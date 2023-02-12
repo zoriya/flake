@@ -3,9 +3,9 @@
   config,
   ...
 }: let
-  cfg = config.modules.nix;
+  cfg = config.nixconf;
 in {
-  options.modules.nix = {enable = lib.mkEnableOption "nix";};
+  options.nixconf = {enable = lib.mkEnableOption "nix";};
   config = lib.mkIf cfg.enable {
     nix = {
       settings.auto-optimise-store = true;

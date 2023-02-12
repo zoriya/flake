@@ -21,9 +21,8 @@ in {
       ];
 
       fontconfig = {
-        hinting.autohint = true;
         defaultFonts = {
-          monospace = ["JetBrainsMono"];
+          monospace = ["JetBrainsMono NL Nerd Font"];
         };
       };
     };

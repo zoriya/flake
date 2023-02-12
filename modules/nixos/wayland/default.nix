@@ -3,9 +3,9 @@
   config,
   ...
 }: let
-  cfg = config.modules.wayland;
+  cfg = config.wayland;
 in {
-  options.modules.wayland = {enable = lib.mkEnableOption "wayland";};
+  options.wayland = {enable = lib.mkEnableOption "wayland";};
   config = lib.mkIf cfg.enable {
     services.printing.enable = true;
     security.rtkit.enable = true;

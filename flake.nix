@@ -31,9 +31,11 @@
         inherit system;
         specialArgs = inputs;
         modules = [
+          ./modules/nixos
+          nixModules
+
           ({pkgs, ...}: {
             networking.hostName = hostname;
-            nixpkgs.config.allowUnfree = true;
             users.users.${user} = {
               isNormalUser = true;
               extraGroups = ["wheel"];
@@ -44,10 +46,10 @@
               ];
             };
           })
-          {
-            imports = [./modules/nixos];
-            config = nixModules;
-          }
+          #{
+          #  imports = [./modules/nixos];
+          #  config = nixModules;
+          #}
           ./hosts/${hostname}/hardware-configuration.nix
 
           home-manager.nixosModules.home-manager
@@ -77,8 +79,8 @@
       fuhen = mkSystem "x86_64-linux" "fuhen" {
         nixModules = {
           fonts.enable = true;
-          nix.enable = true;
-          #wayland.enable = true;
+          nixconf.enable = true;
+          wayland.enable = true;
         };
         homeModules = {
           hyprland.enable = true;
