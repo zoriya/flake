@@ -1,15 +1,41 @@
 @import 'colors';
 
+* {
+    font-family: "monospace";
+}
+
 .bar {
     background-color: $base00;
     color: $base05;
-};
+}
 
 .module {
-    margin: 0 5px;
-};
+    padding: 0 10px;
+}
 
 .accent {
     background-color: $base0C;
     color: $base00;
-};
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.floating {
+    background: $base01;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.battery {
+    .icon {
+        font-size: 20px;
+    }
+    .percent {
+        margin-left: -5px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+

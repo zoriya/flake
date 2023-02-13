@@ -1,0 +1,13 @@
+(defpoll time :interval "5s" `date +'{"date": "%b %m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
+
+(defwidget clock []
+ (box
+  :class "module accent bold"
+  (label
+   :text "${time.hour}:${time.minute}"
+   :class "hour")))
+
+(defwidget date []
+ (box
+  :class "module bold"
+  (label :text "${time.date}")))

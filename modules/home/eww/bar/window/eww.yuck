@@ -1,0 +1,8 @@
+(deflisten title :initial "..." "./bar/window/get-window-title.sh")
+
+(defwidget window []
+ (box
+  :class "floating module"
+  (label :text "${title}"
+  )
+ ))

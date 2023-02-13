@@ -1,0 +1,10 @@
+(defpoll icon :interval "1s" "./bar/battery/get-battery.sh icon")
+(defpoll percent :interval "1s" "./bar/battery/get-battery.sh percent")
+
+(defwidget battery []
+ (box :class "battery module floating"
+  :spacing 6
+  (label :valign "center" :class "icon" :text "${icon}")
+  (label :valign "center" :class "percent" :text "${percent}%"))
+ )
+

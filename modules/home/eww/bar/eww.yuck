@@ -1,22 +1,22 @@
 (include "./bar/workspaces/eww.yuck")
+(include "./bar/window/eww.yuck")
+(include "./bar/clock.yuck")
+(include "./bar/battery/eww.yuck")
 
 (defwidget left []
  (box
   :space-evenly false
   :halign "start"
-  (workspaces)))
+  (workspaces)
+  (window)))
 
 (defwidget right []
  (box
   :space-evenly false
-  ;align "end"
-  ;(volume-module)
-  ;(bluetooth)
-  ;(net)
-  ;(label :class "seperator" :text "|")
-  ;(sys)
-  ;(label :class "seperator" :text "|")
-  ;(clock_module)
+  :halign "end"
+  (battery)
+  (date)
+  (clock)
  ))
 
 (defwidget center []
