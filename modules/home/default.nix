@@ -1,7 +1,9 @@
 {
-  home.stateVersion = "22.11";
   imports = [
     ./hyprland
     ./eww
+    ./apps
   ];
+
+  home.stateVersion = "22.11";
 }

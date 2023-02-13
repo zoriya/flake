@@ -40,9 +40,7 @@
               isNormalUser = true;
               extraGroups = ["wheel"];
               packages = with pkgs; [
-                firefox
                 git
-                google-chrome
               ];
             };
           })
@@ -80,6 +78,7 @@
         homeModules = {
           hyprland.enable = true;
           eww.enable = true;
+          apps.enable = true;
         };
       };
     };
