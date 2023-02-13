@@ -1,0 +1,15 @@
+@import 'colors';
+
+.bar {
+    background-color: $base00;
+    color: $base05;
+};
+
+.module {
+    margin: 0 5px;
+};
+
+.accent {
+    background-color: $base0C;
+    color: $base00;
+};

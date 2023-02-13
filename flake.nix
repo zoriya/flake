@@ -46,14 +46,9 @@
               ];
             };
           })
-          #{
-          #  imports = [./modules/nixos];
-          #  config = nixModules;
-          #}
           ./hosts/${hostname}/hardware-configuration.nix
 
           home-manager.nixosModules.home-manager
-          #{programs.home-manager.enable = true;}
           {
             home-manager = {
               useGlobalPkgs = true;
@@ -84,6 +79,7 @@
         };
         homeModules = {
           hyprland.enable = true;
+          eww.enable = true;
         };
       };
     };
