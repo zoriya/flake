@@ -31,6 +31,7 @@ in {
       wget
       wireplumber
       wlogout
+      bc
     ];
     programs.eww = {
       enable = true;

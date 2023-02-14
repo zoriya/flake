@@ -1,13 +1,16 @@
 (include "./bar/workspaces/eww.yuck")
+(include "./bar/layout/eww.yuck")
 (include "./bar/window/eww.yuck")
-(include "./bar/clock.yuck")
+(include "./bar/music/eww.yuck")
 (include "./bar/battery/eww.yuck")
+(include "./bar/clock.yuck")
 
 (defwidget left []
  (box
   :space-evenly false
   :halign "start"
   (workspaces)
+  (layout)
   (window)))
 
 (defwidget right []
@@ -23,7 +26,7 @@
  (box
   :space-evenly false
   :halign "center"
-  ;(music-module)
+  (music)
  ))
 
 (defwidget bar []

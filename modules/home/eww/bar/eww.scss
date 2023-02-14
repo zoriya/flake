@@ -1,6 +1,8 @@
 @import 'colors';
+@import 'music/music';
 
 * {
+    all: unset;
     font-family: "monospace";
 }
 
@@ -13,9 +15,21 @@
     padding: 0 10px;
 }
 
+.module-margin {
+    margin: 0 10px;
+}
+
 .accent {
     background-color: $base0C;
     color: $base00;
+}
+
+.accent-txt {
+    color: $base0C;
+}
+
+.secondary-txt {
+    color: $base0E;
 }
 
 .bold {
@@ -26,6 +40,15 @@
     background: $base01;
     border-radius: 10px;
     margin: 5px;
+}
+
+.round {
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.px-2 {
+    padding: 8px 6px;
 }
 
 .battery {

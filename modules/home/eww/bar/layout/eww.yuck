@@ -1,0 +1,7 @@
+(deflisten layout :initial "..." "./bar/layout/get-layout.sh")
+
+(defwidget layout []
+ (box
+  ;:class "round module-margin accent px-2"
+  :class "secondary-txt module"
+  (label :text "${layout}")))
