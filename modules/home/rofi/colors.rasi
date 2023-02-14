@@ -1,0 +1,17 @@
+@import "base16.rasi"
+
+* {
+    background:           @base00;
+    backgroundSolid:      @base00;
+    backgroundAdditional: @base01;
+    background-alt:       @base01;
+    foreground:           @base05;
+    foreground-alt:       @base06;
+    selected:             @base0C;
+    highlight:			#CB9D6D;
+    urgent:				#8F7359;
+    on:					#6C6559;
+    off:				#995C38;
+}
+
+/* vim:ft=css

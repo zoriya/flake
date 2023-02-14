@@ -71,8 +71,8 @@
               };
             };
             nixpkgs.overlays = [
-                                nur.overlay
-                                ];
+              nur.overlay
+            ];
           }
 
           # TODO: use a module instead of this.
@@ -91,6 +91,7 @@
         homeModules = {
           hyprland.enable = true;
           eww.enable = true;
+          rofi.enable = true;
           apps.enable = true;
         };
       };

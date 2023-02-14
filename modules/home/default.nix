@@ -2,6 +2,7 @@
   imports = [
     ./hyprland
     ./eww
+    ./rofi
     ./apps
   ];
 
