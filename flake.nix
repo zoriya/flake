@@ -11,28 +11,38 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = {
     self,
-    nixpkgs,
     home-manager,
     hyprland,
+    nur,
     ...
-  } @ inputs: let
+  } @ rawInput: let
     user = "zoriya";
 
     # TODO: mode this to a lib folder
     mkSystem = system: hostname: {
       nixModules,
       homeModules,
-    }:
-      nixpkgs.lib.nixosSystem {
+    }: let
+      nixpkgs = import rawInput.nixpkgs {
+        inherit system;
+        overlays = [
+          (import ./pkgs)
+        ];
+      };
+      inputs = rawInput // {inherit nixpkgs;};
+    in
+      rawInput.nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = inputs;
         modules = [
           ./modules/nixos
           nixModules
+          nur.nixosModules.nur
 
           ({pkgs, ...}: {
             networking.hostName = hostname;
@@ -51,7 +61,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = {inherit user;};
+              extraSpecialArgs = inputs;
               users.${user} = {
                 imports = [
                   ./modules/home
@@ -60,6 +70,9 @@
                 config.modules = homeModules;
               };
             };
+            nixpkgs.overlays = [
+                                nur.overlay
+                                ];
           }
 
           # TODO: use a module instead of this.
