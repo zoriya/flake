@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  user,
   ...
 }: let
   cfg = config.modules.hyprland;
@@ -10,7 +11,10 @@ in {
   config =
     lib.mkIf cfg.enable
     {
-      home.packages = with pkgs; [nur.repos.ocfox.swww];
+      home.packages = with pkgs; [
+        nur.repos.ocfox.swww
+        xorg.xprop
+      ];
       wayland.windowManager.hyprland = {
         enable = true;
         systemdIntegration = true;
@@ -26,6 +30,20 @@ in {
       home.file.".config/hypr/wallpaper.sh" = {
         source = ./wallpaper.sh;
         executable = true;
+      };
+      home.file.".config/startWayland.sh" = {
+        source = ./start.sh;
+        executable = true;
+      };
+
+      home.pointerCursor = {
+        name = "Adwaita";
+        package = pkgs.gnome.adwaita-icon-theme;
+        size = 16;
+        x11 = {
+          enable = true;
+          defaultCursor = "Adwaita";
+        };
       };
 
       # TODO: zsh alias for wp

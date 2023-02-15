@@ -1,6 +1,8 @@
 {
   lib,
   config,
+  pkgs,
+  user,
   ...
 }: let
   cfg = config.wayland;
@@ -15,6 +17,21 @@ in {
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+    };
+
+    # Autostart hyprland and display lockscreen as greeter
+    # See https://github.com/NixOS/nixpkgs/issues/140304 for why this looks weird
+    services.getty = {
+      loginProgram = "${pkgs.bash}/bin/sh";
+      loginOptions = toString (pkgs.writeText "login-program.sh" ''
+        if [[ "$(tty)" == '/dev/tty1' ]]; then
+          ${pkgs.shadow}/bin/login -f ${user};
+          ~/.config/startWayland.sh
+        else
+          ${pkgs.shadow}/bin/login;
+        fi
+      '');
+      extraArgs = ["--skip-login"];
     };
   };
 }

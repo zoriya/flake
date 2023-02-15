@@ -34,7 +34,11 @@
           (import ./pkgs)
         ];
       };
-      inputs = rawInput // {inherit nixpkgs;};
+      inputs =
+        rawInput
+        // {
+          inherit nixpkgs user;
+        };
     in
       rawInput.nixpkgs.lib.nixosSystem {
         inherit system;
