@@ -2,6 +2,7 @@
 (include "./bar/layout/eww.yuck")
 (include "./bar/window/eww.yuck")
 (include "./bar/music/eww.yuck")
+(include "./bar/notification/eww.yuck")
 (include "./bar/battery/eww.yuck")
 (include "./bar/clock.yuck")
 
@@ -17,6 +18,7 @@
  (box
   :space-evenly false
   :halign "end"
+  (notification)
   (battery)
   (date)
   (clock)

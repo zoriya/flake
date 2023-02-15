@@ -1,4 +1,4 @@
-(defpoll time :interval "5s" `date +'{"date": "%b %m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
+(defpoll time :initial '{}' :interval "5s" `date +'{"date": "%b %m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
 
 (defwidget clock []
  (box

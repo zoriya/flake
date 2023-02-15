@@ -31,7 +31,7 @@ in {
         source = ./wallpaper.sh;
         executable = true;
       };
-      home.file.".config/startWayland.sh" = {
+      home.file.".config/hypr/start.sh" = {
         source = ./start.sh;
         executable = true;
       };
@@ -44,6 +44,15 @@ in {
           enable = true;
           defaultCursor = "Adwaita";
         };
+      };
+
+      programs.zsh = {
+        enable = true;
+        loginExtra = ''
+          if [ "$(tty)" = "/dev/tty1" ]; then
+            exec ~/.config/hypr/start.sh &> /dev/null
+          fi
+        '';
       };
 
       # TODO: zsh alias for wp

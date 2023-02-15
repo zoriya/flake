@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-XDG_CACHE_HOME="${XDG_CACHE_HOME:-~/.cache/}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache/}"
 
 get_status() {
 	s=$1

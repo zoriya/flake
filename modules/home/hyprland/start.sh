@@ -1,3 +1,3 @@
 export GDK_SCALE=2
-export XCURSOR_SIZE=32
+export XCURSOR_SIZE=16
 Hyprland

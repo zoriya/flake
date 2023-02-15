@@ -1,0 +1,6 @@
+(deflisten notif :initial '' "./bar/notification/tiramisu.sh")
+
+(defwidget notification []
+ (box
+  :class {notif != "" ? "floating module" : ""}
+  (label :text "${notif}")))

@@ -26,7 +26,6 @@ in {
       loginOptions = toString (pkgs.writeText "login-program.sh" ''
         if [[ "$(tty)" == '/dev/tty1' ]]; then
           ${pkgs.shadow}/bin/login -f ${user};
-          ~/.config/startWayland.sh
         else
           ${pkgs.shadow}/bin/login;
         fi

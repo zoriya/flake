@@ -32,6 +32,7 @@ in {
       wireplumber
       wlogout
       bc
+      tiramisu
     ];
     programs.eww = {
       enable = true;
