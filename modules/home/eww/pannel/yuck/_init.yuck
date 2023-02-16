@@ -6,7 +6,7 @@
 (include "./pannel/yuck/cards/_cardradial.yuck")
 
 (include "./pannel/yuck/_stats.yuck")
-(include "./pannel/yuck/_dnd.yuck")
+(include "./pannel/yuck/_music.yuck")
 (include "./pannel/yuck/_layout.yuck")
 
 (defwindow disclose :stacking "fg"

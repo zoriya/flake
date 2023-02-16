@@ -41,7 +41,6 @@ $other: darken(#ffe59e, 50%);
 
 .disclose-headers-label {
   font-size: 20;
-  font-family: "Caviar Dreams";
   color: $base05;
   opacity: 0.8;
 }
@@ -59,7 +58,7 @@ $other: darken(#ffe59e, 50%);
 
 @import "./_urgency.scss";
 @import "./_stats.scss";
-@import "./_dnd.scss";
+@import "./_music.scss";
 @import "./_modifiers.scss";
 @import "./_override.scss";
 

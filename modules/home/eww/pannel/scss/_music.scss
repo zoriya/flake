@@ -1,0 +1,49 @@
+.disclose-music-box {
+  background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 1.0), rgba(30, 33, 40, 0.5));
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 1em;
+  border-radius: 1.5em;
+
+  .play-status {
+      padding: 4px;
+      font-size: 25;
+  }
+
+  .volume-container {
+      background-color: $base03;
+      border-radius: 2em;
+      opacity: 0.8;
+      padding-right: 8px;
+
+
+      .volume-icon {
+          margin: 0.3em;
+          padding: 0.2em;
+          border-radius: 1em;
+          font-size: 20;
+      }
+
+      .volume-text {
+          font-weight: 600;
+      }
+  }
+}
+
+.disclose-dnd-header {
+  font-size: 20;
+  font-weight: bold;
+  color: $base05;
+}
+
+.disclose-dnd-footer {
+  font-size: 15;
+  color: darken($base06, 10%);
+}
+
+.disclose-dnd-labels {
+  padding: 1.5em;
+}
+
+
+// vim:filetype=scss

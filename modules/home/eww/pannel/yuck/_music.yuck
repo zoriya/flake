@@ -1,0 +1,39 @@
+(deflisten music :initial '{"title": "", "status": "󰐍"}' "./pannel/music.sh")
+(deflisten music_cover "./pannel/music.sh cover")
+
+; TODO: Use a hook on change instead of polling.
+(defpoll volume :interval "5s" "pamixer --get-volume")
+(defpoll is_mute :interval "5s" "pamixer --get-mute")
+
+(defwidget dmusic []
+  (box :vexpand true
+       :hexpand true
+       :class "disclose-music-box"
+       :style "background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.7), rgba(30, 33, 40, 0.2)), url(\"${music_cover}\");"
+       :space-evenly false
+    (box :class "disclose-dnd-labels"
+         :hexpand true
+         :orientation "vertical"
+         :space-evenly false
+      (label :halign "start"
+             :wrap true
+             :class "disclose-dnd-header"
+             :text {music.title == '' ? "No music" : music.title})
+      (label :halign "start"
+             :valign "start"
+             :wrap true
+             :class "disclose-dnd-footer"
+             :vexpand true
+             :text {music.artist == 'null' ? "" : music.artist})
+      (box :valign "end" :space-evenly false :class "disclose-dnd-waiting-toggle"
+        (button :onclick "action"
+                :hexpand true
+                :halign "start"
+                :valign "end"
+                :class "play-status accent-txt" {music.status})
+        (box :space-evenly false :class "volume-container"
+          (label :class "volume-icon"
+                 :text {is_mute == 'true' ? "婢" : "墳"})
+          (label :class "volume-text" :text "${volume}%"))))))
+
+;; vim:filetype=yuck

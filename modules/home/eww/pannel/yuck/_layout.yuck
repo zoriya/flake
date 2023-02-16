@@ -19,14 +19,6 @@
    (label :class "disclose-separator" :text "")
    (box :space-evenly false :class "disclose-misc-box"
     (dstats)
-    (_dnd :total "${disclose_stats.total}"
-     :footer "Dunst Bell"
-     :total_label "Total"
-     :action "dunstctl set-paused toggle"
-     :state "${disclose_dnd_state == "true" ? "ON" : "OFF"}"
-     :label "Don't Disturb."
-     :waiting_icon_on ""
-     :waiting_icon_off ""
-     :waiting dunst_waiting)))))
+    (dmusic)))))
 
      ;; vim:filetype=yuck
