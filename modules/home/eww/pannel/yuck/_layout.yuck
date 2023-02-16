@@ -15,7 +15,7 @@
     :vexpand true
     :hexpand true
     :class "disclose-scroll"
-    (literal :content disclose_sub))
+    (literal :content "toto"))
    (label :class "disclose-separator" :text "")
    (box :space-evenly false :class "disclose-misc-box"
     (dstats)
