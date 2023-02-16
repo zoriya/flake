@@ -9,11 +9,11 @@
 (include "./pannel/yuck/_music.yuck")
 (include "./pannel/yuck/_layout.yuck")
 
-(defwindow disclose :stacking "fg"
+(defwindow pannel :stacking "fg"
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
   :geometry (geometry :width "26%" :height "100%" :anchor "right bottom") 
-  (disclose_layout))
+  (pannel_layout))
 
 ;; vim:ft=yuck

@@ -1,6 +1,10 @@
 ; TODO: Update this value when pressing the button.
 (defpoll bright :interval '5s' "brightnessctl -m | cut -d , -f 4 | head -c -2")
 
+(defpoll ssid :interval "5s" `nmcli -terse -fields SSID,ACTIVE device wifi | awk --field-separator ':' '{if($2=="yes")print$1}'`)
+(defpoll bluethooth :interval '5s' "echo info | timeout 1 bluetoothctl | grep 'Name'")
+
+
 (defwidget stat_card [icon name percent value colorClass]
  (box :space-evenly false
   :class "disclose-stats-box"
@@ -13,7 +17,6 @@
    (label :halign "center" :class "info-value ${colorClass}-txt" :text value)
    (label :halign "start" :class "info-label" :text name))))
 
-; 
 (defwidget dstats []
     (box :space-evenly false
        :orientation "vertical"
@@ -22,5 +25,20 @@
        (stat_card :icon "" :name "CPU" :percent 0 :value {round(EWW_CPU.avg, 2)} :colorClass "red")
        (stat_card :icon "" :name "Memory" :percent {EWW_RAM.used_mem_perc} :value "${round(EWW_RAM.used_mem_perc, 0)}%" :colorClass "green")
        (stat_card :icon "󰃠" :name "Brightness" :percent bright :value "${bright}%" :colorClass "blue")))
+
+
+(defwidget wifi [] 
+    (box
+        :class "module"
+        :spacing 16
+        :style "margin: 8px 16px 16px 16px"
+        (button
+            :class "accent disclose-big-button"
+            :click "nm-connection-editor"
+            "直 : ${ssid != "" ? ssid : "Disconnected"}")
+        (button
+            :class "secondary disclose-big-button"
+            :onclick "blueberry"
+            " : ${bluethooth != "" ? bluethooth : 'Disconnected'}")))
 
 ;; vim:filetype=yuck

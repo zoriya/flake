@@ -1,4 +1,4 @@
-(defwidget disclose_layout []
+(defwidget pannel_layout []
  (box :class "disclose-closer"
   (box :orientation "vertical"
    :space-evenly false
@@ -15,8 +15,9 @@
     :vexpand true
     :hexpand true
     :class "disclose-scroll"
-    (literal :content "toto"))
+    (literal :content disclose_sub))
    (label :class "disclose-separator" :text "")
+   (wifi)
    (box :space-evenly false :class "disclose-misc-box"
     (dstats)
     (dmusic)))))
