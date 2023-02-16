@@ -1,1 +1,2 @@
 (include "./bar/eww.yuck")
+(include "./pannel/yuck/_init.yuck")

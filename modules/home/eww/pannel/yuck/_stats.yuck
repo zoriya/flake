@@ -1,0 +1,26 @@
+; TODO: Update this value when pressing the button.
+(defpoll bright :interval '5s' "brightnessctl -m | cut -d , -f 4 | head -c -2")
+
+(defwidget stat_card [icon name percent value colorClass]
+ (box :space-evenly false
+  :class "disclose-stats-box"
+  (circular-progress :value percent
+   :thickness 10
+   :class "${colorClass}-txt"
+   (label :halign "center" :class "stats-label ${colorClass}-txt" :text icon))
+  (label :class "stats-separator" :text "")
+  (box :hexpand true :halign "center" :orientation "vertical" :class "disclose-stats-info-box"
+   (label :halign "center" :class "info-value ${colorClass}-txt" :text value)
+   (label :halign "start" :class "info-label" :text name))))
+
+; 
+(defwidget dstats []
+    (box :space-evenly false
+       :orientation "vertical"
+       :class "disclose-stats"
+       :spacing 10
+       (stat_card :icon "" :name "CPU" :percent 0 :value {round(EWW_CPU.avg, 2)} :colorClass "red")
+       (stat_card :icon "" :name "Memory" :percent {EWW_RAM.used_mem_perc} :value "${round(EWW_RAM.used_mem_perc, 0)}%" :colorClass "green")
+       (stat_card :icon "󰃠" :name "Brightness" :percent bright :value "${bright}%" :colorClass "blue")))
+
+;; vim:filetype=yuck

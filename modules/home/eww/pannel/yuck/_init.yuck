@@ -1,0 +1,19 @@
+(include "./pannel/yuck/_env.yuck")
+
+(include "./pannel/yuck/cards/_cardimage.yuck")
+(include "./pannel/yuck/cards/_cardprog.yuck")
+(include "./pannel/yuck/cards/_cardscr.yuck")
+(include "./pannel/yuck/cards/_cardradial.yuck")
+
+(include "./pannel/yuck/_stats.yuck")
+(include "./pannel/yuck/_dnd.yuck")
+(include "./pannel/yuck/_layout.yuck")
+
+(defwindow disclose :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry :width "26%" :height "100%" :anchor "right bottom") 
+  (disclose_layout))
+
+;; vim:ft=yuck

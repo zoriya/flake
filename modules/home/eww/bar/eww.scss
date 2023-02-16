@@ -1,10 +1,4 @@
-@import 'colors';
 @import 'music/music';
-
-* {
-    all: unset;
-    font-family: "monospace";
-}
 
 .bar {
     background-color: $base00;
@@ -17,19 +11,6 @@
 
 .module-margin {
     margin: 0 10px;
-}
-
-.accent {
-    background-color: $base0C;
-    color: $base00;
-}
-
-.accent-txt {
-    color: $base0C;
-}
-
-.secondary-txt {
-    color: $base0E;
 }
 
 .bold {

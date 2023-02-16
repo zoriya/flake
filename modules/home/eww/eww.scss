@@ -1,1 +1,44 @@
+@import 'colors';
+
+* {
+    all: unset;
+    font-family: "monospace";
+}
+
+.accent {
+    background-color: $base0C;
+    color: $base00;
+}
+
+.accent-txt {
+    color: $base0C;
+}
+
+.secondary-txt {
+    color: $base0E;
+}
+
+.red {
+    background-color: $base0E;
+}
+.red-txt {
+    color: $base0E;
+}
+
+.green {
+    background-color: $base0B;
+}
+.green-txt {
+    color: $base0B;
+}
+
+.blue {
+    background-color: $base0D;
+}
+.blue-txt {
+    color: $base0D;
+}
+
+
 @import "bar/eww";
+@import "pannel/scss/_init.scss";
