@@ -55,6 +55,7 @@
             users.users.${user} = {
               isNormalUser = true;
               extraGroups = ["wheel" "input"];
+              shell = pkgs.zsh;
               packages = with pkgs; [
                 git
               ];
@@ -84,6 +85,11 @@
           # TODO: use a module instead of this.
           hyprland.nixosModules.default
           {programs.hyprland.enable = true;}
+
+          ({pkgs, ...}: {
+            programs.zsh.enable = true;
+            environment.shells = with pkgs; [zsh];
+          })
 
           xremap.nixosModules.default
           {
@@ -117,6 +123,7 @@
           eww.enable = true;
           rofi.enable = true;
           apps.enable = true;
+          zsh.enable = true;
         };
       };
     };
