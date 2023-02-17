@@ -9,6 +9,16 @@
 (include "./pannel/yuck/_music.yuck")
 (include "./pannel/yuck/_layout.yuck")
 
+(defwidget closer [window]
+  (eventbox :onclick "eww close ${window} && eww close ${window}-closer"))
+ 
+(defwindow pannel-closer
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "pannel"))
+
 (defwindow pannel :stacking "fg"
   :windowtype "normal"
   :wm-ignore true

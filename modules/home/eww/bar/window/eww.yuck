@@ -1,4 +1,4 @@
-(deflisten title :initial "..." "./bar/window/get-window-title.sh")
+(deflisten title :initial "" "./bar/window/get-window-title.sh")
 
 (defwidget window []
  (box

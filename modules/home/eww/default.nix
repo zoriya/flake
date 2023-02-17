@@ -33,11 +33,14 @@ in {
       wlogout
       bc
       tiramisu
+      fusuma
     ];
     programs.eww = {
       enable = true;
       package = pkgs.eww-wayland;
       configDir = ./.;
     };
+
+    xdg.configFile."fusuma/config.yaml".source = ./fusuma.yaml;
   };
 }

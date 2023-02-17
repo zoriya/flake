@@ -12,6 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
+    xremap.url = "github:xremap/nix-flake";
   };
 
   outputs = {
@@ -19,6 +20,7 @@
     home-manager,
     hyprland,
     nur,
+    xremap,
     ...
   } @ rawInput: let
     user = "zoriya";
@@ -52,7 +54,7 @@
             networking.hostName = hostname;
             users.users.${user} = {
               isNormalUser = true;
-              extraGroups = ["wheel"];
+              extraGroups = ["wheel" "input"];
               packages = with pkgs; [
                 git
               ];
@@ -82,6 +84,24 @@
           # TODO: use a module instead of this.
           hyprland.nixosModules.default
           {programs.hyprland.enable = true;}
+
+          xremap.nixosModules.default
+          {
+            services.xremap = {
+              serviceMode = "user";
+              userName = user;
+              config = {
+                modmap = {
+                  application = "eww";
+                  remap = {
+                    Esc = {
+                      launch = "eww close pannel-close && eww close pannel";
+                    };
+                  };
+                };
+              };
+            };
+          }
         ];
       };
   in {

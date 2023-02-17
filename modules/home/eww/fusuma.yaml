@@ -1,0 +1,15 @@
+swipe:
+  3:
+    down:
+      command: "hyprctl dispatch fullscreen 1"
+    up:
+      command: "hyprctl dispatch fullscreen 1"
+  4:
+    left:
+      command: "hyprctl dispatch cyclenext prev"
+    right:
+      command: "hyprctl dispatch cyclenext"
+    up:
+      command: ''bash -c "eww open pannel-closer && eww open pannel"''
+    down:
+      command: ''bash -c "eww close pannel-closer && eww close pannel"''
