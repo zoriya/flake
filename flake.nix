@@ -13,6 +13,10 @@
     };
     nur.url = "github:nix-community/NUR";
     xremap.url = "github:xremap/nix-flake";
+    jq = {
+      url = "github:reegnz/jq-zsh-plugin";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -58,6 +62,7 @@
               shell = pkgs.zsh;
               packages = with pkgs; [
                 git
+                jq
               ];
             };
           })

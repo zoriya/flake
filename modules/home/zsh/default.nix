@@ -1,7 +1,9 @@
 {
   pkgs,
+  zshpkgs,
   config,
   lib,
+  jq,
   ...
 }: let
   cfg = config.modules.zsh;
@@ -11,7 +13,19 @@
 in {
   options.modules.zsh = {enable = lib.mkEnableOption "zsh";};
   config = lib.mkIf cfg.enable {
-    programs.exa.enable = true;
+    home.packages = with pkgs; [
+      exa
+      bat
+      viu
+      htop
+      tldr
+      jq
+      ripgrep
+      psmisc
+      atuin
+      fzf
+      any-nix-shell
+    ];
 
     programs.zsh = {
       enable = true;
@@ -33,6 +47,10 @@ in {
         lt = "exa --tree";
         tree = "exa --tree";
 
+        # git stuff
+        gl = "git log";
+        gu = "git pull";
+
         # Misc
         s = "git status";
         op = "xdg-open";
@@ -47,8 +65,28 @@ in {
           file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
         }
         {
+          name = "jq";
+          src = jq;
+        }
+        {
+          name = "bd";
+          src = pkgs.zsh-bd;
+          file = "share/zsh-bd/bd.zsh";
+        }
+        {
+          name = "you-should-use";
+          src = pkgs.zsh-you-should-use;
+          file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
+        }
+        {
+          name = "zsh-vi-mode";
+          src = pkgs.zsh-vi-mode;
+          file = "share/zsh-vi-mode/zsh-vi-mode.zsh";
+        }
+        {
           name = "custom";
-          src = ./custom.zsh;
+          src = ./.;
+          file = "./custom.zsh";
         }
       ];
       initExtra = ''
@@ -72,6 +110,24 @@ in {
         if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
           source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
         fi
+
+
+        function zvm_before_init() {
+          zvm_bindkey viins '^[[A' history-search-backward
+          zvm_bindkey viins '^[[B' history-search-forward
+          zvm_bindkey vicmd '^[[A' history-search-backward
+          zvm_bindkey vicmd '^[[B' history-search-forward
+        }
+
+        function zvm_after_init() {
+          #zvm_bindkey vimins '^r' _atuin_search_widget
+          bindkey '^r' _atuin_search_widget
+          bindkey '\ej' jq-complete
+        }
+
+        export YSU_MESSAGE_FORMAT="Alias: %alias";
+        eval "$(atuin init zsh)"
+        eval "$(any-nix-shell zsh)"
       '';
 
       oh-my-zsh = {
@@ -81,7 +137,6 @@ in {
           "git"
           "copypath"
           "copyfile"
-          "jsontools"
           "command-not-found"
         ];
       };

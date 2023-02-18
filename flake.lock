@@ -108,6 +108,22 @@
         "type": "github"
       }
     },
+    "jq": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675076157,
+        "narHash": "sha256-YEpywDJMx/Zg/CKYfq+kX2m1rn0SQ5TtmtNIkjV4xHQ=",
+        "owner": "reegnz",
+        "repo": "jq-zsh-plugin",
+        "rev": "e61804e35a593ada9c4d23ee5c957d08974ac382",
+        "type": "github"
+      },
+      "original": {
+        "owner": "reegnz",
+        "repo": "jq-zsh-plugin",
+        "type": "github"
+      }
+    },
     "naersk": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -208,6 +224,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "hyprland": "hyprland",
+        "jq": "jq",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "xremap": "xremap"
