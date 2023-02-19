@@ -12,7 +12,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    xremap.url = "github:xremap/nix-flake";
     jq = {
       url = "github:reegnz/jq-zsh-plugin";
       flake = false;
@@ -24,7 +23,6 @@
     home-manager,
     hyprland,
     nur,
-    xremap,
     ...
   } @ rawInput: let
     user = "zoriya";
@@ -95,24 +93,6 @@
             programs.zsh.enable = true;
             environment.shells = with pkgs; [zsh];
           })
-
-          xremap.nixosModules.default
-          {
-            services.xremap = {
-              serviceMode = "user";
-              userName = user;
-              config = {
-                modmap = {
-                  application = "eww";
-                  remap = {
-                    Esc = {
-                      launch = "eww close pannel-close && eww close pannel";
-                    };
-                  };
-                };
-              };
-            };
-          }
         ];
       };
   in {

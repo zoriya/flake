@@ -1,4 +1,4 @@
-(defwidget pannel_layout []
+(defwidget panel_layout []
  (box :class "disclose-closer"
   (box :orientation "vertical"
    :space-evenly false

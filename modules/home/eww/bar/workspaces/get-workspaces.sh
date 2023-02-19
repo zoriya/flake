@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 spaces (){
-    hyprctl workspaces -j | jq -c 'map(.id) | sort'
+    hyprctl workspaces -j | jq -c 'map(.id | select(. > 0)) | sort'
 }
 
 spaces

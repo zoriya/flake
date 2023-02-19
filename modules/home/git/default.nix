@@ -14,7 +14,7 @@ in {
       enable = true;
       difftastic = {
         enable = true;
-        #display = "inline";
+        display = "inline";
       };
       signing = {
         signByDefault = true;

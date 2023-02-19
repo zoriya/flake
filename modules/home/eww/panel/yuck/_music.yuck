@@ -1,5 +1,5 @@
-(deflisten music :initial '{"title": "", "status": "󰐍"}' "./pannel/music.sh")
-(deflisten music_cover "./pannel/music.sh cover")
+(deflisten music :initial '{"title": "", "status": "󰐍"}' "./panel/music.sh")
+(deflisten music_cover "./panel/music.sh cover")
 
 ; TODO: Use a hook on change instead of polling.
 (defpoll volume :interval "5s" "pamixer --get-volume")

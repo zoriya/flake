@@ -2,7 +2,5 @@
 
 (defwidget window []
  (box
-  :class {title != "" ? "floating module" : ""}
-  (label :text "${title}"
-  )
- ))
+  :class {(title != "" && title != 'null') ? "floating module" : ""}
+  (label :text {title != 'null' ? title : ""})))
