@@ -14,6 +14,8 @@ in {
       home.packages = with pkgs; [
         nur.repos.ocfox.swww
         xorg.xprop
+        discord
+        kitty
       ];
       wayland.windowManager.hyprland = {
         enable = true;

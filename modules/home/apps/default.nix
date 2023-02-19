@@ -23,6 +23,7 @@ in {
       firefox
       mpv
       xdg-utils
+      discord
     ];
     home.sessionVariables = {
       EDITOR = "nvim";
@@ -30,6 +31,7 @@ in {
       TERMINAL = "kitty";
       BROWSER = "google-chrome-stable";
     };
+    xdg.enable = true;
     xdg.mimeApps = {
       enable = false;
       defaultApplications = {
@@ -107,6 +109,14 @@ in {
     xdg.userDirs = {
       enable = true;
       download = "${config.home.homeDirectory}/downloads";
+      desktop = config.home.homeDirectory;
+
+      documents = "${config.home.homeDirectory}/stuff";
+      music = "${config.home.homeDirectory}/stuff";
+      templates = "${config.home.homeDirectory}/stuff";
+      videos = "${config.home.homeDirectory}/stuff";
+      pictures = "${config.home.homeDirectory}/stuff";
+      publicShare = "${config.home.homeDirectory}/stuff";
     };
   };
 }

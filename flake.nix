@@ -129,6 +129,7 @@
           rofi.enable = true;
           apps.enable = true;
           zsh.enable = true;
+          git.enable = true;
         };
       };
     };

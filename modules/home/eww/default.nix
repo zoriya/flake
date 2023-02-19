@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   config,
   pkgs,
@@ -32,6 +31,7 @@ in {
       wireplumber
       wlogout
       bc
+      jq
       tiramisu
       fusuma
     ];
