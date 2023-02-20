@@ -20,6 +20,7 @@ in {
       htop
       tldr
       jq
+      fd
       ripgrep
       psmisc
       atuin

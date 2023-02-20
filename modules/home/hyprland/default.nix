@@ -16,6 +16,9 @@ in {
         xorg.xprop
         discord
         kitty
+        grim
+        slurp
+        wl-clipboard
       ];
       wayland.windowManager.hyprland = {
         enable = true;

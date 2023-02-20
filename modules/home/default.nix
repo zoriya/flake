@@ -6,6 +6,7 @@
     ./apps
     ./zsh
     ./git
+    ./nvim
   ];
 
   home.stateVersion = "22.11";
