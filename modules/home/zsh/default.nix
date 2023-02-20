@@ -108,27 +108,7 @@ in {
           [[ ! -f ${configThemeTTY} ]] || source ${configThemeTTY}
         fi
 
-        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-        fi
-
-
-        function zvm_before_init() {
-          zvm_bindkey viins '^[[A' history-search-backward
-          zvm_bindkey viins '^[[B' history-search-forward
-          zvm_bindkey vicmd '^[[A' history-search-backward
-          zvm_bindkey vicmd '^[[B' history-search-forward
-        }
-
-        function zvm_after_init() {
-          #zvm_bindkey vimins '^r' _atuin_search_widget
-          bindkey '^r' _atuin_search_widget
-          bindkey '\ej' jq-complete
-        }
-
-        export YSU_MESSAGE_FORMAT="Alias: %alias";
-        eval "$(atuin init zsh)"
-        eval "$(any-nix-shell zsh)"
+        ${builtins.readFile ./init.zsh}
       '';
 
       oh-my-zsh = {

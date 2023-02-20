@@ -56,7 +56,5 @@ in {
           fi
         '';
       };
-
-      # TODO: zsh alias for wp
     };
 }

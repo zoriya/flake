@@ -32,5 +32,9 @@ in {
       '');
       extraArgs = ["--skip-login"];
     };
+    security.pam.services.swaylock = {};
+    environment.systemPackages = with pkgs; [
+      swaylock
+    ];
   };
 }

@@ -12,19 +12,34 @@ with lib; let
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
+  lock = pkgs.writeShellScriptBin "lock" ''
+    swaylock --image $(find ${config.home.homeDirectory}/wallpapers/ -type f | shuf -n 1)
+  '';
 in {
   options.modules.apps = {enable = mkEnableOption "apps";};
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      neovim
-      kitty
-      google-chrome
-      firefox
-      mpv
-      xdg-utils
-      discord
-    ];
+    home.packages = with pkgs;
+      [
+        neovim
+        google-chrome
+        firefox
+        mpv
+        xdg-utils
+        discord
+        swaylock
+        swayidle
+      ]
+      ++ [lock];
+    programs.kitty = {
+      enable = true;
+      extraConfig = ''
+        enable_audio_bell no
+        confirm_os_window_close 0
+        map kitty_mod+r launch --type background --stdin-source=@screen_scrollback sh -c 'grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | rofi -dmenu -p "Launch in browser" | xargs xdg-open'
+      '';
+    };
+
     home.sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
