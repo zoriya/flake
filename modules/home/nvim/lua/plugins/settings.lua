@@ -12,6 +12,8 @@ return {
 					telescope = true,
 					treesitter = true,
 					neotree = true,
+					noice = true,
+					mini = true,
 					harpoon = true,
 					gitsigns = true,
 					semantic_tokens = true,

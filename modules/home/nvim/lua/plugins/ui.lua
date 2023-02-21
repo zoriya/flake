@@ -27,7 +27,89 @@ return {
 
 	{
 		"petertriho/nvim-scrollbar",
+		event = "VeryLazy",
 		-- TODO: Add colors highlights.
 		config = true;
 	},
-}
+
+	{
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+		},
+		opts = {
+			presets = {
+				command_palette = true,
+				inc_rename = true,
+			},
+			lsp = {
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
+				},
+			},
+			views = {
+				mini = {
+					timeout = 5000,
+					reverse = false,
+				},
+			},
+		},
+	},
+
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		opts = {
+			plugins = { spelling = true },
+			operators = {
+				gc = "Comments",
+				ys = "Add Surroundings",
+				yS = "Add Surroundings",
+			}
+		},
+		config = function(_, opts)
+			vim.opt["timeoutlen"] = 500
+
+			local wk = require("which-key")
+			wk.setup(opts)
+
+			wk.register({
+				gc = {
+					name = "Comment",
+				},
+				ys = { name = "Add Surroundings" },
+				ds = { name = "Delete Surroundings" },
+				cs = { name = "Change Surroundings" },
+				yS = { name = "Add Surroundings" },
+				dS = { name = "Delete Surroundings" },
+				cS = { name = "Change Surroundings" },
+			}, {
+				noremap = false,
+			})
+
+			wk.register({
+				y = { "Yank to system clipboard" },
+				Y = { "Yank line to system clipboard" },
+				p = { "Past from system clipboard" },
+				P = { "Past line from system clipboard" },
+			}, {
+				prefix = "<leader>"
+			})
+
+			wk.register({
+				["<leader>w"] = { "<cmd>ASToggle<cr>", "Toggle autosave" },
+			})
+
+			wk.register({
+				mode = { "n", "v" },
+				["g"] = { name = "+goto" },
+				["]"] = { name = "+next" },
+				["["] = { name = "+prev" },
+				["<leader>g"] = { name = "+git" },
+			})
+		end,
+		},
+	}

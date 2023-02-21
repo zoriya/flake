@@ -3,6 +3,8 @@ return {
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
 		opts = function()
+			vim.opt["showmode"] = false
+
 			local gps = require("nvim-navic")
 			local toggleterm = {
 				sections = {
@@ -85,6 +87,11 @@ return {
 					},
 					lualine_x = {
 						-- require "dap".status,
+						{
+							require("noice").api.statusline.mode.get,
+							cond = require("noice").api.statusline.mode.has,
+							color = { fg = "#ff9e64" },
+						},
 						'fileformat',
 					},
 					lualine_y = { 'branch', 'progress' },
