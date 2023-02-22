@@ -15,7 +15,7 @@ return {
 		version = false, -- telescope did only one release, so use HEAD for now
 		keys = {
 			{ "<leader>f", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-			{ "<leader>F", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
+			{ "<leader>F", "<cmd>Telescope live_grep theme=ivy<cr>", desc = "Grep" },
 			{ "<leader>gl", "<cmd>Telescope git_commits<CR>", desc = "Git log" },
 			{ "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "Git status" },
 		},

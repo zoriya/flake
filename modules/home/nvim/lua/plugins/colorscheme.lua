@@ -14,6 +14,7 @@ return {
 					neotree = true,
 					noice = true,
 					mini = true,
+					leap = true,
 					harpoon = true,
 					gitsigns = true,
 					semantic_tokens = true,
@@ -25,9 +26,4 @@ return {
 			vim.cmd([[colorscheme catppuccin-mocha]])
 		end
 	},
-	"tpope/vim-surround",
-	"tpope/vim-sleuth",
-	{ "tpope/vim-repeat", event = "VeryLazy" },
-	{ "tpope/vim-unimpaired", config = function() vim.g.nremap = { ["[u"] = "", ["]u"] = "" } end },
-	"nishigori/increment-activator",
 }

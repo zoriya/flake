@@ -70,6 +70,9 @@ return {
 				yS = "Add Surroundings",
 			}
 		},
+		dependencies = {
+			"afreakk/unimpaired-which-key.nvim",
+		},
 		config = function(_, opts)
 			vim.opt["timeoutlen"] = 500
 
@@ -96,7 +99,7 @@ return {
 				p = { "Past from system clipboard" },
 				P = { "Past line from system clipboard" },
 			}, {
-				prefix = "<leader>"
+				prefix = "<leader>",
 			})
 
 			wk.register({
@@ -110,6 +113,50 @@ return {
 				["["] = { name = "+prev" },
 				["<leader>g"] = { name = "+git" },
 			})
+
+			local uwk = require("unimpaired-which-key")
+			wk.register(uwk.normal_mode)
+			wk.register(uwk.normal_and_visual_mode, { mode = { "n", "v" } })
 		end,
-		},
-	}
+	},
+
+	{
+		"NvChad/nvim-colorizer.lua",
+		event = "VeryLazy",
+		opts = {
+			filetypes = {
+				'*',
+				html = { names = true },
+				css = { names = true },
+			},
+			user_default_options = {
+				mode = "virtualtext",
+				RGB = true,
+				RRGGBB = true,
+				names = false,
+				RRGGBBAA = true,
+				AARRGGBB = true,
+				rgb_fn = true,
+				hsl_fn = true,
+				tailwind = true,
+			},
+		}
+	},
+
+	{
+		"stevearc/dressing.nvim",
+		lazy = true,
+		init = function()
+			---@diagnostic disable-next-line: duplicate-set-field
+			vim.ui.select = function(...)
+				require("lazy").load({ plugins = { "dressing.nvim" } })
+				return vim.ui.select(...)
+			end
+			---@diagnostic disable-next-line: duplicate-set-field
+			vim.ui.input = function(...)
+				require("lazy").load({ plugins = { "dressing.nvim" } })
+				return vim.ui.input(...)
+			end
+		end,
+	},
+}

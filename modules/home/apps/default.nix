@@ -21,7 +21,6 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs;
       [
-        neovim
         google-chrome
         firefox
         mpv
