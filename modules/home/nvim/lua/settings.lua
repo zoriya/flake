@@ -13,6 +13,7 @@ local options = {
 	smartcase = true,
 
 	mouse = "a",
+	mousemodel = "extend",
 	splitbelow = true,
 	splitright = true,
 	cursorline = true,
