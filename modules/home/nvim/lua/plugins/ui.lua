@@ -93,6 +93,7 @@ return {
 				noremap = false,
 			})
 
+			-- TODO: Moves this to the settinsg.lua file and use the standard way
 			wk.register({
 				y = { "Yank to system clipboard" },
 				Y = { "Yank line to system clipboard" },
@@ -103,15 +104,12 @@ return {
 			})
 
 			wk.register({
-				["<leader>w"] = { "<cmd>ASToggle<cr>", "Toggle autosave" },
-			})
-
-			wk.register({
 				mode = { "n", "v" },
 				["g"] = { name = "+goto" },
 				["]"] = { name = "+next" },
 				["["] = { name = "+prev" },
 				["<leader>g"] = { name = "+git" },
+				["<leader>l"] = { name = "+lsp" },
 			})
 
 			local uwk = require("unimpaired-which-key")

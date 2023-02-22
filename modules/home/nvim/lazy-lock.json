@@ -10,6 +10,8 @@
   "leap.nvim": { "branch": "main", "commit": "9a69febb2e5a4f5f5a55dd2d7173098fde917bc5" },
   "lualine.nvim": { "branch": "master", "commit": "e99d733e0213ceb8f548ae6551b04ae32e590c80" },
   "neo-tree.nvim": { "branch": "v2.x", "commit": "74040b34278910d9b467fd914862e2a9a1ebacaa" },
+  "neodev.nvim": { "branch": "main", "commit": "6d362921d772963e5a5e5ed0fcf82153defaf206" },
+  "neodim": { "branch": "master", "commit": "c346344ade2ce709e6bd282f10e43778672b861e" },
   "noice.nvim": { "branch": "main", "commit": "d8a1f3056ad713b5d471048f8d029264828e22c0" },
   "nui.nvim": { "branch": "main", "commit": "d147222a1300901656f3ebd5b95f91732785a329" },
   "nvim-colorizer.lua": { "branch": "master", "commit": "550332c5791c6cad6fc7a80c26104de1d00b4692" },
