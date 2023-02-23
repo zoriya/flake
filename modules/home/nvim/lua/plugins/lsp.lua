@@ -47,6 +47,18 @@ local lsp_keymaps = function(buffer)
 	map("v", "<leader>lf", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Range Format")
 end
 
+local function lsp_highlight_document(client)
+	if client.server_capabilities.documentHighlightProvider then
+		vim.cmd [[
+		augroup lsp_document_highlight
+		autocmd! * <buffer>
+		autocmd! CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+		autocmd! CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+		augroup END
+		]]
+	end
+end
+
 
 local kind_icons = {
 	Text = "",
@@ -88,9 +100,21 @@ return {
 					{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
 				},
 			},
+			"b0o/SchemaStore.nvim",
 			"cmp-nvim-lsp",
 		},
 		opts = function()
+			local lsp_on_attach = function(client, buffer)
+				lsp_keymaps(buffer)
+				lsp_highlight_document(client)
+
+				local ok, navic = pcall(require, "nvim-navic")
+				if ok then
+					navic.attach(client, buffer)
+				end
+			end
+			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 			return {
 				excluded_servers = {
 					-- Disable generic purpose LSP that I don't care about.
@@ -98,15 +122,20 @@ return {
 					"diagnosticls"
 				},
 				default_config = {
-					on_attach = function(client, buffer)
-					lsp_keymaps(buffer)
-
-						local ok, navic = pcall(require, "nvim-navic")
-						if ok then
-							navic.attach(client, buffer)
-						end
-					end,
-					capabilities = require('cmp_nvim_lsp').default_capabilities()
+					on_attach = lsp_on_attach,
+					capabilities = lsp_capabilities,
+				},
+				configs = {
+					jsonls = {
+						on_attach = lsp_on_attach,
+						capabilities = lsp_capabilities,
+						settings = {
+							json = {
+								schemas = require('schemastore').json.schemas(),
+								validate = { enable = true },
+							},
+						},
+					},
 				},
 			}
 		end,
