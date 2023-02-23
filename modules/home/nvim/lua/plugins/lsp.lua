@@ -18,7 +18,7 @@ local nullls = {
 						diagnostic.severity = vim.diagnostic.severity.HINT
 					end,
 				})
-			end, sources),
+				end, sources),
 		}
 	end,
 }
@@ -88,24 +88,28 @@ return {
 					{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
 				},
 			},
+			"cmp-nvim-lsp",
 		},
-		opts = {
-			excluded_servers = {
-				-- Disable generic purpose LSP that I don't care about.
-				"efm",
-				"diagnosticls"
-			},
-			default_config = {
-				on_attach = function(client, buffer)
+		opts = function()
+			return {
+				excluded_servers = {
+					-- Disable generic purpose LSP that I don't care about.
+					"efm",
+					"diagnosticls"
+				},
+				default_config = {
+					on_attach = function(client, buffer)
 					lsp_keymaps(buffer)
 
-					local ok, navic = pcall(require, "nvim-navic")
-					if ok then
-						navic.attach(client, buffer)
-					end
-				end,
-			},
-		},
+						local ok, navic = pcall(require, "nvim-navic")
+						if ok then
+							navic.attach(client, buffer)
+						end
+					end,
+					capabilities = require('cmp_nvim_lsp').default_capabilities()
+				},
+			}
+		end,
 		init = function()
 			local signs = {
 				{ name = "DiagnosticSignError", text = "" },
@@ -124,7 +128,6 @@ return {
 			map("]d", '<cmd>lua vim.diagnostic.goto_next()<CR>', "Next diagnostic")
 			map("gl", "<cmd>lua vim.diagnostic.open_float()<CR>", "See diagnostics")
 			map("<leader>li", "<cmd>LspInfo<cr>", "Info")
-
 
 			vim.diagnostic.config({
 				virtual_text = false,
@@ -159,6 +162,33 @@ return {
 	},
 
 	{
+		"L3MON4D3/LuaSnip",
+		dependencies = {
+			{
+				"rafamadriz/friendly-snippets",
+				config = function()
+					require("luasnip.loaders.from_vscode").lazy_load()
+				end,
+			},
+		},
+		opts = {
+			history = true,
+			delete_check_events = "TextChanged",
+		},
+		keys = {
+			{
+				"<tab>",
+				function()
+					return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+				end,
+				expr = true, silent = true, mode = "i",
+			},
+			{ "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+			{ "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+		},
+	},
+
+	{
 		"hrsh7th/nvim-cmp",
 		version = false, -- last release is way too old
 		event = "InsertEnter",
@@ -167,6 +197,7 @@ return {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"saadparwaiz1/cmp_luasnip",
+			"LuaSnip",
 		},
 		opts = function()
 			local cmp = require("cmp")
@@ -206,11 +237,24 @@ return {
 					},
 				},
 				experimental = {
-					ghost_text = {
-						hl_group = true,
-					},
+					ghost_text = true,
 				},
 			}
 		end,
+		init = function()
+			vim.opt.completeopt = { "menuone", "preview", }
+			vim.opt.pumheight = 15
+		end
+	},
+
+	{
+		"ray-x/lsp_signature.nvim",
+		opts = {
+			doc_lines = 100,
+			fix_pos = true,
+			always_trigger = true,
+			toggle_key = "<C-k>",
+			floating_window = false,
+		}
 	},
 }

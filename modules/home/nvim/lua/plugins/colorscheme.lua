@@ -15,6 +15,11 @@ return {
 					noice = true,
 					mini = true,
 					leap = true,
+					cmp = true,
+					native_lsp = {
+						enabled = true
+					},
+					navic = true,
 					harpoon = true,
 					gitsigns = true,
 					semantic_tokens = true,
