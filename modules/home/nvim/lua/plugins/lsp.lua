@@ -1,29 +1,3 @@
-local nullls = {
-	"jose-elias-alvarez/null-ls.nvim",
-	event = { "BufReadPre", "BufNewFile" },
-	dependencies = { "mason.nvim" },
-	opts = function()
-		local nls = require("null-ls")
-		local sources = {
-			nl.builtins.code_actions.eslint_d,
-			nl.builtins.diagnostics.eslint_d,
-			nl.builtins.formatting.eslint_d,
-			nl.builtins.formatting.prettierd,
-			nl.builtins.formatting.black,
-		}
-		return {
-			sources = vim.tbl_map(function(source)
-				return source.with({
-					diagnostics_postprocess = function(diagnostic)
-						diagnostic.severity = vim.diagnostic.severity.HINT
-					end,
-				})
-				end, sources),
-		}
-	end,
-}
-
-
 local lsp_keymaps = function(buffer)
 	local function map(mode, l, r, desc)
 		vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
@@ -35,7 +9,7 @@ local lsp_keymaps = function(buffer)
 	map("n", "gD", '<cmd>lua vim.lsp.buf.declaration()<CR>', "Go to declaration")
 	map("n", "gd", '<cmd>lua vim.lsp.buf.definition()<CR>', "Go to definition")
 	map("n", "gI", '<cmd>lua vim.lsp.buf.implementation()<CR>', "Go to implementation")
-	map("n", "gr", '<cmd>lua vim.lsp.buf.references()<CR>', "Go to reference(s)")
+	map("n", "gR", '<cmd>lua vim.lsp.buf.references()<CR>', "Go to reference(s)")
 	map("n", "gs", '<cmd>lua vim.lsp.buf.type_definition()<CR>', "Type definition")
 
 	map("n", "<leader>lr", '<cmd>lua vim.lsp.buf.rename()<CR>', "Rename")
@@ -115,11 +89,16 @@ return {
 			end
 			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+			-- local lspconfig = require("lspconfig")
+
 			return {
 				excluded_servers = {
 					-- Disable generic purpose LSP that I don't care about.
 					"efm",
-					"diagnosticls"
+					"diagnosticls",
+					-- Prefer tsserver
+					"denols",
+					"eslint",
 				},
 				default_config = {
 					on_attach = lsp_on_attach,
@@ -135,6 +114,12 @@ return {
 								validate = { enable = true },
 							},
 						},
+					},
+					tsserver = {
+						on_attach = lsp_on_attach,
+						capabilities = lsp_capabilities,
+					--	root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
+					--	single_file_support = false,
 					},
 				},
 			}
@@ -286,4 +271,38 @@ return {
 			floating_window = false,
 		}
 	},
+
+	-- {
+	-- 	"jose-elias-alvarez/null-ls.nvim",
+	-- 	event = { "BufReadPre", "BufNewFile" },
+	-- 	opts = function()
+	-- 		local nl = require("null-ls")
+	-- 		local with_nix = function(pkg, nixpkg)
+	-- 			return pkg.with({
+	-- 				command = "nix-shell",
+	-- 				-- This relies on the presence of _opts that contains the metadata of the package. This could break.
+	-- 				args = function(opt)
+	-- 					local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
+	-- 					return { "-p", nixpkg, "--run", table.concat({pkg._opts.command, unpack(def_args)}, " ") }
+	-- 				end,
+	-- 			})
+	-- 		end
+	-- 		local sources = {
+	-- 			with_nix(nl.builtins.code_actions.eslint_d, "nodePackages_latest.eslint_d"),
+	-- 			with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
+	-- 			with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
+	-- 			with_nix(nl.builtins.formatting.prettierd, "nodePackages.prettier_d_slim"),
+	-- 		}
+	-- 		return {
+	-- 			sources = vim.tbl_map(function(source)
+	-- 				return source.with({
+	-- 					diagnostics_postprocess = function(diagnostic)
+	-- 						diagnostic.severity = vim.diagnostic.severity.HINT
+	-- 					end,
+	-- 				})
+	-- 			end, sources),
+	-- 			debug = true,
+	-- 		}
+	-- 	end,
+	-- }
 }

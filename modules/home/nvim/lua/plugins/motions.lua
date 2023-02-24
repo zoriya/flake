@@ -54,4 +54,35 @@ return {
 			{ "<C-X>", desc = "Decrement" },
 		},
 	},
+
+	{
+		"vim-scripts/ReplaceWithRegister",
+		keys = {
+			{ "gr", desc = "Replace with register" }
+		},
+	},
+
+	{
+		"chaoren/vim-wordmotion",
+		keys = {
+			{ "gw", "<plug>WordMotion_w", desc = "Next small world", mode = { "n", "x", "o" } },
+			-- This overrides the default ge but i never used it.
+			{ "ge", "<plug>WordMotion_e", desc = "Next end of small world", mode = { "n", "x", "o" } },
+			{ "gb", "<plug>WordMotion_b", desc = "Previous small world", mode = { "n", "x", "o" } },
+
+			{ "igw", "<plug>WordMotion_iw", desc = "inner small word", mode = { "x", "o" } },
+			{ "agw", "<plug>WordMotion_aw", desc = "a small word (with white-space)", mode = { "x", "o" } },
+		},
+		init = function () vim.g.wordmotion_nomap = true end,
+	},
+
+	{
+		"echasnovski/mini.align",
+		keys = {
+			{"ga", desc = "Align" },
+			{"gA", desc = "Align with preview" }
+		},
+		config = function() require('mini.align').setup() end,
+		version = '*',
+	},
 }

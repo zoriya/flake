@@ -48,39 +48,36 @@ for k, v in pairs(options) do
 end
 vim.cmd("set formatoptions-=ro")
 
-local opts = { noremap = true, silent = true }
-local keymap = vim.api.nvim_set_keymap
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+local function keymap(mode, l, r, desc)
+	vim.keymap.set(mode, l, r, { noremap = true, silent = true, desc = desc })
+end
+
+
 -- Stay in indent mode
-keymap("v", "<", "<gv", opts)
-keymap("v", ">", ">gv", opts)
+keymap("v", "<", "<gv")
+keymap("v", ">", ">gv")
 
 -- Move in insert mode --
-keymap("i", "<A-j>", "<Down>", opts)
-keymap("i", "<A-k>", "<Up>", opts)
-keymap("i", "<A-h>", "<Left>", opts)
-keymap("i", "<A-l>", "<Right>", opts)
+keymap("i", "<A-j>", "<Down>")
+keymap("i", "<A-k>", "<Up>")
+keymap("i", "<A-h>", "<Left>")
+keymap("i", "<A-l>", "<Right>")
 
-keymap("i", "<C-BS>", "<C-w>", opts)
-keymap("c", "<C-BS>", "<C-w>", opts)
-keymap("i", "<C-H>", "<C-w>", opts) -- Keymap for CTRL-BACKSPACE on some termial emulators.
-keymap("c", "<C-H>", "<C-w>", opts)
+keymap("i", "<C-BS>", "<C-w>")
+keymap("c", "<C-BS>", "<C-w>")
+keymap("i", "<C-H>", "<C-w>") -- Keymap for CTRL-BACKSPACE on some termial emulators.
+keymap("c", "<C-H>", "<C-w>")
 
-keymap("n", "<leader>y", '"+y', opts)
-keymap("x", "<leader>y", '"+y', opts)
-keymap("n", "<leader>Y", '"+y$', opts)
-keymap("x", "<leader>Y", '"+y$', opts)
+keymap({"n", "x"}, "<leader>y", '"+y', "Yank to system clipboard")
+keymap({"n", "x"}, "<leader>Y", '"+y$', "Yank line to system clipboard")
 
-keymap("n", "<leader>p", '"+p', opts)
-keymap("x", "<leader>p", '"+p', opts)
-keymap("n", "<leader>P", '"+P', opts)
-keymap("x", "<leader>P", '"+P', opts)
+keymap({"n", "x"}, "<leader>p", '"+p', "Past from system clipboard")
+keymap({"n", "x"}, "<leader>P", '"+P', "Past line from system clipboard")
 
-
-keymap("t", "<C-W>", "<C-\\><C-N><C-W>", opts)
+keymap("t", "<C-W>", "<C-\\><C-N><C-W>")
 
 vim.cmd("autocmd FileType qf setl nolist")
 vim.cmd("syntax on")

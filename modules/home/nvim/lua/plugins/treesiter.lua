@@ -47,4 +47,19 @@ return {
 			}
 		end
 	},
+
+	{
+		"windwp/nvim-ts-autotag",
+		config = true,
+		ft = {
+			'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'tsx', 'jsx',
+			'rescript', 'xml', 'php', 'markdown', 'glimmer', 'handlebars', 'hbs'
+		},
+	},
+
+	{
+		"echasnovski/mini.pairs",
+		version = '*',
+		config = function () require('mini.pairs').setup() end,
+	},
 }

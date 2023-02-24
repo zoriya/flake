@@ -70,7 +70,7 @@ return {
 								return ""
 							end,
 							color = "ErrorMsg",
-							cond = function() return not auto_save_state end,
+							cond = function() return not vim.g.auto_save_state end,
 						},
 						{ 'filetype', colored = true, icon_only = true, separator = "", padding = { left = 1, right = 0 } },
 						{

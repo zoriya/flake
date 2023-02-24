@@ -13,7 +13,8 @@ in {
     programs.git = {
       enable = true;
       difftastic = {
-        enable = true;
+        # This breaks telescope's git status and I don't want to debug why
+        enable = false;
         display = "inline";
       };
       signing = {

@@ -94,16 +94,6 @@ return {
 				noremap = false,
 			})
 
-			-- TODO: Moves this to the settinsg.lua file and use the standard way
-			wk.register({
-				y = { "Yank to system clipboard" },
-				Y = { "Yank line to system clipboard" },
-				p = { "Past from system clipboard" },
-				P = { "Past line from system clipboard" },
-			}, {
-				prefix = "<leader>",
-			})
-
 			wk.register({
 				mode = { "n", "v" },
 				["g"] = { name = "+goto" },
@@ -157,5 +147,18 @@ return {
 				return vim.ui.input(...)
 			end
 		end,
+	},
+
+	{
+		"folke/trouble.nvim",
+		keys = {
+			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>", "Document Diagnostics" },
+			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
+			{ "<leader>lt", "<cmd>TroubleToggle<CR>", "Toogle trouble window" },
+		},
+		opts = {
+			auto_close = true,
+			min_severity = "Warning",
+		},
 	},
 }

@@ -11,6 +11,7 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
     jq = {
       url = "github:reegnz/jq-zsh-plugin";
@@ -22,6 +23,7 @@
     self,
     home-manager,
     hyprland,
+    neovim-nightly,
     nur,
     ...
   } @ rawInput: let
@@ -82,6 +84,7 @@
             };
             nixpkgs.overlays = [
               nur.overlay
+              neovim-nightly.overlay
             ];
           }
 
