@@ -25,7 +25,7 @@ in {
       psmisc
       atuin
       fzf
-      any-nix-shell
+      nix-your-shell
     ];
 
     programs.zsh = {

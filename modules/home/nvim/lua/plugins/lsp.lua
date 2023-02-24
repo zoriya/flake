@@ -99,6 +99,8 @@ return {
 					-- Prefer tsserver
 					"denols",
 					"eslint",
+					-- Prefer nix_ls (more mature)
+					"rnix",
 				},
 				default_config = {
 					on_attach = lsp_on_attach,

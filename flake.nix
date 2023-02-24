@@ -114,6 +114,7 @@
           zsh.enable = true;
           git.enable = true;
           nvim.enable = true;
+          direnv.enable = true;
         };
       };
     };

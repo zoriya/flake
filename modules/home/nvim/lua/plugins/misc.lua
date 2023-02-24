@@ -4,7 +4,7 @@ return {
 		keys = {
 			{"<leader>w", "<cmd>ASToggle<cr>", desc = "Toggle autosave" },
 		},
-		events = {
+		event = {
 			"InsertLeave",
 			"TextChanged",
 		},

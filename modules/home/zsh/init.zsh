@@ -31,5 +31,7 @@ function zvm_after_init() {
 }
 
 export YSU_MESSAGE_FORMAT="Alias: %alias";
+export YSU_IGNORED_ALIASES=("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")
+export DIRENV_LOG_FORMAT=
 eval "$(atuin init zsh)"
-eval "$(any-nix-shell zsh)"
+eval "$(nix-your-shell zsh)"
