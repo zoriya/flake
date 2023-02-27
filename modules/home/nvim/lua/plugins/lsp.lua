@@ -75,6 +75,7 @@ return {
 				},
 			},
 			"b0o/SchemaStore.nvim",
+			"Hoffs/omnisharp-extended-lsp.nvim",
 			"cmp-nvim-lsp",
 		},
 		opts = function()
@@ -101,6 +102,9 @@ return {
 					"eslint",
 					-- Prefer nix_ls (more mature)
 					"rnix",
+					-- Prefer pyright
+					"pylsp",
+					"jedi_language_server",
 				},
 				default_config = {
 					on_attach = lsp_on_attach,
@@ -108,8 +112,6 @@ return {
 				},
 				configs = {
 					jsonls = {
-						on_attach = lsp_on_attach,
-						capabilities = lsp_capabilities,
 						settings = {
 							json = {
 								schemas = require('schemastore').json.schemas(),
@@ -118,10 +120,29 @@ return {
 						},
 					},
 					tsserver = {
-						on_attach = lsp_on_attach,
-						capabilities = lsp_capabilities,
 					--	root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
 					--	single_file_support = false,
+					},
+					omnisharp = {
+						handlers = {
+							["textDocument/definition"] = require('omnisharp_extended').handler,
+						},
+						enable_editorconfig_support = true,
+						enable_roslyn_analyzers = true,
+						organize_imports_on_format = true,
+						enable_import_completion = true,
+						cmd_env = {
+							["OMNISHARP_RoslynExtensionsOptions:enableDecompilationSupport"] = true,
+							["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
+						},
+					},
+					robotframework_ls = {
+						cmd = {"nix-shell", "-p", "python3", "--command", "cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
+						settings = {
+							robot = {
+								codeFormatter = "robotidy",
+							},
+						}
 					},
 				},
 			}

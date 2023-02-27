@@ -58,7 +58,7 @@
             networking.hostName = hostname;
             users.users.${user} = {
               isNormalUser = true;
-              extraGroups = ["wheel" "input"];
+              extraGroups = ["wheel" "input" "docker"];
               shell = pkgs.zsh;
               packages = with pkgs; [
                 git
@@ -95,6 +95,8 @@
           ({pkgs, ...}: {
             programs.zsh.enable = true;
             environment.shells = with pkgs; [zsh];
+            virtualisation.docker.enable = true;
+            environment.systemPackages = with pkgs; [docker-compose];
           })
         ];
       };

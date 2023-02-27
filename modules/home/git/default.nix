@@ -24,6 +24,7 @@ in {
       extraConfig = {
         gpg.format = "ssh";
         gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+        push.autoSetupRemote = true;
       };
 
       userEmail = "zoe.roux@zoriya.dev";

@@ -58,7 +58,8 @@ return {
 	{
 		"vim-scripts/ReplaceWithRegister",
 		keys = {
-			{ "gr", desc = "Replace with register" }
+			{ "gr", desc = "Replace with register" },
+			{ "<leader>gr", '"+gr', desc = "Replace with system clipboard" },
 		},
 	},
 
