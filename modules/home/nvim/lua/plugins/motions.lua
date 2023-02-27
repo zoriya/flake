@@ -2,19 +2,11 @@ return {
 	{
 		"ggandor/leap.nvim",
 		keys = {
-			{ "s", mode = { "n", "x", "o" }, desc = "Leap forward to" },
-			{ "S", mode = { "n", "x", "o" }, desc = "Leap backward to" },
-			{ "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
+			{ "s", "<Plug>(leap-forward-to)", mode = { "n", "x", }, desc = "Leap forward to" },
+			{ "S", "<Plug>(leap-backward-to)", mode = { "n", "x", }, desc = "Leap backward to" },
+			{ "z", "<Plug>(leap-forward-to)", mode = "o", desc = "Leap forward to" },
+			{ "Z", "<Plug>(leap-backward-to)", mode = "o", desc = "Leap backward to" },
 		},
-		config = function(_, opts)
-			local leap = require("leap")
-			for k, v in pairs(opts) do
-				leap.opts[k] = v
-			end
-			leap.add_default_mappings(true)
-			vim.keymap.del({ "x", "o" }, "x")
-			vim.keymap.del({ "x", "o" }, "X")
-		end,
 	},
 	{ "tpope/vim-repeat", event = "VeryLazy" },
 
@@ -33,7 +25,7 @@ return {
 			{ "<C-H>", '<cmd>lua require("harpoon.ui").nav_file(1)<CR>', desc = "Navigate to harpoon 1" },
 			{ "<C-J>", '<cmd>lua require("harpoon.ui").nav_file(2)<CR>', desc = "Navigate to harpoon 2" },
 			{ "<C-K>", '<cmd>lua require("harpoon.ui").nav_file(3)<CR>', desc = "Navigate to harpoon 3" },
-			{ "<C-L>", '<cmd>lua require("harpoon.ui").nav_file(4)<CR>', desc = "Navigate to harpoon 4" },
+			-- <C-L> is already taken but since I use harpoon less on querty no worry
 		},
 		opts = {
 			mark_branch = true,
@@ -44,8 +36,14 @@ return {
 	},
 
 	"tpope/vim-unimpaired",
-	"tpope/vim-surround",
 	"tpope/vim-sleuth",
+
+	{
+		"kylechui/nvim-surround",
+		version = "*",
+		event = "VeryLazy",
+		config = true,
+	},
 
 	{
 		"nishigori/increment-activator",

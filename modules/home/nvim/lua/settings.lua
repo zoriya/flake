@@ -77,7 +77,8 @@ keymap({"n", "x"}, "<leader>Y", '"+y$', "Yank line to system clipboard")
 keymap({"n", "x"}, "<leader>p", '"+p', "Past from system clipboard")
 keymap({"n", "x"}, "<leader>P", '"+P', "Past line from system clipboard")
 
-keymap("t", "<C-W>", "<C-\\><C-N><C-W>")
+keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")
+keymap("t", "<C-W>", "<C-\\><C-N>", "Normal mode")
 
 vim.cmd("autocmd FileType qf setl nolist")
 vim.cmd("syntax on")

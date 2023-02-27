@@ -60,6 +60,17 @@ return {
 	{
 		"echasnovski/mini.pairs",
 		version = '*',
-		config = function () require('mini.pairs').setup() end,
+		opts = {
+			mappings = {
+				-- Disable pairs if the next char is not a whitespace
+				['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\][%s]' },
+				['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\][%s]' },
+				['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\][%s]' },
+				['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\][%s]', register = { cr = false } },
+				["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\][%s]', register = { cr = false } },
+				['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\][%s]', register = { cr = false } },
+			},
+		},
+		config = function(_, opts) require('mini.pairs').setup(opts) end,
 	},
 }

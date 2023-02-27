@@ -81,20 +81,6 @@ return {
 			wk.setup(opts)
 
 			wk.register({
-				gc = {
-					name = "Comment",
-				},
-				ys = { name = "Add Surroundings" },
-				ds = { name = "Delete Surroundings" },
-				cs = { name = "Change Surroundings" },
-				yS = { name = "Add Surroundings" },
-				dS = { name = "Delete Surroundings" },
-				cS = { name = "Change Surroundings" },
-			}, {
-				noremap = false,
-			})
-
-			wk.register({
 				mode = { "n", "v" },
 				["g"] = { name = "+goto" },
 				["]"] = { name = "+next" },
