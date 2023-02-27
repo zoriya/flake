@@ -9,7 +9,7 @@ local lsp_keymaps = function(buffer)
 	map("n", "gD", '<cmd>lua vim.lsp.buf.declaration()<CR>', "Go to declaration")
 	map("n", "gd", '<cmd>lua vim.lsp.buf.definition()<CR>', "Go to definition")
 	map("n", "gI", '<cmd>lua vim.lsp.buf.implementation()<CR>', "Go to implementation")
-	map("n", "gR", '<cmd>lua vim.lsp.buf.references()<CR>', "Go to reference(s)")
+	map("n", "gr", '<cmd>lua vim.lsp.buf.references()<CR>', "Go to reference(s)")
 	map("n", "gs", '<cmd>lua vim.lsp.buf.type_definition()<CR>', "Type definition")
 
 	map("n", "<leader>lr", '<cmd>lua vim.lsp.buf.rename()<CR>', "Rename")
@@ -120,8 +120,8 @@ return {
 						},
 					},
 					tsserver = {
-					--	root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
-					--	single_file_support = false,
+						--	root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
+						--	single_file_support = false,
 					},
 					omnisharp = {
 						handlers = {
@@ -137,12 +137,21 @@ return {
 						},
 					},
 					robotframework_ls = {
-						cmd = {"nix-shell", "-p", "python3", "--command", "cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
+						cmd = { "nix-shell", "-p", "python3", "--command", "cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
 						settings = {
 							robot = {
 								codeFormatter = "robotidy",
 							},
 						}
+					},
+					nil_ls = {
+						settings = {
+							["nil"] = {
+								formatting = {
+									command = { "nixpkgs-fmt" },
+								},
+							},
+						},
 					},
 				},
 			}
@@ -251,7 +260,7 @@ return {
 				mapping = cmp.mapping.preset.insert({
 					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
 					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
+					["<C-b>"] = cmp.mapping.scroll_docs( -4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
@@ -329,4 +338,21 @@ return {
 	-- 		}
 	-- 	end,
 	-- }
+
+	{
+		"kosayoda/nvim-lightbulb",
+		event = { "CursorHold", "CursorHoldI" },
+		opts = {
+			sign = {
+				enable = false,
+			},
+			float = {
+				enable = true,
+				text = ""
+			},
+			autocmd = {
+				enabled = true,
+			},
+		},
+	}
 }

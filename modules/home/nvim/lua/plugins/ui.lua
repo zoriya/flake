@@ -29,7 +29,7 @@ return {
 		"petertriho/nvim-scrollbar",
 		event = "VeryLazy",
 		-- TODO: Add colors highlights.
-		config = true;
+		config = true,
 	},
 
 	{
@@ -138,13 +138,23 @@ return {
 	{
 		"folke/trouble.nvim",
 		keys = {
-			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>", "Document Diagnostics" },
+			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  "Document Diagnostics" },
 			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
-			{ "<leader>lt", "<cmd>TroubleToggle<CR>", "Toogle trouble window" },
+			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 "Toogle trouble window" },
 		},
 		opts = {
 			auto_close = true,
 			min_severity = "Warning",
 		},
+	},
+
+	{
+		"folke/todo-comments.nvim",
+		dependencies = "nvim-lua/plenary.nvim",
+		config = true,
+		event = "VeryLazy",
+		keys = {
+			{ "<leader>t", "<cmd>TodoQuickFix", desc = "Open todo list" },
+		}
 	},
 }

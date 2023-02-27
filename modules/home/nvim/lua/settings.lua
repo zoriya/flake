@@ -46,7 +46,10 @@ local options = {
 for k, v in pairs(options) do
 	vim.opt[k] = v
 end
-vim.cmd("set formatoptions-=ro")
+
+-- Disable comment continuations (enter or o/O)
+vim.cmd("autocmd BufEnter * set formatoptions-=ro")
+vim.cmd("autocmd BufEnter * setlocal formatoptions-=ro")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
