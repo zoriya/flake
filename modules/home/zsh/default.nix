@@ -56,8 +56,9 @@ in {
         s = "git status";
         op = "xdg-open";
         wp = "~/.config/hypr/wallpaper.sh";
-        py = "nix-shell -p python3";
+        py = "nix-shell -p python3 --command python3";
         jctl = "sudo journalctl -n 1000 -fu";
+        where = "where -s"; # Follow symlinks
       };
 
       plugins = [

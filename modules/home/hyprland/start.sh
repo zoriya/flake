@@ -1,10 +1,13 @@
 export GDK_SCALE=2
 export XCURSOR_SIZE=24
 
-export GTK_IM_MODULE=ibus
-export QT_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export SDL_IM_MODULE=ibus
+export INPUT_METHOD=fcitx
+export QT_IM_MODULE=fcitx
+export GTK_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export XIM_SERVERS=fcitx
 export GLFW_IM_MODULE=ibus
+
+fcitx5 -d
 
 exec Hyprland

@@ -1,4 +1,6 @@
 @import 'colors';
+@import "bar/eww";
+@import "panel/scss/_init.scss";
 
 * {
     all: unset;
@@ -23,7 +25,8 @@
 }
 
 .red {
-    background-color: $base0E;
+    background-color: $base08;
+    color: $base02;
 }
 .red-txt {
     color: $base0E;
@@ -44,5 +47,3 @@
 }
 
 
-@import "bar/eww";
-@import "panel/scss/_init.scss";

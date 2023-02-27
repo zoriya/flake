@@ -3,6 +3,7 @@
 (include "./bar/window/eww.yuck")
 (include "./bar/notification/eww.yuck")
 (include "./bar/battery/eww.yuck")
+(include "./bar/language/eww.yuck")
 (include "./bar/clock.yuck")
 
 (defwidget left []
@@ -19,6 +20,7 @@
   :halign "end"
   (notification)
   (battery)
+  (language)
   (date)
   (clock)
  ))

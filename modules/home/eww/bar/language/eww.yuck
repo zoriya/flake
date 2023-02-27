@@ -1,0 +1,8 @@
+(defpoll lang :interval "1s" "./bar/language/language.sh")
+
+(defwidget language []
+ (box :class "module floating"
+  :spacing 6
+  (label :valign "center" :class "icon" :text "")
+  (label :valign "center" :class "percent" :text "${lang}")))
+

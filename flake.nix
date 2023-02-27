@@ -117,6 +117,7 @@
           git.enable = true;
           nvim.enable = true;
           direnv.enable = true;
+          fcitx5.enable = true;
         };
       };
     };

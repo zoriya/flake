@@ -16,3 +16,7 @@ nixify()
 	fi
 	direnv allow
 }
+
+(whence -w run-help | grep -q alias) && unalias run-help
+autoload run-help
+
