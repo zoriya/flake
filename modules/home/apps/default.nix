@@ -16,6 +16,7 @@ with lib; let
     swaylock --image $(find ${config.home.homeDirectory}/wallpapers/ -type f | shuf -n 1)
   '';
 in {
+  imports = [ ./gtk.nix ];
   options.modules.apps = {enable = mkEnableOption "apps";};
 
   config = mkIf cfg.enable {
@@ -28,11 +29,28 @@ in {
         discord
         swaylock
         swayidle
+        zathura
       ]
       ++ [lock];
 
     programs.kitty = {
       enable = true;
+      settings = with config.colorScheme.colors; {
+        foreground = "#${base05}";
+        background = "#${base00}";
+        selection_background = "#${base05}";
+        selection_foreground = "#${base00}";
+        url_color = "#${base04}";
+        cursor = "#${base05}";
+        active_border_color = "#${base03}";
+        inactive_border_color = "#${base01}";
+        active_tab_background = "#${base00}";
+        active_tab_foreground = "#${base05}";
+        inactive_tab_background = "#${base01}";
+        inactive_tab_foreground = "#${base04}";
+        tab_bar_background = "#${base01}";
+      };
+
       extraConfig = ''
         enable_audio_bell no
         confirm_os_window_close 0

@@ -148,7 +148,7 @@ return {
 						settings = {
 							["nil"] = {
 								formatting = {
-									command = { "nixpkgs-fmt" },
+									command = { "nix-shell", "-p", "nixpkgs-fmt", "nixpkgs-fmt" },
 								},
 							},
 						},

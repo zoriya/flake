@@ -15,7 +15,6 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       exa
-      bat
       viu
       htop
       tldr
@@ -27,6 +26,11 @@ in {
       fzf
       nix-your-shell
     ];
+
+    programs.bat = {
+      enable = true;
+      config.theme = "base16";
+    };
 
     programs.zsh = {
       enable = true;

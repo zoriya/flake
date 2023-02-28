@@ -13,6 +13,7 @@
     };
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
+    nix-colors.url = "github:misterio77/nix-colors";
     jq = {
       url = "github:reegnz/jq-zsh-plugin";
       flake = false;
