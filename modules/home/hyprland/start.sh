@@ -8,6 +8,4 @@ export XMODIFIERS=@im=fcitx
 export XIM_SERVERS=fcitx
 export GLFW_IM_MODULE=ibus
 
-fcitx5 -d
-
 exec Hyprland

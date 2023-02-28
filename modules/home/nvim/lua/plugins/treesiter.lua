@@ -7,7 +7,6 @@ return {
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects"
 		},
-		---@type TSConfig
 		opts = {
 			highlight = { enable = true },
 			indent = { enable = true },
@@ -29,7 +28,6 @@ return {
 				},
 			},
 		},
-		---@param opts TSConfig
 		config = function(_, opts)
 			require("nvim-treesitter.configs").setup(opts)
 		end,

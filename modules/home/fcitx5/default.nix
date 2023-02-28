@@ -21,7 +21,7 @@ in {
 
     xdg.configFile."fcitx5/config".text = ''
     [Hotkey/TriggerKeys]
-    0=Super+N
+    0=Super+Shift+L
 
     [Behavior]
     ShowInputMethodInformation=False
