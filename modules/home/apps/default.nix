@@ -18,11 +18,14 @@ with lib; let
 in {
   imports = [ ./gtk.nix ];
   options.modules.apps = {enable = mkEnableOption "apps";};
+  options.darkColors = lib.mkOption {
+    type = with types; attrsOf str;
+  };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;
       [
-        google-chrome
+        # google-chrome
         firefox
         mpv
         xdg-utils
@@ -30,12 +33,13 @@ in {
         swaylock
         swayidle
         zathura
+        cliphist
       ]
       ++ [lock];
 
     programs.kitty = {
       enable = true;
-      settings = with config.colorScheme.colors; {
+      settings = with config.darkColors; {
         foreground = "#${base05}";
         background = "#${base00}";
         selection_background = "#${base05}";
@@ -49,25 +53,34 @@ in {
         inactive_tab_background = "#${base01}";
         inactive_tab_foreground = "#${base04}";
         tab_bar_background = "#${base01}";
+
+        enable_audio_bell = false;
+        confirm_os_window_close = 0;
+        disable_ligatures = "always";
+        #placement_strategy bottom-center
+
+        tab_bar_min_tabs = 3;
+        tab_bar_style = "separator";
+        tab_bar_edge = "top";
       };
 
       extraConfig = ''
-        enable_audio_bell no
-        confirm_os_window_close 0
-        disable_ligatures always
-
         clear_all_shortcuts yes
         kitty_mod alt
         map ctrl+shift+c copy_to_clipboard
         map ctrl+shift+v paste_from_clipboard
-        
 
+        map ctrl+equal change_font_size current +2.0
+        map ctrl+plus change_font_size current +2.0
+        map ctrl+minus change_font_size current -2.0
+        map ctrl+backspace change_font_size current 0
+        
         # map kitty_mod+r launch --type background --stdin-source=@screen_scrollback sh -c 'grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | rofi -dmenu -p "Launch in browser" | xargs xdg-open'
         map kitty_mod+r open_url_with_hints
-        map kitty_mod+n launch --type=tab --cwd=current
+        map kitty_mod+t launch --type=tab --cwd=current
 
-        map kitty_mod+k scroll_line_up
-        map kitty_mod+j scroll_line_down
+        map kitty_mod+e scroll_line_up
+        map kitty_mod+y scroll_line_down
         map kitty_mod+h previous_tab
         map kitty_mod+l next_tab
 
@@ -174,5 +187,9 @@ in {
       pictures = "${config.home.homeDirectory}/stuff";
       publicShare = "${config.home.homeDirectory}/stuff";
     };
+
+    xdg.configFile."nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+    '';
   };
 }

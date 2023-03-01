@@ -20,6 +20,8 @@ in {
       tldr
       jq
       fd
+      duf
+      ncdu
       ripgrep
       psmisc
       atuin

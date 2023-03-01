@@ -108,6 +108,7 @@
           fonts.enable = true;
           nixconf.enable = true;
           wayland.enable = true;
+          games.enable = true;
         };
         homeModules = {
           hyprland.enable = true;

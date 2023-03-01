@@ -19,7 +19,7 @@ return {
 			vim.cmd [[
 			augroup virtcolumn
 				autocmd!
-				autocmd FileType * if index(["netrw", "NvimTree", "neo-tree", "UltestAttach", "dap-float", "Trouble", "lspinfo", "qf", "harpoon", "toggleterm", "packer"], &ft) == -1 | lua require("virt-column").setup_buffer({ virtcolumn = "80,120", char = "▏" })
+				autocmd FileType * if index(["netrw", "NvimTree", "neo-tree", "TelescopePrompt", "TelescopeResults", "UltestAttach", "dap-float", "Trouble", "lspinfo", "qf", "harpoon", "toggleterm", "packer"], &ft) == -1 | lua require("virt-column").setup_buffer({ virtcolumn = "80,120", char = "▏" })
 			augroup end
 			]]
 		end,
