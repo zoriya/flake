@@ -2,13 +2,13 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:zoriya/nixpkgs/nixos-unstable"; #"github:zoriya/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      url = "github:hyprwm/Hyprland";
+      url = "github:hyprwm/Hyprland/v0.22.0beta";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
@@ -18,6 +18,9 @@
       url = "github:reegnz/jq-zsh-plugin";
       flake = false;
     };
+    tuxedo-nixos = {
+      url = "github:blitz/tuxedo-nixos";
+    };
   };
 
   outputs = {
@@ -26,6 +29,7 @@
     hyprland,
     neovim-nightly,
     nur,
+    tuxedo-nixos,
     ...
   } @ rawInput: let
     user = "zoriya";
@@ -98,6 +102,13 @@
             environment.shells = with pkgs; [zsh];
             virtualisation.docker.enable = true;
             environment.systemPackages = with pkgs; [docker-compose];
+          })
+
+          tuxedo-nixos.nixosModules.default
+          ({lib, ...}: {
+            hardware.tuxedo-keyboard.enable = true;
+            hardware.tuxedo-control-center.enable = true;
+            # hardware.tuxedo-control-center.package = tuxedo-nixos.packages.x86_64-linux.default;
           })
         ];
       };

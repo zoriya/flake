@@ -8,7 +8,8 @@ current() {
 		--dest=org.fcitx.Fcitx5 \
 		/controller \
 		org.fcitx.Fcitx.Controller1.CurrentInputMethod \
-		| grep -Po '(?<=")[^"]+'
+		| grep -Po '(?<=")[^"]+' \
+		|| echo "en"
 }
 
 # List all input methods added to Fcitx

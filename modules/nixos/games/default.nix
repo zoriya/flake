@@ -3,14 +3,13 @@ cfg = config.games;
 in {
   options.games = { enable = lib.mkEnableOption "games"; };
   config = lib.mkIf cfg.enable {
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    services.flatpak.enable = true;
 
-      environment.systemPackages = with pkgs; [
-        steam-run
-      ];
-    };
+    hardware.opengl.driSupport32Bit = true;
+    environment.systemPackages = with pkgs; [
+      wineWowPackages.stable
+      wineWowPackages.waylandFull
+      winetricks
+    ];
   };
 }

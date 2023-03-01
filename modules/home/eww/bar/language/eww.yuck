@@ -1,4 +1,4 @@
-(defpoll lang :interval "1s" "./bar/language/language.sh")
+(defpoll lang :interval "1s" :initial "en" "./bar/language/language.sh")
 
 (defwidget language []
  (box :class "module floating"

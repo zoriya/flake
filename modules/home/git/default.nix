@@ -25,6 +25,7 @@ in {
         gpg.format = "ssh";
         gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
         push.autoSetupRemote = true;
+        init.defaultBranch = "master";
       };
 
       userEmail = "zoe.roux@zoriya.dev";
