@@ -241,14 +241,18 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-/+H7WC/UFwZSq+0fFskDNPOvvHFEK1ZvLt+e6JwxeD0=",
-        "path": "/home/zoriya/projects/nixpkgs",
-        "type": "path"
+        "lastModified": 1677689251,
+        "narHash": "sha256-xxfYu5wBM6gZlOJ6xFQeBWJ15BbbsR6zjA0H0FASRfw=",
+        "owner": "zoriya",
+        "repo": "nixpkgs",
+        "rev": "3f7e2345852b90921c55061eab06debfbc6b9e4f",
+        "type": "github"
       },
       "original": {
-        "path": "/home/zoriya/projects/nixpkgs",
-        "type": "path"
+        "owner": "zoriya",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs_3": {

@@ -15,7 +15,7 @@ in {
     };
     xdg.configFile."rofi/base16.rasi".text = with config.colorScheme.colors; ''
     * {
-        base00: #${base00}
+        base00: #${base00};
         base01: #${base01};
         base02: #${base02};
         base03: #${base03};

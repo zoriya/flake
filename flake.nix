@@ -63,7 +63,7 @@
             networking.hostName = hostname;
             users.users.${user} = {
               isNormalUser = true;
-              extraGroups = ["wheel" "input" "docker"];
+              extraGroups = ["wheel" "input" "docker" "audio"];
               shell = pkgs.zsh;
               packages = with pkgs; [
                 git
