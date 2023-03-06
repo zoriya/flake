@@ -34,6 +34,13 @@ in {
       config.theme = "base16";
     };
 
+    programs.less = {
+      enable = true;
+      keys = ''
+       \e quit
+      '';
+    };
+
     programs.zsh = {
       enable = true;
       autocd = true;

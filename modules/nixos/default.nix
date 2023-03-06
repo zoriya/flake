@@ -7,9 +7,13 @@
   ];
 
   boot.loader = {
+    # Hide the boot loader and show it only on keypress.
+    timeout = 0;
     systemd-boot = {
       enable = true;
-#      configurationLimit = 4;
+      configurationLimit = 4;
+      # A real mode for hidpi
+      consoleMode = "max";
     };
     efi.canTouchEfiVariables = true;
   };

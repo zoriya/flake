@@ -23,7 +23,6 @@ configuration {
 * {
 	font: "monospace 12";
 	background-alt: @background;
-	foreground: #FFFFFF;
 	active: @foreground;
 	urgent: @backgroundAdditional;
 }

@@ -30,6 +30,7 @@
     hyprland,
     neovim-nightly,
     nur,
+    nixpkgs,
     tuxedo-nixos,
     ...
   } @ rawInput: let
@@ -40,25 +41,15 @@
       nixModules,
       homeModules,
     }: let
-      nixpkgs = import rawInput.nixpkgs {
-        inherit system;
-        overlays = [
-          (import ./pkgs)
-        ];
-      };
-      inputs =
-        rawInput
-        // {
-          inherit nixpkgs user;
-        };
+      inputs = rawInput  // { inherit user; };
     in
-      rawInput.nixpkgs.lib.nixosSystem {
-        inherit system;
+      nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
         modules = [
           ./modules/nixos
           nixModules
           nur.nixosModules.nur
+          { nixpkgs.overlays = [ (import ./overlays) ]; }
 
           ({pkgs, ...}: {
             networking.hostName = hostname;

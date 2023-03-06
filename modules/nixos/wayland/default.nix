@@ -42,5 +42,36 @@ in {
     environment.systemPackages = with pkgs; [
       swaylock
     ];
+
+    systemd = {
+      user.services.polkit-gnome-authentication-agent-1 = {
+        description = "polkit-gnome-authentication-agent-1";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 10;
+        };
+      };
+    };
+
+    security.sudo.extraConfig = ''
+    Defaults  lecture="never"
+    '';
+
+    boot = {
+      kernelParams = [ "quiet" "splash" ];
+      consoleLogLevel = 0;
+      initrd.verbose = false;
+      plymouth = {
+        enable = true;
+        themePackages = [ pkgs.adi1090x-plymouth ];
+        theme = "colorful_loop";
+      };
+    };
   };
 }

@@ -28,6 +28,8 @@ function zvm_after_init() {
     # Restore plugin bindings that zsh-vi-mode overrides.
     bindkey '^r' _atuin_search_widget
     bindkey '\ej' jq-complete
+    bindkey '^[d' kill-word
+	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
 
 export YSU_MESSAGE_FORMAT="Alias: %alias";
