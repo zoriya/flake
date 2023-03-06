@@ -7,10 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = {
-      url = "github:nix-community/impermanence";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    impermanence.url = "github:nix-community/impermanence";
     hyprland = {
       url = "github:hyprwm/Hyprland/v0.22.0beta";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +62,9 @@
 
           ({pkgs, ...}: {
             networking.hostName = hostname;
+            users.users.root.hashedPassword = builtins.readFile ./password/root;
             users.users.${user} = {
+              hashedPassword = builtins.readFile ./password/${user};
               isNormalUser = true;
               extraGroups = ["wheel" "input" "docker" "audio"];
               shell = pkgs.zsh;
@@ -105,7 +104,7 @@
             programs.zsh.enable = true;
             environment.shells = with pkgs; [zsh];
             virtualisation.docker.enable = true;
-            environment.systemPackages = with pkgs; [docker-compose];
+            environment.systemPackages = with pkgs; [docker-compose git];
           })
 
           tuxedo-nixos.nixosModules.default

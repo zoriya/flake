@@ -33,7 +33,6 @@ in {
       directories = [
         "/var/log"
         "/var/lib/bluetooth"
-        "/var/lib/nixos"
         "/var/lib/systemd/coredump"
         "/var/lib/docker"
         "/etc/NetworkManager/system-connections"
@@ -52,6 +51,9 @@ in {
           ".local/share/flatpak"
           ".local/share/atuin"
           ".config/google-chrome"
+          # Don't reinstall plugins on reboot
+          ".local/share/nvim"
+          ".local/state/nvim"
         ];
         files = [ ];
       };
