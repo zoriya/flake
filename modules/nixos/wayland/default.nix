@@ -12,17 +12,11 @@ in {
     services.printing.enable = true;
     security.rtkit.enable = true;
     security.polkit.enable = true;
-    # services.audio = {
-    #   enable = true;
-    # };
-    # hardware.pulseaudio.enable = true;
-    # hardware.pulseaudio.support32Bit = true;
     services.pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.enable = true;
     };
 
     # Autostart hyprland and display lockscreen as greeter
