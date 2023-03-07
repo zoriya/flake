@@ -66,7 +66,6 @@
 
       programs.kitty.settings = {
         background_opacity = "0.7";
-        dynamic_background_opacity = true;
       };
     };
   };
