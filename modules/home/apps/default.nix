@@ -55,6 +55,7 @@ in {
         tab_bar_background = "#${base01}";
 
         enable_audio_bell = false;
+        cursor_blink_interval = 0;
         confirm_os_window_close = 0;
         disable_ligatures = "always";
         #placement_strategy bottom-center

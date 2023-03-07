@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:zoriya/nixpkgs/nixos-unstable"; #"github:zoriya/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:zoriya/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +49,13 @@
           ./modules/nixos
           nixModules
           nur.nixosModules.nur
-          { nixpkgs.overlays = [ (import ./overlays) ]; }
+          {
+            nixpkgs.overlays = [
+              (import ./overlays)
+              nur.overlay
+              neovim-nightly.overlay
+            ];
+          }
 
           ({pkgs, ...}: {
             networking.hostName = hostname;
@@ -81,10 +87,6 @@
                 config.modules = homeModules;
               };
             };
-            nixpkgs.overlays = [
-              nur.overlay
-              neovim-nightly.overlay
-            ];
           }
 
           # TODO: use a module instead of this.
