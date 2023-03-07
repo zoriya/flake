@@ -150,7 +150,7 @@ return {
 						settings = {
 							["nil"] = {
 								formatting = {
-									command = { "nix-shell", "-p", "nixpkgs-fmt", "nixpkgs-fmt" },
+									command = { "nix-shell", "-p", "alejandra", "--run", "alejandra -" },
 								},
 							},
 						},

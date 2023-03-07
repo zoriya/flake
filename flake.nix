@@ -41,7 +41,7 @@
       nixModules,
       homeModules,
     }: let
-      inputs = rawInput  // { inherit user; };
+      inputs = rawInput // {inherit user;};
     in
       nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
