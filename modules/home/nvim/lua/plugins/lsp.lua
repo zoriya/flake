@@ -307,39 +307,39 @@ return {
 		}
 	},
 
-	-- {
-	-- 	"jose-elias-alvarez/null-ls.nvim",
-	-- 	event = { "BufReadPre", "BufNewFile" },
-	-- 	opts = function()
-	-- 		local nl = require("null-ls")
-	-- 		local with_nix = function(pkg, nixpkg)
-	-- 			return pkg.with({
-	-- 				command = "nix-shell",
-	-- 				-- This relies on the presence of _opts that contains the metadata of the package. This could break.
-	-- 				args = function(opt)
-	-- 					local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
-	-- 					return { "-p", nixpkg, "--run", table.concat({pkg._opts.command, unpack(def_args)}, " ") }
-	-- 				end,
-	-- 			})
-	-- 		end
-	-- 		local sources = {
-	-- 			with_nix(nl.builtins.code_actions.eslint_d, "nodePackages_latest.eslint_d"),
-	-- 			with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
-	-- 			with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
-	-- 			with_nix(nl.builtins.formatting.prettierd, "nodePackages.prettier_d_slim"),
-	-- 		}
-	-- 		return {
-	-- 			sources = vim.tbl_map(function(source)
-	-- 				return source.with({
-	-- 					diagnostics_postprocess = function(diagnostic)
-	-- 						diagnostic.severity = vim.diagnostic.severity.HINT
-	-- 					end,
-	-- 				})
-	-- 			end, sources),
-	-- 			debug = true,
-	-- 		}
-	-- 	end,
-	-- }
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		opts = function()
+			local nl = require("null-ls")
+			local with_nix = function(pkg, nixpkg)
+				return pkg.with({
+					command = "nix-shell",
+					-- This relies on the presence of _opts that contains the metadata of the package. This could break.
+					args = function(opt)
+						local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
+						return { "-p", nixpkg, "--run", table.concat({pkg._opts.command, unpack(def_args)}, " ") }
+					end,
+				})
+			end
+			local sources = {
+				with_nix(nl.builtins.code_actions.eslint_d, "nodePackages_latest.eslint_d"),
+				with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
+				with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
+				with_nix(nl.builtins.formatting.prettier, "nodePackages.prettier"),
+			}
+			return {
+				sources = vim.tbl_map(function(source)
+					return source.with({
+						diagnostics_postprocess = function(diagnostic)
+							diagnostic.severity = vim.diagnostic.severity.HINT
+						end,
+					})
+				end, sources),
+				debug = true,
+			}
+		end,
+	},
 
 	{
 		"kosayoda/nvim-lightbulb",
