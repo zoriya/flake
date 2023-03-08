@@ -1,19 +1,27 @@
-{ nix-colors, lib, pkgs, ... }: rec {
-  imports = [ nix-colors.homeManagerModule ];
-
+{
+  nix-colors,
+  lib,
+  pkgs,
+  ...
+}: let
+  theme-switcher = pkgs.writeShellScriptBin "settheme" (builtins.readFile ./settheme.sh);
+in rec {
+  imports = [nix-colors.homeManagerModule];
 
   home.packages = with pkgs; [
     (google-chrome.override {
       commandLineArgs = ["--force-dark-mode" "--enable-features=WebUIDarkMode"];
     })
     home-manager
+    theme-switcher
   ];
-
 
   colorScheme = lib.mkDefault specialization.dark.configuration.colorScheme;
   darkColors = specialization.dark.configuration.colorScheme.colors;
   specialization = {
     dark.configuration = {
+      home.file.".local/state/theme".text = "dark";
+
       colorScheme = {
         slug = "catppuccin-mocha";
         name = "Catppuccin Mocha";
@@ -40,6 +48,8 @@
     };
 
     light.configuration = {
+      home.file.".local/state/theme".text = "light";
+
       colorScheme = {
         slug = "catppuccin-latte";
         name = "Catppuccin Latte";
@@ -69,5 +79,4 @@
       };
     };
   };
-
 }

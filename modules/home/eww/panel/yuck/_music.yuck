@@ -2,8 +2,8 @@
 (deflisten music_cover "./panel/music.sh cover")
 
 ; TODO: Use a hook on change instead of polling.
-(defpoll volume :interval "5s" "pamixer --get-volume")
-(defpoll is_mute :interval "5s" "pamixer --get-mute")
+(defpoll volume :interval "1s" "pamixer --get-volume")
+(defpoll is_mute :interval "1s" "pamixer --get-mute")
 
 (defwidget dmusic []
   (box :vexpand true
