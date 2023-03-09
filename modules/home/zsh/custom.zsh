@@ -37,3 +37,5 @@ flakify()
 (whence -w run-help | grep -q alias) && unalias run-help
 autoload run-help
 
+# Allow customization per client.
+[[ -f ~/.config/zsh/custom.zsh ]] && source ~/.config/zsh/custom.zsh

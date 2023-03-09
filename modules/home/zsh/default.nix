@@ -24,10 +24,17 @@ in {
       ncdu
       ripgrep
       psmisc
-      atuin
       fzf
       nix-your-shell
+      mosh
     ];
+
+    programs.atuin = {
+      enable = true;
+      settings = {
+         update_check = false;
+      };
+    };
 
     programs.bat = {
       enable = true;

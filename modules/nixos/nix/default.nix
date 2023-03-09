@@ -52,13 +52,16 @@ in {
           ".local/share/flatpak"
           ".cache/flatpak"
           ".local/share/atuin"
+          # Cache for sessions (keep website logged in, plugin downloaded...)
           ".config/google-chrome"
           ".config/discord"
           # Don't reinstall plugins on reboot
           ".local/share/nvim"
           ".local/state/nvim"
         ];
-        files = [ ];
+        files = [
+          ".config/zsh/custom.zsh"
+        ];
       };
     };
   };
