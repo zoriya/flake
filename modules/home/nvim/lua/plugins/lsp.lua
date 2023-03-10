@@ -83,6 +83,83 @@ return {
 				lsp_keymaps(buffer)
 				lsp_highlight_document(client)
 
+				if client.name == "omnisharp" then
+					client.server_capabilities.semanticTokensProvider = {
+						full = vim.empty_dict(),
+						legend = {
+							tokenModifiers = { "static_symbol" },
+							tokenTypes = {
+								"comment",
+								"excluded_code",
+								"identifier",
+								"keyword",
+								"keyword_control",
+								"number",
+								"operator",
+								"operator_overloaded",
+								"preprocessor_keyword",
+								"string",
+								"whitespace",
+								"text",
+								"static_symbol",
+								"preprocessor_text",
+								"punctuation",
+								"string_verbatim",
+								"string_escape_character",
+								"class_name",
+								"delegate_name",
+								"enum_name",
+								"interface_name",
+								"module_name",
+								"struct_name",
+								"type_parameter_name",
+								"field_name",
+								"enum_member_name",
+								"constant_name",
+								"local_name",
+								"parameter_name",
+								"method_name",
+								"extension_method_name",
+								"property_name",
+								"event_name",
+								"namespace_name",
+								"label_name",
+								"xml_doc_comment_attribute_name",
+								"xml_doc_comment_attribute_quotes",
+								"xml_doc_comment_attribute_value",
+								"xml_doc_comment_cdata_section",
+								"xml_doc_comment_comment",
+								"xml_doc_comment_delimiter",
+								"xml_doc_comment_entity_reference",
+								"xml_doc_comment_name",
+								"xml_doc_comment_processing_instruction",
+								"xml_doc_comment_text",
+								"xml_literal_attribute_name",
+								"xml_literal_attribute_quotes",
+								"xml_literal_attribute_value",
+								"xml_literal_cdata_section",
+								"xml_literal_comment",
+								"xml_literal_delimiter",
+								"xml_literal_embedded_expression",
+								"xml_literal_entity_reference",
+								"xml_literal_name",
+								"xml_literal_processing_instruction",
+								"xml_literal_text",
+								"regex_comment",
+								"regex_character_class",
+								"regex_anchor",
+								"regex_quantifier",
+								"regex_grouping",
+								"regex_alternation",
+								"regex_text",
+								"regex_self_escaped_character",
+								"regex_other_escape",
+							},
+						},
+						range = true,
+					}
+				end
+
 				local ok, navic = pcall(require, "nvim-navic")
 				if ok then
 					navic.attach(client, buffer)
@@ -90,7 +167,7 @@ return {
 			end
 			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-			-- local lspconfig = require("lspconfig")
+			local lspconfig = require("lspconfig")
 
 			return {
 				excluded_servers = {
@@ -122,24 +199,25 @@ return {
 						},
 					},
 					tsserver = {
-						--	root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
-						--	single_file_support = false,
+						root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
+						single_file_support = false,
 					},
 					omnisharp = {
 						handlers = {
-							["textDocument/definition"] = require('omnisharp_extended').handler,
+								["textDocument/definition"] = require('omnisharp_extended').handler,
 						},
 						enable_editorconfig_support = true,
 						enable_roslyn_analyzers = true,
 						organize_imports_on_format = true,
 						enable_import_completion = true,
 						cmd_env = {
-							["OMNISHARP_RoslynExtensionsOptions:enableDecompilationSupport"] = true,
-							["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
+								["OMNISHARP_RoslynExtensionsOptions:enableDecompilationSupport"] = true,
+								["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
 						},
 					},
 					robotframework_ls = {
-						cmd = { "nix-shell", "-p", "python3", "--command", "cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
+						cmd = { "nix-shell", "-p", "python3", "--command",
+							"cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
 						settings = {
 							robot = {
 								codeFormatter = "robotidy",
@@ -148,7 +226,7 @@ return {
 					},
 					nil_ls = {
 						settings = {
-							["nil"] = {
+								["nil"] = {
 								formatting = {
 									command = { "nix-shell", "-p", "alejandra", "--run", "alejandra -" },
 								},
@@ -260,13 +338,13 @@ return {
 					end,
 				},
 				mapping = cmp.mapping.preset.insert({
-					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-b>"] = cmp.mapping.scroll_docs( -4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+						["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+						["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+						["<C-b>"] = cmp.mapping.scroll_docs(-4),
+						["<C-f>"] = cmp.mapping.scroll_docs(4),
+						["<C-Space>"] = cmp.mapping.complete(),
+						["<C-e>"] = cmp.mapping.abort(),
+						["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
@@ -318,7 +396,7 @@ return {
 					-- This relies on the presence of _opts that contains the metadata of the package. This could break.
 					args = function(opt)
 						local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
-						return { "-p", nixpkg, "--run", table.concat({pkg._opts.command, unpack(def_args)}, " ") }
+						return { "-p", nixpkg, "--run", table.concat({ pkg._opts.command, unpack(def_args) }, " ") }
 					end,
 				})
 			end
