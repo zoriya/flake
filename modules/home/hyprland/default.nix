@@ -33,7 +33,6 @@ in {
         extraConfig = builtins.readFile ./hyprland.conf;
       };
 
-      home.file."wallpapers".source = ../../../wallpapers;
       home.file.".config/hypr/wallpaper.sh" = {
         source = ./wallpaper.sh;
         executable = true;

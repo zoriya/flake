@@ -17,6 +17,7 @@ in rec {
   ];
 
   colorScheme = lib.mkDefault specialization.dark.configuration.colorScheme;
+  home.file.".local/state/theme".text = lib.mkDefault "dark";
   darkColors = specialization.dark.configuration.colorScheme.colors;
   specialization = {
     dark.configuration = {

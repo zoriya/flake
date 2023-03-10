@@ -96,15 +96,16 @@ in {
       ssh = "kitty +kitten ssh";
     };
 
-    home.sessionVariables = {
+    home.sessionVariables = rec {
       EDITOR = "nvim";
-      VISUAL = "nvim";
+      VISUAL = EDITOR;
       TERMINAL = "kitty";
       BROWSER = "google-chrome-stable";
+      DEFAULT_BROWSER = BROWSER;
     };
     xdg.enable = true;
     xdg.mimeApps = {
-      enable = false;
+      enable = true;
       defaultApplications = {
         "x-scheme-handler/http" = browser;
         "x-scheme-handler/https" = browser;

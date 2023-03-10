@@ -46,6 +46,7 @@ in {
           "downloads"
           "stuff"
           "projects"
+          "wallpapers"
           { directory = ".gnupg"; mode = "0700"; }
           { directory = ".ssh"; mode = "0700"; }
           ".local/share/direnv"
