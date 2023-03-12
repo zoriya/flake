@@ -71,6 +71,8 @@ in {
         # git stuff
         gl = "git log";
         gu = "git pull";
+        gcam = "git commit --amend";
+        gcamn = "git commit --amend --no-edit";
 
         # Misc
         s = "git status";

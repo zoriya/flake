@@ -136,10 +136,11 @@ return {
 	},
 
 	{
-		"folke/trouble.nvim",
+		"git@github.com:zoriya/trouble.nvim",
 		keys = {
-			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  "Document Diagnostics" },
-			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
+			-- lsp_ mode prefix is only on the fork.
+			{ "<leader>ld", "<cmd>Trouble lsp_document_diagnostics<cr>",  "Document Diagnostics" },
+			{ "<leader>lw", "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
 			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 "Toogle trouble window" },
 		},
 		opts = {
@@ -154,7 +155,7 @@ return {
 		config = true,
 		event = "VeryLazy",
 		keys = {
-			{ "<leader>t", "<cmd>TodoQuickFix", desc = "Open todo list" },
+			{ "<leader>t", "<cmd>TodoQuickFix<cr>", desc = "Open todo list" },
 		}
 	},
 }
