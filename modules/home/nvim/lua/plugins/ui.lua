@@ -136,11 +136,10 @@ return {
 	},
 
 	{
-		"git@github.com:zoriya/trouble.nvim",
+		"folke/trouble.nvim",
 		keys = {
-			-- lsp_ mode prefix is only on the fork.
-			{ "<leader>ld", "<cmd>Trouble lsp_document_diagnostics<cr>",  "Document Diagnostics" },
-			{ "<leader>lw", "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
+			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  "Document Diagnostics" },
+			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 "Toogle trouble window" },
 		},
 		opts = {

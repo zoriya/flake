@@ -12,5 +12,10 @@ in {
       wineWowPackages.waylandFull
       winetricks
     ];
+
+    home.sessionVariables = {
+      # For rider
+      FLATPAK_ENABLE_SDK_EXT="*";
+    };
   };
 }
