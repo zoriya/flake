@@ -17,9 +17,10 @@ return {
 			{ "<leader>f",  "<cmd>Telescope find_files<cr>",          desc = "Find Files" },
 			{ "<leader>F",  "<cmd>Telescope live_grep theme=ivy<cr>", desc = "Grep" },
 			{ "<leader>gl", "<cmd>Telescope git_commits<CR>",         desc = "Git log" },
-			{ "<leader>gh", "<cmd>Telescope git_bcommits<CR>",         desc = "Git history" },
+			{ "<leader>gh", "<cmd>Telescope git_bcommits<CR>",        desc = "Git history" },
 			{ "<leader>gb", "<cmd>Telescope git_branches<CR>",        desc = "Git branches" },
 			{ "<leader>gs", "<cmd>Telescope git_status<CR>",          desc = "Git status" },
+			{ "<leader>gc", "<cmd>Telescope git_show<CR>",            desc = "Show last commit" },
 		},
 		opts = function()
 			local actions = require "telescope.actions"
@@ -44,7 +45,7 @@ return {
 							["<A-k>"]  = actions.move_selection_previous,
 							["<A-j>"]  = actions.move_selection_next,
 							["<c-t>"]  = function()
-								local has_trouble, trouble_action = pcall(require, "trouble.providers.telescope")
+							local has_trouble, trouble_action = pcall(require, "trouble.providers.telescope")
 								if has_trouble then
 									trouble_action.open_with_trouble()
 								end
@@ -78,6 +79,7 @@ return {
 			local telescope = require("telescope")
 			telescope.setup(opts)
 			telescope.load_extension("fzf")
+			telescope.load_extension("git_show")
 		end,
 	}
 }
