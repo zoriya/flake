@@ -49,6 +49,9 @@ return {
 		},
 		opts = {
 			default_mappings = false,
-		}
+		},
+		setup = function()
+			vim.keymap.del("n", "gx")
+		end,
 	}
 }
