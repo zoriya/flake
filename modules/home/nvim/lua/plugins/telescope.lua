@@ -24,6 +24,12 @@ return {
 		},
 		opts = function()
 			local actions = require "telescope.actions"
+			local action_state = require "telescope.actions.state"
+
+			local function git_show()
+				local entry = action_state.get_selected_entry()
+				vim.cmd("Telescope git_show ref=" .. entry.value)
+			end
 
 			return {
 				defaults = {
@@ -64,6 +70,20 @@ return {
 					find_files = {
 						hidden = true,
 						find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-E", ".git" },
+					},
+					git_commits = {
+						mappings = {
+							i = {
+								["<CR>"] = git_show,
+							},
+						},
+					},
+					git_bcommits = {
+						mappings = {
+							i = {
+								["<CR>"] = git_show,
+							},
+						},
 					},
 					git_status = {
 						mappings = {
