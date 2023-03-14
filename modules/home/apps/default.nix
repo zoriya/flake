@@ -102,6 +102,8 @@ in {
       TERMINAL = "kitty";
       BROWSER = "google-chrome-stable";
       DEFAULT_BROWSER = BROWSER;
+      # For rider
+      FLATPAK_ENABLE_SDK_EXT="*";
     };
     xdg.enable = true;
     xdg.mimeApps = {

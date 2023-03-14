@@ -157,4 +157,10 @@ return {
 			{ "<leader>t", "<cmd>TodoQuickFix<cr>", desc = "Open todo list" },
 		}
 	},
+
+	{
+		"https://gitlab.com/yorickpeterse/nvim-pqf.git",
+		event = "VeryLazy",
+		config = true,
+	},
 }

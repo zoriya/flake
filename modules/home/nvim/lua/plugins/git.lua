@@ -24,6 +24,7 @@ return {
 				map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
 				map("n", "<leader>gu", gs.undo_stage_hunk, "Unstage Hunk")
 				map("n", "<leader>gA", gs.stage_buffer, "Add buffer")
+				map("n", "<leader>gB", gs.blame_line, "Blame")
 				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
 				map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
 				map("n", "<leader>gd", gs.diffthis, "Diff This")
@@ -32,4 +33,20 @@ return {
 			end,
 		},
 	},
+
+	{
+		"akinsho/git-conflict.nvim",
+		event = "VeryLazy",
+		keys = {
+			{ "gxo", "<Plug>(git-conflict-ours)", "Accept ours" },
+			{ "gxt", "<Plug>(git-conflict-theirs)", "Accept theirs" },
+			{ "gxb", "<Plug>(git-conflict-both)", "Accept both" },
+			{ "gx0", "<Plug>(git-conflict-none)", "Accept none" },
+			{ "]x",  "<Plug>(git-conflict-prev-conflict)", "Previous conflict" },
+			{ "[x",  "<Plug>(git-conflict-next-conflict)", "Next conflict" },
+		},
+		opts = {
+			default_mappings = false,
+		}
+	}
 }
