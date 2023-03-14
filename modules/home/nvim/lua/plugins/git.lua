@@ -38,12 +38,12 @@ return {
 		"akinsho/git-conflict.nvim",
 		event = "VeryLazy",
 		keys = {
-			{ "gxo", "<Plug>(git-conflict-ours)", "Accept ours" },
-			{ "gxt", "<Plug>(git-conflict-theirs)", "Accept theirs" },
-			{ "gxb", "<Plug>(git-conflict-both)", "Accept both" },
-			{ "gx0", "<Plug>(git-conflict-none)", "Accept none" },
-			{ "]x",  "<Plug>(git-conflict-prev-conflict)", "Previous conflict" },
-			{ "[x",  "<Plug>(git-conflict-next-conflict)", "Next conflict" },
+			{ "gxo", "<Plug>(git-conflict-ours)",          desc = "Accept ours" },
+			{ "gxt", "<Plug>(git-conflict-theirs)",        desc = "Accept theirs" },
+			{ "gxb", "<Plug>(git-conflict-both)",          desc = "Accept both" },
+			{ "gx0", "<Plug>(git-conflict-none)",          desc = "Accept none" },
+			{ "]x",  "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
+			{ "[x",  "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
 		},
 		opts = {
 			default_mappings = false,

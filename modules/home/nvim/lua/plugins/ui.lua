@@ -80,18 +80,21 @@ return {
 			local wk = require("which-key")
 			wk.setup(opts)
 
-			wk.register({
-				mode = { "n", "v" },
-				["g"] = { name = "+goto" },
-				["]"] = { name = "+next" },
-				["["] = { name = "+prev" },
-				["<leader>g"] = { name = "+git" },
-				["<leader>l"] = { name = "+lsp" },
-			})
-
 			local uwk = require("unimpaired-which-key")
 			wk.register(uwk.normal_mode)
 			wk.register(uwk.normal_and_visual_mode, { mode = { "n", "v" } })
+
+			wk.register({
+				gx = "Git conflict",
+			})
+			wk.register({
+				mode = { "n", "v" },
+					["g"] = { name = "+goto" },
+					["]"] = { name = "+next" },
+					["["] = { name = "+prev" },
+					["<leader>g"] = { name = "+git" },
+					["<leader>l"] = { name = "+lsp" },
+			})
 		end,
 	},
 
@@ -138,9 +141,9 @@ return {
 	{
 		"folke/trouble.nvim",
 		keys = {
-			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  "Document Diagnostics" },
-			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
-			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 "Toogle trouble window" },
+			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  desc = "Document Diagnostics" },
+			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
+			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 desc = "Toogle trouble window" },
 		},
 		opts = {
 			auto_close = true,
