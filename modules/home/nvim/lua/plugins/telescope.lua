@@ -77,6 +77,8 @@ return {
 		end,
 		config = function(_, opts)
 			local telescope = require("telescope")
+			-- Load my override of git_status
+			require("telescope._extensions.git_status")
 			telescope.setup(opts)
 			telescope.load_extension("fzf")
 			telescope.load_extension("git_show")
