@@ -405,6 +405,7 @@ return {
 				with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
 				with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
 				with_nix(nl.builtins.formatting.prettier, "nodePackages.prettier"),
+				nl.builtins.formatting.black,
 			}
 			return {
 				sources = vim.tbl_map(function(source)
