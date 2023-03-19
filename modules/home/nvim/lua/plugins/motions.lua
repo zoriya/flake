@@ -37,7 +37,7 @@ return {
 	{
 		"tpope/vim-unimpaired",
 		init = function()
-			vim.g.nremap = { ["[x"] = "", ["]x"] = "" }
+			vim.g.nremap = { ["[x"] = "",["]x"] = "" }
 		end
 	},
 	"tpope/vim-sleuth",
@@ -60,8 +60,8 @@ return {
 	{
 		"vim-scripts/ReplaceWithRegister",
 		keys = {
-			{ "cr", "<Plug>ReplaceWithRegisterOperator", desc = "Replace with register" },
-			{ "cR", '"+cr',                              desc = "Replace with system clipboard" },
+			{ "cr", "<Plug>ReplaceWithRegisterOperator",   desc = "Replace with register" },
+			{ "cR", '"+<Plug>ReplaceWithRegisterOperator', desc = "Replace with system clipboard" },
 		},
 	},
 

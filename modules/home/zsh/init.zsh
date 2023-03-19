@@ -32,7 +32,7 @@ function zvm_after_init() {
 	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
 
-export YSU_MESSAGE_FORMAT="Alias: %alias";
+export YSU_MESSAGE_FORMAT="Alias: %alias - %command";
 export YSU_IGNORED_ALIASES=("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")
 export DIRENV_LOG_FORMAT=
 eval "$(atuin init zsh)"
