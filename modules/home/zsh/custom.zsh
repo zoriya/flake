@@ -39,3 +39,20 @@ autoload run-help
 
 # Allow customization per client.
 [[ -f ~/.config/zsh/custom.zsh ]] && source ~/.config/zsh/custom.zsh
+
+dotenv() {
+	DOTENV=".env"
+	if [[ $1 == "-f" ]]; then
+		DOTENV=$2
+		shift
+		shift
+	fi
+
+	ENV=$(cat $DOTENV | sed /#/d | tr '\n' ' ')
+
+	if [[ -z $* ]]; then
+		export ${=ENV}
+	else
+		(export ${=ENV}; $*)
+	fi
+}
