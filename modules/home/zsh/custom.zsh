@@ -48,7 +48,7 @@ dotenv() {
 		shift
 	fi
 
-	ENV=$(cat $DOTENV | sed /#/d | tr '\n' ' ')
+	ENV=$(cat $DOTENV | sed '/^#/d' | tr '\n' ' ')
 
 	if [[ -z $* ]]; then
 		export ${=ENV}
