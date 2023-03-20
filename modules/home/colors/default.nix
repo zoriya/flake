@@ -75,9 +75,9 @@ in rec {
         };
       };
 
-      programs.kitty.settings = {
-        background_opacity = "0.7";
-      };
+      # programs.kitty.settings = {
+      #   background_opacity = "0.7";
+      # };
     };
   };
 }

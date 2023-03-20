@@ -39,7 +39,7 @@ in {
 
     programs.kitty = {
       enable = true;
-      settings = with config.darkColors; {
+      settings = with config.colorScheme.colors; {
         foreground = "#${base05}";
         background = "#${base00}";
         selection_background = "#${base05}";
