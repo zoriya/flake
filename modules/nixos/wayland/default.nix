@@ -18,6 +18,7 @@ in {
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    hardware.bluetooth.enable = true;
 
     # Autostart hyprland and display lockscreen as greeter
     # See https://github.com/NixOS/nixpkgs/issues/140304 for why this looks weird
