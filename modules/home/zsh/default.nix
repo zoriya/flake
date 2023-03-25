@@ -76,6 +76,7 @@ in {
 
         # Misc
         s = "git status";
+        dc = "docker-compose";
         op = "xdg-open";
         wp = "~/.config/hypr/wallpaper.sh";
         py = "nix-shell -p python3 --command python3";

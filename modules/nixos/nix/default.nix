@@ -51,6 +51,7 @@ in {
           { directory = ".ssh"; mode = "0700"; }
           ".local/share/direnv"
           ".local/share/flatpak"
+          ".var"
           ".cache/flatpak"
           ".local/share/atuin"
           # Cache for sessions (keep website logged in, plugin downloaded...)
