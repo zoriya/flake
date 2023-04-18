@@ -8,7 +8,7 @@
 with lib; let
   cfg = config.modules.apps;
 
-  browser = "google-chrome.desktop";
+  browser = "firefox.desktop";
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
