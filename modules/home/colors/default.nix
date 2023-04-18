@@ -9,9 +9,6 @@ in rec {
   imports = [nix-colors.homeManagerModule];
 
   home.packages = with pkgs; [
-    (google-chrome.override {
-      commandLineArgs = ["--force-dark-mode" "--enable-features=WebUIDarkMode"];
-    })
     home-manager
     theme-switcher
   ];

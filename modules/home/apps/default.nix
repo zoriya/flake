@@ -16,7 +16,7 @@ with lib; let
     swaylock --image $(find ${config.home.homeDirectory}/wallpapers/ -type f | shuf -n 1)
   '';
 in {
-  imports = [ ./gtk.nix ];
+  imports = [./gtk.nix];
   options.modules.apps = {enable = mkEnableOption "apps";};
   options.darkColors = lib.mkOption {
     type = with types; attrsOf str;
@@ -25,7 +25,9 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs;
       [
-        # google-chrome
+        (google-chrome.override {
+          commandLineArgs = ["--force-dark-mode" "--enable-features=WebUIDarkMode"];
+        })
         firefox
         mpv
         xdg-utils
@@ -34,6 +36,9 @@ in {
         swayidle
         zathura
         cliphist
+        libreoffice
+        qbittorrent
+        xdg-utils
       ]
       ++ [lock];
 
@@ -76,7 +81,7 @@ in {
         map ctrl+plus change_font_size current +2.0
         map ctrl+minus change_font_size current -2.0
         map ctrl+backspace change_font_size current 0
-        
+
         # map kitty_mod+r launch --type background --stdin-source=@screen_scrollback sh -c 'grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | rofi -dmenu -p "Launch in browser" | xargs xdg-open'
         map kitty_mod+r open_url_with_hints
         map kitty_mod+t launch --type=tab --cwd=current
@@ -103,7 +108,7 @@ in {
       BROWSER = "google-chrome-stable";
       DEFAULT_BROWSER = BROWSER;
       # For rider
-      FLATPAK_ENABLE_SDK_EXT="*";
+      FLATPAK_ENABLE_SDK_EXT = "*";
     };
     xdg.enable = true;
     xdg.mimeApps = {
@@ -194,7 +199,7 @@ in {
     };
 
     xdg.configFile."nixpkgs/config.nix".text = ''
-    { allowUnfree = true; }
+      { allowUnfree = true; }
     '';
   };
 }

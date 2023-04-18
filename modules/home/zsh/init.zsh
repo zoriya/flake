@@ -37,3 +37,5 @@ export YSU_IGNORED_ALIASES=("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")
 export DIRENV_LOG_FORMAT=
 eval "$(atuin init zsh)"
 eval "$(nix-your-shell zsh)"
+
+setopt rm_star_silent

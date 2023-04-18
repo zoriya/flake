@@ -27,12 +27,16 @@ in {
       fzf
       nix-your-shell
       mosh
+      unzip
+      usbutils
+      pciutils
+      sshfs-fuse
     ];
 
     programs.atuin = {
       enable = true;
       settings = {
-         update_check = false;
+        update_check = false;
       };
     };
 
@@ -44,7 +48,7 @@ in {
     programs.less = {
       enable = true;
       keys = ''
-       \e quit
+        \e quit
       '';
     };
 
@@ -77,6 +81,7 @@ in {
         # Misc
         s = "git status";
         dc = "docker-compose";
+        dcd = "docker-compose -f docker-compose.dev.yml";
         op = "xdg-open";
         wp = "~/.config/hypr/wallpaper.sh";
         py = "nix-shell -p python3 --command python3";

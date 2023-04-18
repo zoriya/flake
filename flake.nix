@@ -63,10 +63,11 @@
             users.users.${user} = {
               hashedPassword = builtins.readFile ./password/${user};
               isNormalUser = true;
-              extraGroups = ["wheel" "input" "docker" "audio"];
+              extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
               shell = pkgs.zsh;
               packages = with pkgs; [
                 git
+                docker-compose
                 jq
               ];
             };
@@ -96,8 +97,21 @@
           ({pkgs, ...}: {
             programs.zsh.enable = true;
             environment.shells = with pkgs; [zsh];
+
+            services.locate = {
+              enable = true;
+              locate = pkgs.mlocate;
+              interval = "hourly";
+            };
+
             virtualisation.docker.enable = true;
-            environment.systemPackages = with pkgs; [docker-compose git];
+            environment.systemPackages = with pkgs; [
+              docker-compose
+              git
+              man-pages
+              man-pages-posix
+            ];
+            documentation.dev.enable = true;
           })
 
           tuxedo-nixos.nixosModules.default
@@ -105,6 +119,8 @@
             hardware.tuxedo-keyboard.enable = true;
             hardware.tuxedo-control-center.enable = true;
             # hardware.tuxedo-control-center.package = tuxedo-nixos.packages.x86_64-linux.default;
+            # TODO: Remove this.
+            services.globalprotect.enable = true;
           })
         ];
       };

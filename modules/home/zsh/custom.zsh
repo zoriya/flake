@@ -56,3 +56,17 @@ dotenv() {
 		(export ${=ENV}; $*)
 	fi
 }
+
+robot_install() {
+	robot=$(\where -p robot)
+	if [[ $? -eq 1 ]]; then 
+		pyt=$(\where -p python3)
+		if [[ $? -eq 1 ]]; then
+			nix-shell -p python3
+		fi
+
+		python3 -m venv /tmp/robot
+		source /tmp/robot/bin/activate
+		pip3 install robotframework RESTinstance
+	fi
+}

@@ -55,6 +55,7 @@ in {
           ".cache/flatpak"
           ".local/share/atuin"
           # Cache for sessions (keep website logged in, plugin downloaded...)
+          "./mozilla"
           ".config/google-chrome"
           ".config/discord"
           # Don't reinstall plugins on reboot
