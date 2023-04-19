@@ -6,6 +6,7 @@
 }: let
   cfg = config.fonts;
 in {
+  imports = [./flatpak_fonts.nix];
   options.fonts = {enable = lib.mkEnableOption "fonts";};
   config = lib.mkIf cfg.enable {
     console = {

@@ -31,7 +31,6 @@ in {
         firefox
         mpv
         xdg-utils
-        discord
         swaylock
         swayidle
         zathura
