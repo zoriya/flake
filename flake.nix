@@ -9,10 +9,10 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     hyprland = {
-      url = "github:hyprwm/Hyprland/v0.22.0beta";
+      url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
+    # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
     nix-colors.url = "github:misterio77/nix-colors";
     jq = {
@@ -28,7 +28,7 @@
     self,
     home-manager,
     hyprland,
-    neovim-nightly,
+    # neovim-nightly,
     nur,
     nixpkgs,
     tuxedo-nixos,
@@ -53,7 +53,7 @@
             nixpkgs.overlays = [
               (import ./overlays)
               nur.overlay
-              neovim-nightly.overlay
+              # neovim-nightly.overlay
             ];
           }
 
@@ -91,8 +91,11 @@
           }
 
           # TODO: use a module instead of this.
-          hyprland.nixosModules.default
-          {programs.hyprland.enable = true;}
+          # hyprland.nixosModules.default
+          {
+            programs.hyprland.enable = true;
+            # disabledModules = ["programs/hyprland.nix"];
+          }
 
           ({pkgs, ...}: {
             programs.zsh.enable = true;

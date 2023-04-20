@@ -9,7 +9,10 @@ in {
   options.modules.nvim = {enable = lib.mkEnableOption "nvim";};
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [neovim-nightly];
+    home.packages = with pkgs; [
+      neovim
+      #neovim-nightly
+    ];
 
     xdg.configFile."nvim/lua".source = ./lua;
     xdg.configFile."nvim/lazy-lock.json".source = ./lazy-lock.json;
