@@ -183,7 +183,9 @@ return {
 					"pylsp",
 					"jedi_language_server",
 					-- rls is deprecated, rust_analyzer should be used instead.
-					"rls"
+					"rls",
+					-- Prefer clangd
+					"ccls",
 				},
 				default_config = {
 					on_attach = lsp_on_attach,
