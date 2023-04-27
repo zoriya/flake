@@ -186,6 +186,8 @@ return {
 					"rls",
 					-- Prefer clangd
 					"ccls",
+					-- Bugged servers
+					"sqls"
 				},
 				default_config = {
 					on_attach = lsp_on_attach,
