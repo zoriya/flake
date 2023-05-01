@@ -20,6 +20,12 @@
     options = [ "size=4G" "mode=755" ];
   };
 
+  fileSystems."/tmp" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "size=8G" "mode=755" ];
+  };
+
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/fuhen";
     fsType = "ext4";

@@ -28,6 +28,7 @@ in {
         (google-chrome.override {
           commandLineArgs = ["--force-dark-mode" "--enable-features=WebUIDarkMode"];
         })
+        discord
         firefox
         mpv
         xdg-utils

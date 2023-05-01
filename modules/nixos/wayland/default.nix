@@ -12,12 +12,20 @@ in {
     services.printing.enable = true;
     security.rtkit.enable = true;
     security.polkit.enable = true;
-    services.pipewire = {
+
+    # Pipewire just refuses to have a decent mic so I will use pulseaudio for now
+    hardware.pulseaudio = {
       enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
+      support32Bit = true;
     };
+    # services.pipewire = {
+    #   enable = true;
+    #   alsa.enable = true;
+    #   alsa.support32Bit = true;
+    #   jack.enable = true;
+    #   pulse.enable = true;
+    #   socketActivation = true;
+    # };
     hardware.bluetooth.enable = true;
 
     # Autostart hyprland and display lockscreen as greeter
@@ -41,9 +49,9 @@ in {
     systemd = {
       user.services.polkit-gnome-authentication-agent-1 = {
         description = "polkit-gnome-authentication-agent-1";
-        wantedBy = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        after = [ "graphical-session.target" ];
+        wantedBy = ["graphical-session.target"];
+        wants = ["graphical-session.target"];
+        after = ["graphical-session.target"];
         serviceConfig = {
           Type = "simple";
           ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
@@ -55,16 +63,16 @@ in {
     };
 
     security.sudo.extraConfig = ''
-    Defaults  lecture="never"
+      Defaults  lecture="never"
     '';
 
     boot = {
-      kernelParams = [ "quiet" "splash" ];
+      kernelParams = ["quiet" "splash"];
       consoleLogLevel = 0;
       initrd.verbose = false;
       plymouth = {
         enable = true;
-        themePackages = [ pkgs.adi1090x-plymouth ];
+        themePackages = [pkgs.adi1090x-plymouth];
         theme = "colorful_loop";
       };
     };
