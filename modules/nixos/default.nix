@@ -24,7 +24,7 @@
     enable = true;
     enableSSHSupport = true;
   };
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   # This was needed on older versions of the kernel.
   #boot.kernelParams = ["i915.force_probe=46a6" "i915.enable_psr=0"];
 

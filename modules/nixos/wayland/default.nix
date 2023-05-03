@@ -14,18 +14,17 @@ in {
     security.polkit.enable = true;
 
     # Pipewire just refuses to have a decent mic so I will use pulseaudio for now
-    hardware.pulseaudio = {
-      enable = true;
-      support32Bit = true;
-    };
-    # services.pipewire = {
+    # hardware.pulseaudio = {
     #   enable = true;
-    #   alsa.enable = true;
-    #   alsa.support32Bit = true;
-    #   jack.enable = true;
-    #   pulse.enable = true;
-    #   socketActivation = true;
+    #   support32Bit = true;
     # };
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      jack.enable = true;
+      pulse.enable = true;
+    };
     hardware.bluetooth.enable = true;
 
     # Autostart hyprland and display lockscreen as greeter

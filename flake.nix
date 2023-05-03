@@ -36,7 +36,6 @@
   } @ rawInput: let
     user = "zoriya";
 
-    # TODO: mode this to a lib folder
     mkSystem = system: hostname: {
       nixModules,
       homeModules,
@@ -105,6 +104,8 @@
               enable = true;
               locate = pkgs.mlocate;
               interval = "hourly";
+              # Toggling the next things disable updatedb calls.
+              # localuser = null;
             };
 
             virtualisation.docker.enable = true;
