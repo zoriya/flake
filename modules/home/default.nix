@@ -10,6 +10,7 @@
     ./direnv
     ./fcitx5
     ./colors
+    ./ntfy
   ];
 
   home.stateVersion = "22.11";

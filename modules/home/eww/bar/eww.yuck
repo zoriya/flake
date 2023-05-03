@@ -1,7 +1,6 @@
 (include "./bar/workspaces/eww.yuck")
 (include "./bar/layout/eww.yuck")
 (include "./bar/window/eww.yuck")
-(include "./bar/notification/eww.yuck")
 (include "./bar/battery/eww.yuck")
 (include "./bar/language/eww.yuck")
 (include "./bar/clock.yuck")

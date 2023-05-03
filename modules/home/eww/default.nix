@@ -31,7 +31,6 @@ in {
       wlogout
       bc
       jq
-      tiramisu
       fusuma
       eww-wayland
     ];

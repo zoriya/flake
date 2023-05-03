@@ -147,6 +147,7 @@
           nvim.enable = true;
           direnv.enable = true;
           fcitx5.enable = true;
+          ntfy.enable = true;
         };
       };
     };
