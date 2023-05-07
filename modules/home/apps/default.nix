@@ -12,9 +12,6 @@ with lib; let
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
-  lock = pkgs.writeShellScriptBin "lock" ''
-    swaylock --image $(find ${config.home.homeDirectory}/wallpapers/ -type f | shuf -n 1)
-  '';
 in {
   imports = [./gtk.nix];
   options.modules.apps = {enable = mkEnableOption "apps";};
@@ -32,15 +29,11 @@ in {
         firefox
         mpv
         xdg-utils
-        swaylock
-        swayidle
         zathura
-        cliphist
         libreoffice
         qbittorrent
         xdg-utils
-      ]
-      ++ [lock];
+      ];
 
     programs.kitty = {
       enable = true;

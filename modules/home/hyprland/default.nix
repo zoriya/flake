@@ -21,16 +21,16 @@ in {
         pulseaudio
         wob
       ];
-      wayland.windowManager.hyprland = {
-        enable = true;
-        systemdIntegration = true;
-        xwayland = {
-          enable = true;
-          hidpi = true;
-        };
-        nvidiaPatches = false;
-        extraConfig = builtins.readFile ./hyprland.conf;
-      };
+      # wayland.windowManager.hyprland = {
+      #   enable = true;
+      #   systemdIntegration = true;
+      #   xwayland = {
+      #     enable = true;
+      #     hidpi = true;
+      #   };
+      #   nvidiaPatches = false;
+      #   extraConfig = builtins.readFile ./hyprland.conf;
+      # };
 
       home.file.".config/hypr/wallpaper.sh" = {
         source = ./wallpaper.sh;

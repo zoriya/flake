@@ -8,10 +8,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
     nix-colors.url = "github:misterio77/nix-colors";
@@ -27,7 +23,6 @@
   outputs = {
     self,
     home-manager,
-    hyprland,
     # neovim-nightly,
     nur,
     nixpkgs,
@@ -46,6 +41,7 @@
         specialArgs = inputs;
         modules = [
           ./modules/nixos
+          ./modules/gnome
           nixModules
           nur.nixosModules.nur
           {
@@ -82,18 +78,11 @@
               users.${user} = {
                 imports = [
                   ./modules/home
-                  hyprland.homeManagerModules.default
+                  ./modules/gnome/home.nix
                 ];
                 config.modules = homeModules;
               };
             };
-          }
-
-          # TODO: use a module instead of this.
-          # hyprland.nixosModules.default
-          {
-            programs.hyprland.enable = true;
-            # disabledModules = ["programs/hyprland.nix"];
           }
 
           ({pkgs, ...}: {
@@ -138,15 +127,11 @@
           games.enable = true;
         };
         homeModules = {
-          hyprland.enable = true;
-          eww.enable = true;
-          rofi.enable = true;
           apps.enable = true;
           zsh.enable = true;
           git.enable = true;
           nvim.enable = true;
           direnv.enable = true;
-          fcitx5.enable = true;
           ntfy.enable = true;
         };
       };
