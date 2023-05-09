@@ -190,6 +190,7 @@ in {
       pictures = "${config.home.homeDirectory}/stuff";
       publicShare = "${config.home.homeDirectory}/stuff";
     };
+    home.file.".face".source = ../../../face.png;
 
     xdg.configFile."nixpkgs/config.nix".text = ''
       { allowUnfree = true; }

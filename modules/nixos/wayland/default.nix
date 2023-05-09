@@ -31,16 +31,5 @@ in {
     security.sudo.extraConfig = ''
       Defaults  lecture="never"
     '';
-
-    boot = {
-      kernelParams = ["quiet" "splash"];
-      consoleLogLevel = 0;
-      initrd.verbose = false;
-      plymouth = {
-        enable = true;
-        themePackages = [pkgs.adi1090x-plymouth];
-        theme = "colorful_loop";
-      };
-    };
   };
 }

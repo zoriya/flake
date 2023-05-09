@@ -46,7 +46,6 @@ in {
           "downloads"
           "stuff"
           "projects"
-          "wallpapers"
           { directory = ".gnupg"; mode = "0700"; }
           { directory = ".ssh"; mode = "0700"; }
           ".local/share/direnv"
@@ -66,6 +65,12 @@ in {
           ".config/zsh/custom.zsh"
         ];
       };
+    };
+
+    fileSystems."/home/zoriya/wallpapers" = {
+      device = "/home/zoriya/projects/flake/wallpapers/";
+      fsType = "none";
+      options = [ "bind" ];
     };
   };
 }
