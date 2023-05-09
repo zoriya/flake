@@ -9,12 +9,15 @@ in {
   dconf.settings = with lib.hm.gvariant; {
     "org/gnome/shell" = {
       disable-user-extensions = false;
+      # disable-extension-version-validation = true;
       enabled-extensions = [
         "forge@jmmaranan.com"
         # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
         # "blur-my-shell@aunetx"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
-        "rounded-window-corners@yilozt.shell-extension.zip"
+        "WallpaperSwitcher@Rishu"
+        # Waiting for https://github.com/yilozt/rounded-window-corners/issues/121
+        # "rounded-window-corners@yilozt.shell-extension.zip"
         # Disable while not configured
         # "widgets@aylur"
         # "just-perfection-desktop@just-perfection"
@@ -24,7 +27,7 @@ in {
 
     "org/gnome/desktop/wm/preferences" = {
       auto-raise = true;
-      num-workspaces=9;
+      num-workspaces = 9;
     };
     # "org/gnome/shell/extensions/just-perfection" = {
     #   activities-button = false;
@@ -50,7 +53,7 @@ in {
     "org/gnome/mutter" = {
       experimental-features = ["scale-monitor-framebuffer"];
       overlay-key = "";
-      workspaces-only-on-primary=true;
+      workspaces-only-on-primary = true;
     };
     "org/gnome/desktop/interface" = {
       scaling-factor = 1.5;
@@ -60,13 +63,9 @@ in {
       clock-show-weekday = true;
       show-battery-percentage = true;
     };
-    # "org/gnome/desktop/background" = {
-    #   picture-uri = "file:///home/zoriya/.cache/current-wallpaper";
-    #   picture-uri-dark = "file:///home/zoriya/.cache/current-wallpaper";
-    # };
     "org/gnome/desktop/input-sources" = {
-      mru-sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "ibus" "mozc-jp" ]) ];
-      sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "ibus" "mozc-jp" ]) ];
+      mru-sources = [(mkTuple ["xkb" "us"]) (mkTuple ["ibus" "mozc-jp"])];
+      sources = [(mkTuple ["xkb" "us"]) (mkTuple ["ibus" "mozc-jp"])];
       xkb-options = ["terminate:ctrl_alt_bksp" "caps:swapescape"];
     };
 
@@ -88,6 +87,17 @@ in {
       command = "firefox";
       name = "Firefox";
     };
+
+    "org/gnome/shell/extensions/WallpaperSwitcher" = {
+      wallpaper-path = "/home/zoriya/wallpapers";
+      switching-mode = 1;
+      frequency = 3000;
+    };
+    "org/gnome/desktop/background" = {
+      # Setting default images for before the wallpaper switcher runs.
+      picture-uri = "file:///home/zoriya/wallpapers/default";
+      picture-uri-dark = "file:///home/zoriya/wallpapers/default";
+    };
   };
 
   home.packages = with pkgs.gnomeExtensions; [
@@ -96,6 +106,7 @@ in {
     # just-perfection
     rounded-window-corners
     aylurs-widgets
+    wallpaper-switcher
     wallpaper
   ];
 
