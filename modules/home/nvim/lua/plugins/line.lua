@@ -60,7 +60,7 @@ return {
 								end,
 							},
 							sections = { "error", "warn" },
-							symbols = { error = " ", warn = " " },
+							symbols = { error = "󰅚 ", warn = " " },
 							always_visible = false,
 						}
 					},

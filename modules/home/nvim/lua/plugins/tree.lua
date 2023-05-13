@@ -34,11 +34,11 @@ return {
 						added     = "✚",
 						deleted   = "",
 						modified  = "",
-						renamed   = "",
+						renamed   = "󰁕",
 						-- Status type
 						untracked = "",
 						ignored   = "◌",
-						unstaged  = "",
+						unstaged  = "󰐊",
 						staged    = "✓",
 						conflict  = "",
 					},
