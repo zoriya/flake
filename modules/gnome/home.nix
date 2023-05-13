@@ -9,9 +9,11 @@ in {
   dconf.settings = with lib.hm.gvariant; {
     "org/gnome/shell" = {
       disable-user-extensions = false;
-      # disable-extension-version-validation = true;
+      # Waiting for https://github.com/bdaase/noannoyance/pull/29
+      disable-extension-version-validation = true;
       enabled-extensions = [
         "forge@jmmaranan.com"
+        "noannoyance@daase.net"
         # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
         # "blur-my-shell@aunetx"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
@@ -62,11 +64,26 @@ in {
       enable-hot-corners = false;
       clock-show-weekday = true;
       show-battery-percentage = true;
+      cursor-blink = false;
     };
     "org/gnome/desktop/input-sources" = {
       mru-sources = [(mkTuple ["xkb" "us"]) (mkTuple ["ibus" "mozc-jp"])];
       sources = [(mkTuple ["xkb" "us"]) (mkTuple ["ibus" "mozc-jp"])];
       xkb-options = ["terminate:ctrl_alt_bksp" "caps:swapescape"];
+    };
+
+    "org/gnome/desktop/wm/keybindings" = {
+      minimize = [];
+      activate-window-menu = [];
+      close = ["<Super>c"];
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      screensaver = true;
+    };
+
+    "org/gnome/shell/keybindings" = {
+      toggle-message-tray = [];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
@@ -107,6 +124,7 @@ in {
     rounded-window-corners
     aylurs-widgets
     wallpaper-switcher
+    noannoyance-2
     wallpaper
   ];
 

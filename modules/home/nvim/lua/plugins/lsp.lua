@@ -174,21 +174,22 @@ return {
 					-- Disable generic purpose LSP that I don't care about.
 					"efm",
 					"diagnosticls",
-					-- Prefer tsserver
-					"denols",
-					"eslint",
-					-- Prefer nix_ls (more mature)
-					"rnix",
-					-- Prefer pyright
-					"pylsp",
-					"jedi_language_server",
-					-- rls is deprecated, rust_analyzer should be used instead.
-					"rls",
-					-- Prefer clangd
-					"ccls",
 					-- Bugged servers
 					"sqls"
 				},
+				preferred_servers = {
+					haskell = { "hls" },
+					rust = { "rust_analyzer" },
+					c = { "clangd" },
+					cpp = { "clangd" },
+					pyright = { "pyright" },
+					nix = { "nixls" },
+					typescript = { "tsserver" },
+					javascript = { "tsserver" },
+					jsx = { "tsserver" },
+					tsx = { "tsserver" },
+				},
+
 				default_config = {
 					on_attach = lsp_on_attach,
 					capabilities = lsp_capabilities,
