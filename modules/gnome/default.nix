@@ -25,6 +25,14 @@ in {
   i18n.inputMethod.enabled = "ibus";
   i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [mozc];
 
+  # TODO: Remove this, temporary fix while the extension is not published.
+  fileSystems."/home/zoriya/.local/share/gnome-shell/extensions/fairy@zoriya.dev" = {
+    device = "/home/zoriya/projects/fairy/";
+    fsType = "none";
+    options = [ "bind" ];
+  };
+
+  environment.systemPackages = with pkgs; [gnome3.gnome-tweaks];
   environment.gnome.excludePackages =
     (with pkgs; [
       gnome-tour

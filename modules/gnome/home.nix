@@ -12,11 +12,16 @@ in {
       # Waiting for https://github.com/bdaase/noannoyance/pull/29
       disable-extension-version-validation = true;
       enabled-extensions = [
-        "forge@jmmaranan.com"
+        "fairy@zoriya.dev"
         "noannoyance@daase.net"
         # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
         # "blur-my-shell@aunetx"
+        "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
+        "default-workspace@mateusrodcosta.com"
+        "pano@elhan.io"
+        "color-picker@tuberry"
+        "unite@hardpixel.eu"
         "WallpaperSwitcher@Rishu"
         # Waiting for https://github.com/yilozt/rounded-window-corners/issues/121
         # "rounded-window-corners@yilozt.shell-extension.zip"
@@ -27,10 +32,25 @@ in {
       welcome-dialog-last-shown-version = 999999;
     };
 
+    "org/gnome/desktop/sound" = {
+      allow-volume-above-100-percent = true;
+    };
+
+    "org/gnome/mutter" = {
+      focus-change-on-pointer-rest = false;
+    };
+
     "org/gnome/desktop/wm/preferences" = {
       auto-raise = true;
       num-workspaces = 9;
+      resize-with-right-button = true;
+      focus-mode = "sloppy";
     };
+
+    "org/gnome/shell/extensions/dash-to-dock" = {
+      disable-overview-on-startup = true;
+    };
+
     # "org/gnome/shell/extensions/just-perfection" = {
     #   activities-button = false;
     #   startup-status = 0;
@@ -65,6 +85,8 @@ in {
       clock-show-weekday = true;
       show-battery-percentage = true;
       cursor-blink = false;
+      monospace-font-name = "JetBrainsMono Nerd Font 10";
+      locate-pointer = true;
     };
     "org/gnome/desktop/input-sources" = {
       mru-sources = [(mkTuple ["xkb" "us"]) (mkTuple ["ibus" "mozc-jp"])];
@@ -79,11 +101,20 @@ in {
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      screensaver = true;
+      screensaver = ["<Super><Shift>l"];
     };
 
     "org/gnome/shell/keybindings" = {
       toggle-message-tray = [];
+      switch-to-application-1 = [];
+      switch-to-application-2 = [];
+      switch-to-application-3 = [];
+      switch-to-application-4 = [];
+      switch-to-application-5 = [];
+      switch-to-application-6 = [];
+      switch-to-application-7 = [];
+      switch-to-application-8 = [];
+      switch-to-application-9 = [];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
@@ -110,12 +141,51 @@ in {
       switching-mode = 1;
       frequency = 3000;
     };
+
+    "org/gnome/desktop/screensaver" = {
+      picture-uri = "file:///home/zoriya/wallpapers/default";
+    };
+
     "org/gnome/desktop/background" = {
       # Setting default images for before the wallpaper switcher runs.
       picture-uri = "file:///home/zoriya/wallpapers/default";
       picture-uri-dark = "file:///home/zoriya/wallpapers/default";
     };
-  };
+
+    "org/gnome/shell/extensions/auto-move-windows" = {
+      application-list = ["discord.desktop:4"];
+    };
+
+    # Disable globally all the option, leave only the options to disable client decorations.
+    "org/gnome/shell/extensions/unite" = {
+      extend-left-box = false;
+      autofocus-windows = false;
+      show-legacy-tray = false;
+      show-desktop-name = false;
+      enable-titlebar-actions = false;
+      restrict-to-primary-screen = false;
+      hide-activities-button = "always";
+      hide-window-titlebars = "always";
+      show-window-title = "never";
+      show-window-buttons = "never";
+      notifications-position = "center";
+      hide-dropdown-arrows = false;
+      hide-app-menu-icon = true;
+      reduce-panel-spacing = false;
+      desktop-name-text = "";
+    };
+
+    "org/gnome/shell/extensions/pano" = {
+      history-length = 500;
+      global-shortcut = ["<Super>v"];
+      incognito-shortcut = ["<Shift><Control><Alt><Super>v"];
+      paste-on-select = true;
+      send-notification-on-copy = false;
+      play-audio-on-copy = false;
+      keep-search-entry = false;
+      show-indicator = false;
+    };
+};
 
   home.packages = with pkgs.gnomeExtensions; [
     forge
@@ -125,7 +195,11 @@ in {
     aylurs-widgets
     wallpaper-switcher
     noannoyance-2
+    default-workspace
     wallpaper
+    pano
+    color-picker
+    unite
   ];
 
   # xdg.configFile."autostart/wallpaper.desktop".text = ''
