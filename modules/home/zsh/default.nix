@@ -31,6 +31,8 @@ in {
       usbutils
       pciutils
       sshfs-fuse
+      zip
+      nodePackages.http-server
     ];
 
     programs.atuin = {

@@ -33,6 +33,9 @@ in {
         libreoffice
         qbittorrent
         xdg-utils
+        youtube-music
+        wl-clipboard
+        alsa-utils
       ];
 
     programs.kitty = {
@@ -51,6 +54,7 @@ in {
         inactive_tab_background = "#${base01}";
         inactive_tab_foreground = "#${base04}";
         tab_bar_background = "#${base01}";
+        hide_window_decorations = "yes";
 
         enable_audio_bell = false;
         cursor_blink_interval = 0;

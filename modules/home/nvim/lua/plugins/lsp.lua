@@ -183,7 +183,7 @@ return {
 					c = { "clangd" },
 					cpp = { "clangd" },
 					pyright = { "pyright" },
-					nix = { "nixls" },
+					nix = { "nil_ls" },
 					typescript = { "tsserver" },
 					javascript = { "tsserver" },
 					jsx = { "tsserver" },

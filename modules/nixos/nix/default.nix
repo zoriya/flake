@@ -35,6 +35,7 @@ in {
         "/var/lib/bluetooth"
         "/var/lib/systemd/coredump"
         "/var/lib/docker"
+        "/var/lib/waydroid"
         "/var/lib/flatpak"
         "/etc/NetworkManager/system-connections"
       ];
@@ -50,6 +51,7 @@ in {
           { directory = ".ssh"; mode = "0700"; }
           ".local/share/direnv"
           ".local/share/flatpak"
+          ".local/share/waydroid"
           ".var"
           ".cache/flatpak"
           ".local/share/atuin"
@@ -57,6 +59,7 @@ in {
           ".mozilla"
           ".config/google-chrome"
           ".config/discord"
+          ".config/YouTube\ Music"
           # Don't reinstall plugins on reboot
           ".local/share/nvim"
           ".local/state/nvim"

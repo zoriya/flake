@@ -32,6 +32,15 @@ in {
       welcome-dialog-last-shown-version = 999999;
     };
 
+    "org/gnome/desktop/session" = {
+      idle-delay = mkUint32 900;
+    };
+
+    "org/gnome/settings-daemon/plugins/power" = {
+      sleep-inactive-battery-timeout = 1800;
+      sleep-inactive-ac-timeout = 1800;
+    };
+
     "org/gnome/desktop/sound" = {
       allow-volume-above-100-percent = true;
     };
@@ -185,7 +194,7 @@ in {
       keep-search-entry = false;
       show-indicator = false;
     };
-};
+  };
 
   home.packages = with pkgs.gnomeExtensions; [
     forge
@@ -210,4 +219,5 @@ in {
   #   OnlyShowIn=GNOME;
   # '';
   xdg.configFile."autostart/discord.desktop".text = pkgs.discord.desktopItem.text;
+  # xdg.configFile."autostart/youtube-music.desktop".text = pkgs.youtube-music.desktopItem.text;
 }
