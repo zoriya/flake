@@ -33,6 +33,7 @@ in {
       sshfs-fuse
       zip
       nodePackages.http-server
+      nodePackages.live-server
     ];
 
     programs.atuin = {

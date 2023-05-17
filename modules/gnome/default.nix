@@ -4,9 +4,8 @@
   pkgs,
   inputs,
   ...
-}: let
-  cfg = config.gtk;
-in {
+}:
+{
   services.xserver = {
     enable = true;
     displayManager = {

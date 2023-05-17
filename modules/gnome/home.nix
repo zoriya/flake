@@ -18,7 +18,7 @@ in {
         # "blur-my-shell@aunetx"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
-        "default-workspace@mateusrodcosta.com"
+        # "default-workspace@mateusrodcosta.com"
         "pano@elhan.io"
         "color-picker@tuberry"
         "unite@hardpixel.eu"
@@ -162,7 +162,7 @@ in {
     };
 
     "org/gnome/shell/extensions/auto-move-windows" = {
-      application-list = ["discord.desktop:4"];
+      application-list = ["discord.desktop:4" "youtube-music.desktop:4"];
     };
 
     # Disable globally all the option, leave only the options to disable client decorations.
@@ -211,13 +211,6 @@ in {
     unite
   ];
 
-  # xdg.configFile."autostart/wallpaper.desktop".text = ''
-  #   [Desktop Entry]
-  #   Type=Application
-  #   Name=Wallpapers
-  #   Exec=wp
-  #   OnlyShowIn=GNOME;
-  # '';
-  xdg.configFile."autostart/discord.desktop".text = pkgs.discord.desktopItem.text;
-  # xdg.configFile."autostart/youtube-music.desktop".text = pkgs.youtube-music.desktopItem.text;
+  xdg.configFile."autostart/discord.desktop".source = "${pkgs.discord}/share/applications/discord.desktop";
+  xdg.configFile."autostart/youtube-music.desktop".source = "${pkgs.youtube-music}/share/applications/youtube-music.desktop";
 }
