@@ -13,21 +13,21 @@ in {
       disable-extension-version-validation = true;
       enabled-extensions = [
         "fairy@zoriya.dev"
-        "noannoyance@daase.net"
+        # "noannoyance@daase.net"
         # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
         # "blur-my-shell@aunetx"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
-        # "default-workspace@mateusrodcosta.com"
+        "default-workspace@mateusrodcosta.com"
         "pano@elhan.io"
-        "color-picker@tuberry"
+        "just-perfection-desktop@just-perfection"
+        # "color-picker@tuberry"
         "unite@hardpixel.eu"
         "WallpaperSwitcher@Rishu"
         # Waiting for https://github.com/yilozt/rounded-window-corners/issues/121
         # "rounded-window-corners@yilozt.shell-extension.zip"
         # Disable while not configured
         # "widgets@aylur"
-        # "just-perfection-desktop@just-perfection"
       ];
       welcome-dialog-last-shown-version = 999999;
     };
@@ -162,7 +162,11 @@ in {
     };
 
     "org/gnome/shell/extensions/auto-move-windows" = {
-      application-list = ["discord.desktop:4" "youtube-music.desktop:4"];
+      application-list = ["discord.desktop:3" "youtube-music.desktop:3"];
+    };
+
+    "org/gnome/shell/extensions/default-workspace" = {
+      default-workspace-number = 4;
     };
 
     # Disable globally all the option, leave only the options to disable client decorations.
@@ -194,12 +198,28 @@ in {
       keep-search-entry = false;
       show-indicator = false;
     };
+
+    "org/gnome/shell/extensions/fairy" = { 
+      tag-names = ["一" "二" "三" " 四" "五" "六" "七" "八" "九"];
+    };
+
+    "org/gnome/shell/extensions/just-perfection" = {
+      activities-button = false;
+      background-menu = false;
+      clock-menu-position = 1;
+      clock-menu-position-offset = 10;
+      dash = false;
+      workspace-switcher-size = 10;
+      startup-status = 0;
+      theme = false;
+      window-demands-attention-focus = true;
+      window-preview-caption = false;
+    };
   };
 
   home.packages = with pkgs.gnomeExtensions; [
-    forge
     blur-my-shell
-    # just-perfection
+    just-perfection
     rounded-window-corners
     aylurs-widgets
     wallpaper-switcher
