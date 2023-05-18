@@ -1,33 +1,3 @@
-local function set_cs_catppuccin()
-	local f = io.open(os.getenv("HOME") .. "/.local/state/theme")
-	if f == nil then
-		vim.cmd([[colorscheme catppuccin-mocha]])
-		return
-	end
-
-	local theme = f:read("*l")
-	if theme == "dark" then
-		vim.cmd([[colorscheme catppuccin-mocha]])
-	else
-		vim.cmd([[colorscheme catppuccin-latte]])
-	end
-end
-
-local function color_scheme_watch()
-	local handle = vim.loop.new_fs_event()
-	if not handle then
-		vim.print("Error, handle could not be created. Colorscheme watch failed")
-		return
-	end
-	vim.loop.fs_event_start(handle, os.getenv("HOME") .. "/.local/state/theme", { watch_entry = false, stat = true, }, function (err)
-		if err then
-			vim.print("Error could not watch colorscheme: " .. err)
-			return
-		end
-		vim.schedule(set_cs_catppuccin)
-	end)
-end
-
 return {
 	{
 		"catppuccin/nvim",
@@ -75,8 +45,13 @@ return {
 		},
 		config = function(_, opts)
 			require("catppuccin").setup(opts)
-			set_cs_catppuccin()
-			color_scheme_watch()
+			vim.cmd([[colorscheme catppuccin]])
 		end
+	},
+
+	{
+		"vimpostor/vim-lumen",
+		lazy = false,
+		priority = 1000,
 	},
 }
