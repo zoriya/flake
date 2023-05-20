@@ -13,7 +13,7 @@ in {
       disable-extension-version-validation = true;
       enabled-extensions = [
         "fairy@zoriya.dev"
-        # "noannoyance@daase.net"
+        "noannoyance@daase.net"
         # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
         # "blur-my-shell@aunetx"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
@@ -26,8 +26,6 @@ in {
         "WallpaperSwitcher@Rishu"
         # Waiting for https://github.com/yilozt/rounded-window-corners/issues/121
         # "rounded-window-corners@yilozt.shell-extension.zip"
-        # Disable while not configured
-        # "widgets@aylur"
       ];
       welcome-dialog-last-shown-version = 999999;
     };
@@ -60,21 +58,14 @@ in {
       disable-overview-on-startup = true;
     };
 
-    # "org/gnome/shell/extensions/just-perfection" = {
-    #   activities-button = false;
-    #   startup-status = 0;
-    #   dash = false;
-    # };
     # "org/gnome/shell/world-clocks" = {
     #   locations = "[<(uint32 2, <('Nantes', 'LFRS', true, [(0.82321363634175626, -0.027925268031909273)], [(0.82408630096775348, -0.027052603405912107)])>)>]";
     # };
-    # "org/gnome/Weather" = {
+    # "org/gnome/shell/weather" = {
+    #   automatic-location = true;
+    #   # locations = "[<(uint32 2, <('Tokyo', 'RJTI', true, [(0.62191898430954862, 2.4408429589140699)], [(0.62282074357417661, 2.4391218722853854)])>)>]";
     #   locations = "[<(uint32 2, <('Tokyo', 'RJTI', true, [(0.62191898430954862, 2.4408429589140699)], [(0.62282074357417661, 2.4391218722853854)])>)>]";
     # };
-    "org/gnome/shell/weather" = {
-      automatic-location = true;
-      # locations = "[<(uint32 2, <('Tokyo', 'RJTI', true, [(0.62191898430954862, 2.4408429589140699)], [(0.62282074357417661, 2.4391218722853854)])>)>]";
-    };
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
     };
@@ -107,6 +98,8 @@ in {
       minimize = [];
       activate-window-menu = [];
       close = ["<Super>c"];
+      move-to-monitor-left = ["<Shift><Super>comma"];
+      move-to-monitor-right = ["<Shift><Super>period"];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
@@ -206,8 +199,8 @@ in {
     "org/gnome/shell/extensions/just-perfection" = {
       activities-button = false;
       background-menu = false;
-      clock-menu-position = 1;
-      clock-menu-position-offset = 10;
+      # clock-menu-position = 1;
+      # clock-menu-position-offset = 10;
       dash = false;
       workspace-switcher-size = 10;
       startup-status = 0;
@@ -221,7 +214,6 @@ in {
     blur-my-shell
     just-perfection
     rounded-window-corners
-    aylurs-widgets
     wallpaper-switcher
     noannoyance-2
     default-workspace

@@ -63,6 +63,9 @@ in {
           # Don't reinstall plugins on reboot
           ".local/share/nvim"
           ".local/state/nvim"
+          # Gnome accounts
+          ".config/goa-1.0"
+          ".cache/gnome-control-center-goa-helper"
         ];
         files = [
           ".config/zsh/custom.zsh"
