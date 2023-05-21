@@ -14,8 +14,7 @@ in {
       enabled-extensions = [
         "fairy@zoriya.dev"
         "noannoyance@daase.net"
-        # Waiting for https://github.com/aunetx/blur-my-shell/issues/388
-        # "blur-my-shell@aunetx"
+        "blur-my-shell@aunetx"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
         "default-workspace@mateusrodcosta.com"
@@ -28,6 +27,14 @@ in {
         # "rounded-window-corners@yilozt.shell-extension.zip"
       ];
       welcome-dialog-last-shown-version = 999999;
+    };
+
+    # Due to https://github.com/aunetx/blur-my-shell/issues/388
+    "org/gnome/shell/extensions/blur-my-shell/applications" = {
+      blur = false;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/panel" = {
+      override-background-dynamically = true;
     };
 
     "org/gnome/desktop/session" = {
