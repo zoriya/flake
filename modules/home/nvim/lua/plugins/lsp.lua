@@ -66,6 +66,7 @@ local kind_icons = {
 return {
 	{
 		"dundalek/lazy-lsp.nvim",
+		dev = true,
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			{
@@ -182,12 +183,14 @@ return {
 					rust = { "rust_analyzer" },
 					c = { "clangd" },
 					cpp = { "clangd" },
-					pyright = { "pyright" },
+					python = { "pyright" },
 					nix = { "nil_ls" },
 					typescript = { "tsserver" },
 					javascript = { "tsserver" },
 					jsx = { "tsserver" },
 					tsx = { "tsserver" },
+					javascriptreact = { "tsserver" },
+					typescriptreact = { "tsserver" },
 				},
 
 				default_config = {

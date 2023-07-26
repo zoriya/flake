@@ -16,7 +16,8 @@
       flake = false;
     };
     tuxedo-nixos = {
-      url = "github:blitz/tuxedo-nixos";
+      url = "path:/home/zoriya/projects/tuxedo-nixos"; #"github:blitz/tuxedo-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -93,8 +94,7 @@
               enable = true;
               locate = pkgs.mlocate;
               interval = "hourly";
-              # Toggling the next things disable updatedb calls.
-              # localuser = null;
+              localuser = null;
             };
 
             virtualisation.docker.enable = true;
@@ -111,9 +111,6 @@
           ({lib, ...}: {
             hardware.tuxedo-keyboard.enable = true;
             hardware.tuxedo-control-center.enable = true;
-            # hardware.tuxedo-control-center.package = tuxedo-nixos.packages.x86_64-linux.default;
-            # TODO: Remove this.
-            services.globalprotect.enable = true;
           })
         ];
       };

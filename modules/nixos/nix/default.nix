@@ -27,7 +27,6 @@ in {
       '';
     };
     nixpkgs.config.allowUnfree = true;
-
     environment.persistence."/nix/persist" = {
       hideMounts = true;
       directories = [
