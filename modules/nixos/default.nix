@@ -18,7 +18,7 @@
     efi.canTouchEfiVariables = true;
   };
   networking.networkmanager.enable = true;
-  time.timeZone = "Asia/Tokyo";
+  services.automatic-timezoned.enable = true;
 
   programs.gnupg.agent = {
     enable = true;
