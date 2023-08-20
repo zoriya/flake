@@ -25,6 +25,7 @@ in {
         ../dwl_patches/output-power-managment.patch
         ../dwl_patches/keyboard-shortcut-inhibit.patch
         ../dwl_patches/cursor_wrap.patch
+        ../dwl_patches/vanitygaps.patch
       ];
     });
 
