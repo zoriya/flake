@@ -1,20 +1,36 @@
-self: super: 
-  let
-    enableWayland = drv: bins: 
-      super.symlinkJoin {
-        name = drv.name;
-        paths = [ drv ];
-        buildInputs = [ super.makeWrapper ];
-        postBuild = super.lib.concatStrings (map (bin: ''
+{dwl-source}: self: super: let
+  enableWayland = drv: bins:
+    super.symlinkJoin {
+      name = drv.name;
+      paths = [drv];
+      buildInputs = [super.makeWrapper];
+      postBuild = super.lib.concatStrings (map (bin: ''
           wrapProgram $out/bin/${bin} \
             --add-flags "--enable-features=UseOzonePlatform" \
             --add-flags "--ozone-platform=wayland"
-        '') bins);
-      };
-  in {
-    tuxedo-keyboard = super.callPackage ./tuxedo-keyboard {};
-    slack = enableWayland super.slack ["slack"];
-    discord = enableWayland super.discord ["discord" "Discord"];
-    youtube-music = enableWayland super.youtube-music ["youtube-music"];
-    vscode = enableWayland super.vscode ["code"];
-  }
+        '')
+        bins);
+    };
+in {
+  dwl =
+    (super.dwl.override
+      {conf = ../modules/dwl/config.h;})
+    .overrideAttrs (oldAttrs: {
+      src = dwl-source;
+      patches = [
+        ../dwl_patches/autostart.patch
+        ../dwl_patches/deck.patch
+        # ../dwl_patches/focusMonPointer.patch
+        ../dwl_patches/point.patch
+        ../dwl_patches/output-power-managment.patch
+        ../dwl_patches/keyboard-shortcut-inhibit.patch
+        ../dwl_patches/cursor_wrap.patch
+      ];
+    });
+
+  tuxedo-keyboard = super.callPackage ./tuxedo-keyboard {};
+  slack = enableWayland super.slack ["slack"];
+  discord = enableWayland super.discord ["discord" "Discord"];
+  youtube-music = enableWayland super.youtube-music ["youtube-music"];
+  vscode = enableWayland super.vscode ["code"];
+}

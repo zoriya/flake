@@ -19,6 +19,11 @@
       url = "path:/home/zoriya/projects/tuxedo-nixos"; #"github:blitz/tuxedo-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dwl-source = {
+      # Use dwl's master.
+      url = "github:djpohly/dwl";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -28,6 +33,7 @@
     nur,
     nixpkgs,
     tuxedo-nixos,
+    dwl-source,
     ...
   } @ rawInput: let
     user = "zoriya";
@@ -43,11 +49,12 @@
         modules = [
           ./modules/nixos
           ./modules/gnome
+          # ./modules/dwl
           nixModules
           nur.nixosModules.nur
           {
             nixpkgs.overlays = [
-              (import ./overlays)
+              (import ./overlays { inherit dwl-source; })
               nur.overlay
               # neovim-nightly.overlay
             ];
@@ -80,6 +87,7 @@
                 imports = [
                   ./modules/home
                   ./modules/gnome/home.nix
+                  ./modules/dwl/home.nix
                 ];
                 config.modules = homeModules;
               };

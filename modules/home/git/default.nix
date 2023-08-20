@@ -27,6 +27,7 @@ in {
         push.autoSetupRemote = true;
         init.defaultBranch = "master";
         pull.ff = "only";
+        advice.diverging = false;
       };
 
       userEmail = "zoe.roux@zoriya.dev";

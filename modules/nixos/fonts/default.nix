@@ -15,7 +15,7 @@ in {
       earlySetup = true;
     };
     fonts = {
-      fonts = with pkgs; [
+      packages = with pkgs; [
         roboto
         dejavu_fonts
         # Some japanese fonts

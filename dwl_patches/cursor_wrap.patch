@@ -1,0 +1,65 @@
+diff --git a/config.def.h b/config.def.h
+index 447ba00..2eaf29f 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -9,6 +9,9 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
+ 
+ /* tagging - tagcount must be no greater than 31 */
+ static const int tagcount = 9;
++/* cursor warping */
++static const bool cursor_warp = true;
++
+ 
+ static const Rule rules[] = {
+ 	/* app_id     title       tags mask     isfloating   monitor */
+diff --git a/dwl.c b/dwl.c
+index 93f66ef..5562c0d 100644
+--- a/dwl.c
++++ b/dwl.c
+@@ -314,6 +314,7 @@ static void updatetitle(struct wl_listener *listener, void *data);
+ static void urgent(struct wl_listener *listener, void *data);
+ static void view(const Arg *arg);
+ static void virtualkeyboard(struct wl_listener *listener, void *data);
++static void warpcursor(const Client *c);
+ static Monitor *xytomon(double x, double y);
+ static struct wlr_scene_node *xytonode(double x, double y, struct wlr_surface **psurface,
+ 		Client **pc, LayerSurface **pl, double *nx, double *ny);
+@@ -486,6 +487,9 @@ arrange(Monitor *m)
+ 
+ 	if (m->lt[m->sellt]->arrange)
+ 		m->lt[m->sellt]->arrange(m);
++	c = focustop(selmon);
++	if (cursor_warp && c)
++		warpcursor(c);
+ 	motionnotify(0);
+ 	checkidleinhibitor(NULL);
+ }
+@@ -1210,6 +1214,9 @@ focusclient(Client *c, int lift)
+ 
+ 	if (locked)
+ 		return;
++	/* Warp cursor to center of client if it is outside */
++	if (cursor_warp && c)
++		warpcursor(c);
+ 
+ 	/* Raise client in stacking order if requested */
+ 	if (c && lift)
+@@ -2616,6 +2623,18 @@ virtualkeyboard(struct wl_listener *listener, void *data)
+ 	createkeyboard(&keyboard->keyboard);
+ }
+ 
++void
++warpcursor(const Client *c) {
++	if (cursor->x < c->geom.x ||
++		cursor->x > c->geom.x + c->geom.width ||
++		cursor->y < c->geom.y ||
++		cursor->y > c->geom.y + c->geom.height)
++		wlr_cursor_warp_closest(cursor,
++			  NULL,
++			  c->geom.x + c->geom.width / 2.0,
++			  c->geom.y + c->geom.height / 2.0);
++}
++
+ Monitor *
+ xytomon(double x, double y)
+ {
