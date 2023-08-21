@@ -32,11 +32,7 @@ import cache
 import utils
 
 # WARN: Subject to heavy change.
-# TODO: Use OOP instead of passing around variables
-# TODO: Add fallback / canned lambdas for common handler operations eg: formats["appname"] % attributes
 
-
-# TODO: Handle '\n' in body / summary.
 def redir_to_handlers(formats, attributes: dict) -> str:
     r"""Function for evaluating which handler function will be called.
 

@@ -87,7 +87,7 @@ in {
     "org/gnome/desktop/interface" = {
       scaling-factor = 1.5;
       # Dark mode by default
-      color-scheme = "prefer-dark";
+      # color-scheme = "prefer-dark";
       enable-hot-corners = false;
       clock-show-weekday = true;
       show-battery-percentage = true;

@@ -29,7 +29,6 @@ log file then the list of notifications will be re-rendered again.
 # Read the complete license here:
 # <https://github.com/dharmx/vile/blob/main/LICENSE.txt>
 
-# TODO: Utilize JSON instead of YUCK Literals.
 # WARN: This script is under active development and is subject to frequent changes.
 # WARN: Currently this script is quite inefficient. So, you have been warned.
 

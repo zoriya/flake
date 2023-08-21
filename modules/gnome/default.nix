@@ -28,7 +28,6 @@
   # Allow automatic timezoned to work.
   services.geoclue2.enableDemoAgent = lib.mkForce true;
 
-  # TODO: Remove this, temporary fix while the extension is not published.
   fileSystems."/home/zoriya/.local/share/gnome-shell/extensions/fairy@zoriya.dev" = {
     device = "/home/zoriya/projects/fairy/";
     fsType = "none";

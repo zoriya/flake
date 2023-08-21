@@ -43,7 +43,6 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 
 
-# TODO: Use actual enumerations by using the enum module from the standard library.
 class Urgency:
     """Acts as an Enum for indicating the urgency levels as per
     the notifications specification.
@@ -80,7 +79,6 @@ class Eavesdropper:
             The directory path that all of those image-data would be saved.
     """
 
-    # TODO: Segregate more.
     def __init__(
         self,
         callback: typing.Callable = print,
@@ -167,7 +165,6 @@ class Eavesdropper:
         # execute arbitrary callback and passing details about the current notification.
         self.callback(details)
 
-    # TODO: Segregate more.
     def eavesdrop(
         self,
         timeout: int or bool = False,

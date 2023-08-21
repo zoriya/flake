@@ -1,7 +1,6 @@
 (deflisten music :initial '{"title": "", "status": "󰐍"}' "./panel/music.sh")
 (deflisten music_cover "./panel/music.sh cover")
 
-; TODO: Use a hook on change instead of polling.
 (defpoll volume :interval "1s" "pamixer --get-volume")
 (defpoll is_mute :interval "1s" "pamixer --get-mute")
 

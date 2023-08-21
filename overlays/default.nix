@@ -26,6 +26,7 @@ in {
         ../dwl_patches/keyboard-shortcut-inhibit.patch
         ../dwl_patches/cursor_wrap.patch
         ../dwl_patches/vanitygaps.patch
+        # ../dwl_patches/smartborders.patch
       ];
     });
 
