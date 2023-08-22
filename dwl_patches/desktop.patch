@@ -35,5 +35,5 @@ index 0000000..f8c743d
 +[Desktop Entry]
 +Name=DWL
 +Comment=dwm for Wayland
-+Exec=$(OUT)/bin/dwl
++Exec=$(OUT)/bin/dwl -s ags
 +Type=Application

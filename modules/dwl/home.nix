@@ -13,7 +13,10 @@ in {
     brightnessctl
     pavucontrol
     wbg
+    # Only used for pactl.
+    pulseaudio
     wallpaper
+    hyprpicker
   ];
 
   xdg.configFile."ags" = {

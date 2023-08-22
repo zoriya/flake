@@ -23,7 +23,7 @@ const Indicators = (charging) =>
 		],
 	});
 
-const BatteryIconIndicator = ({
+export const IconIndicator = ({
 	charging = Indicators(true),
 	discharging = Indicators(false),
 	...props
@@ -40,7 +40,6 @@ const BatteryIconIndicator = ({
 				Battery,
 				(stack) => {
 					const { charging, charged } = Battery;
-					log("battery:", charging, charged, Battery.available);
 					stack.shown = `${charging || charged}`;
 					stack.toggleClassName("charging", Battery.charging);
 					stack.toggleClassName("charged", Battery.charged);
@@ -50,15 +49,15 @@ const BatteryIconIndicator = ({
 		],
 	});
 
-const LevelLabel = (props) =>
+export const LevelLabel = (props) =>
 	Label({
 		...props,
 		connections: [[Battery, (label) => (label.label = `${Battery.percent}%`)]],
 	});
 
-export const BatteryIndicator = () =>
+export const Indicator = () =>
 	Box({
-		children: [BatteryIconIndicator(), LevelLabel()],
+		children: [IconIndicator(), LevelLabel()],
 		connections: [
 			[
 				Battery,

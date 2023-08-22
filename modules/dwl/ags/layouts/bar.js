@@ -6,7 +6,12 @@
 // import { PanelButton as QuickSettings } from './widgets/quicksettings.js';
 
 import { Clock } from "../modules/clock.js";
-import { BatteryIndicator } from "../modules/battery.js";
+import * as dwl from "../modules/dwl.js";
+import * as audio from "../modules/audio.js";
+import * as network from "../modules/network.js";
+import * as bluetooth from "../modules/bluetooth.js";
+import * as battery from "../modules/battery.js";
+import * as notifications from "../modules/notifications.js";
 
 const { App } = ags;
 const { Window, CenterBox, Box, Button } = ags.Widget;
@@ -21,37 +26,53 @@ const Bar = (monitor) =>
 		child: CenterBox({
 			startWidget: Box({
 				children: [
-					// Workspaces(),
-					// Separator({ valign: "center" }),
-					// Client(),
+					dwl.Tags({
+						mon: monitor,
+						labels: ["一", "二", "三", " 四", "五", "六", "七", "八", "九"],
+					}),
+					dwl.Layout({
+						mon: monitor,
+					}),
+					dwl.ClientLabel({ mon: monitor }),
+				],
+			}),
+			centerWidget: Box({
+				halign: "center",
+				children: [
+					// NotificationIndicator({
+					// 	hexpand: true,
+					// 	halign: "center",
+					// }),
 				],
 			}),
 			endWidget: Box({
 				halign: "end",
 				children: [
-					// NotificationIndicator({
-					//     direction: "right",
-					//     hexpand: true,
-					//     halign: "start",
-					// }),
 					// ags.Widget.Box({ hexpand: true }),
 					// ScreenRecord(),
 					// ColorPicker(),
 					// Separator({ valign: "center" }),
 					Button({
 						onClicked: () => App.toggleWindow("quicksettings"),
-						connections: [[App, (btn, win, visible) => {
-							btn.toggleClassName( "active", win === "quicksettings" && visible);
-						}]],
+						connections: [
+							[
+								App,
+								(btn, win, visible) => {
+									btn.toggleClassName(
+										"active",
+										win === "quicksettings" && visible
+									);
+								},
+							],
+						],
 						child: Box({
 							children: [
-								// audio.MicrophoneMuteIndicator({ unmuted: null }),
-								// notifications.DNDIndicator({ noisy: null }),
-								// BluetoothIndicator(),
-								// bluetooth.Indicator({ disabled: null }),
-								// network.Indicator(),
-								// audio.SpeakerIndicator(),
-								BatteryIndicator(),
+								audio.MicrophoneMuteIndicator({ unmuted: null }),
+								notifications.DNDIndicator({ noisy: null }),
+								network.Indicator(),
+								audio.SpeakerIndicator(),
+								bluetooth.Indicator({ disabled: null }),
+								battery.Indicator(),
 							],
 						}),
 					}),
