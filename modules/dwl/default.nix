@@ -14,8 +14,11 @@
         enable = true;
         user = "zoriya";
       };
+      sessionPackages = [ pkgs.dwl ];
     };
   };
+
+  environment.systemPackages = [pkgs.dwl];
 
   # Those two lines prevent a crash with gdm autologin.
   systemd.services."getty@tty1".enable = false;
@@ -28,6 +31,6 @@
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  i18n.inputMethod.enabled = "ibus";
-  i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [mozc];
+  # i18n.inputMethod.enabled = "ibus";
+  # i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [mozc];
 }

@@ -14,7 +14,7 @@ class System extends Service {
         const cmd = {
             'Sleep': 'systemctl suspend',
             'Reboot': 'systemctl reboot',
-            'Log Out': 'pkill Hyprland',
+            'Log Out': 'pkill dwl',
             'Shutdown': 'shutdown now',
         }[action];
 

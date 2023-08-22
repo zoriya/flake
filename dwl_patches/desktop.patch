@@ -1,0 +1,39 @@
+diff --git a/Makefile b/Makefile
+index ccca079..31f5c70 100644
+--- a/Makefile
++++ b/Makefile
+@@ -52,8 +52,11 @@ install: dwl
+ 	mkdir -p $(DESTDIR)$(MANDIR)/man1
+ 	cp -f dwl.1 $(DESTDIR)$(MANDIR)/man1
+ 	chmod 644 $(DESTDIR)$(MANDIR)/man1/dwl.1
++	install -Dm 644 dwl.desktop $(DESTDIR)$(DESKTOP)/dwl.desktop
++	sed -i 's@$$(OUT)@$(DESTDIR)$(PREFIX)@' $(DESTDIR)$(DESKTOP)/dwl.desktop
+ uninstall:
+ 	rm -f $(DESTDIR)$(PREFIX)/bin/dwl $(DESTDIR)$(MANDIR)/man1/dwl.1
++	rm -f $(DESTDIR)$(DESKTOP)/dwl.desktop
+ 
+ .SUFFIXES: .c .o
+ .c.o:
+diff --git a/config.mk b/config.mk
+index f50156f..12bef12 100644
+--- a/config.mk
++++ b/config.mk
+@@ -6,6 +6,7 @@ PKG_CONFIG = pkg-config
+ # paths
+ PREFIX = /usr/local
+ MANDIR = $(PREFIX)/share/man
++DESKTOP= $(PREFIX)/share/wayland-sessions
+ 
+ XWAYLAND =
+ XLIBS =
+diff --git a/dwl.desktop b/dwl.desktop
+new file mode 100644
+index 0000000..f8c743d
+--- /dev/null
++++ b/dwl.desktop
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++Name=DWL
++Comment=dwm for Wayland
++Exec=$(OUT)/bin/dwl
++Type=Application

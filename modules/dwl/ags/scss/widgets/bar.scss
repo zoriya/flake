@@ -180,16 +180,4 @@ $float: 5px;
         &.firefox .icon { color: $orange; }
         &.mpv .icon { color: $magenta; }
     }
-
-    .dock {
-        @include dock($spacing: $float);
-        button image {
-            font-size: 38px;
-        }
-
-        @if $bar_style != 'separated' {
-            margin: 0;
-            button > * { margin: 0 $float; }
-        }
-    }
 }

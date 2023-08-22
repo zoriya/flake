@@ -1,12 +1,5 @@
-import { Theme } from './theme/theme.js';
 import topbar from './layouts/topbar.js';
-import bottombar from './layouts/bottombar.js';
 import * as shared from './layouts/shared.js';
-
-const layouts = {
-    topbar,
-    bottombar,
-};
 
 // TODO: (ags) dwl patch
 // const monitors = ags.Service.Hyprland.HyprctlGet('monitors')
@@ -19,10 +12,9 @@ export default {
         'dashboard': 300,
     },
     windows: [
-        ...layouts[Theme.getSetting('layout')](monitors),
-        shared.ApplauncherPopup(),
-        shared.OverviewPopup(),
+        ...topbar(monitors),
+        // shared.ApplauncherPopup(),
         shared.PowermenuPopup(),
-        shared.VerificationPopup(),
+        // shared.VerificationPopup(),
     ],
 };

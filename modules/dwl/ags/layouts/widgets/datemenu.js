@@ -1,5 +1,5 @@
-import { Clock, Uptime } from '../../modules/clock.js';
-const { Box, Label } = ags.Widget;
+import { Clock } from '../../modules/clock.js';
+const { Box } = ags.Widget;
 
 export const PopupContent = props => Box({
     ...props,
@@ -7,14 +7,6 @@ export const PopupContent = props => Box({
     className: 'datemenu',
     children: [
         Clock({ format: '%H:%M' }),
-        Box({
-            className: 'uptime-box',
-            halign: 'center',
-            children: [
-                Label('uptime'),
-                Uptime(),
-            ],
-        }),
         Box({
             className: 'calendar',
             children: [

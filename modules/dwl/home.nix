@@ -4,12 +4,15 @@
   config,
   user,
   ...
-}: {
+}: let
+  wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
+in {
   home.packages = with pkgs; [
-    dwl
     alsa-utils
     sassc
-    nur.repos.ocfox.swww
+    brightnessctl
+    pavucontrol
+    wallpaper
   ];
 
   xdg.configFile."ags" = {

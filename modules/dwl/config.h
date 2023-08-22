@@ -19,7 +19,10 @@ static const bool cursor_warp = true;
 
 /* Autostart */
 static const char *const autostart[] = {
-	// "wbg", "/path/to/your/image", NULL,
+	"ags", NULL,
+	"discord", NULL,
+	"youtube-music", NULL,
+	"wallpaper", NULL,
 	NULL /* terminate */
 };
 
@@ -31,7 +34,8 @@ static const Rule rules[] = {
 	/* examples:
 	{ "Gimp",     NULL,       0,            1,           -1 },
 	*/
-	{ "discord",  NULL,       1 << 3,       0,           -1 },
+	{ "discord",  NULL,       1 << 2,       0,           -1 },
+	{ "youtube-music",  NULL,       1 << 1,       0,           -1 },
 };
 
 /* layout(s) */
@@ -55,10 +59,7 @@ static const MonitorRule monrules[] = {
 /* keyboard */
 static const struct xkb_rule_names xkb_rules = {
 	/* can specify fields: rules, model, layout, variant, options */
-	/* example:
-	.options = "ctrl:nocaps",
-	*/
-	.options = NULL,
+	.options = "caps:swapescape",
 };
 
 static const int repeat_rate = 25;
@@ -68,7 +69,7 @@ static const int repeat_delay = 600;
 static const int tap_to_click = 1;
 static const int tap_and_drag = 1;
 static const int drag_lock = 1;
-static const int natural_scrolling = 0;
+static const int natural_scrolling = 1;
 static const int disable_while_typing = 1;
 static const int left_handed = 0;
 static const int middle_button_emulation = 0;

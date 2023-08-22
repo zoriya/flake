@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "ags": {
+      "inputs": {
+        "dongsu8142-nur": "dongsu8142-nur",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1692611678,
+        "narHash": "sha256-QYmYQthWA6AT+BGS5sNg8X68O1H99HgKS/j4QwCxo7U=",
+        "owner": "Aylur",
+        "repo": "ags",
+        "rev": "2a875d4813c52a1a97aab31fccaead74e4e46fea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Aylur",
+        "repo": "ags",
+        "type": "github"
+      }
+    },
     "base16-schemes": {
       "flake": false,
       "locked": {
@@ -13,6 +34,27 @@
       "original": {
         "owner": "tinted-theming",
         "repo": "base16-schemes",
+        "type": "github"
+      }
+    },
+    "dongsu8142-nur": {
+      "inputs": {
+        "nixpkgs": [
+          "ags",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1690083492,
+        "narHash": "sha256-UoIG+sl44U38FTmM2+m4X2Qi5aivjITcUxAkVHouZl4=",
+        "owner": "dongsu8142",
+        "repo": "nur",
+        "rev": "7f5c7067a482e96fe3787e07a54e21041a4d15c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dongsu8142",
+        "repo": "nur",
         "type": "github"
       }
     },
@@ -166,6 +208,7 @@
     },
     "root": {
       "inputs": {
+        "ags": "ags",
         "dwl-source": "dwl-source",
         "home-manager": "home-manager",
         "impermanence": "impermanence",

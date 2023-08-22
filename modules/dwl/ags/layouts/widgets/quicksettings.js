@@ -1,4 +1,3 @@
-import { Uptime } from '../../modules/clock.js';
 import { FontIcon, HoverRevealer, Separator } from '../../modules/misc.js';
 import * as battery from '../../modules/battery.js';
 import * as audio from '../../modules/audio.js';
@@ -6,7 +5,6 @@ import * as brightness from '../../modules/brightness.js';
 import * as network from '../../modules/network.js';
 import * as bluetooth from '../../modules/bluetooth.js';
 import * as notifications from '../../modules/notifications.js';
-import * as asusctl from '../../modules/asusctl.js';
 import * as theme from '../../theme/theme.js';
 import * as media from './media.js';
 const { Button, Box, Icon, Label, Revealer } = ags.Widget;
@@ -114,13 +112,6 @@ const SystemBox = () => Box({
                     onClicked: () => { App.toggleWindow('quicksettings'); Theme.openSettings(); },
                     tooltipText: 'Settings',
                     child: Icon('org.gnome.Settings-symbolic'),
-                }),
-                Box({
-                    className: 'uptime',
-                    children: [
-                        Label('uptime: '),
-                        Uptime(),
-                    ],
                 }),
                 SysButton('system-log-out-symbolic', 'Log Out'),
                 SysButton('system-shutdown-symbolic', 'Shutdown', 'shutdown'),
@@ -252,16 +243,6 @@ const MuteToggle = () => SmallToggle(
     audio.MicrophoneMuteIndicator,
 );
 
-const AsusctlToggle = () => SmallToggle(
-    asusctl.ProfileToggle,
-    asusctl.ProfileIndicator,
-);
-
-const AsusmodeToggle = () => SmallToggle(
-    asusctl.ModeToggle,
-    asusctl.ModeIndicator,
-);
-
 const ThemeToggle = () => Button({
     className: 'toggle',
     onClicked: () => QSMenu.toggle('theme'),
@@ -322,7 +303,6 @@ export const PopupContent = () => Box({
         Box({
             className: 'header',
             children: [
-                Avatar(),
                 SystemBox(),
             ],
         }),
@@ -341,14 +321,10 @@ export const PopupContent = () => Box({
                     className: 'small-toggles',
                     vexpand: true,
                     hexpand: false,
-                    children: Service.Asusctl?.available
-                        ? [
-                            Box({ children: [AsusmodeToggle(), AsusctlToggle(), DNDToggle()] }),
-                            Box({ children: [AppmixerToggle(), ThemeToggle(), MuteToggle()] }),
-                        ] : [
-                            Box({ children: [DNDToggle(), MuteToggle()] }),
-                            Box({ children: [AppmixerToggle(), ThemeToggle()] }),
-                        ],
+                    children: [
+                        Box({ children: [DNDToggle(), MuteToggle()] }),
+                        Box({ children: [AppmixerToggle(), ThemeToggle()] }),
+                    ],
                 }),
             ],
         }),
@@ -397,8 +373,6 @@ export const PanelButton = () => Button({
     }]],
     child: Box({
         children: [
-            Service.Asusctl?.available && asusctl.ProfileIndicator({ balanced: null }),
-            Service.Asusctl?.available && asusctl.ModeIndicator({ hybrid: null }),
             audio.MicrophoneMuteIndicator({ unmuted: null }),
             notifications.DNDIndicator({ noisy: null }),
             BluetoothIndicator(),

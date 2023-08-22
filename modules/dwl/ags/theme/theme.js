@@ -1,6 +1,5 @@
 import { FontIcon } from '../modules/misc.js';
 import { setupScss } from './scss.js';
-import { setupHyprland } from './hyprland.js';
 import themes from './themes.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Service from 'resource:///com/github/Aylur/ags/service/service.js';
@@ -12,7 +11,7 @@ class ThemeService extends Service {
     static { Service.register(this); }
 
     _settingsPath = App.configDir + '/settings.json';
-    _defaultAvatar = `/home/${USER}/Pictures/avatars/donna.jpg`;
+    _defaultAvatar = `/home/${USER}/.face`;
     _defaultTheme = themes[0].name;
 
     constructor() {
@@ -39,7 +38,6 @@ class ThemeService extends Service {
             ...this.settings,
         };
         setupScss(theme);
-        setupHyprland(theme);
         this.setupOther();
         this.setupWallpaper();
     }
@@ -57,15 +55,15 @@ class ThemeService extends Service {
         const gsettings = 'gsettings set org.gnome.desktop.interface color-scheme';
         execAsync(`${gsettings} "prefer-${darkmode ? 'dark' : 'light'}"`).catch(print);
 
-        const wezterm = `/home/${USER}/.config/wezterm`;
-        execAsync(`cp ${wezterm}/charm${darkmode ? '' : '-light'}.lua ${wezterm}/theme.lua`).catch(print);
+        // const wezterm = `/home/${USER}/.config/wezterm`;
+        // execAsync(`cp ${wezterm}/charm${darkmode ? '' : '-light'}.lua ${wezterm}/theme.lua`).catch(print);
     }
 
     setupWallpaper() {
         execAsync([
             'swww', 'img',
             '--transition-type', 'grow',
-            '--transition-pos', exec('hyprctl cursorpos').replace(' ', ''),
+            // '--transition-pos', exec('hyprctl cursorpos').replace(' ', ''),
             this.getSetting('wallpaper'),
         ]).catch(print);
     }

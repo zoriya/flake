@@ -17,6 +17,8 @@ in {
       {conf = ../modules/dwl/config.h;})
     .overrideAttrs (oldAttrs: {
       src = dwl-source;
+      enableXWayland = true;
+      passthru.providedSessions = [ "dwl" ];
       patches = [
         ../dwl_patches/autostart.patch
         ../dwl_patches/deck.patch
@@ -27,6 +29,7 @@ in {
         ../dwl_patches/cursor_wrap.patch
         ../dwl_patches/vanitygaps.patch
         # ../dwl_patches/smartborders.patch
+        ../dwl_patches/desktop.patch
       ];
     });
 

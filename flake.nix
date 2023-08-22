@@ -24,6 +24,10 @@
       url = "github:djpohly/dwl";
       flake = false;
     };
+    ags = {
+      url = "github:Aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -31,6 +35,7 @@
     home-manager,
     # neovim-nightly,
     nur,
+    ags,
     nixpkgs,
     tuxedo-nixos,
     dwl-source,
@@ -48,8 +53,8 @@
         specialArgs = inputs;
         modules = [
           ./modules/nixos
-          ./modules/gnome
-          # ./modules/dwl
+          # ./modules/gnome
+          ./modules/dwl
           nixModules
           nur.nixosModules.nur
           {
@@ -72,6 +77,7 @@
                 git
                 docker-compose
                 jq
+                ags.packages.x86_64-linux.default
               ];
             };
           })
@@ -86,7 +92,7 @@
               users.${user} = {
                 imports = [
                   ./modules/home
-                  ./modules/gnome/home.nix
+                  # ./modules/gnome/home.nix
                   ./modules/dwl/home.nix
                 ];
                 config.modules = homeModules;
