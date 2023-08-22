@@ -1,2 +1,0 @@
-(include "./bar/eww.yuck")
-(include "./panel/yuck/_init.yuck")

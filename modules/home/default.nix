@@ -1,7 +1,6 @@
 {
   imports = [
     ./hyprland
-    ./eww
     ./rofi
     ./apps
     ./zsh
@@ -10,7 +9,6 @@
     ./direnv
     ./fcitx5
     ./colors
-    ./ntfy
   ];
 
   home.stateVersion = "22.11";

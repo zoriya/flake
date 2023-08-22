@@ -1,0 +1,31 @@
+* {
+	all: unset;
+	font-family: monospace;
+	padding: 0;
+	margin: 0;
+}
+
+window {
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+.module {
+	padding: 0 10px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.accent {
+	background-color: #94e2d5;
+	color: #1e1e2e;
+}
+
+
+.battery.low {
+	color: red;
+}
+.battery.charged, .battery.charging {
+	color: green;
+}

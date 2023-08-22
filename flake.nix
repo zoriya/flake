@@ -44,7 +44,6 @@
     user = "zoriya";
 
     mkSystem = system: hostname: {
-      nixModules,
       homeModules,
     }: let
       inputs = rawInput // {inherit user;};
@@ -55,7 +54,6 @@
           ./modules/misc
           # ./modules/gnome
           ./modules/dwl
-          nixModules
           nur.nixosModules.nur
           {
             nixpkgs.overlays = [
@@ -137,7 +135,6 @@
           git.enable = true;
           nvim.enable = true;
           direnv.enable = true;
-          ntfy.enable = true;
         };
       };
     };

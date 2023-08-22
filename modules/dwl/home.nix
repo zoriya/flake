@@ -12,6 +12,7 @@ in {
     sassc
     brightnessctl
     pavucontrol
+    wbg
     wallpaper
   ];
 

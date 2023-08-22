@@ -1,5 +1,4 @@
-import topbar from './layouts/topbar.js';
-import * as shared from './layouts/shared.js';
+import topbar from "./layouts/bar.js";
 
 // TODO: (ags) dwl patch
 // const monitors = ags.Service.Hyprland.HyprctlGet('monitors')
@@ -7,14 +6,15 @@ import * as shared from './layouts/shared.js';
 const monitors = [0];
 
 export default {
-    closeWindowDelay: {
-        'quicksettings': 300,
-        'dashboard': 300,
-    },
-    windows: [
-        ...topbar(monitors),
-        // shared.ApplauncherPopup(),
-        shared.PowermenuPopup(),
-        // shared.VerificationPopup(),
-    ],
+	closeWindowDelay: {
+		quicksettings: 300,
+		dashboard: 300,
+	},
+	style: ags.App.configDir + "/style.css",
+	windows: [
+		...topbar(monitors),
+		// shared.ApplauncherPopup(),
+		// shared.PowermenuPopup(),
+		// shared.VerificationPopup(),
+	],
 };

@@ -1,6 +1,0 @@
-(deflisten title :initial "" "./bar/window/get-window-title.sh")
-
-(defwidget window []
- (box
-  :class {(title != "" && title != 'null') ? "floating module" : ""}
-  (label :text {title != 'null' ? title : ""})))
