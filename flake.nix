@@ -52,7 +52,7 @@
       nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
         modules = [
-          ./modules/nixos
+          ./modules/misc
           # ./modules/gnome
           ./modules/dwl
           nixModules
@@ -131,12 +131,6 @@
   in {
     nixosConfigurations = {
       fuhen = mkSystem "x86_64-linux" "fuhen" {
-        nixModules = {
-          fonts.enable = true;
-          nixconf.enable = true;
-          wayland.enable = true;
-          games.enable = true;
-        };
         homeModules = {
           apps.enable = true;
           zsh.enable = true;
