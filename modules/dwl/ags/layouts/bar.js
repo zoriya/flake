@@ -9,24 +9,24 @@ import * as notifications from "../modules/notifications.js";
 const { App } = ags;
 const { Window, CenterBox, Box, Button } = ags.Widget;
 
-export const Bar = (monitor) =>
+export const Bar = (mon) =>
 	Window({
-		name: `bar${monitor}`,
+		name: `bar${mon.id}`,
 		className: "transparent",
 		exclusive: true,
 		anchor: "top left right",
-		monitor,
+		monitor: mon.id,
 		child: CenterBox({
 			startWidget: Box({
 				children: [
 					dwl.Tags({
-						mon: monitor,
-						labels: ["一", "二", "三", " 四", "五", "六", "七", "八", "九"],
+						mon: mon.name,
+						labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
 					}),
 					dwl.Layout({
-						mon: monitor,
+						mon: mon.name,
 					}),
-					dwl.ClientLabel({ mon: monitor }),
+					dwl.ClientLabel({ mon: mon.name }),
 				],
 			}),
 			centerWidget: Box({

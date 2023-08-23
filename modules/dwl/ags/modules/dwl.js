@@ -12,12 +12,26 @@ export const Tags = ({ mon, labels, ...props } = {}) =>
 						tag.occupied || tag.selected
 							? Button({
 									child: Label(labels[i]),
-									className: `${tag.selected ? "selected" : ""} ${
-										tag.urgent ? "urgent" : ""
+									className: `tags ${tag.selected ? "accent" : ""} ${
+										tag.urgent ? "secondary" : ""
 									}`,
 							  })
 							: null
 					);
+				},
+			],
+		],
+	});
+
+export const Layout = ({ mon, ...props }) =>
+	Label({
+		className: "module",
+		...props,
+		connections: [
+			[
+				Dwl,
+				(label) => {
+					label.label = Dwl.layout(mon);
 				},
 			],
 		],
@@ -30,6 +44,7 @@ export const ClientLabel = ({
 	...props
 } = {}) =>
 	Label({
+		className: "module",
 		...props,
 		connections: [
 			[
@@ -39,20 +54,7 @@ export const ClientLabel = ({
 					substitutes.forEach(({ from, to }) => {
 						if (name === from) name = to;
 					});
-					label.label = name;
-				},
-			],
-		],
-	});
-
-export const Layout = ({ mon, ...props }) =>
-	Label({
-		...props,
-		connections: [
-			[
-				Dwl,
-				(label) => {
-					label.label = Dwl.layout(mon);
+					label.label = name.substring(0, 25);
 				},
 			],
 		],

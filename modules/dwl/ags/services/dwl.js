@@ -62,8 +62,8 @@ WL-1 tags 1 1 1 0
 WL-1 layout []=
 		*/
 
-		const [monN, type, ...values] = event.split(" ");
-		const mon = parseInt(monN.replace("WL-", "")) - 1;
+		log(event);
+		const [mon, type, ...values] = event.split(" ");
 
 		this._monitors[mon] ??= new Map();
 		switch (type) {
@@ -113,6 +113,6 @@ export default class Dwl {
 	}
 
 	static tags(mon) { return Dwl.instance._monitors[mon]?.["tags"] ?? []; }
-	static layout(mon) { return Dwl.instance._monitors[mon]?.["layout"] ?? "[?]"; }
+	static layout(mon) { return Dwl.instance._monitors[mon]?.["layout"] ?? JSON.stringify(Dwl.instance._monitors); }
 	static title(mon) { return Dwl.instance._monitors[mon]?.["title"] ?? ""; }
 }

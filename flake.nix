@@ -75,7 +75,6 @@
                 git
                 docker-compose
                 jq
-                ags.packages.x86_64-linux.default
               ];
             };
           })
@@ -115,6 +114,7 @@
               git
               man-pages
               man-pages-posix
+              ags.packages.x86_64-linux.default
             ];
             documentation.dev.enable = true;
           })

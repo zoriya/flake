@@ -123,10 +123,7 @@ static const char *termcmd[] = { "kitty", NULL };
 static const char *browcmd[] = { "firefox", NULL };
 static const char *menucmd[] = { "rofi", NULL };
 
-// static const char *upvol[] = { "amixer", "-q", "-c", "0", "set", "Master", "2+", NULL };
-// static const char *downvol[] = { "amixer", "-q", "-c", "0", "set", "Master", "2-", NULL };
-// for muting/unmuting //
-// static const char *mute[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
+static const char *test[] = {"ags", "run-js", "ags.Service.Indicator.speaker()", NULL};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
@@ -148,7 +145,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                    XKB_KEY_d,          setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_f,          togglefloating, {0} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_F,          togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_f,          togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright, tag,            {.ui = ~0} },
@@ -167,6 +164,21 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
 
+	{ 0, XKB_KEY_XF86MonBrightnessUp,    setlayout, {.v = &layouts[0]} },
+	{ 0, XKB_KEY_XF86MonBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()", NULL}}},
+	{ 0, XKB_KEY_XF86KbdBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()", NULL}}},
+	{ 0, XKB_KEY_XF86KbdBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd--; ags.Service.Indicator.kbd()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioRaiseVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.volume += 0.05; ags.Service.Indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioLowerVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioMute,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.isMuted = !ags.Service.Audio.speaker.isMuted; ags.Service.Indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioMicMute,       spawn, {.v = (const char*[]){"pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL}}},
+
+	{ 0, XKB_KEY_XF86AudioPlay,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.playPause()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioStop,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.stop()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioPause,         spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.pause()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioPrev,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.previous()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioNext,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.next()", NULL}}},
+
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
 	{ WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_Terminate_Server, quit, {0} },
 #define CHVT(n) { WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_XF86Switch_VT_##n, chvt, {.ui = (n)} }
@@ -175,24 +187,7 @@ static const Key keys[] = {
 
 // 	// TODO: Allow those bindings on lockscreen
 // 	// TODO: Allow those bindings on repeat
-// 	{ 0,XF86XK_AudioRaiseVolume, spawn,{.v = upvol } },
-// 	{ 0,XF86XK_AudioLowerVolume, spawn,{.v = downvol } },
-// 	{ 0,XF86XK_AudioMute,spawn,{.v = mute } },
-// 	// bind = XF86PowerOff
-// bindle = , XF86MonBrightnessUp,     exec, ags run-js "ags.Service.Brightness.screen += 0.05; ags.Service.Indicator.display()"
-// bindle = , XF86MonBrightnessDown,   exec, ags run-js "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()"
-// bindle = , XF86KbdBrightnessUp,     exec, ags run-js "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()"
-// bindle = , XF86KbdBrightnessDown,   exec, ags run-js "ags.Service.Brightness.kbd--; ags.Service.Indicator.kbd()"
-// bindle = , XF86AudioRaiseVolume,    exec, ags run-js "ags.Service.Audio.speaker.volume += 0.05; ags.Service.Indicator.speaker()"
-// bindle = , XF86AudioLowerVolume,    exec, ags run-js "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()"
-// bindle = , XF86AudioMute,           exec, ags run-js "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()"
-//
-// bindl  = , XF86AudioPlay,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.playPause()"
-// bindl  = , XF86AudioStop,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.stop()"
-// bindl  = , XF86AudioPause,          exec, ags run-js "ags.Service.Mpris.getPlayer()?.pause()"
-// bindl  = , XF86AudioPrev,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.previous()"
-// bindl  = , XF86AudioNext,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.next()"
-// bindl  = , XF86AudioMicMute,        exec, pactl set-source-mute @DEFAULT_SOURCE@ toggle
+	// bind = XF86PowerOff
 };
 
 static const Button buttons[] = {

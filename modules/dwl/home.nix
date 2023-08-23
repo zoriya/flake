@@ -17,6 +17,7 @@ in {
     pulseaudio
     wallpaper
     hyprpicker
+    wdisplays
   ];
 
   xdg.configFile."ags" = {

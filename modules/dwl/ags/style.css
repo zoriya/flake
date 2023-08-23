@@ -23,6 +23,14 @@
 	color: #1e1e2e;
 }
 
+.secondary {
+	background-color: #cba6f7;
+	color: #1e1e2e;
+}
+
+.tags {
+	min-width: 2rem;
+}
 
 .battery.low {
 	color: red;

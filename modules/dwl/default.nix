@@ -4,17 +4,23 @@
   pkgs,
   inputs,
   ...
-}:
-{
+}: {
   services.xserver = {
     enable = true;
     displayManager = {
-      gdm.enable = true;
+      gdm = {
+        enable = true;
+        settings = {
+          "org/gnome/desktop/peripherals/touchpad" = {
+            tap-to-click = true;
+          };
+        };
+      };
       autoLogin = {
         enable = true;
         user = "zoriya";
       };
-      sessionPackages = [ pkgs.dwl ];
+      sessionPackages = [pkgs.dwl];
     };
   };
 
@@ -28,7 +34,7 @@
     enable = true;
     wlr.enable = true;
     # gtk portal needed to make gtk apps happy
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
   services.upower.enable = true;

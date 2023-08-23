@@ -30,6 +30,7 @@ class IndicatorService extends Service {
 			icons[34] = "audio-volume-medium-symbolic";
 			icons[67] = "audio-volume-high-symbolic";
 			icons[101] = "audio-volume-overamplified-symbolic";
+			if (ags.Service.Audio.speaker.isMuted) return icons[0];
 			for (const i of [101, 67, 34, 1, 0]) {
 				if (i <= value * 100) return icons[i];
 			}

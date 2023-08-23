@@ -4,7 +4,7 @@ import { OSD } from "./layouts/osd.js";
 // TODO: (ags) dwl patch
 // const monitors = ags.Service.Hyprland.HyprctlGet('monitors')
 //     .map(mon => mon.id);
-const monitors = [0];
+const monitors = [{id: 0, name: "eDP-1"}];
 
 export default {
 	closeWindowDelay: {
