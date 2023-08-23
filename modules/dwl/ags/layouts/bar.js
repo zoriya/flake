@@ -39,10 +39,10 @@ const Bar = (monitor) =>
 			centerWidget: Box({
 				halign: "center",
 				children: [
-					// NotificationIndicator({
-					// 	hexpand: true,
-					// 	halign: "center",
-					// }),
+					notifications.Indicator({
+						hexpand: true,
+						halign: "center",
+					}),
 				],
 			}),
 			endWidget: Box({
@@ -54,6 +54,7 @@ const Bar = (monitor) =>
 					// Separator({ valign: "center" }),
 					Button({
 						onClicked: () => App.toggleWindow("quicksettings"),
+						className: "module quicksettings",
 						connections: [
 							[
 								App,
@@ -67,17 +68,17 @@ const Bar = (monitor) =>
 						],
 						child: Box({
 							children: [
-								audio.MicrophoneMuteIndicator({ unmuted: null }),
-								notifications.DNDIndicator({ noisy: null }),
-								network.Indicator(),
-								audio.SpeakerIndicator(),
-								bluetooth.Indicator({ disabled: null }),
-								battery.Indicator(),
+								audio.MicrophoneMuteIndicator({ unmuted: null, className: "qs-item" }),
+								notifications.DNDIndicator({ noisy: null, className: "qs-item" }),
+								network.Indicator({ className: "qs-item" }),
+								audio.SpeakerIndicator({ className: "qs-item" }),
+								bluetooth.Indicator({ disabled: null, className: "qs-item" }),
+								battery.Indicator({ className: "qs-item" }),
 							],
 						}),
 					}),
 					Clock({ format: "%a %d %b", className: "module bold" }),
-					Clock({ format: "%H:%M", className: "module accent bold" }),
+					Clock({ format: "%H:%M", className: "module accent bold", style: "margin-right: 0px" }),
 				],
 			}),
 		}),

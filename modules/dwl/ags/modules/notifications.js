@@ -3,6 +3,57 @@ const { Notifications } = ags.Service;
 const { lookUpIcon, timeout } = ags.Utils;
 const { Box, Icon, Label, EventBox, Button, Stack, Revealer } = ags.Widget;
 
+export const Indicator = ({ ...props }) =>
+	Box({
+		...props,
+		connections: [
+			[
+				Notifications,
+				(box) => {
+					box.visible = Notifications.notifications.size > 0 && !Notifications.dnd;
+				},
+			],
+		],
+		children: [
+			Icon("preferences-system-notifications-symbolic"),
+			Revealer({
+				transition: "slide_right",
+				properties: [
+					["current", null],
+					[
+						"update",
+						(rev, id, open) => {
+							if (!id) return;
+
+							// Only close the notification if it is the currently displayed.
+							if (rev._current !== id && !open) return;
+
+							if (rev._current === id) {
+								rev.reveal_child = false;
+								return;
+							}
+
+							rev._current = id;
+							const notif = Notifications.notifications.get(id);
+							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`;
+							rev.reveal_child = true;
+						},
+					],
+				],
+				connections: [
+					[Notifications, (label, id) => label._update(label, id, true), "notified"],
+					[Notifications, (label, id) => label._update(label, id, false), "dismissed"],
+					[Notifications, (label, id) => label._update(label, id, false), "closed"],
+				],
+				child: Label({
+					use_markup: true,
+					truncate: "end",
+					label: "",
+				}),
+			}),
+		],
+	});
+
 const NotificationIcon = ({ appEntry, appIcon, image }) => {
 	if (image) {
 		return Box({
@@ -89,8 +140,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
 										Label({
 											className: "time",
 											valign: "start",
-											label:
-												GLib.DateTime.new_from_unix_local(time).format("%H:%M"),
+											label: GLib.DateTime.new_from_unix_local(time).format("%H:%M"),
 										}),
 										Button({
 											className: "close-button",
@@ -138,9 +188,7 @@ export const NotificationList = (props) =>
 			[
 				Notifications,
 				(box) => {
-					box.children = Array.from(Notifications.notifications.values()).map(
-						(n) => Notification(n)
-					);
+					box.children = Array.from(Notifications.notifications.values()).map((n) => Notification(n));
 
 					box.visible = Notifications.notifications.size > 0;
 				},
@@ -166,8 +214,7 @@ export const PopupList = ({ transition = "slide_down" } = {}) =>
 
 								if (box._map.get(id)._hovered && !force) return;
 
-								if (box._map.size - 1 === 0)
-									box.get_parent().reveal_child = false;
+								if (box._map.size - 1 === 0) box.get_parent().reveal_child = false;
 
 								timeout(200, () => {
 									box._map.get(id)?.destroy();
@@ -182,9 +229,7 @@ export const PopupList = ({ transition = "slide_down" } = {}) =>
 
 								if (box._map.has(id)) box._map.get(id).destroy();
 
-								const widget = Notification(
-									Notifications.notifications.get(id)
-								);
+								const widget = Notification(Notifications.notifications.get(id));
 								box._map.set(id, widget);
 								box.add(widget);
 								box.show_all();
@@ -214,28 +259,15 @@ export const Placeholder = (props) =>
 		halign: "center",
 		hexpand: true,
 		...props,
-		children: [
-			Label({ label: "󰂛", className: "icon" }),
-			Label("Your inbox is empty"),
-		],
-		connections: [
-			[
-				Notifications,
-				(box) => (box.visible = Notifications.notifications.size === 0),
-			],
-		],
+		children: [Label({ label: "󰂛", className: "icon" }), Label("Your inbox is empty")],
+		connections: [[Notifications, (box) => (box.visible = Notifications.notifications.size === 0)]],
 	});
 
 export const ClearButton = (props) =>
 	Button({
 		...props,
 		onClicked: Notifications.clear,
-		connections: [
-			[
-				Notifications,
-				(button) => (button.sensitive = Notifications.notifications.size > 0),
-			],
-		],
+		connections: [[Notifications, (button) => (button.sensitive = Notifications.notifications.size > 0)]],
 		child: Box({
 			children: [
 				Label("Clear "),
@@ -260,8 +292,10 @@ export const ClearButton = (props) =>
 export const DNDIndicator = ({
 	silent = Icon("notifications-disabled-symbolic"),
 	noisy = Icon("preferences-system-notifications-symbolic"),
+	...props
 } = {}) =>
 	Stack({
+		...props,
 		items: [
 			["true", silent],
 			["false", noisy],

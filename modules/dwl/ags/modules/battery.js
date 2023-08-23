@@ -1,12 +1,13 @@
 const { Battery } = ags.Service;
-const { Label, Icon, Stack, ProgressBar, Overlay, Box } = ags.Widget;
+const { Label, Icon, Stack, Box } = ags.Widget;
 
 const icons = (charging) =>
-	Array.from({ length: 10 }, (_, i) => i * 10).map((i) => [
+	Array.from({ length: 11 }, (_, i) => i * 10).map((i) => [
 		`${i}`,
 		Icon({
 			className: `${i} ${charging ? "charging" : "discharging"}`,
-			icon: `battery-level-${i}${charging ? "-charging" : ""}-symbolic`,
+			icon: `battery-level-${i}${charging ? (i === 100 ? "-charged" : "-charging") : ""
+				}-symbolic`,
 		}),
 	]);
 
@@ -17,7 +18,7 @@ const Indicators = (charging) =>
 			[
 				Battery,
 				(stack) => {
-					stack.shown = `${Math.floor(Battery.percent / 10) * 10}`;
+					stack.shown = "100"; //`${Math.floor(Battery.percent / 10) * 10}`;
 				},
 			],
 		],
@@ -49,15 +50,16 @@ export const IconIndicator = ({
 		],
 	});
 
-export const LevelLabel = (props) =>
+export const LevelLabel = ({ ...props }) =>
 	Label({
 		...props,
 		connections: [[Battery, (label) => (label.label = `${Battery.percent}%`)]],
 	});
 
-export const Indicator = () =>
+export const Indicator = ({ ...props }) =>
 	Box({
-		children: [IconIndicator(), LevelLabel()],
+		...props,
+		children: [IconIndicator(), LevelLabel({})],
 		connections: [
 			[
 				Battery,

@@ -10,7 +10,8 @@ window {
 }
 
 .module {
-	padding: 0 10px;
+	padding: 1px 10px;
+	margin: 0 4px;
 }
 
 .bold {
@@ -28,4 +29,8 @@ window {
 }
 .battery.charged, .battery.charging {
 	color: green;
+}
+
+.qs-item + .qs-item {
+	padding: 3px;
 }

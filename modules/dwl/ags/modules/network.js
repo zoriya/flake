@@ -99,8 +99,10 @@ export const WifiIndicator = ({
 export const Indicator = ({
 	wifi = WifiIndicator(),
 	wired = WifiIndicator(),
+	...props
 } = {}) =>
 	Stack({
+		...props,
 		items: [
 			["wired", wired],
 			["wifi", wifi],
