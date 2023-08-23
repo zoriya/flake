@@ -173,9 +173,26 @@ static const Key keys[] = {
 	CHVT(1), CHVT(2), CHVT(3), CHVT(4), CHVT(5), CHVT(6),
 	CHVT(7), CHVT(8), CHVT(9), CHVT(10), CHVT(11), CHVT(12),
 
-	// { 0,XF86XK_AudioRaiseVolume, spawn,{.v = upvol } },
-	// { 0,XF86XK_AudioLowerVolume, spawn,{.v = downvol } },
-	// { 0,XF86XK_AudioMute,spawn,{.v = mute } },
+// 	// TODO: Allow those bindings on lockscreen
+// 	// TODO: Allow those bindings on repeat
+// 	{ 0,XF86XK_AudioRaiseVolume, spawn,{.v = upvol } },
+// 	{ 0,XF86XK_AudioLowerVolume, spawn,{.v = downvol } },
+// 	{ 0,XF86XK_AudioMute,spawn,{.v = mute } },
+// 	// bind = XF86PowerOff
+// bindle = , XF86MonBrightnessUp,     exec, ags run-js "ags.Service.Brightness.screen += 0.05; ags.Service.Indicator.display()"
+// bindle = , XF86MonBrightnessDown,   exec, ags run-js "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()"
+// bindle = , XF86KbdBrightnessUp,     exec, ags run-js "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()"
+// bindle = , XF86KbdBrightnessDown,   exec, ags run-js "ags.Service.Brightness.kbd--; ags.Service.Indicator.kbd()"
+// bindle = , XF86AudioRaiseVolume,    exec, ags run-js "ags.Service.Audio.speaker.volume += 0.05; ags.Service.Indicator.speaker()"
+// bindle = , XF86AudioLowerVolume,    exec, ags run-js "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()"
+// bindle = , XF86AudioMute,           exec, ags run-js "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()"
+//
+// bindl  = , XF86AudioPlay,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.playPause()"
+// bindl  = , XF86AudioStop,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.stop()"
+// bindl  = , XF86AudioPause,          exec, ags run-js "ags.Service.Mpris.getPlayer()?.pause()"
+// bindl  = , XF86AudioPrev,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.previous()"
+// bindl  = , XF86AudioNext,           exec, ags run-js "ags.Service.Mpris.getPlayer()?.next()"
+// bindl  = , XF86AudioMicMute,        exec, pactl set-source-mute @DEFAULT_SOURCE@ toggle
 };
 
 static const Button buttons[] = {

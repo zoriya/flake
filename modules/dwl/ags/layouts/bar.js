@@ -1,10 +1,3 @@
-// import { Separator } from '../modules/misc.js';
-// import { PanelIndicator as NotificationIndicator } from './widgets/notifications.js';
-// import { PanelButton as ColorPicker } from '../modules/colorpicker.js';
-// import { PanelButton as DashBoard } from './widgets/dashboard.js';
-// import { PanelButton as ScreenRecord } from '../modules/screenrecord.js';
-// import { PanelButton as QuickSettings } from './widgets/quicksettings.js';
-
 import { Clock } from "../modules/clock.js";
 import * as dwl from "../modules/dwl.js";
 import * as audio from "../modules/audio.js";
@@ -16,7 +9,7 @@ import * as notifications from "../modules/notifications.js";
 const { App } = ags;
 const { Window, CenterBox, Box, Button } = ags.Widget;
 
-const Bar = (monitor) =>
+export const Bar = (monitor) =>
 	Window({
 		name: `bar${monitor}`,
 		className: "transparent",
@@ -48,7 +41,9 @@ const Bar = (monitor) =>
 			endWidget: Box({
 				halign: "end",
 				children: [
+					// TODO:
 					// ags.Widget.Box({ hexpand: true }),
+					// ScreenShare() & MicInUse()
 					// ScreenRecord(),
 					// ColorPicker(),
 					// Separator({ valign: "center" }),
@@ -59,10 +54,7 @@ const Bar = (monitor) =>
 							[
 								App,
 								(btn, win, visible) => {
-									btn.toggleClassName(
-										"active",
-										win === "quicksettings" && visible
-									);
+									btn.toggleClassName("active", win === "quicksettings" && visible);
 								},
 							],
 						],
@@ -83,14 +75,3 @@ const Bar = (monitor) =>
 			}),
 		}),
 	});
-
-export default (monitors) =>
-	[
-		...monitors.map((mon) => [
-			Bar(mon),
-			// shared.Notifications(mon, 'slide_down', 'top'),
-			// shared.OSDIndicator(mon),
-		]),
-		// shared.Quicksettings({ position: 'top right' }),
-		// shared.Dashboard({ position: 'top' }),
-	].flat(2);

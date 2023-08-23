@@ -75,7 +75,9 @@ class Indicator {
     static kbd() { Indicator.instance.kbd(); }
 }
 
-export const OnScreenIndicator = ({ height = 300, width = 48 } = {}) => Box({
+export const OnScreenIndicator =
+({ height = 300, width = 48 } = {}) =>
+	Box({
     className: 'indicator',
     style: 'padding: 1px;',
     children: [Revealer({

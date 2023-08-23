@@ -5,7 +5,7 @@
 	margin: 0;
 }
 
-window {
+.transparent {
 	background-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -33,4 +33,29 @@ window {
 
 .qs-item + .qs-item {
 	padding: 3px;
+}
+
+.osd {
+	border-radius: 50px;
+	margin-bottom: 150px;
+	min-width: 300px;
+	min-height: 80px;
+}
+
+.progress {
+	border-radius: 10px;
+	background-color: #000;
+}
+
+.progress .fill {
+	border-radius: 10px;
+}
+.progress .fill.over {
+	background-color: red;
+}
+
+.max-indicator {
+	background-color: red;
+	min-width: 1px;
+	min-height: 1px;
 }
