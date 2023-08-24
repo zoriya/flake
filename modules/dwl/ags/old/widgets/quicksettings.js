@@ -63,7 +63,8 @@ const Arrow = (menu, toggleOn) => Button({
     }),
 });
 
-const RevealerMenu = (name, child) => Box({
+const RevealerMenu = (name, child) =>
+	Box({
     children: [Revealer({
         transition: 'slide_down',
         connections: [[QSMenu, r => r.reveal_child = name === QSMenu.opened]],

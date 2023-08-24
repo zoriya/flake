@@ -31,7 +31,6 @@ export const IconIndicator = ({
 } = {}) =>
 	Stack({
 		...props,
-		className: "battery",
 		items: [
 			["true", charging],
 			["false", discharging],
@@ -42,9 +41,8 @@ export const IconIndicator = ({
 				(stack) => {
 					const { charging, charged } = Battery;
 					stack.shown = `${charging || charged}`;
-					stack.toggleClassName("charging", Battery.charging);
-					stack.toggleClassName("charged", Battery.charged);
-					stack.toggleClassName("low", Battery.percent < 30);
+					stack.toggleClassName("green", Battery.charging || Battery.charged);
+					stack.toggleClassName("red", Battery.percent < 30);
 				},
 			],
 		],

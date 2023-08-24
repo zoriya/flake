@@ -5,44 +5,84 @@
 	margin: 0;
 }
 
+/* Colors */
 .transparent {
 	background-color: rgba(0, 0, 0, 0.6);
 }
-
-.module {
-	padding: 1px 10px;
-	margin: 0 4px;
+.surface {
+	background-color: #000;
+	color: #fff;
 }
-
-.bold {
-	font-weight: bold;
-}
-
 .accent {
 	background-color: #94e2d5;
 	color: #1e1e2e;
 }
-
 .secondary {
 	background-color: #cba6f7;
 	color: #1e1e2e;
 }
-
-.tags {
-	min-width: 2rem;
-}
-
-.battery.low {
+.red {
 	color: red;
 }
-.battery.charged, .battery.charging {
+.green {
 	color: green;
 }
 
+/* Misc */
+.bold {
+	font-weight: bold;
+}
+.f16 {
+	font-size: 16px;
+}
+
+.separator {
+	border-radius: 10px;
+	min-height: 1px;
+	min-width: 1px;
+}
+
+/* Progress bar */
+.progress {
+	border-radius: 10px;
+}
+.max-indicator {
+	min-width: 1px;
+	min-height: 1px;
+}
+
+/* Slider */
+slider {
+	box-shadow: none;
+	background-color: transparent;
+	border: 1px solid transparent;
+	transition: 200ms;
+	min-height: 1rem;
+	/* margin: -$slider_width; */
+}
+trough {
+	transition: 200ms;
+	border: 1px;
+	background-color: #000;
+}
+highlight, progress {
+	background-color: #94e2d5;
+	border-radius: 100px;
+}
+
+/* Bar */
+.module {
+	padding: 1px 10px;
+	margin: 0 4px;
+}
+.tags {
+	min-width: 2rem;
+}
 .qs-item + .qs-item {
 	padding: 3px;
 }
 
+/* On Screen Display */
 .osd {
 	border-radius: 50px;
 	margin-bottom: 150px;
@@ -50,20 +90,50 @@
 	min-height: 80px;
 }
 
-.progress {
-	border-radius: 10px;
-	background-color: #000;
+/* Quick settings */
+.qs-container {
+	min-width: 340px;
+	padding: 25px;
+	border-radius: 40px;
+}
+.qs-button {
+	padding: 0px;
+	margin: 5px;
+	border-radius: 30px;
+	min-width: 225px;
+	min-height: 75px;
+	transition: background-color 0.3s ease-in-out;
+	transition: color 0.3s ease-in-out;
+}
+.qs-icon {
+	padding: 18px;
 }
 
-.progress .fill {
-	border-radius: 10px;
-}
-.progress .fill.over {
-	background-color: red;
+.qs-slider > * {
+	margin: 5px;
 }
 
-.max-indicator {
-	background-color: red;
-	min-width: 1px;
-	min-height: 1px;
+.qs-submenu {
+	margin-top: 8px;
+	padding: 18px;
+	border-radius: 30px;
 }
+.qs-sub-title {
+	padding: 14px 20px;
+	border-radius: 100px;
+	margin-bottom: 8px;
+}
+.qs-sub-title > *:first-child {
+	margin-right: 14px;
+}
+.qs-sub-content image {
+	margin-right: 8px;
+}
+.qs-sub-content > button, .qs-sub-content > box {
+	margin: 8px;
+}
+.qs-sub-content > button:last-child, .qs-sub-content > box:last-child {
+	margin: 8px;
+	margin-bottom: 0px;
+}
+

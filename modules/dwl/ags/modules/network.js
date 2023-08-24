@@ -1,23 +1,22 @@
+import { ArrowToggle } from "../services/quicksettings.js";
+import { Separator } from "../misc.js";
+
+const { App } = ags;
 const { Network } = ags.Service;
 const { Label, Icon, Box, Stack, Button } = ags.Widget;
+const { execAsync } = ags.Utils;
 
 export const SSIDLabel = (props) =>
 	Label({
+		truncate: "end",
 		...props,
-		connections: [
-			[
-				Network,
-				(label) => (label.label = Network.wifi?.ssid || "Not Connected"),
-			],
-		],
+		connections: [[Network, (label) => (label.label = Network.wifi?.ssid || "Not Connected")]],
 	});
 
 export const WifiStrengthLabel = (props) =>
 	Label({
 		...props,
-		connections: [
-			[Network, (label) => (label.label = `${Network.wifi?.strength || -1}`)],
-		],
+		connections: [[Network, (label) => (label.label = `${Network.wifi?.strength || -1}`)]],
 	});
 
 export const WiredIndicator = ({
@@ -42,11 +41,9 @@ export const WiredIndicator = ({
 					if (!Network.wired) return;
 
 					const { internet } = Network.wired;
-					if (internet === "connected" || internet === "connecting")
-						return (stack.shown = internet);
+					if (internet === "connected" || internet === "connecting") return (stack.shown = internet);
 
-					if (Network.connectivity !== "full")
-						return (stack.shown = "disconnected");
+					if (Network.connectivity !== "full") return (stack.shown = "disconnected");
 
 					return (stack.shown = "disabled");
 				},
@@ -67,12 +64,7 @@ export const WifiIndicator = ({
 	],
 } = {}) =>
 	Stack({
-		items: [
-			["disabled", disabled],
-			["disconnected", disconnected],
-			["connecting", connecting],
-			...connected,
-		],
+		items: [["disabled", disabled], ["disconnected", disconnected], ["connecting", connecting], ...connected],
 		connections: [
 			[
 				Network,
@@ -96,11 +88,7 @@ export const WifiIndicator = ({
 		],
 	});
 
-export const Indicator = ({
-	wifi = WifiIndicator(),
-	wired = WifiIndicator(),
-	...props
-} = {}) =>
+export const Indicator = ({ wifi = WifiIndicator(), wired = WifiIndicator(), ...props } = {}) =>
 	Stack({
 		...props,
 		items: [
@@ -117,15 +105,22 @@ export const Indicator = ({
 		],
 	});
 
-export const WifiToggle = (props) =>
-	Button({
+export const Toggle = (props) =>
+	ArrowToggle({
 		...props,
-		onClicked: Network.toggleWifi,
+		name: "network",
+		icon: Indicator(),
+		label: SSIDLabel(),
+		toggle: Network.toggleWifi,
+		expand: () => {
+			Network.wifi.enabled = true;
+			Network.wifi.scan();
+		},
 		connections: [
 			[
 				Network,
 				(button) => {
-					button.toggleClassName("on", Network.wifi?.enabled);
+					button.toggleClassName("accent", Network.wifi?.enabled);
 				},
 			],
 		],
@@ -139,31 +134,46 @@ const icons = [
 	{ value: 0, icon: "network-wireless-signal-none-symbolic" },
 ];
 
-export const WifiSelection = (props) =>
+export const Selection = (props) =>
 	Box({
 		...props,
 		vertical: true,
 		connections: [
 			[
 				Network,
-				(box) =>
-					(box.children = Network.wifi?.accessPoints.map((ap) =>
-						Button({
-							onClicked: `nmcli device wifi connect ${ap.bssid}`,
-							child: Box({
-								children: [
-									Icon(icons.find(({ value }) => value <= ap.strength).icon),
-									Label(ap.ssid),
-									ap.active &&
-										Icon({
-											icon: "object-select-symbolic",
-											hexpand: true,
-											halign: "end",
-										}),
-								],
+				(box) => {
+					box.children = Network.wifi?.accessPoints
+						.map((ap) =>
+							Button({
+								onClicked: `nmcli device wifi connect ${ap.bssid}`,
+								child: Box({
+									children: [
+										Icon(icons.find(({ value }) => value <= ap.strength).icon),
+										Label(ap.ssid),
+										ap.active &&
+											Icon({
+												icon: "object-select-symbolic",
+												hexpand: true,
+												halign: "end",
+											}),
+									],
+								}),
+							})
+						)
+						.concat([
+							Separator(),
+							Button({
+								onClicked: () => {
+									execAsync("nm-connection-editor").catch(print);
+									App.closeWindow("quicksettings");
+								},
+								child: Label({
+									label: "Settings",
+									xalign: 0,
+								}),
 							}),
-						})
-					)),
+						]);
+				},
 			],
 		],
 	});

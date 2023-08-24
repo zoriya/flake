@@ -51,7 +51,7 @@ export const FontIcon = ({ icon = "", ...props }) => {
 
 export const Progress = ({ height, width, vertical = false, ...props }) => {
 	const fill = Box({
-		className: "fill accent",
+		className: "progress accent",
 		hexpand: vertical,
 		vexpand: !vertical,
 		halign: vertical ? "fill" : "start",
@@ -62,12 +62,12 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		vexpand: !vertical,
 		halign: vertical ? "fill" : "start",
 		valign: vertical ? "end" : "fill",
-		className: "max-indicator",
+		className: "max-indicator red",
 	});
 	const progress = Overlay({
 		...props,
 		child: Box({
-			className: "progress",
+			className: "progress surface",
 			style: `
 				min-width: ${width}px;
 				min-height: ${height}px;
@@ -84,9 +84,9 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		const min = vertical ? width : height;
 		const preferred = Math.max(min, (axisv * value) / max);
 
-		log(value, max, axisv, axisv /max)
+		log(value, max, axisv, axisv / max);
 		maxIndicator.setStyle(`margin-${vertical ? "top" : "left"}: ${axisv / max}px; `);
-		fill.toggleClassName("over", value > 1);
+		fill.toggleClassName("red", value > 1);
 
 		if (!fill._size) {
 			fill._size = preferred;
@@ -107,3 +107,11 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 	};
 	return progress;
 };
+
+export const Separator = ({ className = "", ...props } = {}) =>
+	Box({
+		hexpand: false,
+		vexpand: false,
+		...props,
+		className: `${className} separator accent`,
+	});

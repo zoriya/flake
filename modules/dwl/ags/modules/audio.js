@@ -1,5 +1,9 @@
+import { Separator } from "../misc.js";
+
+const { App } = ags;
 const { Audio } = ags.Service;
 const { Label, Box, Icon, Stack, Button, Slider } = ags.Widget;
+const { execAsync } = ags.Utils;
 
 const iconSubstitute = (item) => {
 	const substitues = [
@@ -41,19 +45,6 @@ export const SpeakerIndicator = ({
 					}
 				},
 				"speaker-changed",
-			],
-		],
-	});
-
-export const SpeakerTypeIndicator = (props) =>
-	Icon({
-		...props,
-		connections: [
-			[
-				Audio,
-				(icon) => {
-					if (Audio.speaker) icon.icon = iconSubstitute(Audio.speaker.iconName);
-				},
 			],
 		],
 	});
@@ -183,9 +174,7 @@ export const AppMixer = (props) => {
 			[
 				Audio,
 				(box) => {
-					box.children = Array.from(Audio.apps.values()).map((stream) =>
-						AppItem(stream)
-					);
+					box.children = Array.from(Audio.apps.values()).map((stream) => AppItem(stream));
 				},
 			],
 		],
@@ -200,37 +189,51 @@ export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
 			[
 				Audio,
 				(box) => {
-					box.children = Array.from(Audio[streams].values()).map((stream) =>
-						Button({
-							child: Box({
-								children: [
-									Icon({
-										icon: iconSubstitute(stream.iconName),
-										tooltipText: stream.iconName,
-									}),
-									Label(stream.description.split(" ").slice(0, 4).join(" ")),
-									Icon({
-										icon: "object-select-symbolic",
-										hexpand: true,
-										halign: "end",
-										connections: [
-											[
-												"draw",
-												(icon) => {
-													icon.visible = Audio.speaker === stream;
-												},
+					box.children = Array.from(Audio[streams].values())
+						.map((stream) =>
+							Button({
+								child: Box({
+									children: [
+										Icon({
+											icon: iconSubstitute(stream.iconName),
+											tooltipText: stream.iconName,
+										}),
+										Label(stream.description.split(" ").slice(0, 4).join(" ")),
+										Icon({
+											icon: "object-select-symbolic",
+											hexpand: true,
+											halign: "end",
+											connections: [
+												[
+													"draw",
+													(icon) => {
+														icon.visible = Audio.speaker === stream;
+													},
+												],
 											],
-										],
-									}),
-								],
-							}),
-							onClicked: () => {
-								if (streams === "speakers") Audio.speaker = stream;
+										}),
+									],
+								}),
+								onClicked: () => {
+									if (streams === "speakers") Audio.speaker = stream;
 
-								if (streams === "microphones") Audio.microphone = stream;
-							},
-						})
-					);
+									if (streams === "microphones") Audio.microphone = stream;
+								},
+							})
+						)
+						.concat([
+							Separator(),
+							Button({
+								onClicked: () => {
+									execAsync("pavucontrol").catch(print);
+									App.closeWindow("quicksettings");
+								},
+								child: Label({
+									label: "Settings",
+									xalign: 0,
+								}),
+							}),
+						]);
 				},
 			],
 		],

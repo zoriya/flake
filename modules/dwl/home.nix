@@ -12,6 +12,8 @@ in {
     sassc
     brightnessctl
     pavucontrol
+    blueberry
+    networkmanagerapplet
     wbg
     # Only used for pactl.
     pulseaudio
