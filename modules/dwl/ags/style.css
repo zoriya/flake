@@ -58,16 +58,22 @@ slider {
 	border: 1px solid transparent;
 	transition: 200ms;
 	min-height: 1rem;
-	/* margin: -$slider_width; */
+	border-radius: 100px;
 }
 trough {
 	transition: 200ms;
 	border: 1px;
 	background-color: #000;
+	border-radius: 100px;
 }
 highlight, progress {
 	background-color: #94e2d5;
 	border-radius: 100px;
+}
+mark {
+	background-color: red;
+	min-width: 1px;
+	min-height: 3px;
 }
 
 /* Bar */

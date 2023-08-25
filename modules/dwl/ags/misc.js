@@ -1,7 +1,7 @@
 const { Box, Label, Overlay, Icon } = ags.Widget;
 const { timeout } = ags.Utils;
 
-export const Spinner = ({ icon = "process-working-symbolic" }) =>
+export const Spinner = ({ icon = "process-working-symbolic" } = {}) =>
 	Icon({
 		icon,
 		properties: [["deg", 0]],

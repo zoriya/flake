@@ -58,18 +58,20 @@ export const SpeakerPercentLabel = (props) =>
 				(label) => {
 					if (!Audio.speaker) return;
 
-					label.label = `${Math.floor(Audio.speaker.volume * 100)}%`;
+					const perc = Math.floor(Audio.speaker.volume * 100);
+					label.label = `${("  " + perc).slice(-3)}%`;
 				},
 				"speaker-changed",
 			],
 		],
 	});
 
-export const SpeakerSlider = (props) =>
-	Slider({
+export const SpeakerSlider = (props) => {
+	const slider = Slider({
 		...props,
 		drawValue: false,
 		onChange: ({ value }) => (Audio.speaker.volume = value),
+		max: 1.5,
 		connections: [
 			[
 				Audio,
@@ -83,6 +85,11 @@ export const SpeakerSlider = (props) =>
 			],
 		],
 	});
+	slider.add_mark(1, 0, null);
+	slider.add_mark(1, 1, null);
+	slider.max = 1.5;
+	return slider;
+};
 
 export const MicrophoneMuteIndicator = ({
 	muted = Icon("microphone-disabled-symbolic"),
@@ -106,9 +113,10 @@ export const MicrophoneMuteIndicator = ({
 		],
 	});
 
-export const MicrophoneMuteToggle = (props) =>
+export const MuteToggle = (props) =>
 	Button({
 		...props,
+		className: "qs-button surface",
 		onClicked: "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
 		connections: [
 			[
@@ -116,7 +124,7 @@ export const MicrophoneMuteToggle = (props) =>
 				(button) => {
 					if (!Audio.microphone) return;
 
-					button.toggleClassName("on", Audio.microphone.isMuted);
+					button.toggleClassName("accent", Audio.microphone.isMuted);
 				},
 				"microphone-changed",
 			],

@@ -19,14 +19,6 @@ class ThemeService extends Service {
         this.setup();
     }
 
-    openSettings() {
-        if (!this._dialog)
-            this._dialog = SettingsDialog();
-
-        this._dialog.hide();
-        this._dialog.show_all();
-    }
-
     getTheme() {
         return themes.find(({ name }) => name === this.getSetting('theme'));
     }

@@ -24,7 +24,7 @@
     };
   };
 
-  environment.systemPackages = [pkgs.dwl];
+  environment.systemPackages = with pkgs; [dwl];
 
   # Those two lines prevent a crash with gdm autologin.
   systemd.services."getty@tty1".enable = false;
@@ -35,6 +35,7 @@
     wlr.enable = true;
     # gtk portal needed to make gtk apps happy
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    gtkUsePortal = true;
   };
 
   services.upower.enable = true;

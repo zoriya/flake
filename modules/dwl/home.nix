@@ -15,12 +15,20 @@ in {
     blueberry
     networkmanagerapplet
     wbg
+    glib
     # Only used for pactl.
     pulseaudio
     wallpaper
     hyprpicker
     wdisplays
+    wlr-randr
   ];
+
+  xdg.systemDirs.data = [
+    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+  ];
+
 
   xdg.configFile."ags" = {
     source = ./ags;

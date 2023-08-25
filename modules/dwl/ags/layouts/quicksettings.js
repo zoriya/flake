@@ -1,10 +1,12 @@
 import * as audio from "../modules/audio.js";
+import * as brightness from "../modules/brightness.js";
 import * as network from "../modules/network.js";
 import * as bluetooth from "../modules/bluetooth.js";
+import * as darkmode from "../modules/darkmode.js";
+import * as nightmode from "../modules/nightmode.js";
 import { QSMenu, Arrow } from "../services/quicksettings.js";
-import { Separator } from "../misc.js";
 
-const { Window, Revealer, Icon, CenterBox, Box, Button, Label } = ags.Widget;
+const { Window, Revealer, Icon, Box, Button, Label } = ags.Widget;
 
 const Submenu = ({ menuName, icon, title, contentType }) =>
 	Revealer({
@@ -45,11 +47,23 @@ const VolumeBox = () =>
 		],
 	});
 
+const BrightnessBox = () =>
+	Box({
+		className: "qs-slider",
+		children: [
+			brightness.Indicator(),
+			brightness.BrightnessSlider({ hexpand: true }),
+			brightness.PercentLabel(),
+			Box({ className: "qs-icon", style: "margin-right: 18px;" }),
+		],
+	});
+
 export const Quicksettings = () =>
 	Window({
 		name: "quicksettings",
 		exclusive: true,
 		popup: true,
+		focusable: true,
 		anchor: "top right",
 		child: Box({
 			vertical: true,
@@ -57,6 +71,7 @@ export const Quicksettings = () =>
 			hexpand: false,
 			children: [
 				VolumeBox(),
+				BrightnessBox(),
 				Box({
 					children: [network.Toggle({}), bluetooth.Toggle({})],
 				}),
@@ -72,9 +87,13 @@ export const Quicksettings = () =>
 					title: "Bluetooth",
 					contentType: bluetooth.Devices,
 				}),
-				// Box({
-				// 	children: [NightMode, AppMixer ],
-				// }),
+				Box({
+					children: [darkmode.DarkToggle(), nightmode.NightToggle()]
+				}),
+				Box({
+					children: [audio.AppMixer(), audio.MuteToggle()],
+				}),
+				// Media player
 			],
 		}),
 	});
