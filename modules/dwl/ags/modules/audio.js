@@ -1,4 +1,5 @@
-import { Separator } from "../misc.js";
+import { Separator, FontIcon } from "../misc.js";
+import { ArrowToggle, QSMenu } from "../services/quicksettings.js";
 
 const { App } = ags;
 const { Audio } = ags.Service;
@@ -118,6 +119,23 @@ export const MuteToggle = (props) =>
 		...props,
 		className: "qs-button surface",
 		onClicked: "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+		child: Box({
+			children: [
+				MicrophoneMuteIndicator({ className: "qs-icon" }),
+				Label({
+					connections: [
+						[
+							Audio,
+							(label) => {
+								if (!Audio.microphone) return;
+								label.label = Audio.microphone.isMuted ? "Muted" : "Not muted";
+							},
+							"microphone-changed",
+						],
+					],
+				}),
+			],
+		}),
 		connections: [
 			[
 				Audio,
@@ -129,6 +147,15 @@ export const MuteToggle = (props) =>
 				"microphone-changed",
 			],
 		],
+	});
+
+export const AppMixerToggle = (props) =>
+	ArrowToggle({
+		icon: FontIcon({ icon: "", className: "qs-icon" }),
+		label: Label("App Mixer"),
+		name: "app-mixer",
+		toggle: () => QSMenu.toggle("app-mixer"),
+		...props,
 	});
 
 export const AppMixer = (props) => {
