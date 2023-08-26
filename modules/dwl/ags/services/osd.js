@@ -1,4 +1,4 @@
-const { Service } = ags;
+const { App, Service } = ags;
 const { timeout, connect } = ags.Utils;
 
 class IndicatorService extends Service {
@@ -8,16 +8,25 @@ class IndicatorService extends Service {
 		});
 	}
 
+	_openned = false;
 	_delay = 1500;
+	_closeDelay = 300;
 	_count = 0;
 
 	popup(value, icon) {
+		if (!this._openned) App.openWindow("osd");
 		this.emit("popup", value, icon);
 		this._count++;
 		timeout(this._delay, () => {
 			this._count--;
 
-			if (this._count === 0) this.emit("popup", -1, icon);
+			if (this._count !== 0) return;
+			this.emit("popup", -1, icon);
+			timeout(this._closeDelay, () => {
+				if (this._count !== 0) return;
+				App.closeWindow("osd");
+				this._openned = false;
+			});
 		});
 	}
 

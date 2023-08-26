@@ -1,17 +1,3 @@
-diff --git a/config.def.h b/config.def.h
-index 447ba00..2eaf29f 100644
---- a/config.def.h
-+++ b/config.def.h
-@@ -9,6 +9,9 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
- 
- /* tagging - tagcount must be no greater than 31 */
- static const int tagcount = 9;
-+/* cursor warping */
-+static const bool cursor_warp = true;
-+
- 
- static const Rule rules[] = {
- 	/* app_id     title       tags mask     isfloating   monitor */
 diff --git a/dwl.c b/dwl.c
 index 93f66ef..5562c0d 100644
 --- a/dwl.c

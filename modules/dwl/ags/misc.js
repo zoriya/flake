@@ -27,7 +27,6 @@ export const FontIcon = ({ icon = "", ...props }) => {
 	return Box({
 		...props,
 		setup: (box) => (box.label = label),
-		className: "icon",
 		children: [
 			Overlay({
 				child: box,

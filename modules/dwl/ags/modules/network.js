@@ -10,7 +10,19 @@ export const SSIDLabel = (props) =>
 	Label({
 		truncate: "end",
 		...props,
-		connections: [[Network, (label) => (label.label = Network.wifi?.ssid || "Not Connected")]],
+		connections: [
+			[
+				Network,
+				(label) => {
+					if (Network.primary === "wifi") label.label = Network.wifi?.ssid || "Not Connected";
+					else
+						label.label =
+							Network.wired?.internet === "connected" || Network.wired?.internet === "connection"
+								? "Wired"
+								: "Not Connected";
+				},
+			],
+		],
 	});
 
 export const WifiStrengthLabel = (props) =>
@@ -88,7 +100,7 @@ export const WifiIndicator = ({
 		],
 	});
 
-export const Indicator = ({ wifi = WifiIndicator(), wired = WifiIndicator(), ...props } = {}) =>
+export const Indicator = ({ wifi = WifiIndicator(), wired = WiredIndicator(), ...props } = {}) =>
 	Stack({
 		...props,
 		items: [
@@ -151,11 +163,11 @@ export const Selection = (props) =>
 										Icon(icons.find(({ value }) => value <= ap.strength).icon),
 										Label(ap.ssid),
 										ap.active &&
-											Icon({
-												icon: "object-select-symbolic",
-												hexpand: true,
-												halign: "end",
-											}),
+										Icon({
+											icon: "object-select-symbolic",
+											hexpand: true,
+											halign: "end",
+										}),
 									],
 								}),
 							})

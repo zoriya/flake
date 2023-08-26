@@ -123,8 +123,6 @@ static const char *termcmd[] = { "kitty", NULL };
 static const char *browcmd[] = { "firefox", NULL };
 static const char *menucmd[] = { "rofi", NULL };
 
-static const char *test[] = {"ags", "run-js", "ags.Service.Indicator.speaker()", NULL};
-
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
 	/* modifier                  key                 function        argument */
@@ -164,7 +162,7 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
 
-	{ 0, XKB_KEY_XF86MonBrightnessUp,    setlayout, {.v = &layouts[0]} },
+	{ 0, XKB_KEY_XF86MonBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen += 0.05; ags.Service.Indicator.display()", NULL}}},
 	{ 0, XKB_KEY_XF86MonBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()", NULL}}},
 	{ 0, XKB_KEY_XF86KbdBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()", NULL}}},
 	{ 0, XKB_KEY_XF86KbdBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd--; ags.Service.Indicator.kbd()", NULL}}},

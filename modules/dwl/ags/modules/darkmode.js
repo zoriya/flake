@@ -45,14 +45,13 @@ export const Indicator = ({ ...props } = {}) =>
 	Stack({
 		items: [
 			["light", Icon("weather-clear-symbolic")],
-			["dark", Icon("weather-clear-night-symbolic")]
+			["dark", Icon("weather-clear-night-symbolic")],
 		],
 		...props,
 		connections: [
 			[
 				Theme,
 				(stack) => {
-					log(Theme.dark, stack.items);
 					stack.shown = Theme.dark ? "dark" : "light";
 				},
 			],

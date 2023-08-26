@@ -6,9 +6,7 @@ import { Indicator } from "../services/osd.js";
 export const OSD = () =>
 	Window({
 		name: "osd",
-		exclusive: true,
 		popup: true,
-		focusable: true,
 		// Follow active monitor
 		monitor: undefined,
 		layer: "overlay",
