@@ -31,7 +31,7 @@ const TitleLabel = ({ player, ...props } = {}) =>
 			[
 				Mpris,
 				(label) => {
-					label.label = addElipsis(Mpris.getPlayer(player)?.trackTitle || "", 30);
+					label.label = addElipsis(Mpris.getPlayer(player)?.trackTitle || "", 25);
 				},
 			],
 		],
@@ -45,7 +45,7 @@ const ArtistLabel = ({ player, ...props }) =>
 			[
 				Mpris,
 				(label) => {
-					label.label = addElipsis(Mpris.getPlayer(player)?.trackArtists.join(", ") || "", 30);
+					label.label = addElipsis(Mpris.getPlayer(player)?.trackArtists.join(", ") || "", 25);
 				},
 			],
 		],

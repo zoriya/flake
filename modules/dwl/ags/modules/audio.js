@@ -273,3 +273,20 @@ export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
 			],
 		],
 	});
+
+// export const MicUseIndicator = ({ className, ...props } = {}) =>
+// 	Icon({
+// 		icon: "microphone-sensitivity-high-symbolic",
+// 		className: `${className} red`,
+// 		connections: [
+// 			[
+// 				Audio,
+// 				(button) => {
+// 					log(Array.from(Audio.recordingApps).map(x => ({desc: x.description, origin: x.origin, type: x.type})));
+// 					if (!Audio.recordingApps.size) return button.hide();
+// 					button.show();
+// 				},
+// 			],
+// 		],
+// 		...props,
+// 	});

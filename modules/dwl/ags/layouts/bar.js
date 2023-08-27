@@ -46,11 +46,10 @@ export const Bar = (mon) =>
 				halign: "end",
 				children: [
 					// TODO:
-					// ags.Widget.Box({ hexpand: true }),
-					// ScreenShare() & MicInUse()
+					// ScreenShare()
+					// Webcam
 					// ScreenRecord(),
 					// ColorPicker(),
-					// Separator({ valign: "center" }),
 					Button({
 						onClicked: () => App.toggleWindow("quicksettings"),
 						className: "module quicksettings",
@@ -64,6 +63,7 @@ export const Bar = (mon) =>
 						],
 						child: Box({
 							children: [
+								// audio.MicUseIndicator({ className: "qs-icon" }),
 								audio.MicrophoneMuteIndicator({ unmuted: null, className: "qs-item" }),
 								notifications.DNDIndicator({ noisy: null, className: "qs-item" }),
 								network.Indicator({ className: "qs-item" }),
