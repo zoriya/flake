@@ -19,14 +19,14 @@ class MaterialcolorsService extends Service {
 	}
 
 	getColors(url) {
-		if (url !== "undefined") {
+		if (url !== undefined) {
 			// const commandString = `python ${CONFIG_DIR}/bin/getCoverColors "${url}"`;
 			// try {
 			// 	this._colors = JSON.parse(exec(commandString));
 			// } catch {
 			// 	return;
 			// }
-			// this.emit("changed");
+			this.emit("changed");
 		}
 	}
 
@@ -41,7 +41,7 @@ class MaterialcolorsService extends Service {
 
 		Mpris.instance.connect("changed", () => {
 			this._mprisPlayer = Mpris.getPlayer("");
-			this._coverPath = this._mprisPlayer.coverPath;
+			this._coverPath = this._mprisPlayer?.coverPath;
 			this._colors = this.getColors(this.coverPath);
 		});
 	}
@@ -112,14 +112,13 @@ export const PlayPause = ({ player, ...props }) =>
 export const CoverArt = (props) =>
 	Box({
 		...props,
+		className: "mpris-cover-art",
 		connections: [
 			[
 				Materialcolors,
 				(box) => {
 					box.setStyle(`
-						background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 30%, ${Materialcolors.colors.primary}), url("${Materialcolors.coverPath}"); \
-						background-size: cover; \
-						background-position: center; \
+						background-image: radial-gradient(circle, rgba(0, 0, 0, 0.4) 30%, ${Materialcolors.colors.primary}), url("${Materialcolors.coverPath}"); \
 						color: ${Materialcolors.colors.onBackground};
 					`);
 				},

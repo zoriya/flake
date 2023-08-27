@@ -104,7 +104,6 @@ export const Quicksettings = () =>
 	Window({
 		name: "quicksettings",
 		popup: true,
-		// focusable: true,
 		anchor: ["top", "right", "bottom", "left"],
 		child: PopupOverlay(
 			"quicksettings",

@@ -83,7 +83,6 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		const min = vertical ? width : height;
 		const preferred = Math.max(min, (axisv * value) / max);
 
-		log(value, max, axisv, axisv / max);
 		maxIndicator.setStyle(`margin-${vertical ? "top" : "left"}: ${axisv / max}px; `);
 		fill.toggleClassName("red", value > 1);
 

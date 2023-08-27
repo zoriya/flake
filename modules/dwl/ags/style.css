@@ -143,3 +143,40 @@ mark {
 	margin-bottom: 0px;
 }
 
+.mpris-cover-art {
+	background-size: cover;
+	background-position: center;
+	margin: 10px 0;
+	min-height: 205px;
+	border-radius: 30px;
+	transition: all 0.2s;
+}
+.mpris-cover-art > * {
+	padding: 20px;
+}
+.mpris-play {
+	min-width: 60px;
+	min-height: 60px;
+	border-radius: 20px;
+	padding: 0;
+	transition: all 0.3s;
+}
+.mpris-position-slider {
+	margin: 0 10px;
+}
+.mpris-position-slider trough {
+	border-radius: 100px;
+	background-color: rgba(255, 255, 255, 0.6);
+	min-height: 4px;
+}
+.mpris-position-slider highlight, .mpris-position-slider progress {
+	background-color: #fff;
+	border-radius: 100px;
+}
+
+.mpris-position-slider slider {
+	border-radius: 100px;
+	min-height: 4px;
+	min-width: 4px;
+	background-color: #fff;
+}

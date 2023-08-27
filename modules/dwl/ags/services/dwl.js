@@ -62,7 +62,6 @@ WL-1 tags 1 1 1 0
 WL-1 layout []=
 		*/
 
-		log(event);
 		const [mon, type, ...values] = event.split(" ");
 
 		this._monitors[mon] ??= new Map();
