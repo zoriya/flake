@@ -1,4 +1,5 @@
 import { BackgroundBox, CoverArt, PlayPause } from "./materialcolors.js";
+import { addElipsis } from "../misc.js";
 
 const { Box, Button, Slider, Icon, CenterBox, Label } = ags.Widget;
 const { Mpris } = ags.Service;
@@ -25,11 +26,12 @@ const TitleLabel = ({ player, ...props } = {}) =>
 	Label({
 		...props,
 		truncate: "end",
+		wrap: true,
 		connections: [
 			[
 				Mpris,
 				(label) => {
-					label.label = Mpris.getPlayer(player)?.trackTitle || "";
+					label.label = addElipsis(Mpris.getPlayer(player)?.trackTitle || "", 30);
 				},
 			],
 		],
@@ -43,7 +45,7 @@ const ArtistLabel = ({ player, ...props }) =>
 			[
 				Mpris,
 				(label) => {
-					label.label = Mpris.getPlayer(player)?.trackArtists.join(", ") || "";
+					label.label = addElipsis(Mpris.getPlayer(player)?.trackArtists.join(", ") || "", 30);
 				},
 			],
 		],
@@ -90,7 +92,7 @@ const PositionSlider = ({ player, ...props }) => {
 		if (slider._dragging) return;
 
 		const mpris = Mpris.getPlayer(player);
-		// slider.visible = mpris?.length > 0;
+		slider.visible = mpris?.length > 0;
 		if (mpris && mpris.length > 0) slider.adjustment.value = mpris.position / mpris.length;
 	};
 

@@ -1,4 +1,4 @@
-import { Separator, FontIcon } from "../misc.js";
+import { Separator, FontIcon, addElipsis } from "../misc.js";
 import { ArrowToggle, QSMenu } from "../services/quicksettings.js";
 
 const { App } = ags;
@@ -180,7 +180,7 @@ export const AppMixer = (props) => {
 			icon.tooltipText = stream.name;
 			slider.value = stream.volume;
 			percent.label = `${Math.floor(stream.volume * 100)}%`;
-			label.label = stream.description || "";
+			label.label = addElipsis(stream.description || "", 30, "middle");
 		};
 		const id = stream.connect("changed", sync);
 		return Box({

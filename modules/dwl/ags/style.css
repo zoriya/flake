@@ -35,6 +35,18 @@
 .f16 {
 	font-size: 16px;
 }
+.round {
+	border-radius: 50%;
+}
+.r20 {
+	border-radius: 20px;
+}
+.r100 {
+	border-radius: 100px;
+}
+.p10 {
+	padding: 10px;
+}
 
 .separator {
 	border-radius: 10px;
@@ -84,7 +96,7 @@ mark {
 .tags {
 	min-width: 2rem;
 }
-.qs-item + .qs-item {
+.qs-item {
 	padding: 3px;
 }
 
@@ -100,6 +112,7 @@ mark {
 .qs-container {
 	min-width: 340px;
 	padding: 25px;
+	margin: 10px;
 	border-radius: 40px;
 }
 .qs-button {

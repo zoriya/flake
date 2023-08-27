@@ -6,10 +6,9 @@ import * as darkmode from "../modules/darkmode.js";
 import * as nightmode from "../modules/nightmode.js";
 import * as mpris from "../modules/mpris.js";
 import { QSMenu, Arrow } from "../services/quicksettings.js";
-import { FontIcon } from "../misc.js";
+import { FontIcon, PopupOverlay } from "../misc.js";
 
-const { App } = ags;
-const { Window, Revealer, Icon, Box, Button, Label, EventBox } = ags.Widget;
+const { Window, Revealer, Icon, Box, Button, Label } = ags.Widget;
 
 const Submenu = ({ menuName, icon, title, contentType }) =>
 	Revealer({
@@ -61,44 +60,6 @@ const BrightnessBox = () =>
 		],
 	});
 
-const PopupCloser = (windowName) =>
-	EventBox({
-		hexpand: true,
-		vexpand: true,
-		connections: [["button-press-event", () => App.toggleWindow(windowName)]],
-	});
-
-const PopupRevealer = (windowName, transition, child) =>
-	Box({
-		style: "padding: 1px;",
-		children: [
-			Revealer({
-				transition,
-				child,
-				transitionDuration: 350,
-				connections: [
-					[
-						App,
-						(revealer, name, visible) => {
-							if (name === windowName) revealer.reveal_child = visible;
-						},
-					],
-				],
-			}),
-		],
-	});
-
-const PopupOverlay = (windowName, child) =>
-	Box({
-		children: [
-			PopupCloser(windowName),
-			Box({
-				hexpand: false,
-				vertical: true,
-				children: [PopupRevealer(windowName, "slide_down", child), PopupCloser(windowName)],
-			}),
-		],
-	});
 
 export const Quicksettings = () =>
 	Window({
@@ -107,10 +68,10 @@ export const Quicksettings = () =>
 		anchor: ["top", "right", "bottom", "left"],
 		child: PopupOverlay(
 			"quicksettings",
+			"top right",
 			Box({
 				vertical: true,
 				className: "transparent qs-container",
-				hexpand: false,
 				children: [
 					VolumeBox(),
 					BrightnessBox(),

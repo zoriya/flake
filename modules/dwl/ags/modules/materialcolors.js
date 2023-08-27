@@ -20,13 +20,12 @@ class MaterialcolorsService extends Service {
 
 	getColors(url) {
 		if (url !== undefined) {
-			// const commandString = `python ${CONFIG_DIR}/bin/getCoverColors "${url}"`;
-			// try {
-			// 	this._colors = JSON.parse(exec(commandString));
-			// } catch {
-			// 	return;
-			// }
-			this.emit("changed");
+			const commandString = `python ${CONFIG_DIR}/bin/getCoverColors "${url}"`;
+			try {
+				this._colors = JSON.parse(exec(commandString));
+			} catch {
+				return;
+			}
 		}
 	}
 
@@ -42,7 +41,8 @@ class MaterialcolorsService extends Service {
 		Mpris.instance.connect("changed", () => {
 			this._mprisPlayer = Mpris.getPlayer("");
 			this._coverPath = this._mprisPlayer?.coverPath;
-			this._colors = this.getColors(this.coverPath);
+			// this._colors = this.getColors(this.coverPath);
+			this.emit("changed");
 		});
 	}
 

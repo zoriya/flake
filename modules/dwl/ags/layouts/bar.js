@@ -32,9 +32,13 @@ export const Bar = (mon) =>
 			centerWidget: Box({
 				halign: "center",
 				children: [
-					notifications.Indicator({
-						hexpand: true,
-						halign: "center",
+					Button({
+						style: "min-width: 200px;",
+						onClicked: () => App.toggleWindow("notifications"),
+						child: notifications.Indicator({
+							hexpand: true,
+							halign: "center",
+						}),
 					}),
 				],
 			}),
