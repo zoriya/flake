@@ -13,7 +13,7 @@ class ThemeService extends Service {
 		return this._dark;
 	}
 
-	dark(value) {
+	set dark(value) {
 		this._dark = value;
 		execAsync(`gsettings set org.gnome.desktop.interface color-scheme prefer-${this._dark ? "dark" : "light"}`).catch(
 			print
@@ -23,7 +23,7 @@ class ThemeService extends Service {
 
 	constructor() {
 		super();
-		this._dark = Boolean(exec(`gsettings get org.gnome.desktop.interface color-scheme`));
+		this._dark = exec(`gsettings get org.gnome.desktop.interface color-scheme`) === "'prefer-dark'";
 	}
 }
 
@@ -38,6 +38,10 @@ class Theme {
 	}
 	static set dark(value) {
 		Theme.instance.dark = value;
+	}
+
+	static toggle() {
+		this.dark = !this.dark;
 	}
 }
 
@@ -74,7 +78,7 @@ export const DarkToggle = ({ ...props } = {}) =>
 	Button({
 		className: "qs-button surface",
 		hexpand: true,
-		onClicked: () => {},
+		onClicked: () => Theme.toggle(),
 		child: Box({
 			children: [Indicator({ className: "qs-icon" }), ThemeLabel()],
 		}),

@@ -30,6 +30,8 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+  programs.dconf.enable = true;
+  services.dbus.enable = true;
   xdg.portal = {
     enable = true;
     wlr.enable = true;
