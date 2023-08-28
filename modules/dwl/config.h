@@ -163,6 +163,7 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
 
+	{ MODKEY,                    XKB_KEY_z,          SHCMD("hyprpicker | wl-copy") },
 	{ MODKEY,                    XKB_KEY_x,          SHCMD("grim -g \"$(slurp -b 00000000 -s 61616140)\" - | wl-copy") },
 	{ MODKEY,                    XKB_KEY_v,          SHCMD("cliphist list | rofi -dmenu | cliphist decode | wl-copy") },
 
