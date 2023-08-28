@@ -80,7 +80,7 @@ export const PlayPause = ({ player, ...props }) =>
 					Mpris,
 					(stack) => {
 						const mpris = Mpris.getPlayer(player);
-						stack.shown = mpris.playBackStatus;
+						stack.shown = mpris?.playBackStatus ?? "Stopped";
 					},
 				],
 			],

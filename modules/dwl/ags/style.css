@@ -193,3 +193,21 @@ mark {
 	min-width: 4px;
 	background-color: #fff;
 }
+
+
+.powermenu {
+	padding: 20px;
+	border-radius: 30px;
+}
+
+.powermenu button image {
+	margin: 10px;
+	border-radius: 10px;
+	min-width: 120px;
+	min-height: 120px;
+	font-size: 68px;
+}
+.powermenu button:hover image, .powermenu button:focus image {
+	background-color: #000;
+	color: #94e2d5;
+}

@@ -8,6 +8,8 @@
   wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
   dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
 in {
+  imports = [./rofi];
+
   home.packages = with pkgs; [
     alsa-utils
     sassc

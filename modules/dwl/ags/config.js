@@ -1,6 +1,7 @@
 import { Bar } from "./layouts/bar.js";
 import { Notifications } from "./layouts/notifications.js";
 import { OSD } from "./layouts/osd.js";
+import { Powermenu } from "./layouts/powermenu.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
 
 const { App } = ags;
@@ -18,8 +19,7 @@ const config = {
 		Quicksettings(),
 		Notifications(),
 		OSD(),
-		// shared.ApplauncherPopup(),
-		// shared.PowermenuPopup(),
+		Powermenu(),
 	],
 };
 

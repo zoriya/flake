@@ -178,5 +178,17 @@ export const PopupOverlay = (windowName, layout, child) => {
 					}),
 				],
 			});
+		case "center":
+			return Box({
+				children: [
+					PopupCloser(windowName),
+					Box({
+						hexpand: false,
+						vertical: true,
+						children: [PopupCloser(windowName), PopupRevealer(windowName, "crossfade", child), PopupCloser(windowName)],
+					}),
+					PopupCloser(windowName),
+				],
+			});
 	}
 };

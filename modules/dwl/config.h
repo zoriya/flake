@@ -122,7 +122,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* commands */
 static const char *termcmd[] = { "kitty", NULL };
 static const char *browcmd[] = { "firefox", NULL };
-static const char *menucmd[] = { "rofi", NULL };
+static const char *menucmd[] = { "rofi", "-show", "drun", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
@@ -163,6 +163,9 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
 
+	{ 0, XKB_KEY_XF86PowerOff,           spawn, {.v = (const char*[]){"ags", "-t", "powermenu", NULL}}},
+	// TODO: Allow those bindings on lockscreen
+	// TODO: Allow those bindings on repeat
 	{ 0, XKB_KEY_XF86MonBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen += 0.05; ags.Service.Indicator.display()", NULL}}},
 	{ 0, XKB_KEY_XF86MonBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()", NULL}}},
 	{ 0, XKB_KEY_XF86KbdBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()", NULL}}},
@@ -183,10 +186,6 @@ static const Key keys[] = {
 #define CHVT(n) { WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_XF86Switch_VT_##n, chvt, {.ui = (n)} }
 	CHVT(1), CHVT(2), CHVT(3), CHVT(4), CHVT(5), CHVT(6),
 	CHVT(7), CHVT(8), CHVT(9), CHVT(10), CHVT(11), CHVT(12),
-
-// 	// TODO: Allow those bindings on lockscreen
-// 	// TODO: Allow those bindings on repeat
-	// bind = XF86PowerOff
 };
 
 static const Button buttons[] = {
