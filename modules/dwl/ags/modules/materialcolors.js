@@ -112,7 +112,7 @@ export const PlayPause = ({ player, ...props }) =>
 export const CoverArt = (props) =>
 	Box({
 		...props,
-		className: "mpris-cover-art",
+		className: `mpris-cover-art ${props.className}`,
 		connections: [
 			[
 				Materialcolors,
@@ -123,6 +123,7 @@ export const CoverArt = (props) =>
 					`);
 				},
 			],
+			...(props.connections ?? [])
 		],
 	});
 

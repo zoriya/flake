@@ -157,5 +157,14 @@ export const MprisPlayer = ({ player = "", ...props } = {}) =>
 				],
 			}),
 		],
+		connections: [
+			[
+				Mpris,
+				(widget) => {
+					const mpris = Mpris.getPlayer(player);
+					widget.visible = mpris !== null && mpris.playBackStatus !== "Stopped";
+				},
+			],
+		],
 		...props,
 	});

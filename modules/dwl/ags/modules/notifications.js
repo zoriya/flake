@@ -50,6 +50,7 @@ export const Indicator = ({ ...props }) =>
 				child: Label({
 					use_markup: true,
 					truncate: "end",
+					wrap: false,
 					label: "",
 				}),
 			}),
@@ -63,13 +64,13 @@ const NotificationIcon = ({ appEntry, appIcon, image }) => {
 			hexpand: false,
 			className: "icon img",
 			style: `
-                background-image: url("${image}");
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
-                min-width: 78px;
-                min-height: 78px;
-            `,
+				background-image: url("${image}");
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				min-width: 78px;
+				min-height: 78px;
+			`,
 		});
 	}
 
@@ -159,7 +160,6 @@ export const List = (props) =>
 	Box({
 		...props,
 		vertical: true,
-		vexpand: true,
 		connections: [
 			[
 				Notifications,
