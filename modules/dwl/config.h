@@ -35,7 +35,7 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       0,            1,           -1 },
 	*/
 	{ "discord",  NULL,       1 << 2,       0,           -1 },
-	{ "youtube-music",  NULL,       1 << 1,       0,           -1 },
+	{ "youtube-music",  NULL, 1 << 1,       0,           -1 },
 };
 
 /* layout(s) */
@@ -162,6 +162,9 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_8, XKB_KEY_asterisk,                   7),
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
+
+	{ MODKEY,                    XKB_KEY_x,          SHCMD("grim -g \"$(slurp -b 00000000 -s 61616140)\" - | wl-copy") },
+	{ MODKEY,                    XKB_KEY_v,          SHCMD("cliphist list | rofi -dmenu | cliphist decode | wl-copy") },
 
 	{ 0, XKB_KEY_XF86PowerOff,           spawn, {.v = (const char*[]){"ags", "-t", "powermenu", NULL}}},
 	// TODO: Allow those bindings on lockscreen

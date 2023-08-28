@@ -22,13 +22,12 @@ in {
       patches = [
         ../dwl_patches/autostart.patch
         ../dwl_patches/deck.patch
-        # ../dwl_patches/focusMonPointer.patch
         ../dwl_patches/point.patch
         ../dwl_patches/output-power-managment.patch
         ../dwl_patches/keyboard-shortcut-inhibit.patch
         ../dwl_patches/cursor_wrap.patch
-        ../dwl_patches/vanitygaps.patch
         # ../dwl_patches/smartborders.patch
+        ../dwl_patches/vanitygaps.patch
         ../dwl_patches/desktop.patch
       ];
     });

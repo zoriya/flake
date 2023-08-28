@@ -26,6 +26,9 @@ in {
     hyprpicker
     wdisplays
     wlr-randr
+    grim
+    slurp
+    cliphist
   ];
 
   xdg.systemDirs.data = [
