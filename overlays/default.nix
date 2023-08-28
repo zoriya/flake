@@ -30,6 +30,8 @@ in {
         ../dwl_patches/vanity_deck.patch
         ../dwl_patches/smartborders.patch
         ../dwl_patches/desktop.patch
+        ../dwl_patches/togglelayout.patch
+        ../dwl_patches/toggletag.patch
       ];
     });
 
