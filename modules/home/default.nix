@@ -1,7 +1,6 @@
 {
   imports = [
     ./hyprland
-    ./rofi
     ./apps
     ./zsh
     ./git
