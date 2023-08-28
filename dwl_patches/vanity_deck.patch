@@ -43,8 +43,8 @@ index 140c1b1..dc16e16 100644
  		} else {
 -			resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y,
 -				.width = m->w.width - mw, .height = m->w.height}, 0);
-+			h = m->w.height - m->gappoh*oe - m->gappih*ie;
-+			resize(c, (struct wlr_box){.x = m->w.x + mw + m->gappov*oe, .y = m->w.y,
++			h = m->w.height - m->gappoh*oe*2;
++			resize(c, (struct wlr_box){.x = m->w.x + mw + m->gappov*oe, .y = m->w.y + m->gappoh*oe,
 +				.width = m->w.width - mw - 2*m->gappov*oe, .height = h}, 0);
  			if (i == m->nmaster)
  				wlr_scene_node_raise_to_top(&c->scene->node);

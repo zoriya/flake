@@ -32,6 +32,7 @@ in {
         ../dwl_patches/desktop.patch
         ../dwl_patches/togglelayout.patch
         ../dwl_patches/toggletag.patch
+        ../dwl_patches/singletagset.patch
       ];
     });
 

@@ -5,16 +5,17 @@ static const int monoclegaps               = 0;  /* 1 means outer gaps in monocl
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const int smartborders              = 1;
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
-static const unsigned int gappih           = 5; /* horiz inner gap between windows */
-static const unsigned int gappiv           = 5; /* vert inner gap between windows */
-static const unsigned int gappoh           = 5; /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov           = 5; /* vert outer gap between windows and screen edge */
+static const unsigned int gappih           = 10; /* horiz inner gap between windows */
+static const unsigned int gappiv           = 10; /* vert inner gap between windows */
+static const unsigned int gappoh           = 20; /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov           = 20; /* vert outer gap between windows and screen edge */
 static const float bordercolor[]           = {0.5, 0.5, 0.5, 1.0};
 static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 
 /* tagging - tagcount must be no greater than 31 */
+#define TAGCOUNT 9
 static const int tagcount = 9;
 static const bool cursor_warp = true;
 
@@ -22,6 +23,7 @@ static const bool cursor_warp = true;
 static const char *const autostart[] = {
 	"dwlstartup", NULL,
 	"wallpaper", NULL,
+	"wl-paste", "--watch", "cliphist", "store", NULL,
 	"discord", NULL,
 	"youtube-music", NULL,
 	NULL /* terminate */

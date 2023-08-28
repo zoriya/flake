@@ -93,8 +93,8 @@ index dc16e16..7b1ca6f 100644
 +				.width = mw - m->gappiv*ie, .height = h}, 0, draw_borders);
  			my += c->geom.height + m->gappih*ie;
  		} else {
- 			h = m->w.height - m->gappoh*oe - m->gappih*ie;
- 			resize(c, (struct wlr_box){.x = m->w.x + mw + m->gappov*oe, .y = m->w.y,
+ 			h = m->w.height - m->gappoh*oe*2;
+ 			resize(c, (struct wlr_box){.x = m->w.x + mw + m->gappov*oe, .y = m->w.y + m->gappoh*oe,
 -				.width = m->w.width - mw - 2*m->gappov*oe, .height = h}, 0);
 +				.width = m->w.width - mw - 2*m->gappov*oe, .height = h}, 0, draw_borders);
  			if (i == m->nmaster)
