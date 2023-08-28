@@ -19,6 +19,7 @@ static const bool cursor_warp = true;
 
 /* Autostart */
 static const char *const autostart[] = {
+	"dwlstartup", NULL,
 	"wallpaper", NULL,
 	"discord", NULL,
 	"youtube-music", NULL,

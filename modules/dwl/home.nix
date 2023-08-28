@@ -6,6 +6,7 @@
   ...
 }: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
+  dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
 in {
   home.packages = with pkgs; [
     alsa-utils
@@ -19,6 +20,7 @@ in {
     # Only used for pactl.
     pulseaudio
     wallpaper
+    dwlstartup
     hyprpicker
     wdisplays
     wlr-randr
