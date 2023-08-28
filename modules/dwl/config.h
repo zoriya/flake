@@ -3,6 +3,7 @@ static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int smartgaps                 = 1;  /* 1 means no outer gap when there is only one window */
 static const int monoclegaps               = 0;  /* 1 means outer gaps in monocle layout */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
+static const int smartborders              = 1;
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
 static const unsigned int gappih           = 5; /* horiz inner gap between windows */
 static const unsigned int gappiv           = 5; /* vert inner gap between windows */
@@ -117,7 +118,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 	{ MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,SKEY,toggletag, {.ui = 1 << TAG} }
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) spawn, { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
 static const char *termcmd[] = { "kitty", NULL };

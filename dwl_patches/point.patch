@@ -32,20 +32,6 @@ index ccca07948..ee1316146 100644
  wlr-layer-shell-unstable-v1-protocol.h:
  	$(WAYLAND_SCANNER) server-header \
  		protocols/wlr-layer-shell-unstable-v1.xml $@
-diff --git a/config.def.h b/config.def.h
-index 447ba0051..9f3a40131 100644
---- a/config.def.h
-+++ b/config.def.h
-@@ -10,6 +10,9 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
- /* tagging - tagcount must be no greater than 31 */
- static const int tagcount = 9;
- 
-+/* pointer constraints */
-+static const int allow_constrain      = 1;
-+
- static const Rule rules[] = {
- 	/* app_id     title       tags mask     isfloating   monitor */
- 	/* examples:
 diff --git a/dwl.c b/dwl.c
 index 93f66efe6..d3b5cdac1 100644
 --- a/dwl.c
@@ -84,12 +70,13 @@ index 93f66efe6..d3b5cdac1 100644
  typedef struct {
  	const char *id;
  	const char *title;
-@@ -245,6 +256,7 @@ static void createlocksurface(struct wl_listener *listener, void *data);
+@@ -245,7 +256,8 @@ static void createlocksurface(struct wl_listener *listener, void *data);
  static void createmon(struct wl_listener *listener, void *data);
  static void createnotify(struct wl_listener *listener, void *data);
  static void createpointer(struct wlr_pointer *pointer);
 +static void createpointerconstraint(struct wl_listener *listener, void *data);
  static void cursorframe(struct wl_listener *listener, void *data);
+ static void deck(Monitor *m);
  static void destroydragicon(struct wl_listener *listener, void *data);
  static void destroyidleinhibitor(struct wl_listener *listener, void *data);
 @@ -254,12 +266,14 @@ static void destroylocksurface(struct wl_listener *listener, void *data);

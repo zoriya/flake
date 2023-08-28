@@ -14,7 +14,7 @@ diff --git a/config.def.h b/config.def.h
 index 447ba0051..3cf694c7b 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -7,6 +7,12 @@ static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
+@@ -7,7 +7,13 @@ static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
  /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
  static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
  
@@ -25,7 +25,8 @@ index 447ba0051..3cf694c7b 100644
 +};
 +
  /* tagging - tagcount must be no greater than 31 */
- static const int tagcount = 9;
+ #define TAGCOUNT (9)
+ static const int tagcount = TAGCOUNT;
  
 diff --git a/dwl.c b/dwl.c
 index 93f66efe6..de1f6e5ed 100644

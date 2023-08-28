@@ -1,4 +1,4 @@
-From 09b0ee42bb19c7e1feae690f06ecc1d3b7ec8c20 Mon Sep 17 00:00:00 2001
+From 82daf3df097dc5946829e3bc4753c3aa2aafb789 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Leonardo=20Hern=C3=A1ndez=20Hern=C3=A1ndez?=
  <leohdz172@protonmail.com>
 Date: Tue, 16 Aug 2022 15:28:00 -0500
@@ -8,8 +8,8 @@ Co-authored-by: A Frederick Christensen <dwl@ivories.org>
 Co-authored-by: Andrey Proskurin <andreyproskurin@protonmail.com>
 ---
  config.def.h |  1 +
- dwl.c        | 40 ++++++++++++++++++++++++++--------------
- 2 files changed, 27 insertions(+), 14 deletions(-)
+ dwl.c        | 38 +++++++++++++++++++++++++-------------
+ 2 files changed, 26 insertions(+), 13 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
 index 447ba0051..2383c4dbf 100644
@@ -24,7 +24,7 @@ index 447ba0051..2383c4dbf 100644
  static const float bordercolor[]           = {0.5, 0.5, 0.5, 1.0};
  static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
 diff --git a/dwl.c b/dwl.c
-index 93f66efe6..d5e898cbc 100644
+index 4ff5c37f7..ad5ec9a19 100644
 --- a/dwl.c
 +++ b/dwl.c
 @@ -286,7 +286,7 @@ static void printstatus(void);
@@ -45,25 +45,48 @@ index 93f66efe6..d5e898cbc 100644
  		if (c->mon == m)
  			setmon(c, selmon, c->tags);
  	}
-@@ -773,7 +773,7 @@ commitnotify(struct wl_listener *listener, void *data)
+@@ -1183,7 +1183,7 @@ cursorframe(struct wl_listener *listener, void *data)
+ void
+ deck(Monitor *m)
+ {
+-	unsigned int i, n = 0, mw, my;
++	unsigned int i, n = 0, mw, my, draw_borders = 1;
+ 	Client *c;
  
- 	if (c->mon && !wlr_box_empty(&box) && (box.width != c->geom.width - 2 * c->bw
- 			|| box.height != c->geom.height - 2 * c->bw))
--		c->isfloating ? resize(c, c->geom, 1) : arrange(c->mon);
-+		c->isfloating ? resize(c, c->geom, 1, 1) : arrange(c->mon);
+ 	wl_list_for_each(c, &clients, link)
+@@ -1191,6 +1191,8 @@ deck(Monitor *m)
+ 			n++;
+ 	if (n == 0)
+ 		return;
++	if (smartborders == n)
++		draw_borders = 0;
  
- 	/* mark a pending resize as completed */
- 	if (c->resize && c->resize <= c->surface.xdg->current.configure_serial)
-@@ -1628,7 +1628,7 @@ monocle(Monitor *m)
+ 	if (n > m->nmaster)
+ 		mw = m->nmaster ? m->w.width * m->mfact : 0;
+@@ -1202,11 +1204,11 @@ deck(Monitor *m)
+ 			continue;
+ 		if (i < m->nmaster) {
+ 			resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
+-				.height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
++				.height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0, draw_borders);
+ 			my += c->geom.height;
+ 		} else {
+ 			resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y,
+-				.width = m->w.width - mw, .height = m->w.height}, 0);
++				.width = m->w.width - mw, .height = m->w.height}, 0, draw_borders);
+ 			if (i == m->nmaster)
+ 				wlr_scene_node_raise_to_top(&c->scene->node);
+ 		}
+@@ -1788,7 +1788,7 @@ monocle(Monitor *m)
  	wl_list_for_each(c, &clients, link) {
  		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
  			continue;
 -		resize(c, m->w, 0);
 +		resize(c, m->w, 0, !smartborders);
  		n++;
- 	}
+ }
  	if (n)
-@@ -1676,11 +1676,11 @@ motionnotify(uint32_t time)
+@@ -1672,11 +1672,11 @@ motionnotify(uint32_t time)
  	if (cursor_mode == CurMove) {
  		/* Move the grabbed client to the new position. */
  		resize(grabc, (struct wlr_box){.x = cursor->x - grabcx, .y = cursor->y - grabcy,
@@ -77,7 +100,7 @@ index 93f66efe6..d5e898cbc 100644
  		return;
  	}
  
-@@ -1930,11 +1930,12 @@ requeststartdrag(struct wl_listener *listener, void *data)
+@@ -1926,11 +1926,12 @@ requeststartdrag(struct wl_listener *listener, void *data)
  }
  
  void
@@ -91,7 +114,7 @@ index 93f66efe6..d5e898cbc 100644
  	applybounds(c, bbox);
  
  	/* Update scene-graph, including borders */
-@@ -2031,6 +2032,8 @@ setfloating(Client *c, int floating)
+@@ -2027,6 +2028,8 @@ setfloating(Client *c, int floating)
  {
  	c->isfloating = floating;
  	wlr_scene_node_reparent(&c->scene->node, layers[c->isfloating ? LyrFloat : LyrTile]);
@@ -100,7 +123,7 @@ index 93f66efe6..d5e898cbc 100644
  	arrange(c->mon);
  	printstatus();
  }
-@@ -2048,11 +2051,11 @@ setfullscreen(Client *c, int fullscreen)
+@@ -2044,11 +2047,11 @@ setfullscreen(Client *c, int fullscreen)
  
  	if (fullscreen) {
  		c->prev = c->geom;
@@ -114,7 +137,7 @@ index 93f66efe6..d5e898cbc 100644
  	}
  	arrange(c->mon);
  	printstatus();
-@@ -2068,6 +2071,12 @@ setlayout(const Arg *arg)
+@@ -2064,6 +2067,12 @@ setlayout(const Arg *arg)
  	if (arg && arg->v)
  		selmon->lt[selmon->sellt] = (Layout *)arg->v;
  	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, LENGTH(selmon->ltsymbol));
@@ -127,16 +150,16 @@ index 93f66efe6..d5e898cbc 100644
  	arrange(selmon);
  	printstatus();
  }
-@@ -2104,7 +2113,7 @@ setmon(Client *c, Monitor *m, uint32_t newtags)
- 	}
+@@ -2098,7 +2107,7 @@ setmon(Client *c, Monitor *m, uint32_t newtags)
+ 		arrange(oldmon);
  	if (m) {
  		/* Make sure window actually overlaps with the monitor */
 -		resize(c, c->geom, 0);
 +		resize(c, c->geom, 0, 1);
- 		wlr_surface_send_enter(client_surface(c), m->wlr_output);
  		c->tags = newtags ? newtags : m->tagset[m->seltags]; /* assign tags of target monitor */
  		setfullscreen(c, c->isfullscreen); /* This will call arrange(c->mon) */
-@@ -2361,7 +2370,7 @@ tagmon(const Arg *arg)
+ 	}
+@@ -2355,7 +2364,7 @@ tagmon(const Arg *arg)
  void
  tile(Monitor *m)
  {
@@ -145,7 +168,7 @@ index 93f66efe6..d5e898cbc 100644
  	Client *c;
  
  	wl_list_for_each(c, &clients, link)
-@@ -2370,6 +2379,9 @@ tile(Monitor *m)
+@@ -2364,6 +2373,9 @@ tile(Monitor *m)
  	if (n == 0)
  		return;
  
@@ -155,7 +178,7 @@ index 93f66efe6..d5e898cbc 100644
  	if (n > m->nmaster)
  		mw = m->nmaster ? m->w.width * m->mfact : 0;
  	else
-@@ -2380,11 +2392,11 @@ tile(Monitor *m)
+@@ -2374,11 +2386,11 @@ tile(Monitor *m)
  			continue;
  		if (i < m->nmaster) {
  			resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
@@ -169,7 +192,7 @@ index 93f66efe6..d5e898cbc 100644
  			ty += c->geom.height;
  		}
  		i++;
-@@ -2707,7 +2719,7 @@ configurex11(struct wl_listener *listener, void *data)
+@@ -2703,7 +2715,7 @@ configurex11(struct wl_listener *listener, void *data)
  		return;
  	if (c->isfloating || c->type == X11Unmanaged)
  		resize(c, (struct wlr_box){.x = event->x, .y = event->y,
