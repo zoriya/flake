@@ -1,6 +1,6 @@
 const { Service } = ags;
 const { Box, Stack, Button, Icon } = ags.Widget;
-const { execAsync } = ags.Utils;
+const { execAsync, timeout } = ags.Utils;
 const { Mpris } = ags.Service;
 
 class MaterialcolorsService extends Service {
@@ -10,12 +10,14 @@ class MaterialcolorsService extends Service {
 
 	getColors(url) {
 		if (url) {
-			execAsync(`covercolors ${url}`)
-				.then((colors) => {
-					this._colors = JSON.parse(colors);
-					this.emit("changed");
-				})
-				.catch(print);
+			timeout(100, () => {
+				execAsync(["covercolors", url])
+					.then((colors) => {
+						this._colors = JSON.parse(colors);
+						this.emit("changed");
+					})
+					.catch(print);
+			});
 		}
 	}
 

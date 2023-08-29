@@ -39,21 +39,7 @@ class DwlService extends Service {
 		if (!event) return;
 
 		/*
-WL-1 title YouTube Music
-WL-1 appid YouTube Music
-WL-1 fullscreen 0
-WL-1 floating 0
-WL-1 selmon 1
-WL-1 tags 1 1 1 0
-WL-1 layout []=
-WL-1 title YouTube Music
-WL-1 appid YouTube Music
-WL-1 fullscreen 0
-WL-1 floating 0
-WL-1 selmon 1
-WL-1 tags 1 1 1 0
-WL-1 layout []=
-WL-1 title YouTube Music
+WL-1:0,0 title YouTube Music
 WL-1 appid YouTube Music
 WL-1 fullscreen 0
 WL-1 floating 0
@@ -62,7 +48,8 @@ WL-1 tags 1 1 1 0
 WL-1 layout []=
 		*/
 
-		const [mon, type, ...values] = event.split(" ");
+		const [monAll, type, ...values] = event.split(" ");
+		const [_connector, mon] = monAll.split(":");
 
 		this._monitors[mon] ??= new Map();
 		switch (type) {

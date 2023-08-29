@@ -13,37 +13,28 @@ const config = {
 		notifications: 300,
 	},
 	style: ags.App.configDir + "/style.css",
-	monitorFactory: (mon) => [Bar(mon)],
-	windows: [
-		Bar({id: 0, name: "eDP-1"}),
-		Quicksettings(),
-		Notifications(),
-		OSD(),
-		Powermenu(),
-	],
+	monitorFactory: (mon) => [Bar(mon, `${mon.geometry.x},${mon.geometry.y}`)],
+	windows: [Quicksettings(), Notifications(), OSD(), Powermenu()],
 };
 
-export default config;
+const registerMonitors = (config) => {
+	const display = Display.get_default();
+	display.connect("monitor-added", (_, monitor) => {
+		const newWindows = config.monitorFactory(monitor);
+		for (const window of newWindows) App.addWindow(window);
+	});
+	display.connect("monitor-removed", (_, monitor) => {
+		for (const [name, win] of App.windows) {
+			if (win.monitor == monitor) ags.App.removeWindow(name);
+		}
+	});
 
-// const registerMonitors = (config) => {
-// 	const display = Display.get_default();
-// 	display.connect("monitor-added", (_, monitor) => {
-// 		const newWindows = config.monitorFactory(monitor);
-// 		for (const window of newWindows)
-// 			App.addWindow(window);
-// 	});
-// 	display.connect("monitor-removed", (_, monitor) => {
-// 		for (const [name, win] of App.windows) {
-// 			if (win.monitor == monitor) ags.App.removeWindow(name);
-// 		}
-// 	});
-//
-// 	for (let i = 0; i < display.get_n_monitors(); i++) {
-// 		const mon = display.get_monitor(i);
-// 		config.monitorFactory(mon);
-// 	}
-//
-// 	return config;
-// };
-//
-// export default registerMonitors(config);
+	for (let i = 0; i < display.get_n_monitors(); i++) {
+		const mon = display.get_monitor(i);
+		config.monitorFactory(mon);
+	}
+
+	return config;
+};
+
+export default registerMonitors(config);
