@@ -33,6 +33,7 @@ in {
         ../dwl_patches/togglelayout.patch
         ../dwl_patches/toggletag.patch
         ../dwl_patches/singletagset.patch
+        ../dwl_patches/montagset.patch
       ];
     });
 

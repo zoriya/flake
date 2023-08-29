@@ -33,12 +33,12 @@ static const char *const autostart[] = {
 static const int allow_constrain      = 1;
 
 static const Rule rules[] = {
-	/* app_id     title       tags mask     isfloating   monitor */
+	/* app_id           title       tags mask     isfloating   monitor */
 	/* examples:
-	{ "Gimp",     NULL,       0,            1,           -1 },
+	{ "Gimp",           NULL,       0,            1,           -1 },
 	*/
-	{ "discord",  NULL,       1 << 2,       0,           -1 },
-	{ "youtube-music",  NULL, 1 << 1,       0,           -1 },
+	{ "discord",        NULL,       1 << 2,       0,           -1 },
+	{ "YouTube Music",  NULL,       1 << 0,       0,           -1 },
 };
 
 /* layout(s) */
@@ -52,11 +52,11 @@ static const Layout layouts[] = {
 
 /* monitors */
 static const MonitorRule monrules[] = {
-	/* name       mfact nmaster scale layout       rotate/reflect                x    y */
+	/* name       mfact nmaster scale layout       rotate/reflect                x    y   tagset*/
 	/* example of a HiDPI laptop monitor: */
-	{ "eDP-1",    0.55, 1,   1.75,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ "eDP-1",    0.55, 1,   1.75,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1, 1 << 3 },
 	/* defaults */
-	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1, 0},
 };
 
 /* keyboard */
