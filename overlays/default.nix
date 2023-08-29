@@ -34,6 +34,7 @@ in {
         ../dwl_patches/toggletag.patch
         ../dwl_patches/singletagset.patch
         ../dwl_patches/montagset.patch
+        ../dwl_patches/movestack.patch
       ];
     });
 
