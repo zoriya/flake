@@ -13,7 +13,7 @@ export const Notifications = () =>
 			"top",
 			Box({
 				vertical: true,
-				className: "transparent qs-container",
+				className: "bgcont qs-container",
 				children: [
 					Box({
 						hexpand: true,

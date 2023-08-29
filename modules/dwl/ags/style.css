@@ -9,9 +9,13 @@
 .transparent {
 	background-color: rgba(0, 0, 0, 0.6);
 }
+.bgcont {
+	background-color: #1E1E2E;
+	border: 1px solid #11111B;
+}
 .surface {
-	background-color: #000;
-	color: #fff;
+	background-color: #11111B;
+	color: #CDD6F4;
 }
 .accent {
 	background-color: #94e2d5;
@@ -22,10 +26,10 @@
 	color: #1e1e2e;
 }
 .red {
-	color: red;
+	color: #F38BA8;
 }
 .green {
-	color: green;
+	color: #A6E3A1;
 }
 
 /* Misc */
@@ -83,7 +87,7 @@ highlight, progress {
 	border-radius: 100px;
 }
 mark {
-	background-color: red;
+	background-color: #F38BA8;
 	min-width: 1px;
 	min-height: 3px;
 }
@@ -208,6 +212,6 @@ mark {
 	font-size: 68px;
 }
 .powermenu button:hover image, .powermenu button:focus image {
-	background-color: #000;
+	background-color: #11111B;
 	color: #94e2d5;
 }

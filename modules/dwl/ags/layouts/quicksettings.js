@@ -71,7 +71,7 @@ export const Quicksettings = () =>
 			"top right",
 			Box({
 				vertical: true,
-				className: "transparent qs-container",
+				className: "bgcont qs-container",
 				children: [
 					VolumeBox(),
 					BrightnessBox(),

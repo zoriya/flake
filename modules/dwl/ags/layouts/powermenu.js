@@ -30,7 +30,7 @@ export const Powermenu = () =>
 			"center",
 			Box({
 				homogeneous: true,
-				className: "powermenu transparent",
+				className: "powermenu background",
 				children: [
 					SysButton("system-shutdown-symbolic", "Shutdown"),
 					SysButton("system-reboot-symbolic", "Reboot"),

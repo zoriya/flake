@@ -22,7 +22,7 @@ export const OSD = () =>
 				],
 			],
 			child: Box({
-				className: "osd transparent osd",
+				className: "osd bgcont osd",
 				valign: "center",
 				halign: "center",
 				children: [
