@@ -1,3 +1,5 @@
+import GLib from 'gi://GLib';
+
 const { Service } = ags;
 const { exec, execAsync } = ags.Utils;
 const { Icon, Label, Button, Box, Stack } = ags.Widget;
@@ -18,12 +20,22 @@ class ThemeService extends Service {
 		execAsync(`gsettings set org.gnome.desktop.interface color-scheme prefer-${this._dark ? "dark" : "light"}`).catch(
 			print
 		);
+		execAsync(`gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3${this._dark ? "-dark" : ""}`).catch(
+			print
+		);
+		const conf = GLib.get_user_config_dir();
+		execAsync(`ln -sf ${conf}/kitty/${this._dark ? "dark" : "light"}.conf ${conf}/kitty/theme.conf`).catch(
+			print
+		);
+		execAsync("pkill -USR1 kitty").catch(print);
 		this.emit("changed");
 	}
 
 	constructor() {
 		super();
 		this._dark = exec(`gsettings get org.gnome.desktop.interface color-scheme`) === "'prefer-dark'";
+		// Ensure that the gtk theme is in sync with the theme.
+		this._dark = this._dark;
 	}
 }
 

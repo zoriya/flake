@@ -10,7 +10,6 @@
     impermanence.url = "github:nix-community/impermanence";
     # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
-    nix-colors.url = "github:misterio77/nix-colors";
     jq = {
       url = "github:reegnz/jq-zsh-plugin";
       flake = false;
@@ -43,17 +42,14 @@
   } @ rawInput: let
     user = "zoriya";
 
-    mkSystem = system: hostname: {
-      homeModules,
-    }: let
+    mkSystem = system: hostname: de: let
       inputs = rawInput // {inherit user;};
     in
       nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
         modules = [
           ./modules/misc
-          # ./modules/gnome
-          ./modules/dwl
+          (./modules + "/${de}")
           nur.nixosModules.nur
           {
             nixpkgs.overlays = [
@@ -89,10 +85,8 @@
               users.${user} = {
                 imports = [
                   ./modules/home
-                  # ./modules/gnome/home.nix
-                  ./modules/dwl/home.nix
+                  (./modules + "/${de}/home.nix")
                 ];
-                config.modules = homeModules;
               };
             };
           }
@@ -128,15 +122,7 @@
       };
   in {
     nixosConfigurations = {
-      fuhen = mkSystem "x86_64-linux" "fuhen" {
-        homeModules = {
-          apps.enable = true;
-          zsh.enable = true;
-          git.enable = true;
-          nvim.enable = true;
-          direnv.enable = true;
-        };
-      };
+      fuhen = mkSystem "x86_64-linux" "fuhen" "dwl";
     };
   };
 }

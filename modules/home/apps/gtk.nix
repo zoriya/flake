@@ -1,13 +1,10 @@
-{ config, pkgs, nix-colors, ... }:
-let
-  inherit (nix-colors.lib-contrib { inherit pkgs; }) gtkThemeFromScheme;
-in
+{ config, pkgs, ... }:
   rec {
     gtk = {
       enable = true;
       theme = {
-        name = "${config.colorscheme.slug}";
-        package = gtkThemeFromScheme { scheme = config.colorscheme; };
+        name = pkgs.adw-gtk3.pname;
+        package = pkgs.adw-gtk3;
       };
     };
 
