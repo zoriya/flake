@@ -8,15 +8,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1692981420,
-        "narHash": "sha256-meHJRzMB1kwEfhR7w7kpy/xHbFBWFvKuYBeZWvZ2cN4=",
-        "owner": "Aylur",
+        "lastModified": 1693143699,
+        "narHash": "sha256-Wa1woyXIEu9+w/1HKOBHjOW4Cto+U4Z2FWPOrwbhWLY=",
+        "owner": "ferrreo",
         "repo": "ags",
-        "rev": "facc29161e12882a2ac5d08600000bf77dcb5928",
+        "rev": "1404ad863fca95e924e19634ca410d3701d3d909",
         "type": "github"
       },
       "original": {
-        "owner": "Aylur",
+        "owner": "ferrreo",
+        "ref": "mpris-use-hash-for-cache",
         "repo": "ags",
         "type": "github"
       }

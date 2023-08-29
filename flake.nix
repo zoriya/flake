@@ -24,7 +24,8 @@
       flake = false;
     };
     ags = {
-      url = "github:Aylur/ags";
+      # url = "github:Aylur/ags";
+      url = "github:ferrreo/ags/mpris-use-hash-for-cache";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

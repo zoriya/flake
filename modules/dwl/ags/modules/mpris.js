@@ -92,7 +92,8 @@ const PositionSlider = ({ player, ...props }) => {
 		if (slider._dragging) return;
 
 		const mpris = Mpris.getPlayer(player);
-		slider.visible = mpris?.length > 0;
+		// Only set opacity and not change the visible bool to keep it expanded.
+		slider.opacity = mpris?.length > 0 ? 1 : 0;
 		if (mpris && mpris.length > 0) slider.adjustment.value = mpris.position / mpris.length;
 	};
 
@@ -111,7 +112,7 @@ const PositionSlider = ({ player, ...props }) => {
 	});
 };
 
-export const MprisPlayer = ({ player = "", ...props } = {}) =>
+export const MprisPlayer = ({ player = "youtube-music", ...props } = {}) =>
 	CoverArt({
 		vexpand: false,
 		children: [

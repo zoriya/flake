@@ -7,6 +7,17 @@
 }: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
   dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
+  covercolors = pkgs.stdenv.mkDerivation {
+    name = "covercolors";
+    dontUnpack = true;
+    propagatedBuildInputs = [
+      (pkgs.python3.withPackages (pyPkgs: with pyPkgs; [
+        material-color-utilities
+        pillow
+      ]))
+    ];
+    installPhase = "install -Dm755 ${./ags/covercolors.py} $out/bin/covercolors";
+  };
 in {
   imports = [./rofi];
 
@@ -29,6 +40,7 @@ in {
     grim
     slurp
     cliphist
+    covercolors
   ];
 
   xdg.systemDirs.data = [
