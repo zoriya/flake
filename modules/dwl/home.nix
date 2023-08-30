@@ -11,10 +11,11 @@
     name = "covercolors";
     dontUnpack = true;
     propagatedBuildInputs = [
-      (pkgs.python3.withPackages (pyPkgs: with pyPkgs; [
-        material-color-utilities
-        pillow
-      ]))
+      (pkgs.python3.withPackages (pyPkgs:
+        with pyPkgs; [
+          material-color-utilities
+          pillow
+        ]))
     ];
     installPhase = "install -Dm755 ${./ags/covercolors.py} $out/bin/covercolors";
   };
@@ -41,6 +42,8 @@ in {
     slurp
     cliphist
     covercolors
+    ydotool
+    fusuma
   ];
 
   xdg.systemDirs.data = [
@@ -48,19 +51,24 @@ in {
     "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
   ];
 
-
   xdg.configFile."ags" = {
     source = ./ags;
     recursive = true;
   };
 
-  home.pointerCursor = {
-    name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
-    size = 24;
-    x11 = {
-      enable = true;
-      defaultCursor = "Adwaita";
-    };
-  };
+  xdg.configFile."fusuma/config.yaml".text = "
+swipe:
+  3:
+    right:
+      command: 'ydotool key 125:1 105:1 105:0 125:0'
+    left:
+      command: 'ydotool key 125:1 106:1 106:0 125:0'
+    up:
+      command: 'ydotool key 125:1 4:1 4:0 125:0'
+    down:
+      command: 'ydotool key 125:1 4:1 4:0 125:0'
+hold:
+  3:
+      command: 'ydotool key 125:1 3:1 3:0 125:0'
+";
 }

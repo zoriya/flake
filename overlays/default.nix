@@ -36,6 +36,7 @@ in {
         ../dwl_patches/montagset.patch
         ../dwl_patches/movestack.patch
         ../dwl_patches/gdk_monitors_status.patch
+        ../dwl_patches/rotatetags.patch
       ];
     });
 

@@ -1,0 +1,79 @@
+From 9dbdc4269c8db1b9580a153d99165aaa9cf14ad7 Mon Sep 17 00:00:00 2001
+From: korei999 <ju7t1xe@gmail.com>
+Date: Mon, 17 Jul 2023 01:02:22 +0300
+Subject: [PATCH] This patch provides the ability to rotate the tagset left /
+ right. It implements a new function rotatetags which modifies the current
+ tagset. Same as original dwm patch. Also adds ability to "shift" focused
+ client to left / right tag.
+
+---
+ config.def.h |  6 +++++-
+ dwl.c        | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/dwl.c b/dwl.c
+index 93f66efe6..3928c2b9b 100644
+--- a/dwl.c
++++ b/dwl.c
+@@ -318,6 +318,8 @@ static Monitor *xytomon(double x, double y);
+ static struct wlr_scene_node *xytonode(double x, double y, struct wlr_surface **psurface,
+ 		Client **pc, LayerSurface **pl, double *nx, double *ny);
+ static void zoom(const Arg *arg);
++static void rotatetags(const Arg *arg);
++static void clientshift(const Arg *arg);
+ 
+ /* variables */
+ static const char broken[] = "broken";
+@@ -2687,6 +2689,52 @@ zoom(const Arg *arg)
+ 	arrange(selmon);
+ }
+ 
++static void
++rotatetags(const Arg *arg)
++{
++	Arg a;
++	size_t ntags = tagcount;
++	int i = arg->i;
++	int nextseltags, curseltags = selmon->tagset[selmon->seltags];
++
++	if (i > 0) // left circular shift
++		nextseltags = (curseltags << 1) | (curseltags >> (ntags - 1));
++	else // right circular shift
++		nextseltags = curseltags >> 1 | (curseltags << (ntags - 1));
++
++	i += arg->i;
++
++	a.i = nextseltags;
++	view(&a);
++}
++
++static void
++clientshift(const Arg *arg)
++{
++	Client *sel = focustop(selmon);
++
++	Arg a;
++	size_t ntags = tagcount;
++	int i = arg->i;
++	int nextseltags, curseltags = selmon->tagset[selmon->seltags];
++
++	if (i > 0) // left circular shift
++		nextseltags = (curseltags << 1) | (curseltags >> (ntags - 1));
++	else // right circular shift
++		nextseltags = curseltags >> 1 | (curseltags << (ntags - 1));
++
++	i += arg->i;
++
++	a.i = nextseltags;
++
++	if (sel && a.i) {
++		sel->tags = a.i;
++		focusclient(focustop(selmon), 1);
++		arrange(selmon);
++	}
++	printstatus();
++}
++
+ #ifdef XWAYLAND
+ void
+ activatex11(struct wl_listener *listener, void *data)
