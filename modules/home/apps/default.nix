@@ -129,7 +129,11 @@ in {
   };
   home.file.".face".source = ../../../face.png;
 
-  xdg.configFile."nixpkgs/config.nix".text = ''
-    { allowUnfree = true; }
-  '';
+  xdg.configFile."nixpkgs/config.nix".text =
+''{
+  allowUnfree = true;
+  permittedInsecurePackages = [
+    "nodejs-16.20.2"
+  ];
+}'';
 }
