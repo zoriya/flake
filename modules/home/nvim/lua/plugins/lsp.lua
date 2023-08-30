@@ -404,7 +404,7 @@ return {
 					-- This relies on the presence of _opts that contains the metadata of the package. This could break.
 					args = function(opt)
 						local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
-						return { "-p", nixpkg, "--run", table.concat({ pkg._opts.command, unpack(def_args) }, " ") }
+						return { "-p", nixpkg, "--pure", "--run", table.concat({ pkg._opts.command, unpack(def_args) }, " ") }
 					end,
 				})
 			end
@@ -412,7 +412,8 @@ return {
 				with_nix(nl.builtins.code_actions.eslint_d, "nodePackages_latest.eslint_d"),
 				with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
 				with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
-				with_nix(nl.builtins.formatting.prettier, "nodePackages.prettier"),
+				-- with_nix(nl.builtins.formatting.prettier, "nodePackages.prettier"),
+				nl.builtins.formatting.prettier,
 				nl.builtins.formatting.black,
 			}
 			return {
