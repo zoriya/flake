@@ -5,6 +5,7 @@ import { Powermenu } from "./layouts/powermenu.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
 
 const { App } = ags;
+const { timeout } = ags.Utils;
 const { Display } = imports.gi.Gdk;
 
 const config = {
@@ -20,8 +21,11 @@ const config = {
 const registerMonitors = (config) => {
 	const display = Display.get_default();
 	display.connect("monitor-added", (_, monitor) => {
-		const newWindows = config.monitorFactory(monitor);
-		for (const window of newWindows) App.addWindow(window);
+		// We wait for the geometry to be initialized by gdk.
+		timeout(500, () => {
+			const newWindows = config.monitorFactory(monitor);
+			for (const window of newWindows) App.addWindow(window);
+		});
 	});
 	display.connect("monitor-removed", (_, monitor) => {
 		for (const [name, win] of App.windows) {
