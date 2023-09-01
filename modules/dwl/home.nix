@@ -44,7 +44,14 @@ in {
     covercolors
     ydotool
     fusuma
+    gnome.gnome-weather
   ];
+
+  dconf.settings = {
+    "org/gnome/shell/weather" = {
+      automatic-location = true;
+    };
+  };
 
   xdg.systemDirs.data = [
     "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
