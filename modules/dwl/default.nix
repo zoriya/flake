@@ -18,6 +18,8 @@
     };
   };
 
+  networking.networkmanager.enable = true;
+
   environment.systemPackages = with pkgs; [
     dwl
     ags.packages.x86_64-linux.default

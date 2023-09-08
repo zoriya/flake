@@ -38,7 +38,7 @@
   } @ rawInput: let
     user = "zoriya";
 
-    mkSystem = system: hostname: de: custom: let
+    mkSystem = hostname: de: custom: let
       inputs = rawInput // {inherit user;};
     in
       nixpkgs.lib.nixosSystem {
@@ -87,13 +87,15 @@
       };
   in {
     nixosConfigurations = {
-      fuhen = mkSystem "x86_64-linux" "fuhen" "dwl" [
+      fuhen = mkSystem "fuhen" "dwl" [
         tuxedo-nixos.nixosModules.default
         ({lib, ...}: {
           hardware.tuxedo-keyboard.enable = true;
           hardware.tuxedo-control-center.enable = true;
         })
       ];
+
+      saikai = mkSystem "saikai" "server" [];
     };
   };
 }

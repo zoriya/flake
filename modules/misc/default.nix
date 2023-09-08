@@ -19,7 +19,6 @@
     };
     efi.canTouchEfiVariables = true;
   };
-  networking.networkmanager.enable = true;
   services.automatic-timezoned.enable = true;
 
   programs.gnupg.agent = {
@@ -45,7 +44,17 @@
   };
 
   virtualisation.docker.enable = true;
-  documentation.dev.enable = true;
+
+  documentation = {
+    enable = true;
+    dev.enable = true;
+    man = {
+      enable = true;
+      generateCaches = true;
+    };
+    info.enable = true;
+    nixos.enable = true;
+  };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # This was needed on older versions of the kernel.
