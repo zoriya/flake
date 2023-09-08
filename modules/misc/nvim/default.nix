@@ -1,14 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     neovim
     #neovim-nightly
   ];
-
   xdg.configFile."nvim/lua".source = ./lua;
   xdg.configFile."nvim/lazy-lock.json".source = ./lazy-lock.json;
   xdg.configFile."nvim/init.lua".text = ''
@@ -17,11 +11,15 @@
 
     ${builtins.readFile ./init.lua}
   '';
-
   programs.zsh.shellAliases = {
     n = "nvim";
     vim = "nvim";
     vi = "nvim";
     v = "nvim";
+  };
+
+  home.sessionVariables = rec {
+    EDITOR = "nvim";
+    VISUAL = EDITOR;
   };
 }

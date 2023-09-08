@@ -21,7 +21,13 @@
   environment.systemPackages = with pkgs; [
     dwl
     ags.packages.x86_64-linux.default
+    wineWowPackages.stable
+    wineWowPackages.waylandFull
+    winetricks
   ];
+  hardware.steam-hardware.enable = true;
+  hardware.opengl.driSupport32Bit = true;
+  services.flatpak.enable = true;
 
   # Those two lines prevent a crash with gdm autologin.
   systemd.services."getty@tty1".enable = false;

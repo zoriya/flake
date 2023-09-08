@@ -10,10 +10,6 @@
     impermanence.url = "github:nix-community/impermanence";
     # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     # nur.url = "github:nix-community/NUR";
-    jq = {
-      url = "github:reegnz/jq-zsh-plugin";
-      flake = false;
-    };
     tuxedo-nixos = {
       url = "github:blitz/tuxedo-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,11 +64,6 @@
                 isNormalUser = true;
                 extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
                 shell = pkgs.zsh;
-                packages = with pkgs; [
-                  git
-                  docker-compose
-                  jq
-                ];
               };
             })
             ./hosts/${hostname}/hardware-configuration.nix
@@ -85,7 +76,7 @@
                 extraSpecialArgs = inputs;
                 users.${user} = {
                   imports = [
-                    ./modules/home
+                    ./modules/misc/home.nix
                     (./modules + "/${de}/home.nix")
                   ];
                 };

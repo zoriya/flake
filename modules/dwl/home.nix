@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  user,
-  ...
-}: let
+{pkgs, ...}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
   dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
   covercolors = pkgs.stdenv.mkDerivation {
@@ -20,7 +14,10 @@
     installPhase = "install -Dm755 ${./ags/covercolors.py} $out/bin/covercolors";
   };
 in {
-  imports = [./rofi];
+  imports = [
+    ./rofi
+    ../common/apps.nix
+  ];
 
   home.packages = with pkgs; [
     alsa-utils

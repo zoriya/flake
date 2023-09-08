@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   config,
   pkgs,
@@ -32,8 +31,6 @@ in {
   ];
 
   home.sessionVariables = rec {
-    EDITOR = "nvim";
-    VISUAL = EDITOR;
     TERMINAL = "kitty";
     BROWSER = "google-chrome-stable";
     DEFAULT_BROWSER = BROWSER;
@@ -127,13 +124,5 @@ in {
     pictures = "${config.home.homeDirectory}/stuff";
     publicShare = "${config.home.homeDirectory}/stuff";
   };
-  home.file.".face".source = ../../../face.png;
-
-  xdg.configFile."nixpkgs/config.nix".text =
-''{
-  allowUnfree = true;
-  permittedInsecurePackages = [
-    "nodejs-16.20.2"
-  ];
-}'';
+  home.file.".face".source = ../../face.png;
 }

@@ -1,9 +1,5 @@
 {
   pkgs,
-  zshpkgs,
-  config,
-  lib,
-  jq,
   ...
 }: let
   configThemeNormal = ./p10k.zsh;
@@ -47,9 +43,9 @@ in {
 
   programs.less = {
     enable = true;
-    keys = ''
-      \e quit
-    '';
+    # keys = ''
+    #   \e quit
+    # '';
   };
 
   programs.zsh = {
@@ -83,8 +79,7 @@ in {
       dc = "docker-compose";
       dcd = "docker-compose -f docker-compose.dev.yml";
       op = "xdg-open";
-      wp = "~/.config/hypr/wallpaper.sh";
-      py = "nix-shell -p python3 --command python3";
+      py = "python3 2> /dev/null || nix-shell -p python3 --command python3";
       jctl = "sudo journalctl -n 1000 -fu";
       where = "where -s"; # Follow symlinks
     };
@@ -94,10 +89,6 @@ in {
         name = "powerlevel10k";
         src = pkgs.zsh-powerlevel10k;
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
-      {
-        name = "jq";
-        src = jq;
       }
       {
         name = "bd";

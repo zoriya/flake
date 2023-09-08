@@ -27,14 +27,7 @@
     enableSSHSupport = true;
   };
 
-  services.flatpak.enable = true;
-
-  hardware.steam-hardware.enable = true;
-  hardware.opengl.driSupport32Bit = true;
   environment.systemPackages = with pkgs; [
-    wineWowPackages.stable
-    wineWowPackages.waylandFull
-    winetricks
     docker-compose
     git
     man-pages
