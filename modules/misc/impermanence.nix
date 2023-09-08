@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  impermanence,
-  ...
-}: {
+{impermanence, ...}: {
   imports = [impermanence.nixosModules.impermanence];
   nix = {
     settings = {

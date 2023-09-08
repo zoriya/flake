@@ -28,6 +28,7 @@ in {
     pciutils
     sshfs-fuse
     zip
+    scc
     nodePackages.http-server
     nodePackages.live-server
   ];

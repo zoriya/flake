@@ -1,28 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  user,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./fonts.nix
     ./impermanence.nix
   ];
-
-  services.printing.enable = true;
-  security.rtkit.enable = true;
-  security.polkit.enable = true;
-
-  hardware.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
-    pulse.enable = true;
-  };
-  hardware.bluetooth.enable = true;
 
   security.sudo.extraConfig = ''
     Defaults  lecture="never"
@@ -55,7 +35,24 @@
     wineWowPackages.stable
     wineWowPackages.waylandFull
     winetricks
+    docker-compose
+    git
+    man-pages
+    man-pages-posix
   ];
+
+  programs.zsh.enable = true;
+  environment.shells = with pkgs; [zsh];
+
+  services.locate = {
+    enable = true;
+    locate = pkgs.mlocate;
+    interval = "hourly";
+    localuser = null;
+  };
+
+  virtualisation.docker.enable = true;
+  documentation.dev.enable = true;
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # This was needed on older versions of the kernel.

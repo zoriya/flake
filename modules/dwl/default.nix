@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}: {
+{pkgs, ags, ...}: {
   services.xserver = {
     enable = true;
     displayManager = {
@@ -24,11 +18,27 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [dwl];
+  environment.systemPackages = with pkgs; [
+    dwl
+    ags.packages.x86_64-linux.default
+  ];
 
   # Those two lines prevent a crash with gdm autologin.
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+
+  services.printing.enable = true;
+  security.rtkit.enable = true;
+
+  hardware.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
+    pulse.enable = true;
+  };
+  hardware.bluetooth.enable = true;
 
   security.polkit.enable = true;
   systemd.user.services.polkit-gnome-authentication-agent-1 = {

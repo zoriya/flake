@@ -9,7 +9,7 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
-    nur.url = "github:nix-community/NUR";
+    # nur.url = "github:nix-community/NUR";
     jq = {
       url = "github:reegnz/jq-zsh-plugin";
       flake = false;
@@ -33,7 +33,7 @@
     self,
     home-manager,
     # neovim-nightly,
-    nur,
+    # nur,
     ags,
     nixpkgs,
     tuxedo-nixos,
@@ -42,87 +42,67 @@
   } @ rawInput: let
     user = "zoriya";
 
-    mkSystem = system: hostname: de: let
+    mkSystem = system: hostname: de: custom: let
       inputs = rawInput // {inherit user;};
     in
       nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
-        modules = [
-          ./modules/misc
-          (./modules + "/${de}")
-          nur.nixosModules.nur
-          {
-            nixpkgs.overlays = [
-              (import ./overlays { inherit dwl-source; })
-              nur.overlay
-              # neovim-nightly.overlay
-            ];
-          }
-
-          ({pkgs, ...}: {
-            networking.hostName = hostname;
-            users.users.root.hashedPassword = builtins.readFile ./password/root;
-            users.users.${user} = {
-              hashedPassword = builtins.readFile ./password/${user};
-              isNormalUser = true;
-              extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
-              shell = pkgs.zsh;
-              packages = with pkgs; [
-                git
-                docker-compose
-                jq
+        modules =
+          [
+            ./modules/misc
+            (./modules + "/${de}")
+            # nur.nixosModules.nur
+            {
+              nixpkgs.overlays = [
+                (import ./overlays {inherit dwl-source;})
+                # nur.overlay
+                # neovim-nightly.overlay
               ];
-            };
-          })
-          ./hosts/${hostname}/hardware-configuration.nix
+            }
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = inputs;
-              users.${user} = {
-                imports = [
-                  ./modules/home
-                  (./modules + "/${de}/home.nix")
+            ({pkgs, ...}: {
+              networking.hostName = hostname;
+              users.users.root.hashedPassword = builtins.readFile ./password/root;
+              users.users.${user} = {
+                hashedPassword = builtins.readFile ./password/${user};
+                isNormalUser = true;
+                extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
+                shell = pkgs.zsh;
+                packages = with pkgs; [
+                  git
+                  docker-compose
+                  jq
                 ];
               };
-            };
-          }
+            })
+            ./hosts/${hostname}/hardware-configuration.nix
 
-          ({pkgs, ...}: {
-            programs.zsh.enable = true;
-            environment.shells = with pkgs; [zsh];
-
-            services.locate = {
-              enable = true;
-              locate = pkgs.mlocate;
-              interval = "hourly";
-              localuser = null;
-            };
-
-            virtualisation.docker.enable = true;
-            environment.systemPackages = with pkgs; [
-              docker-compose
-              git
-              man-pages
-              man-pages-posix
-              ags.packages.x86_64-linux.default
-            ];
-            documentation.dev.enable = true;
-          })
-
-          tuxedo-nixos.nixosModules.default
-          ({lib, ...}: {
-            hardware.tuxedo-keyboard.enable = true;
-            hardware.tuxedo-control-center.enable = true;
-          })
-        ];
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = inputs;
+                users.${user} = {
+                  imports = [
+                    ./modules/home
+                    (./modules + "/${de}/home.nix")
+                  ];
+                };
+              };
+            }
+          ]
+          ++ custom;
       };
   in {
     nixosConfigurations = {
-      fuhen = mkSystem "x86_64-linux" "fuhen" "dwl";
+      fuhen = mkSystem "x86_64-linux" "fuhen" "dwl" [
+        tuxedo-nixos.nixosModules.default
+        ({lib, ...}: {
+          hardware.tuxedo-keyboard.enable = true;
+          hardware.tuxedo-control-center.enable = true;
+        })
+      ];
     };
   };
 }
