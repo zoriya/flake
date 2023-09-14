@@ -31,7 +31,7 @@ class MaterialcolorsService extends Service {
 		};
 
 		Mpris.instance.connect("changed", () => {
-			this._mprisPlayer = Mpris.getPlayer("");
+			this._mprisPlayer = Mpris.getPlayer("youtube-music");
 			this._coverPath = this._mprisPlayer?.coverPath;
 			this.getColors(this.coverPath);
 			this.emit("changed");

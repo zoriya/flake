@@ -139,7 +139,8 @@ return {
 	},
 
 	{
-		"folke/trouble.nvim",
+		"cormacrelf/trouble.nvim",
+		branch = "cascading-sev-2",
 		keys = {
 			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  desc = "Document Diagnostics" },
 			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },

@@ -9,11 +9,9 @@ import * as notifications from "../modules/notifications.js";
 const { App } = ags;
 const { Window, CenterBox, Box, Button } = ags.Widget;
 
-let id = 1;
-
 export const Bar = (mon, monId) =>
 	Window({
-		name: `bar${id++}`,
+		name: `bar${monId}`,
 		className: "transparent",
 		exclusive: true,
 		anchor: "top left right",

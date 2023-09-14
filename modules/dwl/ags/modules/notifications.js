@@ -12,7 +12,7 @@ export const Indicator = ({ ...props }) =>
 			[
 				Notifications,
 				(box) => {
-					box.visible = Notifications.notifications.size > 0 && !Notifications.dnd;
+					box.visible = Notifications.notifications.length > 0 && !Notifications.dnd;
 				},
 			],
 		],
@@ -37,7 +37,7 @@ export const Indicator = ({ ...props }) =>
 
 							rev._current = id;
 							const notif = Notifications.notifications.get(id);
-							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`;
+							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`.replace("\n", " ");
 							rev.reveal_child = true;
 						},
 					],
@@ -164,9 +164,9 @@ export const List = (props) =>
 			[
 				Notifications,
 				(box) => {
-					box.children = Array.from(Notifications.notifications.values()).map((n) => Notification(n));
+					box.children = Notifications.notifications.map((n) => Notification(n));
 
-					box.visible = Notifications.notifications.size > 0;
+					box.visible = Notifications.notifications.length > 0;
 				},
 			],
 		],
@@ -182,14 +182,14 @@ export const Placeholder = (props) =>
 			Label({ label: "󰂛", style: "margin-top: 150px;" }),
 			Label({ label: "Your inbox is empty", style: "margin-bottom: 150px;" }),
 		],
-		connections: [[Notifications, (box) => (box.visible = Notifications.notifications.size === 0)]],
+		connections: [[Notifications, (box) => (box.visible = Notifications.notifications.length === 0)]],
 	});
 
 export const ClearButton = (props) =>
 	Button({
 		...props,
 		onClicked: Notifications.clear,
-		connections: [[Notifications, (button) => (button.sensitive = Notifications.notifications.size > 0)]],
+		connections: [[Notifications, (button) => (button.sensitive = Notifications.notifications.length > 0)]],
 		child: Box({
 			children: [
 				Label("Clear "),
@@ -202,7 +202,7 @@ export const ClearButton = (props) =>
 						[
 							Notifications,
 							(stack) => {
-								stack.shown = `${Notifications.notifications.size > 0}`;
+								stack.shown = `${Notifications.notifications.length > 0}`;
 							},
 						],
 					],

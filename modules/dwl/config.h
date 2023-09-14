@@ -172,7 +172,7 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
 
-	{ MODKEY,                    XKB_KEY_z,          SHCMD("hyprpicker | wl-copy") },
+	{ MODKEY,                    XKB_KEY_b,          SHCMD("hyprpicker | wl-copy") },
 	{ MODKEY,                    XKB_KEY_x,          SHCMD("grim -g \"$(slurp -b 00000000 -s 61616140)\" - | wl-copy") },
 	{ MODKEY,                    XKB_KEY_v,          SHCMD("cliphist list | rofi -dmenu | cliphist decode | wl-copy") },
 
@@ -202,7 +202,7 @@ static const Key keys[] = {
 };
 
 static const Button buttons[] = {
-	{ MODKEY, BTN_LEFT,   moveresize,     {.ui = CurMove} },
-	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
-	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, BTN_LEFT,   moveresize,     {.ui = CurMove} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, BTN_MIDDLE, togglefloating, {0} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
 };

@@ -209,7 +209,7 @@ export const AppMixer = (props) => {
 			[
 				Audio,
 				(box) => {
-					box.children = Array.from(Audio.apps.values()).map((stream) => AppItem(stream));
+					box.children = Audio.apps.map((stream) => AppItem(stream));
 				},
 			],
 		],
@@ -224,7 +224,7 @@ export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
 			[
 				Audio,
 				(box) => {
-					box.children = Array.from(Audio[streams].values())
+					box.children = Audio[streams]
 						.map((stream) =>
 							Button({
 								child: Box({
@@ -282,8 +282,8 @@ export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
 // 			[
 // 				Audio,
 // 				(button) => {
-// 					log(Array.from(Audio.recordingApps).map(x => ({desc: x.description, origin: x.origin, type: x.type})));
-// 					if (!Audio.recordingApps.size) return button.hide();
+// 					log(Audio.recordingApps.map(x => ({desc: x.description, origin: x.origin, type: x.type})));
+// 					if (!Audio.recordingApps.length) return button.hide();
 // 					button.show();
 // 				},
 // 			],

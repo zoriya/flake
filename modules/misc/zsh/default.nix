@@ -6,7 +6,7 @@
   configThemeTTY = ./p10k-tty.zsh;
 in {
   home.packages = with pkgs; [
-    exa
+    eza
     viu
     htop
     tldr
@@ -62,7 +62,7 @@ in {
       la = "ls -la";
       lla = "ls -la";
       lc = "l --color";
-      exa = "exa --group";
+      exa = "eza --group";
       lg = "exa -l --git-ignore";
       ls = "exa";
       lt = "exa --tree";
