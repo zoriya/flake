@@ -61,6 +61,9 @@
         # Gnome accounts
         ".config/goa-1.0"
         ".cache/gnome-control-center-goa-helper"
+        # Games directory for lutris
+        ".local/lutris"
+        ".local/games"
       ];
       files = [
         ".config/zsh/custom.zsh"

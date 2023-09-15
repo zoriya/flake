@@ -92,6 +92,8 @@
         ({lib, ...}: {
           hardware.tuxedo-keyboard.enable = true;
           hardware.tuxedo-control-center.enable = true;
+
+          programs.gamescope.enable = true;
         })
       ];
 
