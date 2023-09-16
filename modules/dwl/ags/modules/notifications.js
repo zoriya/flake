@@ -30,13 +30,13 @@ export const Indicator = ({ ...props }) =>
 							// Only close the notification if it is the currently displayed.
 							if (rev._current !== id && !open) return;
 
-							if (rev._current === id) {
+							if (rev._current === id && !open) {
 								rev.reveal_child = false;
 								return;
 							}
 
 							rev._current = id;
-							const notif = Notifications.notifications.get(id);
+							const notif = Notifications.getNotification(id);
 							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`.replace("\n", " ");
 							rev.reveal_child = true;
 						},
