@@ -4,6 +4,13 @@
     ./impermanence.nix
   ];
 
+  fileSystems."/home/zoriya/.config/nvim/lazy-lock.json" = {
+    device = "/home/zoriya/projects/flake/modules/misc/nvim/lazy-lock.json";
+    fsType = "none";
+    options = ["bind"];
+  };
+
+
   security.sudo.extraConfig = ''
     Defaults  lecture="never"
   '';

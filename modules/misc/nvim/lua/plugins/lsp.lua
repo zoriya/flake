@@ -16,7 +16,6 @@ local lsp_keymaps = function(buffer)
 	map("n", "<leader>la", '<cmd>lua vim.lsp.buf.code_action()<CR>', "Code action")
 	map("n", "<leader>ll", '<cmd>lua vim.lsp.codelens.run()<CR>', "Run code lens")
 	map("n", "<leader>lg", '<cmd>Telescope lsp_document_symbols<CR>', "Go to symbol")
-	map("n", "<leader>lf", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Format")
 
 	map("v", "<leader>lf", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Range Format")
 end
@@ -66,7 +65,7 @@ local kind_icons = {
 return {
 	{
 		"dundalek/lazy-lsp.nvim",
-		dev = true,
+		-- dev = true,
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			{
@@ -114,6 +113,7 @@ return {
 					tsx = { "tsserver" },
 					javascriptreact = { "tsserver" },
 					typescriptreact = { "tsserver" },
+					go = { "gopls" },
 				},
 
 				default_config = {
@@ -135,16 +135,22 @@ return {
 					},
 					omnisharp = {
 						handlers = {
-								["textDocument/definition"] = require('omnisharp_extended').handler,
+							["textDocument/definition"] = require('omnisharp_extended').handler,
 						},
 						enable_editorconfig_support = true,
 						enable_roslyn_analyzers = true,
 						organize_imports_on_format = true,
 						enable_import_completion = true,
 						cmd_env = {
-								["OMNISHARP_RoslynExtensionsOptions:enableDecompilationSupport"] = true,
-								["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
+							["OMNISHARP_RoslynExtensionsOptions:enableDecompilationSupport"] = true,
+							["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
 						},
+						on_new_config = function(new_config, new_root_dir)
+							pcall(require("lspconfig").omnisharp.document_config.default_config.on_new_config,
+								new_config, new_root_dir)
+							local custom_nix_pkgs = { "omnisharp-roslyn" }
+							new_config.cmd = require("lazy-lsp").in_shell(custom_nix_pkgs, new_config.cmd)
+						end,
 					},
 					robotframework_ls = {
 						cmd = { "nix-shell", "-p", "python3", "--command",
@@ -157,12 +163,38 @@ return {
 					},
 					nil_ls = {
 						settings = {
-								["nil"] = {
+							["nil"] = {
 								formatting = {
 									command = { "nix-shell", "-p", "alejandra", "--run", "alejandra -" },
 								},
 							},
 						},
+					},
+					gopls = {
+						settings = {
+							-- https://go.googlesource.com/vscode-go/+/HEAD/docs/settings.md#settings-for
+							gopls = {
+								analyses = {
+									nilness = true,
+									unusedparams = true,
+									unusedwrite = true,
+									useany = true
+								},
+								experimentalPostfixCompletions = true,
+								gofumpt = true,
+								staticcheck = true,
+								usePlaceholders = true,
+								hints = {
+									assignVariableTypes = true,
+									compositeLiteralFields = true,
+									compositeLiteralTypes = true,
+									constantValues = true,
+									functionTypeParameters = true,
+									parameterNames = true,
+									rangeVariableTypes = true
+								}
+							}
+						}
 					},
 				},
 			}
@@ -170,9 +202,9 @@ return {
 		init = function()
 			local signs = {
 				{ name = "DiagnosticSignError", text = "󰅚" },
-				{ name = "DiagnosticSignWarn",  text = "" },
-				{ name = "DiagnosticSignHint",  text = "󰌶" },
-				{ name = "DiagnosticSignInfo",  text = "" },
+				{ name = "DiagnosticSignWarn", text = "" },
+				{ name = "DiagnosticSignHint", text = "󰌶" },
+				{ name = "DiagnosticSignInfo", text = "" },
 			}
 			for _, sign in ipairs(signs) do
 				vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
@@ -269,13 +301,13 @@ return {
 					end,
 				},
 				mapping = cmp.mapping.preset.insert({
-						["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-						["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-						["<C-b>"] = cmp.mapping.scroll_docs(-4),
-						["<C-f>"] = cmp.mapping.scroll_docs(4),
-						["<C-Space>"] = cmp.mapping.complete(),
-						["<C-e>"] = cmp.mapping.abort(),
-						["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+					["<C-b>"] = cmp.mapping.scroll_docs(-4),
+					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-Space>"] = cmp.mapping.complete(),
+					["<C-e>"] = cmp.mapping.abort(),
+					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
@@ -317,39 +349,51 @@ return {
 	},
 
 	{
-		"jose-elias-alvarez/null-ls.nvim",
-		event = { "BufReadPre", "BufNewFile" },
-		opts = function()
-			local nl = require("null-ls")
-			local with_nix = function(pkg, nixpkg)
-				return pkg.with({
-					command = "nix-shell",
-					-- This relies on the presence of _opts that contains the metadata of the package. This could break.
-					args = function(opt)
-						local def_args = type(pkg._opts.args) == "function" and pkg._opts.args(opt) or pkg._opts.args
-						return { "-p", nixpkg, "--pure", "--run", table.concat({ pkg._opts.command, unpack(def_args) }, " ") }
-					end,
-				})
-			end
-			local sources = {
-				with_nix(nl.builtins.code_actions.eslint_d, "nodePackages_latest.eslint_d"),
-				with_nix(nl.builtins.diagnostics.eslint_d, "nodePackages_latest.eslint_d"),
-				with_nix(nl.builtins.formatting.eslint_d, "nodePackages_latest.eslint_d"),
-				-- with_nix(nl.builtins.formatting.prettier, "nodePackages.prettier"),
-				nl.builtins.formatting.prettier,
-				nl.builtins.formatting.black,
-			}
-			return {
-				sources = vim.tbl_map(function(source)
-					return source.with({
-						diagnostics_postprocess = function(diagnostic)
-							diagnostic.severity = vim.diagnostic.severity.HINT
-						end,
-					})
-				end, sources),
-				debug = true,
-			}
+		"stevearc/conform.nvim",
+		keys = {
+			{
+				"<leader>lf",
+				function()
+					require("conform").format({ async = true, lsp_fallback = true })
+				end,
+				desc = "Format",
+				mode = { "n", "v" },
+			},
+		},
+		config = function(_, opts)
+			require("conform").setup(opts)
+			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 		end,
+		opts = {
+			formatters_by_ft = {
+				python = { "black" },
+				javascript = { { "prettierd", "prettier" } },
+				typescript = { { "prettierd", "prettier" } },
+				javascriptreact = { { "prettierd", "prettier" } },
+				typescriptreact = { { "prettierd", "prettier" } },
+				css = { { "prettierd", "prettier" } },
+				html = { { "prettierd", "prettier" } },
+			},
+		}
+	},
+
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function(_, opts)
+			require("lint").linters_by_ft = opts
+			vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
+				callback = function()
+					require("lint").try_lint()
+				end,
+			})
+		end,
+		opts = {
+			javascript = { "eslint_d" },
+			typescript = { "eslint_d" },
+			javascriptreact = { "eslint_d" },
+			typescriptreact = { "eslint_d" },
+		},
 	},
 
 	{
