@@ -373,6 +373,7 @@ return {
 				typescriptreact = { { "prettierd", "prettier" } },
 				css = { { "prettierd", "prettier" } },
 				html = { { "prettierd", "prettier" } },
+				sql = { "pg_format" },
 			},
 		}
 	},

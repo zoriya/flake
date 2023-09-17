@@ -1,0 +1,27 @@
+From b4eb343faff1ff15dd5d70a1f317dca201c5e37c Mon Sep 17 00:00:00 2001
+From: Nikita Ivanov <nikita.vyach.ivanov@gmail.com>
+Date: Sun, 21 May 2023 17:40:15 +0200
+Subject: [PATCH] Set natural scrolling only for trackpads
+
+---
+ dwl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dwl.c b/dwl.c
+index b7436bb4f..8db928292 100644
+--- a/dwl.c
++++ b/dwl.c
+@@ -1029,10 +1029,10 @@ createpointer(struct wlr_pointer *pointer)
+ 			libinput_device_config_tap_set_drag_enabled(libinput_device, tap_and_drag);
+ 			libinput_device_config_tap_set_drag_lock_enabled(libinput_device, drag_lock);
+ 			libinput_device_config_tap_set_button_map(libinput_device, button_map);
+-		}
+ 
+-		if (libinput_device_config_scroll_has_natural_scroll(libinput_device))
+-			libinput_device_config_scroll_set_natural_scroll_enabled(libinput_device, natural_scrolling);
++			if (libinput_device_config_scroll_has_natural_scroll(libinput_device))
++				libinput_device_config_scroll_set_natural_scroll_enabled(libinput_device, natural_scrolling);
++		}
+ 
+ 		if (libinput_device_config_dwt_is_available(libinput_device))
+ 			libinput_device_config_dwt_set_enabled(libinput_device, disable_while_typing);

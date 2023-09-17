@@ -37,6 +37,7 @@ in {
         ../dwl_patches/movestack.patch
         ../dwl_patches/gdk_monitors_status.patch
         ../dwl_patches/rotatetags.patch
+        ../dwl_patches/naturalscrolltrackpad.patch
       ];
     });
 
