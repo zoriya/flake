@@ -10,12 +10,11 @@ index e6bb8c6..d7a6e55 100644
  static void autostartexec(void);
  static void axisnotify(struct wl_listener *listener, void *data);
  static void buttonpress(struct wl_listener *listener, void *data);
-@@ -283,6 +284,7 @@ static void focusmon(const Arg *arg);
+@@ -271,5 +272,6 @@ static void focusmon(const Arg *arg);
  static void focusstack(const Arg *arg);
  static Client *focustop(Monitor *m);
  static void fullscreennotify(struct wl_listener *listener, void *data);
 +static size_t getunusedtag(void);
- static void handleconstraintcommit(struct wl_listener *listener, void *data);
  static void handlesig(int signo);
  static void incnmaster(const Arg *arg);
 @@ -554,6 +556,15 @@ arrangelayer(Monitor *m, struct wl_list *list, struct wlr_box *usable_area, int

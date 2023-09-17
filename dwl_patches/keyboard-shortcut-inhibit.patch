@@ -19,14 +19,13 @@ index b7436bb4f..842e0b147 100644
  #include <wlr/types/wlr_layer_shell_v1.h>
  #include <wlr/types/wlr_output.h>
  #include <wlr/types/wlr_output_layout.h>
-@@ -245,6 +246,7 @@ static void createlocksurface(struct wl_listener *listener, void *data);
+@@ -247,7 +248,8 @@ static void createlocksurface(struct wl_listener *listener, void *data);
  static void createmon(struct wl_listener *listener, void *data);
  static void createnotify(struct wl_listener *listener, void *data);
  static void createpointer(struct wlr_pointer *pointer);
-+static void createshortcutsinhibitor(struct wl_listener *listener, void *data);
- static void createpointerconstraint(struct wl_listener *listener, void *data);
- static void deck(Monitor *m);
  static void cursorframe(struct wl_listener *listener, void *data);
++static void createshortcutsinhibitor(struct wl_listener *listener, void *data);
+ static void deck(Monitor *m);
  static void destroydragicon(struct wl_listener *listener, void *data);
  static void destroyidleinhibitor(struct wl_listener *listener, void *data);
 @@ -254,6 +256,7 @@ static void destroylocksurface(struct wl_listener *listener, void *data);

@@ -22,7 +22,6 @@ in {
       patches = [
         ../dwl_patches/autostart.patch
         ../dwl_patches/deck.patch
-        ../dwl_patches/point.patch
         ../dwl_patches/output-power-managment.patch
         ../dwl_patches/keyboard-shortcut-inhibit.patch
         ../dwl_patches/cursor_wrap.patch
@@ -38,6 +37,8 @@ in {
         ../dwl_patches/gdk_monitors_status.patch
         ../dwl_patches/rotatetags.patch
         ../dwl_patches/naturalscrolltrackpad.patch
+        ../dwl_patches/pointer-gesture.patch
+        ../dwl_patches/sway-pointer-contraints.patch
       ];
     });
 

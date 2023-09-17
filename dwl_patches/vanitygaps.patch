@@ -63,13 +63,6 @@ index b5e146d10..0af910980 100644
  	unsigned int seltags;
  	unsigned int sellt;
  	uint32_t tagset[2];
-@@ -246,5 +250,6 @@ static void createmon(struct wl_listener *listener, void *data);
- static void createshortcutsinhibitor(struct wl_listener *listener, void *data);
- static void createpointerconstraint(struct wl_listener *listener, void *data);
- static void cursorframe(struct wl_listener *listener, void *data);
-+static void defaultgaps(const Arg *arg);
- static void deck(Monitor *m);
- static void destroydragicon(struct wl_listener *listener, void *data);
 @@ -262,6 +267,13 @@ static Client *focustop(Monitor *m);
  static void fullscreennotify(struct wl_listener *listener, void *data);
  static int handlesig(int signo, void *data);

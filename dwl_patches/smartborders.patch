@@ -14,14 +14,6 @@ diff --git a/dwl.c b/dwl.c
 index dc16e16..7b1ca6f 100644
 --- a/dwl.c
 +++ b/dwl.c
-@@ -267,7 +267,6 @@ static void createpointer(struct wlr_pointer *pointer);
- static void createshortcutsinhibitor(struct wl_listener *listener, void *data);
- static void createpointerconstraint(struct wl_listener *listener, void *data);
- static void cursorframe(struct wl_listener *listener, void *data);
--static void defaultgaps(const Arg *arg);
- static void deck(Monitor *m);
- static void destroydragicon(struct wl_listener *listener, void *data);
- static void destroyidleinhibitor(struct wl_listener *listener, void *data);
 @@ -287,13 +286,6 @@ static void fullscreennotify(struct wl_listener *listener, void *data);
  static void handleconstraintcommit(struct wl_listener *listener, void *data);
  static void handlesig(int signo);
