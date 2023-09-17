@@ -4,6 +4,7 @@
     #neovim-nightly
   ];
   xdg.configFile."nvim/lua".source = ./lua;
+  xdg.configFile."nvim/lazy-lock.json".source = ./lazy-lock.json;
   xdg.configFile."nvim/init.lua".text = ''
     -- Nix
     vim.env.CC = "${pkgs.gcc}/bin/gcc"
