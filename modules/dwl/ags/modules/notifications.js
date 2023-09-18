@@ -37,7 +37,7 @@ export const Indicator = ({ ...props }) =>
 
 							rev._current = id;
 							const notif = Notifications.getNotification(id);
-							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`.replace("\n", " ");
+							rev.child.label = `${notif.summary?.substring(0, 18)?.trim()}: ${notif.body?.substring(0, 45)?.trim()}`.replaceAll("\n", " ");
 							rev.reveal_child = true;
 						},
 					],

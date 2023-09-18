@@ -13,11 +13,11 @@ static const float bordercolor[]           = {0.5, 0.5, 0.5, 1.0};
 static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
+static bool cursor_warp = true;
 
 /* tagging - tagcount must be no greater than 31 */
 #define TAGCOUNT 9
 static const int tagcount = 9;
-static const bool cursor_warp = true;
 
 /* Autostart */
 static const char *const autostart[] = {
@@ -29,9 +29,6 @@ static const char *const autostart[] = {
 	"youtube-music", NULL,
 	NULL /* terminate */
 };
-
-/* pointer constraints */
-static const int allow_constrain      = 1;
 
 static const Rule rules[] = {
 	/* app_id           title       tags mask     isfloating   monitor */

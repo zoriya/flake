@@ -24,7 +24,7 @@ in {
         ../dwl_patches/deck.patch
         ../dwl_patches/output-power-managment.patch
         ../dwl_patches/keyboard-shortcut-inhibit.patch
-        ../dwl_patches/cursor_wrap.patch
+        ../dwl_patches/cursor_warp.patch
         ../dwl_patches/vanitygaps.patch
         ../dwl_patches/vanity_deck.patch
         ../dwl_patches/smartborders.patch

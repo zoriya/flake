@@ -1,16 +1,16 @@
 diff --git a/dwl.c b/dwl.c
-index 93f66ef..5562c0d 100644
+index 0841bef..426ec14 100644
 --- a/dwl.c
 +++ b/dwl.c
-@@ -314,6 +314,7 @@ static void updatetitle(struct wl_listener *listener, void *data);
+@@ -322,6 +322,7 @@ static void updatetitle(struct wl_listener *listener, void *data);
  static void urgent(struct wl_listener *listener, void *data);
  static void view(const Arg *arg);
  static void virtualkeyboard(struct wl_listener *listener, void *data);
 +static void warpcursor(const Client *c);
  static Monitor *xytomon(double x, double y);
- static struct wlr_scene_node *xytonode(double x, double y, struct wlr_surface **psurface,
+ static void xytonode(double x, double y, struct wlr_surface **psurface,
  		Client **pc, LayerSurface **pl, double *nx, double *ny);
-@@ -486,6 +487,9 @@ arrange(Monitor *m)
+@@ -503,6 +504,9 @@ arrange(Monitor *m)
  
  	if (m->lt[m->sellt]->arrange)
  		m->lt[m->sellt]->arrange(m);
@@ -20,17 +20,18 @@ index 93f66ef..5562c0d 100644
  	motionnotify(0);
  	checkidleinhibitor(NULL);
  }
-@@ -1210,6 +1214,9 @@ focusclient(Client *c, int lift)
- 
- 	if (locked)
+@@ -1304,6 +1308,10 @@ focusclient(Client *c, int lift)
+ 	if (c && client_surface(c) == old)
  		return;
+ 
 +	/* Warp cursor to center of client if it is outside */
 +	if (cursor_warp && c)
 +		warpcursor(c);
- 
- 	/* Raise client in stacking order if requested */
- 	if (c && lift)
-@@ -2616,6 +2623,18 @@ virtualkeyboard(struct wl_listener *listener, void *data)
++
+ 	if ((old_client_type = toplevel_from_wlr_surface(old, &old_c, &old_l)) == XDGShell) {
+ 		struct wlr_xdg_popup *popup, *tmp;
+ 		wl_list_for_each_safe(popup, tmp, &old_c->surface.xdg->popups, link)
+@@ -2736,6 +2744,18 @@ virtualkeyboard(struct wl_listener *listener, void *data)
  	createkeyboard(&keyboard->keyboard);
  }
  
