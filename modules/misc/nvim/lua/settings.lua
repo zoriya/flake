@@ -40,6 +40,10 @@ local options = {
 	},
 	fillchars = {
 		diff = "╱",
+		-- eob: ,fold: ,
+		foldopen = "",
+		foldsep = " ",
+		foldclose = "",
 	},
 }
 

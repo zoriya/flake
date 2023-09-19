@@ -12,16 +12,11 @@ return {
 	},
 
 	{
-		"lukas-reineke/virt-column.nvim",
-		lazy = true,
-		config = true,
+		"xiyaowong/virtcolumn.nvim",
+		event = "VeryLazy",
 		init = function()
-			vim.cmd [[
-			augroup virtcolumn
-				autocmd!
-				autocmd FileType * if index(["netrw", "NvimTree", "neo-tree", "TelescopePrompt", "TelescopeResults", "UltestAttach", "dap-float", "Trouble", "lspinfo", "qf", "harpoon", "toggleterm", "packer"], &ft) == -1 | lua require("virt-column").setup_buffer({ virtcolumn = "80,120", char = "▏" })
-			augroup end
-			]]
+			vim.g.virtcolumn_char = '▕'
+			vim.opt.colorcolumn = { 80, 120 }
 		end,
 	},
 
@@ -50,6 +45,11 @@ return {
 				hover = {
 					enabled = false,
 				},
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+					["vim.lsp.util.stylize_markdown"] = false,
+					["cmp.entry.get_documentation"] = false,
+				},
 			},
 			views = {
 				mini = {
@@ -58,6 +58,28 @@ return {
 				},
 			},
 		},
+	},
+
+	{
+		"luukvbaal/statuscol.nvim",
+		config = function()
+			local builtin = require("statuscol.builtin")
+			require("statuscol").setup({
+				relculright = false,
+				segments = {
+					{
+						sign = { name = { ".*" }, maxwidth = 1, colwidth = 1 },
+						click = "v:lua.ScSa"
+					},
+					{ text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+					{
+						sign = { name = { "Diagnostic" }, maxwidth = 1, },
+						click = "v:lua.ScSa"
+					},
+					{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+				}
+			})
+		end
 	},
 
 	{
@@ -89,11 +111,11 @@ return {
 			})
 			wk.register({
 				mode = { "n", "v" },
-					["g"] = { name = "+goto" },
-					["]"] = { name = "+next" },
-					["["] = { name = "+prev" },
-					["<leader>g"] = { name = "+git" },
-					["<leader>l"] = { name = "+lsp" },
+				["g"] = { name = "+goto" },
+				["]"] = { name = "+next" },
+				["["] = { name = "+prev" },
+				["<leader>g"] = { name = "+git" },
+				["<leader>l"] = { name = "+lsp" },
 			})
 		end,
 	},
