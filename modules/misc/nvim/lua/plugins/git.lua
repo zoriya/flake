@@ -4,12 +4,12 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {
 			signs = {
-				add = { text = "▎" },
-				change = { text = "▎" },
+				add = { text = "▕" },
+				change = { text = "▕" },
 				delete = { text = "󰐊" },
 				topdelete = { text = "󰐊" },
-				changedelete = { text = "▎" },
-				untracked = { text = "▎" },
+				changedelete = { text = "▕" },
+				untracked = { text = "▕" },
 			},
 			-- Preview feature to enable signs with staged hunks.
 			_signs_staged_enable = true,

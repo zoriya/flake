@@ -62,21 +62,22 @@ return {
 
 	{
 		"luukvbaal/statuscol.nvim",
+		event = "VeryLazy",
 		config = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
 				relculright = false,
 				segments = {
-					{
-						sign = { name = { ".*" }, maxwidth = 1, colwidth = 1 },
-						click = "v:lua.ScSa"
-					},
 					{ text = { builtin.foldfunc }, click = "v:lua.ScFa" },
 					{
-						sign = { name = { "Diagnostic" }, maxwidth = 1, },
+						sign = { name = { ".*" }, maxwidth = 1, },
 						click = "v:lua.ScSa"
 					},
 					{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+					{
+						sign = { name = { "GitSign*" }, maxwidth = 1, colwidth = 1 },
+						click = "v:lua.ScSa"
+					},
 				}
 			})
 		end
