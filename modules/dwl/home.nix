@@ -60,6 +60,8 @@ in {
     recursive = true;
   };
 
+  # Keycodes here: https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h#L202
+  # :1 is for keydown, :0 for keyup
   xdg.configFile."fusuma/config.yaml".text = "
 swipe:
   3:
@@ -72,7 +74,7 @@ swipe:
     down:
       command: 'ydotool key 125:1 4:1 4:0 125:0'
 hold:
-  3:
-      command: 'ydotool key 125:1 3:1 3:0 125:0'
+  4:
+      command: 'ydotool key 125:1 106:1 106:0 125:0'
 ";
 }
