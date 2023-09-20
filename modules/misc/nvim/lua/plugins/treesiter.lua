@@ -42,13 +42,16 @@ return {
 		event = "VeryLazy",
 		dependencies = "kevinhwang91/promise-async",
 		init = function()
-			vim.o.foldcolumn = '2'
+			vim.o.foldcolumn = '1'
 			vim.o.foldlevel = 99
 			vim.o.foldlevelstart = 99
 			vim.o.foldenable = true
 		end,
-		config = function(_, opts)
-			local handler = function(virtText, lnum, endLnum, width, truncate)
+		opts = {
+			provider_selector = function(bufnr, filetype, buftype)
+				return { 'treesitter', 'indent' }
+			end,
+			fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
 				local newVirtText = {}
 				local foldedLines = endLnum - lnum
 				local suffix = ("             %d"):format(foldedLines)
@@ -78,8 +81,9 @@ return {
 				suffix = (" "):rep(rAlignAppndx) .. suffix
 				table.insert(newVirtText, { suffix, "MoreMsg" })
 				return newVirtText
-			end
-			opts["fold_virt_text_handler"] = handler
+			end,
+		},
+		config = function(_, opts)
 			require("ufo").setup(opts)
 			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
 			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
