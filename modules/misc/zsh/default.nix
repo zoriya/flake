@@ -8,7 +8,7 @@ in {
   home.packages = with pkgs; [
     eza
     viu
-    htop
+    htop-vim
     tldr
     jq
     fd
@@ -25,6 +25,7 @@ in {
     sshfs-fuse
     zip
     scc
+    bc
     nodePackages.http-server
     nodePackages.live-server
   ];

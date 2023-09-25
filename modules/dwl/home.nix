@@ -75,6 +75,6 @@ swipe:
       command: 'ydotool key 125:1 4:1 4:0 125:0'
 hold:
   4:
-      command: 'ydotool key 125:1 106:1 106:0 125:0'
+      command: 'ydotool key 125:1 52:1 52:0 125:0'
 ";
 }
