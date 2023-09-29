@@ -8,7 +8,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod"];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
@@ -16,7 +16,7 @@
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "size=8G" "mode=755" ];
+    options = [ "size=2G" "mode=755" ];
   };
 
   fileSystems."/tmp" = {
@@ -26,7 +26,7 @@
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-label/fuhen";
+    device = "/dev/disk/by-label/kadan";
     fsType = "ext4";
   };
 

@@ -98,6 +98,8 @@
       ];
 
       saikai = mkSystem "saikai" "server" [];
+
+      kadan = mkSystem "kadan" "server" [];
     };
   };
 }
