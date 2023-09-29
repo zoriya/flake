@@ -17,6 +17,10 @@
   services.fail2ban = {
     enable = true;
     bantime = "-1";
+    ignoreIP = [
+      "192.168.0.0/16"
+    ];
+    maxretry = 5;
   };
 
   virtualisation.oci-containers.containers."watchtower" = {

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   modulesPath,
   ...
 }: {
@@ -9,9 +10,12 @@
   ];
 
   boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
-  boot.initrd.kernelModules = [];
+  # boot.initrd.kernelModules = ["nivida"];
   boot.kernelModules = ["kvm-intel"];
-  boot.extraModulePackages = [];
+  boot.extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
+  boot.blacklistedKernelModules = ["nouveau"];
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+
 
   fileSystems."/" = {
     device = "none";
@@ -22,7 +26,7 @@
   fileSystems."/tmp" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "size=8G" "mode=755" ];
+    options = [ "size=4G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
@@ -42,7 +46,7 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+  #networking.interfaces.eno1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
@@ -78,9 +82,11 @@
 
     # Enable the Nvidia settings menu,
 	# accessible via `nvidia-settings`.
-    nvidiaSettings = false;
+    nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+
+  system.stateVersion = "23.05";
 }
