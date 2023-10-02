@@ -11,12 +11,12 @@
     # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     # nur.url = "github:nix-community/NUR";
     tuxedo-nixos = {
-      url = "github:blitz/tuxedo-nixos";
+      url = "github:zoriya/tuxedo-nixos";#"github:blitz/tuxedo-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dwl-source = {
       # Use dwl's master.
-      url = "github:djpohly/dwl";
+      url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
       flake = false;
     };
     ags = {
