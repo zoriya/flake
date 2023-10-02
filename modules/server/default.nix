@@ -28,6 +28,28 @@
     image = "containrrr/watchtower";
     volumes = [
       "/var/run/docker.sock:/var/run/docker.sock"
-    ]; 
+    ];
+  };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts."kyoo.sdg.moe" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:8901";
+        proxyWebsockets = true;
+        extraConfig =
+          "proxy_pass_header Authorization;";
+      };
+    };
+  };
+  security.acme = {
+    acceptTerms = true;
+    default.email = "zoe.roux@zoriya.dev";
   };
 }
