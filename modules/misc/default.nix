@@ -31,6 +31,7 @@
     git
     man-pages
     man-pages-posix
+    vim
   ];
 
   programs.zsh.enable = true;
