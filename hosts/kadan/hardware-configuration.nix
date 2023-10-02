@@ -36,33 +36,56 @@
     fsType = "vfat";
   };
 
-  fileSystems."/media/a" = {
+  fileSystems."/mnt/a" = {
     device = "/dev/disk/by-label/sda";
     fsType = "ext4";
   };
-  fileSystems."/media/c" = {
+  fileSystems."/mnt/c" = {
     device = "/dev/disk/by-label/sdc";
     fsType = "ext4";
   };
-  fileSystems."/media/d" = {
+  fileSystems."/mnt/d" = {
     device = "/dev/disk/by-label/sdd";
     fsType = "ext4";
   };
-  fileSystems."/media/parity" = {
+  fileSystems."/mnt/parity" = {
     device = "/dev/disk/by-label/parity";
     fsType = "ext4";
   };
 
-  environment.systemPackages = with pkgs; [ mergerfs ];
-  fileSystems."/media/kyoo" = {
-    device = "/media/a:/media/c:/media/d";
-    depends = ["/media/a" "/media/c" "/media/d"];
+  environment.systemPackages = with pkgs; [mergerfs];
+  fileSystems."/mnt/kyoo" = {
+    device = "/mnt/a:/mnt/c:/mnt/d";
+    depends = ["/mnt/a" "/mnt/c" "/mnt/d"];
     fsType = "fuse.mergerfs";
     options = [
       "func.getattr=newest" # For kyoo's scanner
       "cache.files=partial" # To enable mmap (used by rtorrent)
       "dropcacheonclose=true"
       "category.create=mfs"
+    ];
+  };
+
+  snapraid = {
+    enable = true;
+    exclude = [
+      "*.unrecoverable"
+      "/tmp/"
+      "/lost+found/"
+    ];
+    dataDisks = {
+      a = "/mnt/a/";
+      c = "/mnt/c/";
+      d = "/mnt/d/";
+    };
+    contentFiles = [
+      "/var/snapraid.content"
+      "/mnt/a/snapraid.content"
+      "/mnt/c/snapraid.content"
+      "/mnt/d/snapraid.content"
+    ];
+    parityFiles = [
+      "/mnt/parity/snapraid.parity"
     ];
   };
 

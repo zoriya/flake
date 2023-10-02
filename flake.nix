@@ -99,7 +99,11 @@
 
       saikai = mkSystem "saikai" "server" [];
 
-      kadan = mkSystem "kadan" "server" [];
+      kadan = mkSystem "kadan" "server" [
+        ({pkgs, ...}: {
+          environment.systemPackages = with pkgs; [tmux];
+        })
+      ];
     };
   };
 }
