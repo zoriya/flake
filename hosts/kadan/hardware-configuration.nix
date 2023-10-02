@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }: {
@@ -10,11 +9,9 @@
   ];
 
   boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
-  # boot.initrd.kernelModules = ["nivida"];
-  boot.kernelModules = ["kvm-intel"];
+  boot.kernelModules = ["kvm-intel" "coretemp" "nct6775"];
   boot.extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
   boot.blacklistedKernelModules = ["nouveau"];
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
 
   fileSystems."/" = {
