@@ -15,13 +15,6 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-# ^Z when a job is suspended runs it in the background.
-background() {
-	bg
-}
-zle -N background
-bindkey ^Z background
-
 function zvm_before_init() {
 	# Restore nice history search that zsh-vi-mode disable.
 	zvm_bindkey viins '^[[A' history-search-backward
@@ -36,6 +29,14 @@ function zvm_after_init() {
 	# bindkey '\ej' jq-complete
 	bindkey '^[d' kill-word
 	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+
+	# ^Z when a job is suspended runs it in the foreground.
+	foreground() {
+		fg
+	}
+	zle -N foreground
+	bindkey ^Z foreground
+
 }
 
 export YSU_MESSAGE_FORMAT="Alias: %alias - %command";
