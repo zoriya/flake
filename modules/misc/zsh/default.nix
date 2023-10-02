@@ -70,13 +70,14 @@ in {
       tree = "exa --tree";
 
       # git stuff
+      s = "git status";
+      gs = "git status";
       gl = "git log";
       gu = "git pull";
       gcam = "git commit --amend";
       gcamn = "git commit --amend --no-edit";
 
       # Misc
-      s = "git status";
       dc = "docker-compose";
       dcd = "docker-compose -f docker-compose.dev.yml";
       op = "xdg-open";
