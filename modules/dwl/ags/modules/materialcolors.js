@@ -46,18 +46,7 @@ class MaterialcolorsService extends Service {
 	}
 }
 
-class Materialcolors {
-	static {
-		Service.export(this, "Materialcolors");
-	}
-	static instance = new MaterialcolorsService();
-	static get colors() {
-		return Materialcolors.instance._colors;
-	}
-	static get coverPath() {
-		return Materialcolors.instance._coverPath;
-	}
-}
+export const Materialcolors = new MaterialcolorsService();
 
 export const PlayPause = ({ player, ...props }) =>
 	Button({

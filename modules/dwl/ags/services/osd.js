@@ -72,21 +72,5 @@ class IndicatorService extends Service {
 	}
 }
 
-export class Indicator {
-	static {
-		Service.export(this, "Indicator");
-	}
-	static instance = new IndicatorService();
-	static popup(value, icon) {
-		Indicator.instance.popup(value, icon);
-	}
-	static speaker() {
-		Indicator.instance.speaker();
-	}
-	static display() {
-		Indicator.instance.display();
-	}
-	static kbd() {
-		Indicator.instance.kbd();
-	}
-}
+export const Indicator = new IndicatorService();
+ags.Service.Indicator = Indicator;

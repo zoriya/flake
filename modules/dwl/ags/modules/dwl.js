@@ -1,5 +1,5 @@
 const { Box, Button, Label } = ags.Widget;
-import Dwl from "../services/dwl.js";
+import { Dwl } from "../services/dwl.js";
 
 export const Tags = ({ mon, labels, ...props } = {}) =>
 	Box({
@@ -11,11 +11,10 @@ export const Tags = ({ mon, labels, ...props } = {}) =>
 					box.children = Dwl.tags(mon).map((tag, i) =>
 						tag.occupied || tag.selected
 							? Button({
-									child: Label(labels[i]),
-									className: `tags ${tag.selected ? "accent" : ""} ${
-										tag.urgent ? "secondary" : ""
+								child: Label(labels[i]),
+								className: `tags ${tag.selected ? "accent" : ""} ${tag.urgent ? "secondary" : ""
 									}`,
-							  })
+							})
 							: null
 					);
 				},

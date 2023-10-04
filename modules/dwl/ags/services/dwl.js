@@ -2,9 +2,10 @@ import Gio from "gi://Gio";
 
 const { Service } = ags;
 
-
 class DwlService extends Service {
-	static { Service.register(this); }
+	static {
+		Service.register(this);
+	}
 
 	_decoder = new TextDecoder();
 	_monitors = new Map();
@@ -81,24 +82,15 @@ WL-1 layout []=
 		if (type === "layout")
 			this.emit("changed");
 	}
+
+	get monitors() {
+		return this._monitors;
+	}
+
+	tags(mon) { return this._monitors[mon]?.["tags"] ?? []; }
+	layout(mon) { return this._monitors[mon]?.["layout"] ?? JSON.stringify(this._monitors); }
+	title(mon) { return this._monitors[mon]?.["title"] ?? ""; }
 }
 
-export default class Dwl {
-	static {
-		Service.export(this, "Dwl");
-	}
-	static _instance;
-
-	static get instance() {
-		Service.ensureInstance(Dwl, DwlService);
-		return Dwl._instance;
-	}
-
-	static get monitors() {
-		return Dwl.instance._monitors;
-	}
-
-	static tags(mon) { return Dwl.instance._monitors[mon]?.["tags"] ?? []; }
-	static layout(mon) { return Dwl.instance._monitors[mon]?.["layout"] ?? JSON.stringify(Dwl.instance._monitors); }
-	static title(mon) { return Dwl.instance._monitors[mon]?.["title"] ?? ""; }
-}
+export const Dwl = new DwlService();
+globalThis.dwl = Dwl;

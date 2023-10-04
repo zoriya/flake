@@ -31,6 +31,10 @@ class ThemeService extends Service {
 		this.emit("changed");
 	}
 
+	toggle() {
+		this.dark = !this.dark;
+	}
+
 	constructor() {
 		super();
 		this._dark = exec(`gsettings get org.gnome.desktop.interface color-scheme`) === "'prefer-dark'";
@@ -39,23 +43,7 @@ class ThemeService extends Service {
 	}
 }
 
-class Theme {
-	static {
-		Service.export(this, "Theme");
-	}
-	static instance = new ThemeService();
-
-	static get dark() {
-		return Theme.instance.dark;
-	}
-	static set dark(value) {
-		Theme.instance.dark = value;
-	}
-
-	static toggle() {
-		this.dark = !this.dark;
-	}
-}
+const Theme = new ThemeService();
 
 export const Indicator = ({ ...props } = {}) =>
 	Stack({
