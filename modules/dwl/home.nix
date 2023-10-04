@@ -42,6 +42,7 @@ in {
     ydotool
     fusuma
     gnome.gnome-weather
+    shikane
   ];
 
   dconf.settings = {
@@ -77,4 +78,34 @@ hold:
   4:
       command: 'ydotool key 125:1 52:1 52:0 125:0'
 ";
+
+  xdg.configFile."shikane/config.toml".text = ''
+[[profile]]
+name = "laptop"
+    [[profile.output]]
+    match = "eDP-1"
+    enable = true
+
+
+[[profile]]
+name = "docked"
+    [[profile.output]]
+    match = "eDP-1"
+    enable = false
+
+    [[profile.output]]
+    match = "Acer Technologies EB243Y A T7NEE0023P00 (DP-2 via HDMI)"
+    enable = true
+    mode = { width = 1920, height = 1080, refresh = 60 }
+    position = { x = 0, y = 0 }
+    scale = 1
+
+    [[profile.output]]
+    match = "Acer Technologies EB243Y A T7NEE0023P00 (DP-1 via HDMI)"
+    enable = true
+    mode = { width = 1920, height = 1080, refresh = 60 }
+    position = { x = 0, y = 1280 }
+    scale = 1
+
+'';
 }

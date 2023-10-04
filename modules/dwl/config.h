@@ -24,6 +24,7 @@ static const char *const autostart[] = {
 	"dwlstartup", NULL,
 	"wallpaper", NULL,
 	"ydotoold", NULL,
+	"shikane", NULL,
 	"wl-paste", "--watch", "cliphist", "store", NULL,
 	"discord", NULL,
 	"youtube-music", NULL,

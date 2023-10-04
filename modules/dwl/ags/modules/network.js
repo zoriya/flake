@@ -31,91 +31,21 @@ export const WifiStrengthLabel = (props) =>
 		connections: [[Network, (label) => (label.label = `${Network.wifi?.strength || -1}`)]],
 	});
 
-export const WiredIndicator = ({
-	connecting = Icon("network-wired-acquiring-symbolic"),
-	disconnected = Icon("network-wired-no-route-symbolic"),
-	disabled = Icon("network-wired-disconnected-symbolic"),
-	connected = Icon("network-wired-symbolic"),
-	unknown = Icon("content-loading-symbolic"),
-} = {}) =>
-	Stack({
-		items: [
-			["unknown", unknown],
-			["disconnected", disconnected],
-			["disabled", disabled],
-			["connected", connected],
-			["connecting", connecting],
-		],
-		connections: [
-			[
-				Network,
-				(stack) => {
-					if (!Network.wired) return;
-
-					const { internet } = Network.wired;
-					if (internet === "connected" || internet === "connecting") return (stack.shown = internet);
-
-					if (Network.connectivity !== "full") return (stack.shown = "disconnected");
-
-					return (stack.shown = "disabled");
-				},
-			],
-		],
-	});
-
-export const WifiIndicator = ({
-	disabled = Icon("network-wireless-disabled-symbolic"),
-	disconnected = Icon("network-wireless-offline-symbolic"),
-	connecting = Icon("network-wireless-acquiring-symbolic"),
-	connected = [
-		["80", Icon("network-wireless-signal-excellent-symbolic")],
-		["60", Icon("network-wireless-signal-good-symbolic")],
-		["40", Icon("network-wireless-signal-ok-symbolic")],
-		["20", Icon("network-wireless-signal-weak-symbolic")],
-		["0", Icon("network-wireless-signal-none-symbolic")],
+export const Indicator = () => Stack({
+	items: [
+		['wifi', Icon({
+			connections: [[Network, self => {
+				self.icon = Network.wifi?.iconName || '';
+			}]],
+		})],
+		['wired', Icon({
+			connections: [[Network, self => {
+				self.icon = Network.wired?.iconName || '';
+			}]],
+		})],
 	],
-} = {}) =>
-	Stack({
-		items: [["disabled", disabled], ["disconnected", disconnected], ["connecting", connecting], ...connected],
-		connections: [
-			[
-				Network,
-				(stack) => {
-					if (!Network.wifi) return;
-
-					const { internet, enabled, strength } = Network.wifi;
-					if (internet === "connected") {
-						for (const threshold of [80, 60, 40, 20, 0]) {
-							if (strength >= threshold) return (stack.shown = `${threshold}`);
-						}
-					}
-
-					if (internet === "connecting") return (stack.shown = "connecting");
-
-					if (enabled) return (stack.shown = "disconnected");
-
-					return (stack.shown = "disabled");
-				},
-			],
-		],
-	});
-
-export const Indicator = ({ wifi = WifiIndicator(), wired = WiredIndicator(), ...props } = {}) =>
-	Stack({
-		...props,
-		items: [
-			["wired", wired],
-			["wifi", wifi],
-		],
-		connections: [
-			[
-				Network,
-				(stack) => {
-					stack.shown = Network.primary || "wifi";
-				},
-			],
-		],
-	});
+	binds: [['shown', Network, 'primary', p => p || 'wifi']],
+});
 
 export const Toggle = (props) =>
 	ArrowToggle({
