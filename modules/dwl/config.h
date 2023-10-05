@@ -51,10 +51,10 @@ static const Layout layouts[] = {
 
 /* monitors */
 static const MonitorRule monrules[] = {
-	/* name       mfact nmaster scale layout       rotate/reflect                x    y   tagset*/
-	{ "eDP-1",    0.55, 1,   1.75,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   0,  2000, 1 << 3 },
+	/* name       mfact nmaster scale layout       rotate/reflect                x   y   tagset*/
+	{ "eDP-1",    0.55, 1,   1.75,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   0,  0,  1 << 3 },
 	/* defaults */
-	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,    -1, 0},
+	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1, -1, 0},
 };
 
 /* keyboard */
@@ -150,10 +150,10 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_f,          togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright, tag,            {.ui = ~0} },
-	{ MODKEY,                    XKB_KEY_comma,      focusmon,       {.i = WLR_DIRECTION_LEFT} },
-	{ MODKEY,                    XKB_KEY_period,     focusmon,       {.i = WLR_DIRECTION_RIGHT} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_less,       tagmon,         {.i = WLR_DIRECTION_LEFT} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_greater,    tagmon,         {.i = WLR_DIRECTION_RIGHT} },
+	{ MODKEY,                    XKB_KEY_comma,      focusmon,       {.i = WLR_DIRECTION_LEFT|WLR_DIRECTION_DOWN} },
+	{ MODKEY,                    XKB_KEY_period,     focusmon,       {.i = WLR_DIRECTION_RIGHT|WLR_DIRECTION_UP} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_less,       tagmon,         {.i = WLR_DIRECTION_LEFT|WLR_DIRECTION_DOWN} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_greater,    tagmon,         {.i = WLR_DIRECTION_RIGHT|WLR_DIRECTION_UP} },
 	{ MODKEY,                    XKB_KEY_Left,       rotatetags,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_Right,      rotatetags,     {.i = +1} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Left,       clientshift,    {.i = -1} },

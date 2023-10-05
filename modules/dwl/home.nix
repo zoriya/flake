@@ -94,14 +94,14 @@ name = "docked"
     enable = false
 
     [[profile.output]]
-    match = "Acer Technologies EB243Y A T7NEE0023P00 (DP-2 via HDMI)"
+    match = "/DP-1|.*|EB243Y A/"
     enable = true
     mode = { width = 1920, height = 1080, refresh = 60 }
     position = { x = 0, y = 0 }
     scale = 1
 
     [[profile.output]]
-    match = "Acer Technologies EB243Y A T7NEE0023P00 (DP-1 via HDMI)"
+    match = "/DP-2|.*|EB243Y A/"
     enable = true
     mode = { width = 1920, height = 1080, refresh = 60 }
     position = { x = 0, y = 1280 }
