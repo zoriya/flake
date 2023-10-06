@@ -40,6 +40,14 @@
     virtualHosts."kyoo.sdg.moe" = {
       enableACME = true;
       forceSSL = true;
+
+      locations."/robots.txt" = {
+        extraConfig = ''
+          rewrite ^/(.*)  $1;
+          return 200 "User-agent: *\nDisallow: /";
+        '';
+      };
+
       locations."/" = {
         proxyPass = "http://localhost:8901";
         proxyWebsockets = true;
