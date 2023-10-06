@@ -89,6 +89,7 @@ name = "laptop"
 
 [[profile]]
 name = "docked"
+exec = "bash -c 'ags -q; cat /proc/$(pidof dwl)/fd/1 | ags'"
     [[profile.output]]
     match = "eDP-1"
     enable = false
@@ -104,7 +105,7 @@ name = "docked"
     match = "/DP-2|.*|EB243Y A/"
     enable = true
     mode = { width = 1920, height = 1080, refresh = 60 }
-    position = { x = 0, y = 1280 }
+    position = { x = 0, y = 1180 }
     scale = 1
 
 '';

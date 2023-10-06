@@ -39,6 +39,7 @@ in {
         ../dwl_patches/naturalscrolltrackpad.patch
         ../dwl_patches/pointer-gesture.patch
         ../dwl_patches/sway-pointer-contraints.patch
+        ../dwl_patches/retore-tiling.patch
       ];
     });
 
