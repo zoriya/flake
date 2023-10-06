@@ -55,9 +55,19 @@
           "proxy_pass_header Authorization;";
       };
     };
+    virtualHosts."flood.sdg.moe" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:3001";
+        proxyWebsockets = true;
+        extraConfig =
+          "proxy_pass_header Authorization;";
+      };
+    };
   };
   security.acme = {
     acceptTerms = true;
-    default.email = "zoe.roux@zoriya.dev";
+    defaults.email = "zoe.roux@zoriya.dev";
   };
 }
