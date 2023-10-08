@@ -1,4 +1,18 @@
-{
+{pkgs, lib, ...}: let
+  guesspath = pkgs.stdenv.mkDerivation rec {
+    name = "guesspath";
+    nativeBuildInputs = with pkgs; [makeWrapper];
+    propagatedBuildInputs = with pkgs; [
+      python3Packages.guessit
+      transmission_4
+    ];
+    dontUnpack = true;
+    installPhase = "
+     install -Dm755 ${./guesspath.sh} $out/bin/guesspath
+     wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
+   ";
+  };
+in {
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
 
@@ -31,7 +45,7 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -51,23 +65,52 @@
       locations."/" = {
         proxyPass = "http://localhost:8901";
         proxyWebsockets = true;
-        extraConfig =
-          "proxy_pass_header Authorization;";
+        extraConfig = "proxy_pass_header Authorization;";
       };
     };
     virtualHosts."flood.sdg.moe" = {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        proxyPass = "http://localhost:3001";
+        proxyPass = "http://localhost:3000";
         proxyWebsockets = true;
-        extraConfig =
-          "proxy_pass_header Authorization;";
+        extraConfig = "proxy_pass_header Authorization;";
       };
     };
   };
   security.acme = {
     acceptTerms = true;
     defaults.email = "zoe.roux@zoriya.dev";
+  };
+
+  services.transmission = {
+    enable = true;
+    package = pkgs.transmission_4;
+    # Make downloaded items readable/writtable by users
+    group = "users";
+    settings = {
+      incomplete-dir-enabled = false;
+      download-dir = "/mnt/kyoo/downloads";
+      download-queue-enabled = false;
+      rename-partial-files = false;
+      trash-can-enabled = false;
+      ratio-limit-enabled = true;
+      ratio-limit = 1;
+      script-torrent-added-enabled = true;
+      script-torrent-added-filename = "${guesspath}/bin/guesspath";
+    };
+  };
+  # Also allows transmission to reach thoses files
+  systemd.services.transmission.serviceConfig.BindPaths = [ "/mnt/kyoo/shows" ];
+  systemd.services.flood = {
+    enable = true;
+    wantedBy = ["multi-user.target"];
+    after = ["transmission.service"];
+    requires = ["transmission.service"];
+    serviceConfig = {
+      ExecStart = "${pkgs.flood}/bin/flood --rundir=/var/lib/flood --trurl=http://127.0.0.1:9091/transmission/rpc --truser '' --trpass ''";
+      User = "transmission";
+      Restart = "on-failure";
+    };
   };
 }

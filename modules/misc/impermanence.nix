@@ -27,6 +27,7 @@
       "/var/lib/waydroid"
       "/var/lib/flatpak"
       "/var/lib/tcc"
+      "/var/lib/flood"
       "/etc/NetworkManager/system-connections"
     ];
     files = [
