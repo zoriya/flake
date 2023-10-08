@@ -36,4 +36,4 @@ class BrightnessService extends Service {
 }
 
 export const Brightness = new BrightnessService();
-globalThis.brightness = Brightness;
+ags.Service.Brightness = Brightness;

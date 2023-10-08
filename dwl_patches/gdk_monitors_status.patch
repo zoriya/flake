@@ -4,7 +4,7 @@ index a7c2e28..b23067a 100644
 +++ b/dwl.c
 @@ -2090,29 +2090,31 @@ printstatus(void)
 +		if (!m->wlr_output->enabled)
-+			return;
++			continue;
  		occ = urg = 0;
  		wl_list_for_each(c, &clients, link) {
  			occ |= c->tags;

@@ -1,5 +1,5 @@
 diff --git a/dwl.c b/dwl.c
-index 0841bef..426ec14 100644
+index 0841bef..b53cc14 100644
 --- a/dwl.c
 +++ b/dwl.c
 @@ -322,6 +322,7 @@ static void updatetitle(struct wl_listener *listener, void *data);
@@ -31,7 +31,20 @@ index 0841bef..426ec14 100644
  	if ((old_client_type = toplevel_from_wlr_surface(old, &old_c, &old_l)) == XDGShell) {
  		struct wlr_xdg_popup *popup, *tmp;
  		wl_list_for_each_safe(popup, tmp, &old_c->surface.xdg->popups, link)
-@@ -2736,6 +2744,18 @@ virtualkeyboard(struct wl_listener *listener, void *data)
+@@ -1372,6 +1380,12 @@ focusmon(const Arg *arg)
+ 			selmon = dirtomon(arg->i);
+ 		while (!selmon->wlr_output->enabled && i++ < nmons);
+ 	focusclient(focustop(selmon), 1);
++	if (cursor_warp) {
++		wlr_cursor_warp_closest(cursor,
++			  NULL,
++			  selmon->m.x + selmon->m.width / 2.0,
++			  selmon->m.y + selmon->m.height / 2.0);
++	}
+ }
+ 
+ void
+@@ -2736,6 +2750,18 @@ virtualkeyboard(struct wl_listener *listener, void *data)
  	createkeyboard(&keyboard->keyboard);
  }
  
