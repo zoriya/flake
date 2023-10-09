@@ -12,6 +12,21 @@
      wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
    ";
   };
+
+  smartrss = pkgs.stdenv.mkDerivation rec {
+      name = "smartrss";
+      nativeBuildInputs = with pkgs; [makeWrapper];
+      propagatedBuildInputs = with pkgs; [
+        python3Packages.guessit
+        curl
+        jq
+      ];
+      dontUnpack = true;
+      installPhase = "
+        install -Dm755 ${./smartrss.sh} $out/bin/smartrss
+        wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
+      ";
+    };
 in {
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
@@ -107,6 +122,7 @@ in {
     wantedBy = ["multi-user.target"];
     after = ["transmission.service"];
     requires = ["transmission.service"];
+    path = with pkgs; [mediainfo smartrss];
     serviceConfig = {
       ExecStart = "${pkgs.flood}/bin/flood --rundir=/var/lib/flood --trurl=http://127.0.0.1:9091/transmission/rpc --truser '' --trpass ''";
       User = "transmission";

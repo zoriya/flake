@@ -23,6 +23,10 @@
       url = "github:Aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flood = {
+      url = "/home/zoriya/projects/flood";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -34,6 +38,7 @@
     nixpkgs,
     tuxedo-nixos,
     dwl-source,
+    flood,
     ...
   } @ rawInput: let
     user = "zoriya";
@@ -50,7 +55,7 @@
             # nur.nixosModules.nur
             {
               nixpkgs.overlays = [
-                (import ./overlays {inherit dwl-source;})
+                (import ./overlays {inherit dwl-source flood;})
                 # nur.overlay
                 neovim-nightly.overlay
               ];

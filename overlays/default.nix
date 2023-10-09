@@ -1,4 +1,7 @@
-{dwl-source}: self: super: let
+{
+  dwl-source,
+  flood,
+}: self: super: let
   enableWayland = drv: bins:
     super.symlinkJoin {
       name = drv.name;
@@ -18,7 +21,7 @@ in {
     .overrideAttrs (oldAttrs: {
       src = dwl-source;
       enableXWayland = true;
-      passthru.providedSessions = [ "dwl" ];
+      passthru.providedSessions = ["dwl"];
       patches = [
         ../dwl_patches/autostart.patch
         ../dwl_patches/deck.patch
@@ -42,6 +45,27 @@ in {
         ../dwl_patches/retore-tiling.patch
       ];
     });
+
+  flood = self.pkgs.buildNpmPackage {
+    pname = "flood";
+    version = "4.7.0";
+
+    src = flood;
+
+    npmDepsHash = "sha256-XmDnvq+ni5TOf3UQFc4JvGI3LiGpjbrLAocRvrW8qgk=";
+
+    # The prepack script runs the build script, which we'd rather do in the build phase.
+    npmPackFlags = ["--ignore-scripts"];
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
+    meta = with self.lib; {
+      description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
+      homepage = "https://flood.js.org";
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [winter];
+    };
+  };
 
   tuxedo-keyboard = super.callPackage ./tuxedo-keyboard {};
   slack = enableWayland super.slack ["slack"];

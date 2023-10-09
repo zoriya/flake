@@ -69,6 +69,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -204,6 +205,19 @@
         "owner": "hercules-ci",
         "repo": "hercules-ci-effects",
         "type": "github"
+=======
+    "flood": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696808821,
+        "narHash": "sha256-/9EEXVx+8IJuPMQY2bSvO93Iz1voGPTsJx7k4f5lk6o=",
+        "path": "/home/zoriya/projects/flood",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/zoriya/projects/flood",
+        "type": "path"
+>>>>>>> 8d135d2 (Add smartrss)
       }
     },
     "home-manager": {
@@ -356,6 +370,7 @@
       "inputs": {
         "ags": "ags",
         "dwl-source": "dwl-source",
+        "flood": "flood",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "neovim-nightly": "neovim-nightly",
