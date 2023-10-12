@@ -1,32 +1,37 @@
-{pkgs, lib, ...}: let
-  guesspath = pkgs.stdenv.mkDerivation rec {
-    name = "guesspath";
-    nativeBuildInputs = with pkgs; [makeWrapper];
-    propagatedBuildInputs = with pkgs; [
-      python3Packages.guessit
-      transmission_4
-    ];
-    dontUnpack = true;
-    installPhase = "
-     install -Dm755 ${./guesspath.sh} $out/bin/guesspath
-     wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
-   ";
-  };
-
-  smartrss = pkgs.stdenv.mkDerivation rec {
-      name = "smartrss";
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  guesspath =
+    pkgs.stdenv.mkDerivation rec {
+      name = "guesspath";
       nativeBuildInputs = with pkgs; [makeWrapper];
       propagatedBuildInputs = with pkgs; [
         python3Packages.guessit
-        curl
-        jq
+        transmission_4
       ];
       dontUnpack = true;
       installPhase = "
+     install -Dm755 ${./guesspath.sh} $out/bin/guesspath
+     wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
+   ";
+    };
+
+  smartrss = pkgs.stdenv.mkDerivation rec {
+    name = "smartrss";
+    nativeBuildInputs = with pkgs; [makeWrapper];
+    propagatedBuildInputs = with pkgs; [
+      python3Packages.guessit
+      curl
+      jq
+    ];
+    dontUnpack = true;
+    installPhase = "
         install -Dm755 ${./smartrss.sh} $out/bin/smartrss
         wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
       ";
-    };
+  };
 in {
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
@@ -58,6 +63,10 @@ in {
     volumes = [
       "/var/run/docker.sock:/var/run/docker.sock"
     ];
+    environment = {
+      WATCHTOWER_CLEANUP = "true";
+      WATCHTOWER_POLL_INTERVAL = "86400";
+    };
   };
 
   networking.firewall.allowedTCPPorts = [80 443];
@@ -116,7 +125,7 @@ in {
     };
   };
   # Also allows transmission to reach thoses files
-  systemd.services.transmission.serviceConfig.BindPaths = [ "/mnt/kyoo/shows" ];
+  systemd.services.transmission.serviceConfig.BindPaths = ["/mnt/kyoo/shows"];
   systemd.services.flood = {
     enable = true;
     wantedBy = ["multi-user.target"];

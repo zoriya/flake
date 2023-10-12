@@ -11,7 +11,7 @@
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     # nur.url = "github:nix-community/NUR";
     tuxedo-nixos = {
-      url = "github:zoriya/tuxedo-nixos";#"github:blitz/tuxedo-nixos";
+      url = "github:zoriya/tuxedo-nixos"; #"github:blitz/tuxedo-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dwl-source = {
@@ -106,7 +106,7 @@
 
       kadan = mkSystem "kadan" "server" [
         ({pkgs, ...}: {
-          environment.systemPackages = with pkgs; [tmux];
+          environment.systemPackages = with pkgs; [tmux python3Packages.guessit mediainfo];
         })
       ];
     };
