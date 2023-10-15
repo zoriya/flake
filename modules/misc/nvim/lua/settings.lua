@@ -79,6 +79,10 @@ keymap("c", "<C-BS>", "<C-w>")
 keymap("i", "<C-H>", "<C-w>") -- Keymap for CTRL-BACKSPACE on some termial emulators.
 keymap("c", "<C-H>", "<C-w>")
 
+-- Center screen when navigating search results
+keymap("n", "n", "nzz")
+keymap("n", "N", "Nzz")
+
 keymap({"n", "x"}, "<leader>y", '"+y', "Yank to system clipboard")
 keymap({"n", "x"}, "<leader>Y", '"+y$', "Yank line to system clipboard")
 
