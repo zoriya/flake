@@ -6,22 +6,6 @@ return {
 			vim.opt["showmode"] = false
 
 			local gps = require("nvim-navic")
-			local toggleterm = {
-				sections = {
-					lualine_a = {
-						{
-							'mode',
-							fmt = function(str) return string.format("%7s", str) end
-						},
-					},
-					lualine_b = {
-						function()
-							return 'ToggleTerm #' .. vim.b.toggle_number
-						end
-					}
-				},
-				filetypes = { "toggleterm" },
-			}
 
 			return {
 				options = {
@@ -88,8 +72,8 @@ return {
 					lualine_x = {
 						-- require "dap".status,
 						{
-							require("noice").api.statusline.mode.get,
-							cond = require("noice").api.statusline.mode.has,
+							require("noice").api.status.mode.get,
+							cond = require("noice").api.status.mode.has,
 							color = { fg = "#ff9e64" },
 						},
 						'fileformat',
@@ -106,7 +90,6 @@ return {
 					"quickfix",
 					"neo-tree",
 					"fugitive",
-					toggleterm
 				},
 			}
 		end

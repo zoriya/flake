@@ -2,12 +2,29 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		event = { "BufReadPost", "BufNewFile" },
+		main = "ibl",
 		opts = {
-			char = "▏",
-			filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
-			show_trailing_blankline_indent = true,
-			use_treesitter = true,
-			show_current_context = true,
+			indent = {
+				char = "▏",
+				tab_char = "▏",
+			},
+			exclude = {
+				filetypes = {
+					"help",
+					"alpha",
+					"dashboard",
+					"neo-tree",
+					"Trouble",
+					"lazy",
+					"lspinfo",
+					"packer",
+					"checkhealth",
+					"help",
+					"man",
+					"",
+				}
+			},
+			scope = { show_start = false },
 		},
 	},
 
@@ -68,14 +85,13 @@ return {
 			require("statuscol").setup({
 				relculright = false,
 				segments = {
-					{ text = { builtin.foldfunc }, click = "v:lua.ScFa" },
 					{
 						sign = { name = { ".*" }, maxwidth = 1, },
 						click = "v:lua.ScSa"
 					},
 					{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
 					{
-						sign = { name = { "GitSign*" }, maxwidth = 1, colwidth = 1 },
+						sign = { namespace = { "gitsign" }, maxwidth = 1, colwidth = 1 },
 						click = "v:lua.ScSa"
 					},
 				}
