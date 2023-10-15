@@ -70,6 +70,7 @@
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -206,6 +207,8 @@
         "repo": "hercules-ci-effects",
         "type": "github"
 =======
+=======
+>>>>>>> 3ce266f (Switch to nvim nightly since highlights are broken otherwise)
     "flood": {
       "flake": false,
       "locked": {
@@ -217,7 +220,147 @@
       "original": {
         "path": "/home/zoriya/projects/flood",
         "type": "path"
+<<<<<<< HEAD
 >>>>>>> 8d135d2 (Add smartrss)
+=======
+=======
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "neovim-nightly",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1696343447,
+        "narHash": "sha256-B2xAZKLkkeRFG5XcHHSXXcP7To9Xzr59KXeZiRf4vdQ=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "c9afaba3dfa4085dbd2ccb38dfade5141e33d9d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_2": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1688466019,
+        "narHash": "sha256-VeM2akYrBYMsb4W/MmBo1zmaMfgbL4cH3Pu8PGyIwJ0=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "8e8d955c22df93dbe24f19ea04f47a74adbdc5ec",
+        "type": "github"
+      },
+      "original": {
+        "id": "flake-parts",
+        "type": "indirect"
+      }
+    },
+    "flake-parts_3": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "neovim-nightly",
+          "hercules-ci-effects",
+          "hercules-ci-agent",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1688466019,
+        "narHash": "sha256-VeM2akYrBYMsb4W/MmBo1zmaMfgbL4cH3Pu8PGyIwJ0=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "8e8d955c22df93dbe24f19ea04f47a74adbdc5ec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1685518550,
+        "narHash": "sha256-o2d0KcvaXzTrPRIo0kOLV0/QXHhDQ5DTi+OxcjO8xqY=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "a1720a10a6cfe8234c0e93907ffe81be440f4cef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "haskell-flake": {
+      "locked": {
+        "lastModified": 1684780604,
+        "narHash": "sha256-2uMZsewmRn7rRtAnnQNw1lj0uZBMh4m6Cs/7dV5YF08=",
+        "owner": "srid",
+        "repo": "haskell-flake",
+        "rev": "74210fa80a49f1b6f67223debdbf1494596ff9f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "ref": "0.3.0",
+        "repo": "haskell-flake",
+        "type": "github"
+      }
+    },
+    "hercules-ci-agent": {
+      "inputs": {
+        "flake-parts": "flake-parts_3",
+        "haskell-flake": "haskell-flake",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1688568579,
+        "narHash": "sha256-ON0M56wtY/TIIGPkXDlJboAmuYwc73Hi8X9iJGtxOhM=",
+        "owner": "hercules-ci",
+        "repo": "hercules-ci-agent",
+        "rev": "367dd8cd649b57009a6502e878005a1e54ad78c5",
+        "type": "github"
+      },
+      "original": {
+        "id": "hercules-ci-agent",
+        "type": "indirect"
+      }
+    },
+    "hercules-ci-effects": {
+      "inputs": {
+        "flake-parts": "flake-parts_2",
+        "hercules-ci-agent": "hercules-ci-agent",
+        "nixpkgs": [
+          "neovim-nightly",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1697031886,
+        "narHash": "sha256-oTMPX8dGC7yxSwrbF4NuPNQsUEcHB1dusW2yEbFD5zg=",
+        "owner": "hercules-ci",
+        "repo": "hercules-ci-effects",
+        "rev": "178b36dc3a75c96efc25477d45eafc37ba1fafc3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "hercules-ci-effects",
+        "type": "github"
+>>>>>>> 648bc13 (Switch to nvim nightly since highlights are broken otherwise)
+>>>>>>> 3ce266f (Switch to nvim nightly since highlights are broken otherwise)
       }
     },
     "home-manager": {
