@@ -98,7 +98,8 @@ return {
 					"efm",
 					"diagnosticls",
 					-- Bugged servers
-					"sqls"
+					"sqls",
+					"rome",
 				},
 				preferred_servers = {
 					haskell = { "hls" },
@@ -114,6 +115,8 @@ return {
 					javascriptreact = { "tsserver" },
 					typescriptreact = { "tsserver" },
 					go = { "gopls" },
+					json = { "jsonls" },
+					yaml = { "yamlls" },
 				},
 
 				default_config = {
@@ -379,9 +382,23 @@ return {
 	},
 
 	{
-		"mfussenegger/nvim-lint",
+		-- "mfussenegger/nvim-lint",
+		"sQVe/nvim-lint",
+		branch = "fix/repair-eslint-linters",
 		event = { "BufReadPre", "BufNewFile" },
 		config = function(_, opts)
+			local override_severity = function(linter)
+				local old_parser = linter.parser;
+				linter.parser = function (output)
+					local diags = old_parser(output);
+					for _, d in pairs(diags) do
+						d.severity = vim.diagnostic.severity.HINT
+					end
+					return diags
+				end
+			end
+			override_severity(require("lint").linters.eslint_d)
+
 			require("lint").linters_by_ft = opts
 			vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
 				callback = function()
