@@ -172,6 +172,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_b,          SHCMD("hyprpicker | wl-copy") },
 	{ MODKEY,                    XKB_KEY_x,          SHCMD("grim -g \"$(slurp -b 00000000 -s 61616140)\" - | wl-copy") },
 	{ MODKEY,                    XKB_KEY_v,          SHCMD("cliphist list | rofi -dmenu | cliphist decode | wl-copy") },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_e,          SHCMD("kitty -d \"~/projects/$(ls .. | rofi -dmenu)\"") },
 
 	{ 0, XKB_KEY_XF86PowerOff,           spawn, {.v = (const char*[]){"ags", "-t", "powermenu", NULL}}},
 	// TODO: Allow those bindings on lockscreen

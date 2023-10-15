@@ -17,6 +17,8 @@ configuration {
 	display-run: "";
 	drun-display-format: "{name}";
 	window-format: "{w} · {c} · {t}";
+	matching: "fuzzy";
+	drun-match-fields: "name";
 }
 
 /*****----- Global Properties -----*****/
