@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    # neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     # nur.url = "github:nix-community/NUR";
     tuxedo-nixos = {
       url = "github:zoriya/tuxedo-nixos";#"github:blitz/tuxedo-nixos";
@@ -28,7 +28,7 @@
   outputs = {
     self,
     home-manager,
-    # neovim-nightly,
+    neovim-nightly,
     # nur,
     ags,
     nixpkgs,
@@ -52,7 +52,7 @@
               nixpkgs.overlays = [
                 (import ./overlays {inherit dwl-source;})
                 # nur.overlay
-                # neovim-nightly.overlay
+                neovim-nightly.overlay
               ];
             }
 

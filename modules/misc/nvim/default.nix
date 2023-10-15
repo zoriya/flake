@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    neovim
-    #neovim-nightly
+    # neovim
+    neovim-nightly
   ];
   xdg.configFile."nvim/lua".source = ./lua;
   xdg.configFile."nvim/lazy-lock.json".source = ./lazy-lock.json;
