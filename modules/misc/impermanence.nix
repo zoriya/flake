@@ -28,6 +28,7 @@
       "/var/lib/flatpak"
       "/var/lib/tcc"
       "/var/lib/flood"
+      "/var/lib/transmission"
       "/etc/NetworkManager/system-connections"
     ];
     files = [
