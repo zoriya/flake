@@ -29,6 +29,7 @@
       "/var/lib/tcc"
       "/var/lib/flood"
       "/var/lib/transmission"
+      "/var/lib/acme"
       "/etc/NetworkManager/system-connections"
     ];
     files = [
