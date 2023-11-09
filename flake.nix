@@ -24,7 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flood = {
-      url = "/home/zoriya/projects/flood";
+      url = "github:zoriya/flood";
       flake = false;
     };
   };
