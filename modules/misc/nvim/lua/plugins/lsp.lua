@@ -389,7 +389,7 @@ return {
 		config = function(_, opts)
 			local override_severity = function(linter)
 				local old_parser = linter.parser;
-				linter.parser = function (output)
+				linter.parser = function(output)
 					local diags = old_parser(output);
 					for _, d in pairs(diags) do
 						d.severity = vim.diagnostic.severity.HINT
@@ -429,5 +429,9 @@ return {
 				enabled = true,
 			},
 		},
-	}
+	},
+
+	{
+		"yioneko/nvim-type-fmt",
+	},
 }
