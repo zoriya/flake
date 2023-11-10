@@ -6,15 +6,15 @@ import * as bluetooth from "../modules/bluetooth.js";
 import * as battery from "../modules/battery.js";
 import * as notifications from "../modules/notifications.js";
 
-const { App } = ags;
-const { Window, CenterBox, Box, Button } = ags.Widget;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import { Window, CenterBox, Box, Button } from 'resource:///com/github/Aylur/ags/widget.js';
 
 export const Bar = (mon, monId) =>
 	Window({
 		name: `bar${monId}`,
 		className: "transparent",
 		exclusive: true,
-		anchor: "top left right",
+		anchor: ["top", "left", "right"],
 		layer: "bottom",
 		monitor: mon,
 		child: CenterBox({

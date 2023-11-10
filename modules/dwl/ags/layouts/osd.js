@@ -1,5 +1,5 @@
-const { lookUpIcon } = ags.Utils;
-const { Window, Revealer, Stack, Box, Icon } = ags.Widget;
+import { lookUpIcon } from 'resource:///com/github/Aylur/ags/utils.js';
+import { Window, Revealer, Stack, Box, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
 import { FontIcon, Progress } from "../misc.js";
 import { Indicator } from "../services/osd.js";
 

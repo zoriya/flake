@@ -177,20 +177,20 @@ static const Key keys[] = {
 	{ 0, XKB_KEY_XF86PowerOff,           spawn, {.v = (const char*[]){"ags", "-t", "powermenu", NULL}}},
 	// TODO: Allow those bindings on lockscreen
 	// TODO: Allow those bindings on repeat
-	{ 0, XKB_KEY_XF86MonBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen += 0.05; ags.Service.Indicator.display()", NULL}}},
-	{ 0, XKB_KEY_XF86MonBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.screen -= 0.05; ags.Service.Indicator.display()", NULL}}},
-	{ 0, XKB_KEY_XF86KbdBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd++; ags.Service.Indicator.kbd()", NULL}}},
-	{ 0, XKB_KEY_XF86KbdBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Brightness.kbd--; ags.Service.Indicator.kbd()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioRaiseVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.volume += 0.05; ags.Service.Indicator.speaker()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioLowerVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.volume -= 0.05; ags.Service.Indicator.speaker()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioMute,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Audio.speaker.isMuted = !ags.Service.Audio.speaker.isMuted; ags.Service.Indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86MonBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "brightness.screen += 0.05; indicator.display()", NULL}}},
+	{ 0, XKB_KEY_XF86MonBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "brightness.screen -= 0.05; indicator.display()", NULL}}},
+	{ 0, XKB_KEY_XF86KbdBrightnessUp,    spawn, {.v = (const char*[]){"ags", "run-js", "brightness.kbd++; indicator.kbd()", NULL}}},
+	{ 0, XKB_KEY_XF86KbdBrightnessDown,  spawn, {.v = (const char*[]){"ags", "run-js", "brightness.kbd--; indicator.kbd()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioRaiseVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "audio.speaker.volume += 0.05; indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioLowerVolume,   spawn, {.v = (const char*[]){"ags", "run-js", "audio.speaker.volume -= 0.05; indicator.speaker()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioMute,          spawn, {.v = (const char*[]){"ags", "run-js", "audio.speaker.isMuted = !audio.speaker.isMuted; indicator.speaker()", NULL}}},
 	{ 0, XKB_KEY_XF86AudioMicMute,       spawn, {.v = (const char*[]){"pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL}}},
 
-	{ 0, XKB_KEY_XF86AudioPlay,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.playPause()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioStop,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.stop()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioPause,         spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.pause()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioPrev,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.previous()", NULL}}},
-	{ 0, XKB_KEY_XF86AudioNext,          spawn, {.v = (const char*[]){"ags", "run-js", "ags.Service.Mpris.getPlayer()?.next()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioPlay,          spawn, {.v = (const char*[]){"ags", "run-js", "mpris.getPlayer()?.playPause()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioStop,          spawn, {.v = (const char*[]){"ags", "run-js", "mpris.getPlayer()?.stop()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioPause,         spawn, {.v = (const char*[]){"ags", "run-js", "mpris.getPlayer()?.pause()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioPrev,          spawn, {.v = (const char*[]){"ags", "run-js", "mpris.getPlayer()?.previous()", NULL}}},
+	{ 0, XKB_KEY_XF86AudioNext,          spawn, {.v = (const char*[]){"ags", "run-js", "mpris.getPlayer()?.next()", NULL}}},
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
 	{ WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_Terminate_Server, quit, {0} },

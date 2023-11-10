@@ -1,6 +1,6 @@
 import Gio from "gi://Gio";
 
-const { Service } = ags;
+import Service from 'resource:///com/github/Aylur/ags/service.js'
 
 class DwlService extends Service {
 	static {

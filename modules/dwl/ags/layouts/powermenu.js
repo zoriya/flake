@@ -1,6 +1,7 @@
 import { PopupOverlay } from "../misc.js";
 
-const { Box, Button, Icon, Label, Window } = ags.Widget;
+import { Box, Button, Icon, Label, Window } from 'resource:///com/github/Aylur/ags/widget.js';
+import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 
 const cmd = {
 	Sleep: "systemctl suspend",
@@ -11,7 +12,7 @@ const cmd = {
 
 const SysButton = (icon, action) =>
 	Button({
-		onClicked: cmd[action],
+		onClicked: () => execAsync(cmd[action]),
 		child: Box({
 			vertical: true,
 			children: [Icon(icon), Label(action)],

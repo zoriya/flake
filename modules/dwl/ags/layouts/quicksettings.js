@@ -5,15 +5,16 @@ import * as bluetooth from "../modules/bluetooth.js";
 import * as darkmode from "../modules/darkmode.js";
 import * as nightmode from "../modules/nightmode.js";
 import * as mpris from "../modules/mpris.js";
-import { QSMenu, Arrow } from "../services/quicksettings.js";
+import { opened, Arrow } from "../services/quicksettings.js";
 import { FontIcon, PopupOverlay } from "../misc.js";
 
-const { Window, Revealer, Icon, Box, Button, Label } = ags.Widget;
+import { Window, Revealer, Icon, Box, Button, Label } from 'resource:///com/github/Aylur/ags/widget.js'
+import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js'
 
 const Submenu = ({ menuName, icon, title, contentType }) =>
 	Revealer({
 		transition: "slide_down",
-		connections: [[QSMenu, (r) => (r.reveal_child = menuName === QSMenu.opened)]],
+		connections: [[opened, (r) => (r.reveal_child = menuName === opened.value)]],
 		child: Box({
 			className: "qs-submenu surface",
 			vertical: true,
@@ -33,7 +34,7 @@ const VolumeBox = () =>
 				children: [
 					Button({
 						child: audio.SpeakerIndicator(),
-						onClicked: "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+						onClicked: () => execAsync("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
 					}),
 					audio.SpeakerSlider({ hexpand: true }),
 					audio.SpeakerPercentLabel(),

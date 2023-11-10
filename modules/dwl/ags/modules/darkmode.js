@@ -1,8 +1,8 @@
 import GLib from 'gi://GLib';
 
-const { Service } = ags;
-const { exec, execAsync } = ags.Utils;
-const { Icon, Label, Button, Box, Stack } = ags.Widget;
+import Service from 'resource:///com/github/Aylur/ags/service.js'
+import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
+import { Icon, Label, Button, Box, Stack } from 'resource:///com/github/Aylur/ags/widget.js';
 
 class ThemeService extends Service {
 	static {

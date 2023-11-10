@@ -1,8 +1,8 @@
 import { Brightness } from "../services/brightness.js";
 
-const { Service } = ags;
-const { exec, execAsync } = ags.Utils;
-const { Icon, Label, Slider } = ags.Widget;
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
+import { Icon, Label, Slider } from 'resource:///com/github/Aylur/ags/widget.js';
 
 export const BrightnessSlider = (props) =>
 	Slider({

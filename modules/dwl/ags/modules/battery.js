@@ -1,5 +1,5 @@
-const { Battery } = ags.Service;
-const { Label, Icon, Stack, Box } = ags.Widget;
+import Battery from 'resource:///com/github/Aylur/ags/service/battery.js'
+import { Label, Icon, Stack, Box } from 'resource:///com/github/Aylur/ags/widget.js';
 
 const icons = (charging) =>
 	Array.from({ length: 11 }, (_, i) => i * 10).map((i) => [

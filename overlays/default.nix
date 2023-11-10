@@ -67,7 +67,6 @@ in {
     };
   };
 
-  tuxedo-keyboard = super.callPackage ./tuxedo-keyboard {};
   slack = enableWayland super.slack ["slack"];
   discord = enableWayland super.discord ["discord" "Discord"];
   vscode = enableWayland super.vscode ["code"];

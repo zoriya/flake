@@ -1,9 +1,9 @@
 import { FontIcon } from "../misc.js";
 
 const { GLib } = imports.gi;
-const { Notifications } = ags.Service;
-const { lookUpIcon, timeout } = ags.Utils;
-const { Box, Icon, Label, EventBox, Button, Stack, Revealer } = ags.Widget;
+import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js'
+import { lookUpIcon, timeout } from 'resource:///com/github/Aylur/ags/utils.js';
+import { Box, Icon, Label, EventBox, Button, Stack, Revealer } from 'resource:///com/github/Aylur/ags/widget.js';
 
 export const Indicator = ({ ...props }) =>
 	Box({

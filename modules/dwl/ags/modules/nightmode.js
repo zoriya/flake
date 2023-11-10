@@ -1,6 +1,4 @@
-const { Service } = ags;
-const { exec, execAsync } = ags.Utils;
-const { Icon, Label, Button, Box, Stack } = ags.Widget;
+import { Icon, Label, Button, Box, Stack } from 'resource:///com/github/Aylur/ags/widget.js';
 
 // class ThemeService extends Service {
 // 	static {
@@ -30,10 +28,9 @@ const { Icon, Label, Button, Box, Stack } = ags.Widget;
 // 	static {
 // 		Service.export(this, "Theme");
 // 	}
-// 	static instance = new ThemeService();
 //
 // 	static get dark() {
-// 		return Theme.instance.dark;
+// 		return Theme.dark;
 // 	}
 // 	static set dark(value) {
 // 		Theme.instance.dark = value;

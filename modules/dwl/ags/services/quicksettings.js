@@ -1,28 +1,14 @@
-const { App, Service } = ags;
-const { Box, Button, Icon } = ags.Widget;
-const { timeout } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import Service from 'resource:///com/github/Aylur/ags/service.js'
+import Variable from 'resource:///com/github/Aylur/ags/variable.js';
+import { Box, Button, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
+import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 
-export class QSMenu extends Service {
-	static {
-		Service.register(this);
-	}
-	static instance = new QSMenu();
-	static opened = "";
-	static toggle(menu) {
-		QSMenu.opened = QSMenu.opened === menu ? "" : menu;
-		QSMenu.instance.emit("changed");
-	}
-
-	constructor() {
-		super();
-		App.instance.connect("window-toggled", (_a, name, visible) => {
-			if (name === "quicksettings" && !visible) {
-				QSMenu.opened = "";
-				QSMenu.instance.emit("changed");
-			}
-		});
-	}
-}
+export const opened = Variable('');
+App.instance.connect('window-toggled', (_, name, visible) => {
+	if (name === 'quicksettings' && !visible)
+		timeout(500, () => opened.value = '');
+});
 
 export const ArrowToggle = ({ icon, label, toggle, name, expand, ...props }) => {
 	icon.className = `${icon.className} qs-icon`;
@@ -47,14 +33,14 @@ export const Arrow = ({ name, expand, ...props }) =>
 		...props,
 		className: "qs-icon",
 		onClicked: () => {
-			QSMenu.toggle(name);
-			if (expand && QSMenu.openned == name) expand();
+			opened.value = opened.value === name ? "" : name;
+			if (expand) expand();
 		},
 		connections: [
 			[
-				QSMenu,
+				opened,
 				(button) => {
-					button.toggleClassName("opened", QSMenu.opened === name);
+					button.toggleClassName("opened", opened.value === name);
 				},
 			],
 		],
@@ -66,10 +52,10 @@ export const Arrow = ({ name, expand, ...props }) =>
 			],
 			connections: [
 				[
-					QSMenu,
+					opened,
 					(icon) => {
-						if ((QSMenu.opened === name && !icon._opened) || (QSMenu.opened !== name && icon._opened)) {
-							const step = QSMenu.opened === name ? 10 : -10;
+						if ((opened.value === name && !icon._opened) || (opened.value !== name && icon._opened)) {
+							const step = opened.value === name ? 10 : -10;
 							icon._opened = !icon._opened;
 							for (let i = 0; i < 9; ++i) {
 								timeout(5 * i, () => {

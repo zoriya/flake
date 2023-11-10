@@ -1,10 +1,10 @@
 import { ArrowToggle } from "../services/quicksettings.js";
 import { Separator } from "../misc.js";
 
-const { App } = ags;
-const { Network } = ags.Service;
-const { Label, Icon, Box, Stack, Button } = ags.Widget;
-const { execAsync } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import Network from 'resource:///com/github/Aylur/ags/service/network.js'
+import { Label, Icon, Box, Stack, Button } from 'resource:///com/github/Aylur/ags/widget.js';
+import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 
 export const SSIDLabel = (props) =>
 	Label({
@@ -44,7 +44,7 @@ export const Indicator = () => Stack({
 			}]],
 		})],
 	],
-	binds: [['shown', Network, 'primary', p => p || 'wifi']],
+	connections: [[Network, self => { self.shown = Network.primary || "wifi" }]],
 });
 
 export const Toggle = (props) =>
@@ -87,7 +87,7 @@ export const Selection = (props) =>
 					box.children = Network.wifi?.accessPoints
 						.map((ap) =>
 							Button({
-								onClicked: `nmcli device wifi connect ${ap.bssid}`,
+								onClicked: () => execAsync(`nmcli device wifi connect ${ap.bssid}`),
 								child: Box({
 									children: [
 										Icon(icons.find(({ value }) => value <= ap.strength).icon),

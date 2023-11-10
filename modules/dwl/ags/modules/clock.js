@@ -1,4 +1,4 @@
-const { Label } = ags.Widget;
+import { Label } from 'resource:///com/github/Aylur/ags/widget.js';
 const { DateTime } = imports.gi.GLib;
 
 export const Clock = ({

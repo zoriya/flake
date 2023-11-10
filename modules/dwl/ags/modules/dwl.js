@@ -1,4 +1,4 @@
-const { Box, Button, Label } = ags.Widget;
+import { Box, Button, Label } from 'resource:///com/github/Aylur/ags/widget.js';
 import { Dwl } from "../services/dwl.js";
 
 export const Tags = ({ mon, labels, ...props } = {}) =>

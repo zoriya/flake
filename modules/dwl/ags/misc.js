@@ -1,6 +1,6 @@
-const { App } = ags;
-const { Box, Label, Revealer, EventBox, Overlay, Icon } = ags.Widget;
-const { timeout } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import { Box, Label, Revealer, EventBox, Overlay, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
+import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 
 export const addElipsis = (str, max = 20, position = "end") => {
 	if (str.length <= max) return str;

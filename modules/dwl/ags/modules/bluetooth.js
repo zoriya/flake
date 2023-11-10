@@ -1,10 +1,10 @@
 import { Spinner, Separator } from "../misc.js";
 import { ArrowToggle } from "../services/quicksettings.js";
 
-const { App } = ags;
-const { Bluetooth } = ags.Service;
-const { Icon, Label, Box, Button, Stack } = ags.Widget;
-const { execAsync } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js'
+import { Icon, Label, Box, Button, Stack } from 'resource:///com/github/Aylur/ags/widget.js';
+import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 
 export const Indicator = ({
 	enabled = Icon({ icon: "bluetooth-active-symbolic", className: "enabled" }),

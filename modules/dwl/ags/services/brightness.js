@@ -1,5 +1,5 @@
-const { Service } = ags;
-const { exec, execAsync } = ags.Utils;
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 
 class BrightnessService extends Service {
 	static {
@@ -36,4 +36,5 @@ class BrightnessService extends Service {
 }
 
 export const Brightness = new BrightnessService();
-ags.Service.Brightness = Brightness;
+export default Brightness;
+globalThis.brightness = Brightness;

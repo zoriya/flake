@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:zoriya/nixpkgs"; #"nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -10,17 +10,13 @@
     impermanence.url = "github:nix-community/impermanence";
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     # nur.url = "github:nix-community/NUR";
-    tuxedo-nixos = {
-      url = "github:zoriya/tuxedo-nixos"; #"github:blitz/tuxedo-nixos";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     dwl-source = {
       # Use dwl's master.
       url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
       flake = false;
     };
     ags = {
-      url = "github:Aylur/ags";
+      url = "github:Aylur/ags?ref=v1.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flood = {
@@ -36,7 +32,6 @@
     # nur,
     ags,
     nixpkgs,
-    tuxedo-nixos,
     dwl-source,
     flood,
     ...
@@ -93,10 +88,11 @@
   in {
     nixosConfigurations = {
       fuhen = mkSystem "fuhen" "dwl" [
-        tuxedo-nixos.nixosModules.default
         ({lib, ...}: {
-          hardware.tuxedo-keyboard.enable = true;
-          hardware.tuxedo-control-center.enable = true;
+          hardware.tuxedo-rs = {
+            enable = true;
+            tailor-gui.enable = true;
+          };
 
           programs.gamescope.enable = true;
         })

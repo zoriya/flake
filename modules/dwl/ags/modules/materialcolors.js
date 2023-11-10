@@ -1,7 +1,7 @@
-const { Service } = ags;
-const { Box, Stack, Button, Icon } = ags.Widget;
-const { execAsync, timeout } = ags.Utils;
-const { Mpris } = ags.Service;
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import { Box, Stack, Button, Icon } from 'resource:///com/github/Aylur/ags/widget.js';
+import { execAsync, timeout } from 'resource:///com/github/Aylur/ags/utils.js';
+import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 
 class MaterialcolorsService extends Service {
 	static {
@@ -13,7 +13,9 @@ class MaterialcolorsService extends Service {
 			timeout(100, () => {
 				execAsync(["covercolors", url])
 					.then((colors) => {
-						this._colors = JSON.parse(colors);
+						const col = JSON.parse(colors);
+						if (!col) return;
+						this._colors = col;
 						this.emit("changed");
 					})
 					.catch(print);

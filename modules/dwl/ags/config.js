@@ -4,8 +4,8 @@ import { OSD } from "./layouts/osd.js";
 import { Powermenu } from "./layouts/powermenu.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
 
-const { App } = ags;
-const { timeout } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 const { Display } = imports.gi.Gdk;
 
 const config = {
@@ -13,7 +13,7 @@ const config = {
 		quicksettings: 300,
 		notifications: 300,
 	},
-	style: ags.App.configDir + "/style.css",
+	style: App.configDir + "/style.css",
 	monitorFactory: (mon) => [Bar(mon, `${mon.geometry.x},${mon.geometry.y}`)],
 	windows: [Quicksettings(), Notifications(), OSD(), Powermenu()],
 };

@@ -1,10 +1,11 @@
 import { Separator, FontIcon, addElipsis } from "../misc.js";
-import { ArrowToggle, QSMenu } from "../services/quicksettings.js";
+import { ArrowToggle, opened } from "../services/quicksettings.js";
 
-const { App } = ags;
-const { Audio } = ags.Service;
-const { Label, Box, Icon, Stack, Button, Slider } = ags.Widget;
-const { execAsync } = ags.Utils;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import Service from 'resource:///com/github/Aylur/ags/service.js'
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js'
+import { Label, Box, Icon, Stack, Button, Slider } from 'resource:///com/github/Aylur/ags/widget.js';
+import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 
 const iconSubstitute = (item) => {
 	const substitues = [
@@ -118,7 +119,7 @@ export const MuteToggle = (props) =>
 	Button({
 		...props,
 		className: "qs-button surface",
-		onClicked: "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+		onClicked: () => execAsync("pactl set-source-mute @DEFAULT_SOURCE@ toggle"),
 		child: Box({
 			children: [
 				MicrophoneMuteIndicator({ className: "qs-icon" }),
@@ -154,7 +155,7 @@ export const AppMixerToggle = (props) =>
 		icon: FontIcon({ icon: "", className: "qs-icon" }),
 		label: Label("App Mixer"),
 		name: "app-mixer",
-		toggle: () => QSMenu.toggle("app-mixer"),
+		toggle: () => opened.value = opened.value === "app-mixer" ? "" : "app-mixer",
 		...props,
 	});
 

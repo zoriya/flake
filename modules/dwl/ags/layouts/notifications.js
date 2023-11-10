@@ -1,7 +1,7 @@
 import { PopupOverlay } from "../misc.js";
 import * as notifications from "../modules/notifications.js";
 
-const { Window, Box } = ags.Widget;
+import { Window, Box }  from 'resource:///com/github/Aylur/ags/widget.js'
 
 export const Notifications = () =>
 	Window({

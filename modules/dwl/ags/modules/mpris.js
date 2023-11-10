@@ -1,9 +1,9 @@
 import { BackgroundBox, CoverArt, PlayPause } from "./materialcolors.js";
 import { addElipsis } from "../misc.js";
 
-const { Box, Button, Slider, Icon, CenterBox, Label } = ags.Widget;
-const { Mpris } = ags.Service;
-const { lookUpIcon } = ags.Utils;
+import { Box, Button, Slider, Icon, CenterBox, Label } from 'resource:///com/github/Aylur/ags/widget.js';
+import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js'
+import { lookUpIcon } from 'resource:///com/github/Aylur/ags/utils.js';
 
 const PlayerIcon = ({ player, symbolic = false, ...props }) =>
 	Icon({
