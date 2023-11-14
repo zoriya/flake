@@ -16,7 +16,7 @@
       flake = false;
     };
     ags = {
-      url = "github:Aylur/ags?ref=v1.3.0";
+      url = "github:Aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flood = {

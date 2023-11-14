@@ -60,10 +60,10 @@ export const Indicator = ({ ...props }) =>
 const NotificationIcon = ({ appEntry, appIcon, image }) => {
 	if (image) {
 		return Box({
-			valign: "start",
+			vpack: "start",
 			hexpand: false,
 			className: "icon img",
-			style: `
+			css: `
 				background-image: url("${image}");
 				background-size: contain;
 				background-repeat: no-repeat;
@@ -80,17 +80,17 @@ const NotificationIcon = ({ appEntry, appIcon, image }) => {
 	if (lookUpIcon(appEntry)) icon = appEntry;
 
 	return Box({
-		valign: "start",
+		vpack: "start",
 		hexpand: false,
 		className: "icon",
-		style: "min-width: 78px; min-height: 78px;",
+		css: "min-width: 78px; min-height: 78px;",
 		children: [
 			Icon({
 				icon,
 				size: 58,
-				halign: "center",
+				hpack: "center",
 				hexpand: true,
-				valign: "center",
+				vpack: "center",
 				vexpand: true,
 			}),
 		],
@@ -100,7 +100,7 @@ const NotificationIcon = ({ appEntry, appIcon, image }) => {
 const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
 	Button({
 		className: "surface r20 p10",
-		style: "margin: 8px 0;",
+		css: "margin: 8px 0;",
 		onClicked: () => Notifications.invoke(id, "view"),
 		vexpand: false,
 		child: Box({
@@ -128,12 +128,12 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
 										}),
 										Label({
 											className: "time",
-											valign: "start",
+											vpack: "start",
 											label: GLib.DateTime.new_from_unix_local(time).format("%H:%M"),
 										}),
 										Button({
 											className: "close-button",
-											valign: "start",
+											vpack: "start",
 											child: Icon("window-close-symbolic"),
 											onClicked: () => Notifications.close(id),
 										}),
@@ -175,12 +175,12 @@ export const List = (props) =>
 export const Placeholder = (props) =>
 	Box({
 		vertical: true,
-		valign: "center",
-		halign: "center",
+		vpack: "center",
+		hpack: "center",
 		...props,
 		children: [
-			Label({ label: "󰂛", style: "margin-top: 150px;" }),
-			Label({ label: "Your inbox is empty", style: "margin-bottom: 150px;" }),
+			Label({ label: "󰂛", css: "margin-top: 150px;" }),
+			Label({ label: "Your inbox is empty", css: "margin-bottom: 150px;" }),
 		],
 		connections: [[Notifications, (box) => (box.visible = Notifications.notifications.length === 0)]],
 	});

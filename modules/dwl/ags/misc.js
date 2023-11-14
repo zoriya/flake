@@ -21,7 +21,7 @@ export const Spinner = ({ icon = "process-working-symbolic" } = {}) =>
 			[
 				10,
 				(w) => {
-					w.setStyle(`-gtk-icon-transform: rotate(${w._deg++ % 360}deg);`);
+					w.setCss(`-gtk-icon-transform: rotate(${w._deg++ % 360}deg);`);
 				},
 			],
 		],
@@ -29,12 +29,12 @@ export const Spinner = ({ icon = "process-working-symbolic" } = {}) =>
 
 export const FontIcon = ({ icon = "", ...props }) => {
 	const box = Box({
-		style: "min-width: 1px; min-height: 1px;",
+		css: "min-width: 1px; min-height: 1px;",
 	});
 	const label = Label({
 		label: icon,
-		halign: "center",
-		valign: "center",
+		hpack: "center",
+		vpack: "center",
 	});
 	return Box({
 		...props,
@@ -51,7 +51,7 @@ export const FontIcon = ({ icon = "", ...props }) => {
 							const size =
 								overlay.get_style_context().get_property("font-size", imports.gi.Gtk.StateFlags.NORMAL) || 11;
 
-							box.setStyle(`min-width: ${size}px; min-height: ${size}px;`);
+							box.setCss(`min-width: ${size}px; min-height: ${size}px;`);
 						},
 					],
 				],
@@ -65,21 +65,21 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		className: "progress accent",
 		hexpand: vertical,
 		vexpand: !vertical,
-		halign: vertical ? "fill" : "start",
-		valign: vertical ? "end" : "fill",
+		hpack: vertical ? "fill" : "start",
+		vpack: vertical ? "end" : "fill",
 	});
 	const maxIndicator = Box({
 		hexpand: vertical,
 		vexpand: !vertical,
-		halign: vertical ? "fill" : "start",
-		valign: vertical ? "end" : "fill",
+		hpack: vertical ? "fill" : "start",
+		vpack: vertical ? "end" : "fill",
 		className: "max-indicator red",
 	});
 	const progress = Overlay({
 		...props,
 		child: Box({
 			className: "progress surface",
-			style: `
+			css: `
 				min-width: ${width}px;
 				min-height: ${height}px;
 			`,
@@ -95,12 +95,12 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		const min = vertical ? width : height;
 		const preferred = Math.max(min, (axisv * value) / max);
 
-		maxIndicator.setStyle(`margin-${vertical ? "top" : "left"}: ${axisv / max}px; `);
+		maxIndicator.setCss(`margin-${vertical ? "top" : "left"}: ${axisv / max}px; `);
 		fill.toggleClassName("red", value > 1);
 
 		if (!fill._size) {
 			fill._size = preferred;
-			fill.setStyle(`min-${axis}: ${preferred}px;`);
+			fill.setCss(`min-${axis}: ${preferred}px;`);
 			return;
 		}
 
@@ -111,7 +111,7 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 		for (let i = 0; i < frames; ++i) {
 			timeout(5 * i, () => {
 				fill._size += step;
-				fill.setStyle(`min-${axis}: ${fill._size}px`);
+				fill.setCss(`min-${axis}: ${fill._size}px`);
 			});
 		}
 	};
@@ -135,7 +135,7 @@ const PopupCloser = (windowName) =>
 
 const PopupRevealer = (windowName, transition, child) =>
 	Box({
-		style: "padding: 1px;",
+		css: "padding: 1px;",
 		children: [
 			Revealer({
 				transition,

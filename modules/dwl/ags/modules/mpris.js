@@ -9,8 +9,8 @@ const PlayerIcon = ({ player, symbolic = false, ...props }) =>
 	Icon({
 		...props,
 		size: 24,
-		halign: "start",
-		valign: "start",
+		hpack: "start",
+		vpack: "start",
 		connections: [
 			[
 				Mpris,
@@ -130,27 +130,27 @@ export const MprisPlayer = ({ player = "youtube-music", ...props } = {}) =>
 						children: [
 							BackgroundBox({
 								vertical: true,
-								valign: "center",
+								vpack: "center",
 								hexpand: true,
 								children: [
-									TitleLabel({ player, style: "font-weight: 600; font-size: 19px;" }),
-									ArtistLabel({ player, style: "font-weight: 400; font-size: 17px;" }),
+									TitleLabel({ player, css: "font-weight: 600; font-size: 19px;" }),
+									ArtistLabel({ player, css: "font-weight: 400; font-size: 17px;" }),
 								],
 							}),
 							Box({
-								children: [PlayPause({ player, halign: "end", className: "mpris-play" })],
+								children: [PlayPause({ player, hpack: "end", className: "mpris-play" })],
 							}),
 						],
 					}),
 					BackgroundBox({
-						valign: "end",
+						vpack: "end",
 						children: [
 							Box({
 								hexpand: true,
 								children: [
-									PreviousButton({ player, style: "margin-left: 16px;" }),
+									PreviousButton({ player, css: "margin-left: 16px;" }),
 									PositionSlider({ player, hexpand: true }),
-									NextButton({ player, style: "margin-right: 16px;" }),
+									NextButton({ player, css: "margin-right: 16px;" }),
 								],
 							}),
 						],

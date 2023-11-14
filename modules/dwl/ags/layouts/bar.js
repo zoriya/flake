@@ -31,20 +31,20 @@ export const Bar = (mon, monId) =>
 				],
 			}),
 			centerWidget: Box({
-				halign: "center",
+				hpack: "center",
 				children: [
 					Button({
-						style: "min-width: 200px;",
+						css: "min-width: 200px;",
 						onClicked: () => App.toggleWindow("notifications"),
 						child: notifications.Indicator({
 							hexpand: true,
-							halign: "center",
+							hpack: "center",
 						}),
 					}),
 				],
 			}),
 			endWidget: Box({
-				halign: "end",
+				hpack: "end",
 				children: [
 					// TODO:
 					// ScreenShare()
@@ -75,7 +75,7 @@ export const Bar = (mon, monId) =>
 						}),
 					}),
 					Clock({ format: "%a %d %b", className: "module bold" }),
-					Clock({ format: "%H:%M", className: "module accent bold", style: "margin-right: 0px" }),
+					Clock({ format: "%H:%M", className: "module accent bold", css: "margin-right: 0px" }),
 				],
 			}),
 		}),

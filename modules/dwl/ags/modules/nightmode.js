@@ -33,7 +33,7 @@ import { Icon, Label, Button, Box, Stack } from 'resource:///com/github/Aylur/ag
 // 		return Theme.dark;
 // 	}
 // 	static set dark(value) {
-// 		Theme.instance.dark = value;
+// 		Theme.dark = value;
 // 	}
 // }
 

@@ -96,7 +96,7 @@ export const Selection = (props) =>
 										Icon({
 											icon: "object-select-symbolic",
 											hexpand: true,
-											halign: "end",
+											hpack: "end",
 										}),
 									],
 								}),

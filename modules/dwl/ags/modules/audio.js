@@ -238,7 +238,7 @@ export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
 										Icon({
 											icon: "object-select-symbolic",
 											hexpand: true,
-											halign: "end",
+											hpack: "end",
 											connections: [
 												[
 													"draw",

@@ -57,7 +57,7 @@ const BrightnessBox = () =>
 			brightness.Indicator(),
 			brightness.BrightnessSlider({ hexpand: true }),
 			brightness.PercentLabel(),
-			Box({ className: "qs-icon", style: "margin-right: 18px;" }),
+			Box({ className: "qs-icon", css: "margin-right: 18px;" }),
 		],
 	});
 

@@ -1,7 +1,7 @@
 import { lookUpIcon } from 'resource:///com/github/Aylur/ags/utils.js';
 import { Window, Revealer, Stack, Box, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
 import { FontIcon, Progress } from "../misc.js";
-import { Indicator } from "../services/osd.js";
+import Indicator from "../services/osd.js";
 
 export const OSD = () =>
 	Window({
@@ -23,20 +23,20 @@ export const OSD = () =>
 			],
 			child: Box({
 				className: "osd bgcont osd",
-				valign: "center",
-				halign: "center",
+				vpack: "center",
+				hpack: "center",
 				children: [
 					Stack({
-						valign: "center",
-						halign: "center",
-						style: "padding: 20px;",
+						vpack: "center",
+						hpack: "center",
+						css: "padding: 20px;",
 						hexpand: false,
 						items: [
 							[
 								"true",
 								Icon({
-									halign: "center",
-									valign: "center",
+									hpack: "center",
+									vpack: "center",
 									size: 40,
 									connections: [[Indicator, (icon, _v, name) => (icon.icon = name || "")]],
 								}),
@@ -44,10 +44,10 @@ export const OSD = () =>
 							[
 								"false",
 								FontIcon({
-									halign: "center",
-									valign: "center",
+									hpack: "center",
+									vpack: "center",
 									hexpand: true,
-									style: `font-size: 40px;`,
+									css: `font-size: 40px;`,
 									connections: [[Indicator, ({ label }, _v, name) => (label.label = name || "")]],
 								}),
 							],
@@ -64,9 +64,9 @@ export const OSD = () =>
 					Progress({
 						width: 200,
 						height: 10,
-						halign: "center",
-						valign: "center",
-						style: "margin-right: 20px;",
+						hpack: "center",
+						vpack: "center",
+						css: "margin-right: 20px;",
 						hexpand: false,
 						vexpand: false,
 						connections: [

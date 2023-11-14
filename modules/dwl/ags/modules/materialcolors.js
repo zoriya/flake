@@ -32,7 +32,7 @@ class MaterialcolorsService extends Service {
 			onBackground: "#ffffff",
 		};
 
-		Mpris.instance.connect("changed", () => {
+		Mpris.connect("changed", () => {
 			this._mprisPlayer = Mpris.getPlayer("youtube-music");
 			this._coverPath = this._mprisPlayer?.coverPath;
 			this.getColors(this.coverPath);
@@ -73,7 +73,7 @@ export const PlayPause = ({ player, ...props }) =>
 			[
 				Materialcolors,
 				(icon) => {
-					icon.setStyle(`
+					icon.setCss(`
 						background-color: ${Materialcolors.colors.primary};
 						color: ${Materialcolors.colors.onPrimary};
 					`);
@@ -100,7 +100,7 @@ export const CoverArt = (props) =>
 			[
 				Materialcolors,
 				(box) => {
-					box.setStyle(`
+					box.setCss(`
 						background-image: radial-gradient(circle, rgba(0, 0, 0, 0.4) 30%, ${Materialcolors.colors.primary}), url("${Materialcolors.coverPath}"); \
 						color: ${Materialcolors.colors.onBackground};
 					`);
@@ -117,7 +117,7 @@ export const BackgroundBox = (props = {}) =>
 			[
 				Materialcolors,
 				(box) => {
-					box.setStyle(`
+					box.setCss(`
 						color: ${Materialcolors.colors.onBackground};
 					`);
 				},

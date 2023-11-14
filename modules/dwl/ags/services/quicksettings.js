@@ -5,7 +5,7 @@ import { Box, Button, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
 import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 
 export const opened = Variable('');
-App.instance.connect('window-toggled', (_, name, visible) => {
+App.connect('window-toggled', (_, name, visible) => {
 	if (name === 'quicksettings' && !visible)
 		timeout(500, () => opened.value = '');
 });
@@ -60,7 +60,7 @@ export const Arrow = ({ name, expand, ...props }) =>
 							for (let i = 0; i < 9; ++i) {
 								timeout(5 * i, () => {
 									icon._deg += step;
-									icon.setStyle(`-gtk-icon-transform: rotate(${icon._deg}deg);`);
+									icon.setCss(`-gtk-icon-transform: rotate(${icon._deg}deg);`);
 								});
 							}
 						}

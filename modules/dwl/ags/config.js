@@ -5,8 +5,13 @@ import { Powermenu } from "./layouts/powermenu.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
 
 import App from 'resource:///com/github/Aylur/ags/app.js'
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js'
+import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js'
 import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 const { Display } = imports.gi.Gdk;
+
+globalThis.audio = Audio;
+globalThis.mpris = Mpris;
 
 const config = {
 	closeWindowDelay: {
