@@ -7,15 +7,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1699817941,
-        "narHash": "sha256-Yos4QFOaUOdjUu21Aira7RhllLkSiE1u2yNn/PcyBqI=",
-        "owner": "Aylur",
+        "lastModified": 1699995737,
+        "narHash": "sha256-FoEqoGZuxI/vbpRkwKH1bgj03xT9M382BO4tcawni+8=",
+        "owner": "zoriya",
         "repo": "ags",
-        "rev": "54fd9cf50c428bc8760ef20f05f6daffcb821896",
+        "rev": "199f700988d61b568fab41de21a269c9d9716ef4",
         "type": "github"
       },
       "original": {
-        "owner": "Aylur",
+        "owner": "zoriya",
         "repo": "ags",
         "type": "github"
       }

@@ -8,6 +8,7 @@ import App from 'resource:///com/github/Aylur/ags/app.js'
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js'
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js'
 import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
+const Gdk = imports.gi.Gdk;
 const { Display } = imports.gi.Gdk;
 
 globalThis.audio = Audio;
@@ -40,6 +41,7 @@ const registerMonitors = (config) => {
 
 	for (let i = 0; i < display.get_n_monitors(); i++) {
 		const mon = display.get_monitor(i);
+		// console.log(mon, Gdk.Display.get_default()?.get_default_screen().get_monitor_plug_name(mon));
 		config.monitorFactory(mon);
 	}
 

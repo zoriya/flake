@@ -16,7 +16,7 @@
       flake = false;
     };
     ags = {
-      url = "github:Aylur/ags";
+      url = "github:zoriya/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flood = {
