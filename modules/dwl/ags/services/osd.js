@@ -1,3 +1,4 @@
+import App from 'resource:///com/github/Aylur/ags/app.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Brightness from '../services/brightness.js';
@@ -10,6 +11,7 @@ class Indicator extends Service {
 		});
 	}
 
+	#openned = false
 	#delay = 1500;
 	#count = 0;
 
@@ -18,13 +20,20 @@ class Indicator extends Service {
 	 * @param {string} icon
 	 */
 	popup(value, icon) {
+		if (!this.#openned) {
+			this.#openned = true;
+			App.openWindow("osd");
+		}
 		this.emit('popup', value, icon);
 		this.#count++;
 		Utils.timeout(this.#delay, () => {
 			this.#count--;
 
-			if (this.#count === 0)
+			if (this.#count === 0) {
 				this.emit('popup', -1, icon);
+				App.closeWindow("osd");
+				this.#openned = false;
+			}
 		});
 	}
 
