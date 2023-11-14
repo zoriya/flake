@@ -5,6 +5,7 @@
   ...
 }:
 with lib; let
+  # When editing this, don't forget to edit home.sessionVariables.
   browser = "firefox.desktop";
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
@@ -32,7 +33,7 @@ in {
 
   home.sessionVariables = rec {
     TERMINAL = "kitty";
-    BROWSER = "google-chrome-stable";
+    BROWSER = "firefox";
     DEFAULT_BROWSER = BROWSER;
     # For rider
     FLATPAK_ENABLE_SDK_EXT = "*";

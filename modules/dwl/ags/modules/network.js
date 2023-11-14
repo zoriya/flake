@@ -106,7 +106,7 @@ export const Selection = (props) =>
 							Separator(),
 							Button({
 								onClicked: () => {
-									execAsync("nm-connection-editor").catch(print);
+									execAsync("gnome-control-center").catch(print);
 									App.closeWindow("quicksettings");
 								},
 								child: Label({

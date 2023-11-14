@@ -41,6 +41,7 @@ in {
     covercolors
     ydotool
     fusuma
+    gnome-control-center
     gnome.gnome-weather
     shikane
   ];

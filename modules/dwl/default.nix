@@ -63,6 +63,12 @@
     };
   };
 
+  # needed for GNOME services outside of GNOME Desktop
+  services = {
+    dbus.packages = [pkgs.gcr];
+    udev.packages = with pkgs; [gnome.gnome-settings-daemon];
+  };
+
   programs.dconf.enable = true;
   services.dbus.enable = true;
   xdg.portal = {
