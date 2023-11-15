@@ -25,17 +25,37 @@
 		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((string_literal_fragment) @injection.content)))))))))))))))))))
 		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((string_literal_fragment) @injection.content))))))))))))))))))))
 		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((string_literal_fragment) @injection.content)))))))))))))))))))))
-		; ((string_literal) @sql)
-		; (argument ((string_literal) @sql))
-		; (local_declaration_statement
-		; 	(variable_declaration
-		; 		(variable_declarator
-		; 			(equals_value_clause ((string_literal) @sql)))))
-		; (local_declaration_statement
-		; 	(variable_declaration
-		; 		(variable_declarator
-		; 			(equals_value_clause ((string_literal) @sql)))))
 	]
+	(#set! injection.language "sql")
+)
+
+(
+	((comment) @_comm (#match? @_comm "[Ss][Qq][Ll]"))
+	.
+	[
+		((verbatim_string_literal) @injection.content)
+		(_ ((verbatim_string_literal) @injection.content))
+		(_ (_ ((verbatim_string_literal) @injection.content)))
+		(_ (_ (_ ((verbatim_string_literal) @injection.content))))
+		(_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))
+		(_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))
+		(_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))
+		(_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content))))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((verbatim_string_literal) @injection.content)))))))))))))))))))))
+	]
+	((#offset! @injection.content 0 2 0 -1))
 	(#set! injection.language "sql")
 )
 
