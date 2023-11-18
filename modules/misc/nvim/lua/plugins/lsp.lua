@@ -357,7 +357,7 @@ return {
 			{
 				"<leader>lf",
 				function()
-					require("conform").format({ async = true, lsp_fallback = true })
+					require("conform").format({ async = true, lsp_fallback = "always" })
 				end,
 				desc = "Format",
 				mode = { "n", "v" },
@@ -377,8 +377,12 @@ return {
 				css = { { "prettierd", "prettier" } },
 				html = { { "prettierd", "prettier" } },
 				sql = { "pg_format" },
+				["*"] = { "injected" }
 			},
-		}
+		},
+		init = function()
+			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+		end
 	},
 
 	{

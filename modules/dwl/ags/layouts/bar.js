@@ -16,7 +16,7 @@ export const Bar = (mon, monId) =>
 		exclusive: true,
 		anchor: ["top", "left", "right"],
 		layer: "bottom",
-		monitor: mon,
+		gdkmonitor: mon,
 		child: CenterBox({
 			startWidget: Box({
 				children: [

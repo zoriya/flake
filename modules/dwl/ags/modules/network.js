@@ -85,6 +85,11 @@ export const Selection = (props) =>
 				Network,
 				(box) => {
 					box.children = Network.wifi?.accessPoints
+						.reduce((acc, x) => {
+							if (!acc[x.bssid])
+								acc.push(x)
+							return acc;
+						}, [])
 						.map((ap) =>
 							Button({
 								onClicked: () => execAsync(`nmcli device wifi connect ${ap.bssid}`),
