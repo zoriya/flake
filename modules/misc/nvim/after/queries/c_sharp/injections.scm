@@ -59,3 +59,33 @@
 	(#set! injection.language "sql")
 )
 
+(
+	((comment) @_comm (#match? @_comm "[Ss][Qq][Ll]"))
+	.
+	[
+		((raw_string_literal) @injection.content)
+		(_ ((raw_string_literal) @injection.content))
+		(_ (_ ((raw_string_literal) @injection.content)))
+		(_ (_ (_ ((raw_string_literal) @injection.content))))
+		(_ (_ (_ (_ ((raw_string_literal) @injection.content)))))
+		(_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))
+		(_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))
+		(_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content))))))))))))))))))))
+		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((raw_string_literal) @injection.content)))))))))))))))))))))
+	]
+	((#offset! @injection.content 0 3 0 -3))
+	(#set! injection.language "sql")
+)
+
