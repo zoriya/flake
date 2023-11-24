@@ -3,6 +3,8 @@ import { FontIcon } from "../misc.js";
 const { GLib } = imports.gi;
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js'
 import { lookUpIcon, timeout } from 'resource:///com/github/Aylur/ags/utils.js';
+
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import { Box, Icon, Label, EventBox, Button, Stack, Revealer } from 'resource:///com/github/Aylur/ags/widget.js';
 
 export const Indicator = ({ ...props }) =>
@@ -59,7 +61,7 @@ export const Indicator = ({ ...props }) =>
 
 const NotificationIcon = ({ appEntry, appIcon, image }) => {
 	if (image) {
-		return Box({
+		return Widget.Box({
 			vpack: "start",
 			hexpand: false,
 			className: "icon img",
@@ -79,13 +81,16 @@ const NotificationIcon = ({ appEntry, appIcon, image }) => {
 
 	if (lookUpIcon(appEntry)) icon = appEntry;
 
-	return Box({
+	return Widget.Box({
 		vpack: "start",
 		hexpand: false,
 		className: "icon",
-		css: "min-width: 78px; min-height: 78px;",
+		css: `
+			min-width: 78px;
+			min-height: 78px;
+		`,
 		children: [
-			Icon({
+			Widget.Icon({
 				icon,
 				size: 58,
 				hpack: "center",
@@ -97,64 +102,84 @@ const NotificationIcon = ({ appEntry, appIcon, image }) => {
 	});
 };
 
-const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
-	Button({
-		className: "surface r20 p10",
-		css: "margin: 8px 0;",
-		onClicked: () => Notifications.invoke(id, "view"),
-		vexpand: false,
-		child: Box({
-			vertical: true,
-			children: [
-				Box({
-					children: [
-						NotificationIcon(icon),
-						Box({
-							hexpand: true,
-							vertical: true,
-							children: [
-								Box({
-									children: [
-										Label({
-											className: "title",
-											xalign: 0,
-											justification: "left",
-											hexpand: true,
-											maxWidthChars: 24,
-											ellipsize: 3,
-											wrap: true,
-											label: summary,
-											useMarkup: summary.startsWith("<"),
-										}),
-										Label({
-											className: "time",
-											vpack: "start",
-											label: GLib.DateTime.new_from_unix_local(time).format("%H:%M"),
-										}),
-										Button({
-											className: "close-button",
-											vpack: "start",
-											child: Icon("window-close-symbolic"),
-											onClicked: () => Notifications.close(id),
-										}),
-									],
-								}),
-								Label({
-									className: "description",
-									hexpand: true,
-									useMarkup: true,
-									xalign: 0,
-									justification: "left",
-									label: body,
-									wrap: true,
-								}),
-							],
-						}),
-					],
-				}),
-			],
-		}),
-	});
+export const Notification = n => Widget.EventBox({
+	className: `surface r20 p10 notification ${n.urgency}`,
+	css: "margin: 8px 0;",
+	onPrimaryClick: () => n.dismiss(),
+	properties: [['hovered', false]],
+	onHover: self => {
+		if (self._hovered)
+			return;
+
+		// if there are action buttons and they are hovered
+		// EventBox onHoverLost will fire off immediately,
+		// so to prevent this we delay it
+		timeout(300, () => self._hovered = true);
+	},
+	onHoverLost: self => {
+		if (!self._hovered)
+			return;
+
+		self._hovered = false;
+		n.dismiss();
+	},
+	vexpand: false,
+	child: Widget.Box({
+		vertical: true,
+		children: [
+			Widget.Box({
+				children: [
+					NotificationIcon(n),
+					Widget.Box({
+						hexpand: true,
+						vertical: true,
+						children: [
+							Widget.Box({
+								children: [
+									Widget.Label({
+										className: 'title',
+										xalign: 0,
+										justification: 'left',
+										hexpand: true,
+										maxWidthChars: 24,
+										truncate: 'end',
+										wrap: true,
+										label: n.summary,
+										useMarkup: true,
+									}),
+									Widget.Button({
+										className: 'close-button',
+										vpack: 'start',
+										child: Widget.Icon('window-close-symbolic'),
+										onClicked: n.close.bind(n),
+									}),
+								],
+							}),
+							Widget.Label({
+								className: 'description',
+								hexpand: true,
+								useMarkup: true,
+								xalign: 0,
+								justification: 'left',
+								label: n.body,
+								wrap: true,
+							}),
+						],
+					}),
+				],
+			}),
+			Widget.Box({
+				className: 'actions',
+				children: n.actions.map(({ id, label }) => Widget.Button({
+					className: 'action-button',
+					onClicked: () => n.invoke(id),
+					hexpand: true,
+					child: Widget.Label(label),
+				})),
+			}),
+		],
+	}),
+});
 
 export const List = (props) =>
 	Box({
@@ -188,7 +213,7 @@ export const Placeholder = (props) =>
 export const ClearButton = (props) =>
 	Button({
 		...props,
-		onClicked: Notifications.clear,
+		onClicked: () => Notifications.clear(),
 		connections: [[Notifications, (button) => (button.sensitive = Notifications.notifications.length > 0)]],
 		child: Box({
 			children: [
