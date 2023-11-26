@@ -13,7 +13,6 @@ return {
 				additional_vim_regex_highlighting = false,
 			},
 			indent = { enable = true },
-			context_commentstring = { enable = true, enable_autocmd = false },
 			ensure_installed = "all",
 			sync_install = false,
 			textobjects = {
@@ -36,19 +35,25 @@ return {
 	},
 
 	{
-		"numToStr/Comment.nvim",
-		event = "VeryLazy",
+		"echasnovski/mini.comment",
+		version = '*',
 		dependencies = {
-			"JoosepAlviste/nvim-ts-context-commentstring",
+			{
+				"JoosepAlviste/nvim-ts-context-commentstring",
+				opts = {
+					enable_autocmd = false,
+				}
+			},
 		},
-		opts = function()
-			return {
-				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-				toggler = {
-					block = "gC",
-				},
+		event = "VeryLazy",
+		opts = {
+			options = {
+				custom_commentstring = function()
+					return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+				end,
+
 			}
-		end
+		},
 	},
 
 	{

@@ -1,4 +1,18 @@
 return {
+	-- {
+	-- 	"stevearc/oil.nvim",
+	-- 	opts = {
+	-- 		skip_confirm_for_simple_edits = true,
+	-- 		view_options = {
+	-- 			show_hidden = true,
+	-- 		},
+	-- 	},
+	-- 	dependencies = { "nvim-tree/nvim-web-devicons" },
+	-- 	keys = {
+	-- 		{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
+	-- 	},
+	-- },
+
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		dependencies = {
@@ -8,9 +22,9 @@ return {
 		},
 		cmd = "Neotree",
 		keys = {
-			{ "-", "<cmd>Neotree current dir=%:h reveal_force_cwd toggle<CR>", desc = "Toggle explorer", },
-			{ "\\", "<cmd>Neotree current dir=%:h reveal_force_cwd toggle<CR>", desc = "Toggle explorer", },
-			{ "<leader>e", "<cmd>Neotree left toggle<CR>", desc = "Toggle left explorer", },
+			{ "-",         "<cmd>Neotree current dir=%:h reveal_force_cwd toggle<CR>", desc = "Toggle explorer", },
+			{ "\\",        "<cmd>Neotree current dir=%:h reveal_force_cwd toggle<CR>", desc = "Toggle explorer", },
+			{ "<leader>e", "<cmd>Neotree left toggle<CR>",                             desc = "Toggle left explorer", },
 		},
 		deactivate = function()
 			vim.cmd([[Neotree close]])
@@ -51,18 +65,18 @@ return {
 					["h"] = function(state)
 						local node = state.tree:get_node()
 						if node.type == 'directory' and node:is_expanded() then
-							require'neo-tree.sources.filesystem'.toggle_directory(state, node)
+							require 'neo-tree.sources.filesystem'.toggle_directory(state, node)
 						else
-							require'neo-tree.ui.renderer'.focus_node(state, node:get_parent_id())
+							require 'neo-tree.ui.renderer'.focus_node(state, node:get_parent_id())
 						end
 					end,
 					["l"] = function(state)
 						local node = state.tree:get_node()
 						if node.type == 'directory' then
 							if not node:is_expanded() then
-								require'neo-tree.sources.filesystem'.toggle_directory(state, node)
+								require 'neo-tree.sources.filesystem'.toggle_directory(state, node)
 							elseif node:has_children() then
-								require'neo-tree.ui.renderer'.focus_node(state, node:get_child_ids()[1])
+								require 'neo-tree.ui.renderer'.focus_node(state, node:get_child_ids()[1])
 							end
 						end
 					end,

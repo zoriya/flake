@@ -2,6 +2,7 @@ import { Separator, FontIcon, addElipsis } from "../misc.js";
 import { ArrowToggle, opened } from "../services/quicksettings.js";
 
 import App from 'resource:///com/github/Aylur/ags/app.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 import Service from 'resource:///com/github/Aylur/ags/service.js'
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js'
 import { Label, Box, Icon, Stack, Button, Slider } from 'resource:///com/github/Aylur/ags/widget.js';
@@ -177,7 +178,9 @@ export const AppMixer = (props) => {
 			},
 		});
 		const sync = () => {
-			icon.icon = stream.iconName;
+			icon.icon = Utils.lookUpIcon(stream.name || '')
+				? (stream.name || '')
+				: "audio-x-generic-symbolic";
 			icon.tooltipText = stream.name;
 			slider.value = stream.volume;
 			percent.label = `${Math.floor(stream.volume * 100)}%`;

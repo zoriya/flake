@@ -79,6 +79,7 @@ return {
 
 	{
 		"luukvbaal/statuscol.nvim",
+		branch = "0.10",
 		event = "VeryLazy",
 		config = function()
 			local builtin = require("statuscol.builtin")
@@ -86,7 +87,11 @@ return {
 				relculright = false,
 				segments = {
 					{
-						sign = { name = { ".*" }, maxwidth = 1, },
+						sign = {
+							name = { ".*" },
+							namespace = { ".*" },
+							maxwidth = 1,
+						},
 						click = "v:lua.ScSa"
 					},
 					{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
