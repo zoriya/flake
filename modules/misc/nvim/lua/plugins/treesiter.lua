@@ -49,9 +49,16 @@ return {
 		opts = {
 			options = {
 				custom_commentstring = function()
-					return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+					local cstr = require("ts_context_commentstring").calculate_commentstring()
+					if cstr then
+						return cstr
+					end
+					print(vim.bo.commentstring)
+					if vim.bo.commentstring == "/*%s*/" then
+						return "// %s"
+					end
+					return vim.bo.commentstring
 				end,
-
 			}
 		},
 	},
