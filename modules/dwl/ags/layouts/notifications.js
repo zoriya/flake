@@ -7,6 +7,7 @@ export const Notifications = () =>
 	Window({
 		name: "notifications",
 		popup: true,
+		visible: false,
 		anchor: ["top", "right", "bottom", "left"],
 		child: PopupOverlay(
 			"notifications",

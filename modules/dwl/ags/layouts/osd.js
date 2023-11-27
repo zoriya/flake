@@ -9,6 +9,7 @@ export const OSD = () =>
 		popup: true,
 		// Follow active monitor
 		monitor: undefined,
+		visible: false,
 		layer: "overlay",
 		anchor: ["bottom"],
 		child: Revealer({

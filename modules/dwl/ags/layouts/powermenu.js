@@ -25,6 +25,7 @@ export const Powermenu = () =>
 		monitor: undefined,
 		popup: true,
 		focusable: true,
+		visible: false,
 		anchor: ["top", "right", "bottom", "left"],
 		child: PopupOverlay(
 			"powermenu",

@@ -66,6 +66,7 @@ export const Quicksettings = () =>
 	Window({
 		name: "quicksettings",
 		popup: true,
+		visible: false,
 		anchor: ["top", "right", "bottom", "left"],
 		child: PopupOverlay(
 			"quicksettings",
