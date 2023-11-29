@@ -40,7 +40,6 @@ return {
 	{
 		"petertriho/nvim-scrollbar",
 		event = "VeryLazy",
-		-- TODO: Add colors highlights.
 		config = true,
 	},
 
@@ -115,18 +114,11 @@ return {
 				yS = "Add Surroundings",
 			}
 		},
-		dependencies = {
-			"afreakk/unimpaired-which-key.nvim",
-		},
 		config = function(_, opts)
 			vim.opt["timeoutlen"] = 500
 
 			local wk = require("which-key")
 			wk.setup(opts)
-
-			local uwk = require("unimpaired-which-key")
-			wk.register(uwk.normal_mode)
-			wk.register(uwk.normal_and_visual_mode, { mode = { "n", "v" } })
 
 			wk.register({
 				gx = "Git conflict",

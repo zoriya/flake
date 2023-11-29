@@ -2,7 +2,7 @@ return {
 	{
 		"zoriya/auto-save.nvim",
 		keys = {
-			{"<leader>w", "<cmd>ASToggle<cr>", desc = "Toggle autosave" },
+			{ "<leader>w", "<cmd>ASToggle<cr>", desc = "Toggle autosave" },
 		},
 		event = {
 			"InsertLeave",
@@ -16,6 +16,18 @@ return {
 				disabling = function() vim.g.auto_save_state = false end,
 			}
 		},
-		init = function () vim.g.auto_save_state = true end
+		init = function() vim.g.auto_save_state = true end
 	},
+
+	-- {
+	-- 	"kkoomen/vim-doge",
+	-- 	build = ":call doge#install()",
+	-- 	keys = {
+	-- 		{ "<leader>d", "<cmd>DogeGenerate<CR>", desc = "Generate documentation" },
+	-- 	},
+	-- 	init = function()
+	-- 		vim.g.doge_enable_mappings = false
+	-- 		vim.g.doge_comment_interactive = false
+	-- 	end
+	-- }
 }

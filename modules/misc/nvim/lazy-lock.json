@@ -51,12 +51,10 @@
   "telescope.nvim": { "branch": "master", "commit": "e4c62dedd760d339bea5b8325c2d918d87476d00" },
   "todo-comments.nvim": { "branch": "main", "commit": "4a6737a8d70fe1ac55c64dfa47fcb189ca431872" },
   "trouble.nvim": { "branch": "cascading-sev-2", "commit": "b97b3261433d659b0edb8aedd90dc0b199b8f37b" },
-  "unimpaired-which-key.nvim": { "branch": "main", "commit": "321a247ecbbb31a59a8580350eec044b88d82e81" },
   "vim-illuminate": { "branch": "master", "commit": "3bd2ab64b5d63b29e05691e624927e5ebbf0fb86" },
   "vim-lumen": { "branch": "master", "commit": "7f501a241eee6ed61cd5a15f13fe6d9ca2f0992c" },
   "vim-repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
   "vim-sleuth": { "branch": "master", "commit": "1cc4557420f215d02c4d2645a748a816c220e99b" },
-  "vim-unimpaired": { "branch": "master", "commit": "6d44a6dc2ec34607c41ec78acf81657248580bf1" },
   "vim-wordmotion": { "branch": "master", "commit": "81d9bd298376ab0dc465c85d55afa4cb8d5f47a1" },
   "virtcolumn.nvim": { "branch": "main", "commit": "2376352d1f530fc872754bffa28fa3f9b5d5bb10" },
   "which-key.nvim": { "branch": "main", "commit": "4433e5ec9a507e5097571ed55c02ea9658fb268a" }

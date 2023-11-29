@@ -34,12 +34,6 @@ return {
 		},
 	},
 
-	{
-		"tpope/vim-unimpaired",
-		init = function()
-			vim.g.nremap = { ["[x"] = "",["]x"] = "" }
-		end
-	},
 	"tpope/vim-sleuth",
 
 	{
