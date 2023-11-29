@@ -20,18 +20,6 @@ local lsp_keymaps = function(buffer)
 	map("v", "<leader>lf", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Range Format")
 end
 
-local function lsp_highlight_document(client)
-	if client.server_capabilities.documentHighlightProvider then
-		vim.cmd [[
-		augroup lsp_document_highlight
-		autocmd! * <buffer>
-		autocmd! CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-		autocmd! CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-		augroup END
-		]]
-	end
-end
-
 return {
 	{
 		"dundalek/lazy-lsp.nvim",
@@ -51,7 +39,6 @@ return {
 		opts = function()
 			local lsp_on_attach = function(client, buffer)
 				lsp_keymaps(buffer)
-				lsp_highlight_document(client)
 
 				local ok, navic = pcall(require, "nvim-navic")
 				if ok then
@@ -395,5 +382,10 @@ return {
 	{
 		"yioneko/nvim-type-fmt",
 		event = { "InsertEnter" },
+	},
+
+	{
+		"RRethy/vim-illuminate",
+		event = { "BufReadPre", "BufNewFile" },
 	},
 }
