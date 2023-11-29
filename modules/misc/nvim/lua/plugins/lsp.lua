@@ -32,36 +32,6 @@ local function lsp_highlight_document(client)
 	end
 end
 
-
-local kind_icons = {
-	Text = "󰉿",
-	Method = "󰆧",
-	Function = "󰊕",
-	Constructor = "",
-	Field = "󰜢",
-	Variable = "󰀫",
-	Class = "󰠱",
-	Interface = "",
-	Module = "",
-	Property = "󰜢",
-	Unit = "󰑭",
-	Value = "󰎠",
-	Enum = "",
-	Keyword = "󰌋",
-	Snippet = "",
-	Color = "󰏘",
-	File = "󰈙",
-	Reference = "󰈇",
-	Folder = "󰉋",
-	EnumMember = "",
-	Constant = "󰏿",
-	Struct = "󰙅",
-	Event = "",
-	Operator = "󰆕",
-	TypeParameter = "",
-}
-
-
 return {
 	{
 		"dundalek/lazy-lsp.nvim",
@@ -255,30 +225,10 @@ return {
 
 	{
 		"L3MON4D3/LuaSnip",
-		dependencies = {
-			{
-				"rafamadriz/friendly-snippets",
-				config = function()
-					require("luasnip.loaders.from_vscode").lazy_load()
-				end,
-			},
-		},
 		opts = {
 			history = true,
 			delete_check_events = "TextChanged",
 		},
-		-- I'm never using snippets and it only bother me so for now I am disabling it.
-		-- keys = {
-		-- 	{
-		-- 		"<tab>",
-		-- 		function()
-		-- 			return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-		-- 		end,
-		-- 		expr = true, silent = true, mode = "i",
-		-- 	},
-		-- 	{ "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
-		-- 	{ "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-		-- },
 	},
 
 	{
@@ -289,15 +239,12 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
-			"saadparwaiz1/cmp_luasnip",
 			"LuaSnip",
+			"onsails/lspkind.nvim",
 		},
 		opts = function()
 			local cmp = require("cmp")
 			return {
-				completion = {
-					completeopt = "menu,menuone,noinsert",
-				},
 				snippet = {
 					expand = function(args)
 						require("luasnip").lsp_expand(args.body)
@@ -314,20 +261,30 @@ return {
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
 					{ name = "path" },
 				}),
-				formatting = {
-					fields = { "abbr", "kind" },
-					format = function(_, vim_item)
-						vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
-						return vim_item
-					end,
-				},
 				navigation = {
 					documentation = {
 						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
 					},
+				},
+				window = {
+					completion = {
+						winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+						col_offset = -3,
+						side_padding = 0,
+					},
+				},
+				formatting = {
+					fields = { "kind", "abbr", "menu" },
+					format = function(entry, vim_item)
+						local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry,
+							vim_item)
+						local strings = vim.split(kind.kind, "%s", { trimempty = true })
+						kind.kind = " " .. (strings[1] or "") .. " "
+						kind.menu = "    (" .. (strings[2] or "") .. ")"
+						return kind
+					end,
 				},
 				experimental = {
 					ghost_text = true,
@@ -437,5 +394,6 @@ return {
 
 	{
 		"yioneko/nvim-type-fmt",
+		event = { "InsertEnter" },
 	},
 }
