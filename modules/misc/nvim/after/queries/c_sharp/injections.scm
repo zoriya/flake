@@ -116,6 +116,7 @@
 		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((interpolated_verbatim_string_text) @injection.content))))))))))))))))))))
 		(_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ (_ ((interpolated_verbatim_string_text) @injection.content)))))))))))))))))))))
 	]
+	((#offset! @injection.content 0 3 0 -3))
 	(#set! injection.conbined)
 	(#set! injection.language "sql")
 )

@@ -301,16 +301,12 @@ return {
 			{
 				"<leader>lf",
 				function()
-					require("conform").format({ async = true, lsp_fallback = "always" })
+					require("conform").format({ async = true, lsp_fallback = true --[["always"--]] })
 				end,
 				desc = "Format",
 				mode = { "n", "v" },
 			},
 		},
-		config = function(_, opts)
-			require("conform").setup(opts)
-			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-		end,
 		opts = {
 			formatters_by_ft = {
 				python = { "black" },
@@ -330,9 +326,7 @@ return {
 	},
 
 	{
-		-- "mfussenegger/nvim-lint",
-		"sQVe/nvim-lint",
-		branch = "fix/repair-eslint-linters",
+		"mfussenegger/nvim-lint",
 		event = { "BufReadPre", "BufNewFile" },
 		config = function(_, opts)
 			local override_severity = function(linter)
