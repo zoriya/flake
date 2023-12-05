@@ -1,6 +1,6 @@
 return {
 	{
-		"zoriya/auto-save.nvim",
+		"okuuva/auto-save.nvim",
 		keys = {
 			{ "<leader>w", "<cmd>ASToggle<cr>", desc = "Toggle autosave" },
 		},
@@ -10,7 +10,7 @@ return {
 		},
 		opts = {
 			write_all_buffers = true,
-			print_enabled = false,
+			execution_message = { enabled = false },
 			callbacks = {
 				enabling = function() vim.g.auto_save_state = true end,
 				disabling = function() vim.g.auto_save_state = false end,
