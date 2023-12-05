@@ -14,9 +14,12 @@ return {
 			callbacks = {
 				enabling = function() vim.g.auto_save_state = true end,
 				disabling = function() vim.g.auto_save_state = false end,
-			}
+			},
+			condition = function(buf)
+				return vim.fn.getbufvar(buf, "&filetype") ~= "oil"
+			end,
 		},
-		init = function() vim.g.auto_save_state = true end
+		init = function() vim.g.auto_save_state = true end,
 	},
 
 	-- {

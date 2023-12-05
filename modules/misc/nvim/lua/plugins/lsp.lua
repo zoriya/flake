@@ -357,23 +357,6 @@ return {
 	},
 
 	{
-		"kosayoda/nvim-lightbulb",
-		event = { "CursorHold", "CursorHoldI" },
-		opts = {
-			sign = {
-				enable = false,
-			},
-			float = {
-				enable = true,
-				text = ""
-			},
-			autocmd = {
-				enabled = true,
-			},
-		},
-	},
-
-	{
 		"yioneko/nvim-type-fmt",
 		event = { "InsertEnter" },
 	},
@@ -381,5 +364,14 @@ return {
 	{
 		"RRethy/vim-illuminate",
 		event = { "BufReadPre", "BufNewFile" },
+		opts = {
+			providers = {
+				"lsp",
+				"treesitter",
+			},
+			under_cursor = false,
+			min_count_to_highlight = 2,
+		},
+		config = function (_, opts) require("illuminate").configure(opts) end,
 	},
 }

@@ -81,7 +81,7 @@ return {
 			{ "ga", desc = "Align" },
 			{ "gA", desc = "Align with preview" }
 		},
-		config = function() require('mini.align').setup() end,
+		as = "mini.align",
 		version = '*',
 	},
 
@@ -98,7 +98,7 @@ return {
 				join = 'gJ',
 			},
 		},
-		config = function(_, opts) require('mini.splitjoin').setup(opts) end,
+		as = "mini.splitjoin",
 		version = '*',
 	},
 }
