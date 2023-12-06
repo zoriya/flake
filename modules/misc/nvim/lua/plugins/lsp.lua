@@ -290,7 +290,9 @@ return {
 			doc_lines = 100,
 			fix_pos = true,
 			always_trigger = true,
+			select_signature_key = "<C-J>",
 			toggle_key = "<C-k>",
+			toggle_key_flip_floatwin_setting = true,
 			floating_window = false,
 		}
 	},
