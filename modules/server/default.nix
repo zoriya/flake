@@ -58,17 +58,17 @@ in {
     maxretry = 5;
   };
 
-  virtualisation.oci-containers.containers."watchtower" = {
-    autoStart = true;
-    image = "containrrr/watchtower";
-    volumes = [
-      "/var/run/docker.sock:/var/run/docker.sock"
-    ];
-    environment = {
-      WATCHTOWER_CLEANUP = "true";
-      WATCHTOWER_POLL_INTERVAL = "86400";
-    };
-  };
+  # virtualisation.oci-containers.containers."watchtower" = {
+  #   autoStart = true;
+  #   image = "containrrr/watchtower";
+  #   volumes = [
+  #     "/var/run/docker.sock:/var/run/docker.sock"
+  #   ];
+  #   environment = {
+  #     WATCHTOWER_CLEANUP = "true";
+  #     WATCHTOWER_POLL_INTERVAL = "86400";
+  #   };
+  # };
 
   networking.firewall.allowedTCPPorts = [80 443];
   services.nginx = {
