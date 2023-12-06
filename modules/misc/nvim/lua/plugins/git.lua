@@ -6,13 +6,9 @@ return {
 			signs = {
 				add = { text = "▕" },
 				change = { text = "▕" },
-			-- 	delete = { text = "󰐊" },
-			-- 	topdelete = { text = "󰐊" },
 				changedelete = { text = "▕" },
 				untracked = { text = "▕" },
 			},
-			-- Preview feature to enable signs with staged hunks.
-			_signs_staged_enable = true,
 			on_attach = function(buffer)
 				local gs = package.loaded.gitsigns
 

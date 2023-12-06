@@ -121,7 +121,7 @@ return {
 			wk.setup(opts)
 
 			wk.register({
-				gx = "Git conflict",
+				gx = { name = "+Git conflict" },
 			})
 			wk.register({
 				mode = { "n", "v" },
@@ -175,8 +175,7 @@ return {
 	},
 
 	{
-		"cormacrelf/trouble.nvim",
-		branch = "cascading-sev-2",
+		"folke/trouble.nvim",
 		keys = {
 			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  desc = "Document Diagnostics" },
 			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
@@ -184,7 +183,9 @@ return {
 		},
 		opts = {
 			auto_close = true,
-			min_severity = "Warning",
+			auto_preview = false,
+			use_diagnostic_signs = true,
+			severity = vim.diagnostic.severity.WARN,
 		},
 	},
 

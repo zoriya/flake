@@ -12,7 +12,6 @@ return {
 					enabled = true,
 					style = "nvchad",
 				},
-				neotree = true,
 				noice = true,
 				mini = true,
 				leap = true,

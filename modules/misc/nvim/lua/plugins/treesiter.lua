@@ -62,30 +62,4 @@ return {
 			}
 		},
 	},
-
-	{
-		"windwp/nvim-ts-autotag",
-		config = true,
-		ft = {
-			'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'tsx', 'jsx',
-			'rescript', 'xml', 'php', 'markdown', 'glimmer', 'handlebars', 'hbs'
-		},
-	},
-
-	{
-		"echasnovski/mini.pairs",
-		version = '*',
-		opts = {
-			mappings = {
-				-- Disable pairs if the next char is not a whitespace
-				['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\][%s]' },
-				['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\][%s]' },
-				['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\][%s]' },
-				['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\][%s]', register = { cr = false } },
-				["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\][%s]', register = { cr = false } },
-				['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\][%s]', register = { cr = false } },
-			},
-		},
-		config = function(_, opts) require('mini.pairs').setup(opts) end,
-	},
 }

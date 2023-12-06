@@ -88,8 +88,8 @@ return {
 				tabline = {},
 				extensions = {
 					"quickfix",
-					"neo-tree",
-					"fugitive",
+					"lazy",
+					"trouble",
 				},
 			}
 		end

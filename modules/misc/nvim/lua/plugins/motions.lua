@@ -1,6 +1,9 @@
 return {
 	{
 		"ggandor/leap.nvim",
+		dependencies = {
+			{ "tpope/vim-repeat", event = "VeryLazy" },
+		},
 		keys = {
 			{ "s", "<Plug>(leap-forward-till)",  mode = { "n", "x", }, desc = "Leap forward to" },
 			{ "S", "<Plug>(leap-backward-till)", mode = { "n", "x", }, desc = "Leap backward to" },
@@ -8,7 +11,11 @@ return {
 			{ "Z", "<Plug>(leap-backward-till)", mode = "o",           desc = "Leap backward to" },
 		},
 	},
-	{ "tpope/vim-repeat", event = "VeryLazy" },
+	{
+		"ggandor/flit.nvim",
+		keys= { "f", "F", "t", "T" },
+		opts = true,
+	},
 
 	{
 		"ThePrimeagen/harpoon",
