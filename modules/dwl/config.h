@@ -22,6 +22,7 @@ static const int tagcount = 9;
 /* Autostart */
 static const char *const autostart[] = {
 	"dwlstartup", NULL,
+	"polkit-gnome-authentication-agent-1", NULL,
 	"wallpaper", NULL,
 	"ydotoold", NULL,
 	"shikane", NULL,
