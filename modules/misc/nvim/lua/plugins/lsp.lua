@@ -212,6 +212,7 @@ return {
 
 	{
 		"L3MON4D3/LuaSnip",
+		event = "InsertEnter",
 		opts = {
 			history = true,
 			delete_check_events = "TextChanged",
@@ -319,6 +320,7 @@ return {
 				css = { { "prettierd", "prettier" } },
 				html = { { "prettierd", "prettier" } },
 				sql = { "pg_format" },
+				cs = { "csharpier" },
 				["*"] = { "injected" }
 			},
 		},
@@ -374,6 +376,6 @@ return {
 			under_cursor = false,
 			min_count_to_highlight = 2,
 		},
-		config = function (_, opts) require("illuminate").configure(opts) end,
+		config = function(_, opts) require("illuminate").configure(opts) end,
 	},
 }

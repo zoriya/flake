@@ -12,8 +12,6 @@ return {
 				show_hidden = true,
 			},
 			keymaps = {
-				["<C-v>"] = "actions.select_vsplit",
-				["<C-s>"] = "actions.select_split",
 				["<BS>"] = "actions.parent",
 
 				-- Disable default mappings that conflict with harpoon.

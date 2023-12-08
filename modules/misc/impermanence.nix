@@ -27,6 +27,7 @@
       "/var/lib/waydroid"
       "/var/lib/flatpak"
       "/var/lib/tcc"
+      "/etc/tailord/"
       "/var/lib/flood"
       "/var/lib/transmission"
       "/var/lib/acme"
