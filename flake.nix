@@ -12,7 +12,7 @@
     # nur.url = "github:nix-community/NUR";
     dwl-source = {
       # Use dwl's master.
-      url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
+      url = "git+https://codeberg.org/dwl/dwl.git";
       flake = false;
     };
     ags = {

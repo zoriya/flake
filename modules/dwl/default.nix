@@ -1,4 +1,50 @@
-{pkgs, ags, ...}: {
+{
+  pkgs,
+  ags,
+  ...
+}: let
+  dwl-patched = pkgs.dwl.overrideAttrs (old: {
+    patches = [
+    ../../dwl_patches/deck.patch
+    # ../../dwl_patches/output-power-managment.patch
+    # ../../dwl_patches/keyboard-shortcut-inhibit.patch
+    ../../dwl_patches/cursor_warp.patch
+    ../../dwl_patches/vanitygaps.patch
+    ../../dwl_patches/vanity_deck.patch
+    ../../dwl_patches/smartborders.patch
+    ../../dwl_patches/togglelayout.patch
+    ../../dwl_patches/toggletag.patch
+    # ../../dwl_patches/singletagset.patch
+    ../../dwl_patches/montagset.patch
+    ../../dwl_patches/movestack.patch
+    ../../dwl_patches/gdk_monitors_status.patch
+    ../../dwl_patches/rotatetags.patch
+    ../../dwl_patches/naturalscrolltrackpad.patch
+    ../../dwl_patches/pointer-gesture.patch
+    ../../dwl_patches/sway-pointer-contraints.patch
+    ../../dwl_patches/retore-tiling.patch
+    ];
+  });
+
+  dwlp = pkgs.writeShellScriptBin "dwl" ''
+  ${dwl-patched}/bin/dwl -s ags
+  dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
+
+  # Stop any services that are running, so that they receive the new env var when they restart.
+  systemctl --user stop pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+  systemctl --user start wireplumber
+
+  fusuma -c ~/.config/fusuma/config.yaml &
+  ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &
+  ydotoold &
+  shikane &
+  wl-paste --watch cliphist store &
+
+  wallpaper
+  discord &
+  youtube-music &
+  '';
+in {
   services.xserver = {
     enable = true;
     displayManager = {
@@ -21,8 +67,7 @@
   networking.networkmanager.enable = true;
 
   environment.systemPackages = with pkgs; [
-    dwl
-    polkit_gnome
+    dwlp
     ags.packages.x86_64-linux.default
     wineWowPackages.stable
     wineWowPackages.waylandFull

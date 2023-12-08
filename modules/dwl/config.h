@@ -17,20 +17,6 @@ static bool cursor_warp = true;
 
 /* tagging - tagcount must be no greater than 31 */
 #define TAGCOUNT 9
-static const int tagcount = 9;
-
-/* Autostart */
-static const char *const autostart[] = {
-	"dwlstartup", NULL,
-	"polkit-gnome-authentication-agent-1", NULL,
-	"wallpaper", NULL,
-	"ydotoold", NULL,
-	"shikane", NULL,
-	"wl-paste", "--watch", "cliphist", "store", NULL,
-	"discord", NULL,
-	"youtube-music", NULL,
-	NULL /* terminate */
-};
 
 static const Rule rules[] = {
 	/* app_id           title       tags mask     isfloating   monitor */

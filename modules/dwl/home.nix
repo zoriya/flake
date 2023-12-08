@@ -1,6 +1,5 @@
 {pkgs, ...}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
-  dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
   covercolors = pkgs.stdenv.mkDerivation {
     name = "covercolors";
     dontUnpack = true;
@@ -31,7 +30,6 @@ in {
     # Only used for pactl.
     pulseaudio
     wallpaper
-    dwlstartup
     hyprpicker
     wdisplays
     wlr-randr
