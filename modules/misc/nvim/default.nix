@@ -1,12 +1,11 @@
-{pkgs, ...}: {
+{pkgs, config, ...}: {
   home.packages = with pkgs; [
     # neovim
     neovim-nightly
   ];
-  # FIXME: See ../default.nix's fileSystems bind hack.
-  # xdg.configFile."nvim/lua".source = ./lua;
-  # xdg.configFile."nvim/after".source = ./after;
-  # xdg.configFile."nvim/lazy-lock.json".source = ./lazy-lock.json;
+  xdg.configFile."nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim/lua";
+  xdg.configFile."nvim/after".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim/after";
+  xdg.configFile."nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim/lazy-lock.json";
   xdg.configFile."nvim/init.lua".text = ''
     -- Nix
     vim.env.CC = "${pkgs.gcc}/bin/gcc"

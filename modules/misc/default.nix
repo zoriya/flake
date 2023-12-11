@@ -57,25 +57,6 @@
     nixos.enable = true;
   };
 
-
-  # Should use something better to actually sync lazy with nix but /shrug
-  fileSystems."/home/zoriya/.config/nvim/lazy-lock.json" = {
-    device = "/home/zoriya/projects/flake/modules/misc/nvim/lazy-lock.json";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-  fileSystems."/home/zoriya/.config/nvim/after" = {
-    device = "/home/zoriya/projects/flake/modules/misc/nvim/after";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-  fileSystems."/home/zoriya/.config/nvim/lua" = {
-    device = "/home/zoriya/projects/flake/modules/misc/nvim/lua";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-
-
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # This was needed on older versions of the kernel.
   #boot.kernelParams = ["i915.force_probe=46a6" "i915.enable_psr=0"];
