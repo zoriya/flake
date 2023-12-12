@@ -2,7 +2,7 @@ return {
 	{
 		"okuuva/auto-save.nvim",
 		keys = {
-			{ "<leader>w", "<cmd>ASToggle<cr>", desc = "Toggle autosave" },
+			{ "<leader>w", "<cmd>lua vim.g.auto_save_state = not vim.g.auto_save_state<cr>", desc = "Toggle autosave" },
 		},
 		event = {
 			"InsertLeave",
@@ -11,12 +11,12 @@ return {
 		opts = {
 			write_all_buffers = true,
 			execution_message = { enabled = false },
-			callbacks = {
-				enabling = function() vim.g.auto_save_state = true end,
-				disabling = function() vim.g.auto_save_state = false end,
-			},
 			condition = function(buf)
-				return vim.fn.getbufvar(buf, "&filetype") ~= "oil"
+				if not vim.g.auto_save_state then
+					return false
+				end
+				local ft = vim.fn.getbufvar(buf, "&filetype")
+				return ft ~= "oil" and ft ~= "harpoon"
 			end,
 		},
 		init = function() vim.g.auto_save_state = true end,
