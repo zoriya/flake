@@ -61,7 +61,7 @@ static const MonitorRule monrules[] = {
 /* keyboard */
 static const struct xkb_rule_names xkb_rules = {
 	/* can specify fields: rules, model, layout, variant, options */
-	.options = "caps:escape",
+	.options = "caps:escape_shifted_capslock",
 };
 
 static const int repeat_rate = 25;

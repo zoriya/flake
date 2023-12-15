@@ -88,11 +88,14 @@
   in {
     nixosConfigurations = {
       fuhen = mkSystem "fuhen" "dwl" [
-        ({lib, ...}: {
+        ({lib, pkgs, ...}: {
           hardware.tuxedo-rs = {
             enable = true;
             tailor-gui.enable = true;
           };
+
+          hardware.keyboard.zsa.enable = true;
+          environment.systemPackages = with pkgs; [ wally-cli ];
 
           programs.gamescope.enable = true;
         })

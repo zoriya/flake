@@ -75,7 +75,7 @@ in {
   gnome-control-center = wrapProgram super.gnome.gnome-control-center ["gnome-control-center"] "--set XDG_CURRENT_DESKTOP GNOME";
 
   slack = enableWayland super.slack ["slack"];
-  youtube-music = enableWayland super.slack ["youtube-music"];
+  youtube-music = enableWayland super.youtube-music ["youtube-music"];
   discord = enableWayland super.discord ["discord" "Discord"];
   vscode = enableWayland super.vscode ["code"];
 }

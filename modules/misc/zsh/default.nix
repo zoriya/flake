@@ -84,6 +84,7 @@ in {
       py = "python3 2> /dev/null || nix-shell -p python3 --command python3";
       jctl = "sudo journalctl -n 1000 -fu";
       where = "where -s"; # Follow symlinks
+      sloc = "scc";
     };
 
     plugins = [
