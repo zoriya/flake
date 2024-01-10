@@ -13,15 +13,20 @@
         '')
         bins);
     };
-  enableWayland = drv: bins: wrapProgram drv bins ''
-    --add-flags "--enable-features=UseOzonePlatform" \
-    --add-flags "--ozone-platform=wayland"'';
+  enableWayland = drv: bins:
+    wrapProgram drv bins ''
+      --add-flags "--enable-features=UseOzonePlatform" \
+      --add-flags "--ozone-platform=wayland"'';
 in {
   # Patch dwl.
   dwl =
     (super.dwl.override
-      {conf = ../modules/dwl/config.h;})
+      {
+        wlroots = super.pkgs.wlroots_0_16;
+        conf = ../modules/dwl/config.h;
+      })
     .overrideAttrs (oldAttrs: {
+      version = "0.4";
       src = dwl-source;
       enableXWayland = true;
       passthru.providedSessions = ["dwl"];
