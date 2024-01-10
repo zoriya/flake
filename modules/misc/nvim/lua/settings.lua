@@ -102,3 +102,5 @@ vim.cmd [[
 		autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200}) 
 	augroup end
 ]]
+
+vim.g.zig_fmt_autosave = 0

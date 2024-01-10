@@ -105,7 +105,7 @@
 
       kadan = mkSystem "kadan" "server" [
         ({pkgs, ...}: {
-          environment.systemPackages = with pkgs; [tmux python3Packages.guessit mediainfo];
+          environment.systemPackages = with pkgs; [tmux python3Packages.guessit mediainfo yt-dlp];
         })
       ];
     };

@@ -156,6 +156,17 @@ return {
 							}
 						}
 					},
+					zls = {
+						settings = {
+							enable_build_on_save = true,
+						},
+						on_new_config = function(new_config, new_root_dir)
+							-- Simply disable the nix-shell wrapping and use zls from the shell.nix of the projects
+							-- I use nightly builds of zigs/zls
+							pcall(require("lspconfig").zls.document_config.default_config.on_new_config, new_config,
+								new_root_dir)
+						end,
+					},
 				},
 			}
 		end,
@@ -320,7 +331,7 @@ return {
 				css = { { "prettierd", "prettier" } },
 				html = { { "prettierd", "prettier" } },
 				sql = { "pg_format" },
-				cs = { "csharpier" },
+				-- cs = { "csharpier" },
 				["*"] = { "injected" }
 			},
 		},
