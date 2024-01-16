@@ -14,13 +14,13 @@ return {
 				},
 				noice = true,
 				mini = true,
-				leap = true,
 				cmp = true,
 				native_lsp = {
 					enabled = true
 				},
 				navic = true,
 				harpoon = true,
+				flash = true,
 				gitsigns = true,
 				semantic_tokens = true,
 				indent_blankline = {
@@ -28,6 +28,11 @@ return {
 				},
 				illuminate = true,
 			},
+			custom_highlights = function (colors)
+				return {
+					FlashLabel = { fg = colors.red }
+				}
+			end
 		},
 		config = function(_, opts)
 			require("catppuccin").setup(opts)

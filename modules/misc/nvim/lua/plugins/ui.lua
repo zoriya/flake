@@ -184,8 +184,9 @@ return {
 		opts = {
 			auto_close = true,
 			auto_preview = false,
+			cycle_results = false,
 			use_diagnostic_signs = true,
-			severity = vim.diagnostic.severity.WARN,
+			severity = vim.diagnostic.severity.ERORR,
 		},
 	},
 
@@ -200,7 +201,7 @@ return {
 	},
 
 	{
-		"https://gitlab.com/yorickpeterse/nvim-pqf.git",
+		"yorickpeterse/nvim-pqf",
 		event = "VeryLazy",
 		config = true,
 	},

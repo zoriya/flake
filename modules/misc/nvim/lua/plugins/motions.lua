@@ -1,40 +1,46 @@
 return {
 	{
-		"ggandor/leap.nvim",
-		dependencies = {
-			{ "tpope/vim-repeat", event = "VeryLazy" },
+
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		opts = {
+			search = {
+				multi_window = false,
+			},
+			modes = {
+				search = { enabled = false, },
+				char = { highlight = { backdrop = false } },
+			}
 		},
 		keys = {
-			{ "s", "<Plug>(leap-forward-till)",  mode = { "n", "x", }, desc = "Leap forward to" },
-			{ "S", "<Plug>(leap-backward-till)", mode = { "n", "x", }, desc = "Leap backward to" },
-			{ "z", "<Plug>(leap-forward-till)",  mode = "o",           desc = "Leap forward to" },
-			{ "Z", "<Plug>(leap-backward-till)", mode = "o",           desc = "Leap backward to" },
+			{ "s", mode = { "n", "x" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "z", mode = "o",          function() require("flash").jump() end, desc = "Flash" },
+			"f",
+			"F",
+			"t",
+			"T",
 		},
-	},
-	{
-		"ggandor/flit.nvim",
-		keys= { "f", "F", "t", "T" },
-		opts = true,
+
 	},
 
 	{
 		"ThePrimeagen/harpoon",
 		branch = "harpoon2",
 		keys = {
-			{ "<leader>a", '<cmd>lua require("harpoon"):list():append()<CR>',   desc = "Mark file" },
+			{ "<leader>a", '<cmd>lua require("harpoon"):list():append()<CR>',                                 desc = "Mark file" },
 			{ "<leader>h", '<cmd>lua require("harpoon").ui:toggle_quick_menu(require("harpoon"):list())<CR>', desc = "Harpoon menu" },
-			{ "<C-H>",     '<cmd>lua require("harpoon"):list():select(1)<CR>', desc = "Navigate to harpoon 1" },
-			{ "<C-T>",     '<cmd>lua require("harpoon"):list():select(2)<CR>', desc = "Navigate to harpoon 2" },
-			{ "<C-N>",     '<cmd>lua require("harpoon"):list():select(3)<CR>', desc = "Navigate to harpoon 3" },
-			{ "<C-S>",     '<cmd>lua require("harpoon"):list():select(4)<CR>', desc = "Navigate to harpoon 4" },
+			{ "<C-H>",     '<cmd>lua require("harpoon"):list():select(1)<CR>',                                desc = "Navigate to harpoon 1" },
+			{ "<C-T>",     '<cmd>lua require("harpoon"):list():select(2)<CR>',                                desc = "Navigate to harpoon 2" },
+			{ "<C-N>",     '<cmd>lua require("harpoon"):list():select(3)<CR>',                                desc = "Navigate to harpoon 3" },
+			{ "<C-S>",     '<cmd>lua require("harpoon"):list():select(4)<CR>',                                desc = "Navigate to harpoon 4" },
 
 			-- <C-;> is not a valid sequence so use HJKL instead.
-			{ "<C-H>",     '<cmd>lua require("harpoon"):list():select(1)<CR>', desc = "Navigate to harpoon 1" },
-			{ "<C-J>",     '<cmd>lua require("harpoon"):list():select(2)<CR>', desc = "Navigate to harpoon 2" },
-			{ "<C-K>",     '<cmd>lua require("harpoon"):list():select(3)<CR>', desc = "Navigate to harpoon 3" },
+			{ "<C-H>",     '<cmd>lua require("harpoon"):list():select(1)<CR>',                                desc = "Navigate to harpoon 1" },
+			{ "<C-J>",     '<cmd>lua require("harpoon"):list():select(2)<CR>',                                desc = "Navigate to harpoon 2" },
+			{ "<C-K>",     '<cmd>lua require("harpoon"):list():select(3)<CR>',                                desc = "Navigate to harpoon 3" },
 			-- <C-L> is already taken but since I use harpoon less on querty no worry
 		},
-		config = function (_, opts)
+		config = function(_, opts)
 			require("harpoon"):setup(opts)
 		end,
 		opts = {
@@ -64,15 +70,15 @@ return {
 	{
 		"vim-scripts/ReplaceWithRegister",
 		keys = {
-			{ "cr", "<Plug>ReplaceWithRegisterOperator",   desc = "Replace with register" },
-			{ "cR", '"+<Plug>ReplaceWithRegisterOperator', desc = "Replace with system clipboard" },
+			{ "cr",         "<Plug>ReplaceWithRegisterOperator",   desc = "Replace with register" },
+			{ "<leader>cr", '"+<Plug>ReplaceWithRegisterOperator', desc = "Replace with system clipboard" },
 		},
 	},
 
 	{
 		"chaoren/vim-wordmotion",
 		keys = {
-			{"gw", "<plug>WordMotion_w", desc = "Next small world", mode = { "n", "x", "o" }},
+			{ "gw",  "<plug>WordMotion_w",  desc = "Next small world",                mode = { "n", "x", "o" } },
 			-- This overrides the default ge but i never used it.
 			{ "ge",  "<plug>WordMotion_e",  desc = "Next end of small world",         mode = { "n", "x", "o" } },
 			{ "gb",  "<plug>WordMotion_b",  desc = "Previous small world",            mode = { "n", "x", "o" } },
