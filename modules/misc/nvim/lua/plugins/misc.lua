@@ -21,4 +21,18 @@ return {
 		},
 		init = function() vim.g.auto_save_state = true end,
 	},
+
+	{
+		"jiaoshijie/undotree",
+		dependencies = "nvim-lua/plenary.nvim",
+		keys = {
+			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+		},
+		opts = {
+			window = {
+				-- undotree sets a windblend to 30 by default
+				winblend = 0,
+			},
+		},
+	}
 }

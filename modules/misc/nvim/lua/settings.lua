@@ -23,7 +23,7 @@ local options = {
 	termguicolors = true,
 	swapfile = false,
 	undofile = true,
-	updatetime = 300,                        -- faster completion (4000ms default)
+	updatetime = 300, -- faster completion (4000ms default)
 
 	number = true,
 	relativenumber = true,
@@ -83,12 +83,14 @@ keymap("c", "<C-H>", "<C-w>")
 keymap("n", "n", "nzz")
 keymap("n", "N", "Nzz")
 
-keymap({"n", "x"}, "<leader>y", '"+y', "Yank to system clipboard")
-keymap({"n", "x"}, "<leader>Y", '"+y$', "Yank line to system clipboard")
+keymap({ "n", "x" }, "<leader>y", '"+y', "Yank to system clipboard")
+keymap({ "n", "x" }, "<leader>Y", '"+y$', "Yank line to system clipboard")
 
-keymap({"n", "x"}, "<leader>p", '"+p', "Past from system clipboard")
-keymap({"n", "x"}, "<leader>P", '"+P', "Past line from system clipboard")
+keymap({ "n", "x" }, "<leader>p", '"+p', "Past from system clipboard")
+keymap({ "n", "x" }, "<leader>P", '"+P', "Past line from system clipboard")
 
+keymap("n", "<C-k>", "<cmd>cnext<CR>zz", "Next quickfix")
+keymap("n", "<C-j>", "<cmd>cprev<CR>zz", "Prev quickfix")
 keymap("n", "<leader>c", "<cmd>cclose<cr>", "Close quickfix")
 
 keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")
@@ -99,7 +101,7 @@ vim.cmd("syntax on")
 vim.cmd [[
 	augroup highlight_yank
 		autocmd!
-		autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200}) 
+		autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
 	augroup end
 ]]
 
