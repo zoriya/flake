@@ -23,16 +23,9 @@ return {
 	},
 
 	{
-		"jiaoshijie/undotree",
-		dependencies = "nvim-lua/plenary.nvim",
+		"mbbill/undotree",
 		keys = {
-			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
-		},
-		opts = {
-			window = {
-				-- undotree sets a windblend to 30 by default
-				winblend = 0,
-			},
+			{ "<leader>u", vim.cmd.UndotreeToggle, desc = "Show undotree" },
 		},
 	}
 }
