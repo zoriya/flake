@@ -30,6 +30,7 @@ return {
 
 	{
 		"xiyaowong/virtcolumn.nvim",
+		dev = true,
 		event = "VeryLazy",
 		init = function()
 			vim.g.virtcolumn_char = '▕'

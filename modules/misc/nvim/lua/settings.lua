@@ -89,8 +89,8 @@ keymap({ "n", "x" }, "<leader>Y", '"+y$', "Yank line to system clipboard")
 keymap({ "n", "x" }, "<leader>p", '"+p', "Past from system clipboard")
 keymap({ "n", "x" }, "<leader>P", '"+P', "Past line from system clipboard")
 
-keymap("n", "<C-k>", "<cmd>cnext<CR>zz", "Next quickfix")
-keymap("n", "<C-j>", "<cmd>cprev<CR>zz", "Prev quickfix")
+keymap("n", "<C-.>", "<cmd>cnext<CR>zz", "Next quickfix")
+keymap("n", "<C-,>", "<cmd>cprev<CR>zz", "Prev quickfix")
 keymap("n", "<leader>c", "<cmd>cclose<cr>", "Close quickfix")
 
 keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")

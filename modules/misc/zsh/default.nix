@@ -28,6 +28,7 @@ in {
     bc
     nodePackages.http-server
     nodePackages.live-server
+    bat
   ];
 
   programs.atuin = {
@@ -38,10 +39,11 @@ in {
     };
   };
 
-  programs.bat = {
-    enable = true;
-    config.theme = "base16";
-  };
+  # Broken due to https://github.com/nix-community/home-manager/issues/4826
+  # programs.bat = {
+  #   enable = true;
+  #   config.theme = "base16";
+  # };
 
   programs.less = {
     enable = true;
