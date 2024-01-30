@@ -92,6 +92,18 @@ return {
 					tsserver = {
 						root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
 						single_file_support = false,
+						commands = {
+							OrganizeImports = {
+								function()
+									vim.lsp.buf.execute_command({
+										command = "_typescript.organizeImports",
+										arguments = { vim.api.nvim_buf_get_name(0) },
+										title = ""
+									})
+								end,
+								description = "Organize Imports"
+							},
+						},
 					},
 					omnisharp = {
 						handlers = {

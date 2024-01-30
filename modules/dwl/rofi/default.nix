@@ -1,7 +1,5 @@
 {
   pkgs,
-  config,
-  lib,
   ...
 }: {
   xdg.configFile."rofi/base16.rasi".text = with {

@@ -36,9 +36,6 @@
 
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
-      permittedInsecurePackages = [
-        "nodejs-16.20.2"
-      ];
     }'';
 
   home.stateVersion = "22.11";

@@ -34,17 +34,17 @@
     nixpkgs,
     dwl-source,
     flood,
+    impermanence,
     ...
-  } @ rawInput: let
+  } @ inputs: let
     user = "zoriya";
 
-    mkSystem = hostname: de: custom: let
-      inputs = rawInput // {inherit user;};
-    in
+    mkSystem = hostname: de: custom:
       nixpkgs.lib.nixosSystem {
         specialArgs = inputs;
         modules =
           [
+            impermanence.nixosModules.impermanence
             ./modules/misc
             (./modules + "/${de}")
             # nur.nixosModules.nur
@@ -73,7 +73,6 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                extraSpecialArgs = inputs;
                 users.${user} = {
                   imports = [
                     ./modules/misc/home.nix
@@ -88,14 +87,18 @@
   in {
     nixosConfigurations = {
       fuhen = mkSystem "fuhen" "dwl" [
-        ({lib, pkgs, ...}: {
+        ({
+          lib,
+          pkgs,
+          ...
+        }: {
           hardware.tuxedo-rs = {
             enable = true;
             tailor-gui.enable = true;
           };
 
           hardware.keyboard.zsa.enable = true;
-          environment.systemPackages = with pkgs; [ wally-cli ];
+          environment.systemPackages = with pkgs; [wally-cli];
 
           programs.gamescope.enable = true;
         })

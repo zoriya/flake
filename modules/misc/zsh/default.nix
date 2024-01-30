@@ -45,12 +45,7 @@ in {
   #   config.theme = "base16";
   # };
 
-  programs.less = {
-    enable = true;
-    # keys = ''
-    #   \e quit
-    # '';
-  };
+  programs.less.enable = true;
 
   programs.zsh = {
     enable = true;

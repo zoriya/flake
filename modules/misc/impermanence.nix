@@ -1,5 +1,4 @@
-{impermanence, ...}: {
-  imports = [impermanence.nixosModules.impermanence];
+{
   nix = {
     settings = {
       auto-optimise-store = true;
