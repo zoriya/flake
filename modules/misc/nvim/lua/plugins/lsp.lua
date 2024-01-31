@@ -335,7 +335,13 @@ return {
 		},
 		opts = {
 			formatters_by_ft = {
-				python = { "black" },
+				python = function(bufnr)
+					if require("conform").get_formatter_info("ruff_format", bufnr).available then
+						return { "ruff_format" }
+					else
+						return { "isort", "black" }
+					end
+				end,
 				javascript = { { "prettierd", "prettier" } },
 				typescript = { { "prettierd", "prettier" } },
 				javascriptreact = { { "prettierd", "prettier" } },
