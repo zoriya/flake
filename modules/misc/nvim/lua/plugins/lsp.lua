@@ -343,7 +343,7 @@ return {
 				css = { { "prettierd", "prettier" } },
 				html = { { "prettierd", "prettier" } },
 				sql = { "pg_format" },
-				-- cs = { "csharpier" },
+				cs = { "csharpier" },
 				["*"] = { "injected" }
 			},
 		},

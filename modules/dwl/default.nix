@@ -1,4 +1,4 @@
-{pkgs, ags, ...}: {
+{pkgs, inputs, ...}: {
   services.xserver = {
     enable = true;
     displayManager = {
@@ -23,7 +23,7 @@
   environment.systemPackages = with pkgs; [
     dwl
     polkit_gnome
-    ags.packages.x86_64-linux.default
+    inputs.ags.packages.x86_64-linux.default
     wineWowPackages.stable
     wineWowPackages.waylandFull
     winetricks

@@ -8,7 +8,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # nur.url = "github:nix-community/NUR";
     dwl-source = {
       # Use dwl's master.
@@ -41,7 +44,7 @@
 
     mkSystem = hostname: de: custom:
       nixpkgs.lib.nixosSystem {
-        specialArgs = inputs;
+        specialArgs = {inherit inputs;};
         modules =
           [
             impermanence.nixosModules.impermanence
