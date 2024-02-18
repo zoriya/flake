@@ -352,6 +352,16 @@ return {
 				cs = { "csharpier" },
 				["*"] = { "injected" }
 			},
+			formatters = {
+				csharpier = function()
+					return {
+						cwd = require("conform.util").root_file(function(name)
+							return name:match('.*%.sln$')
+						end),
+						require_cwd = true,
+					}
+				end,
+			},
 		},
 		init = function()
 			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
