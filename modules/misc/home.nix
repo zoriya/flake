@@ -28,6 +28,9 @@
       init.defaultBranch = "master";
       pull.ff = "only";
       advice.diverging = false;
+      rerere.enabled = true;
+      branch.sort = "-committerdate";
+      # TODO: enable git maintenance
     };
 
     userEmail = "zoe.roux@zoriya.dev";
