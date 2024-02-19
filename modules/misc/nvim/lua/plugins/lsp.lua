@@ -39,11 +39,6 @@ return {
 		opts = function()
 			local lsp_on_attach = function(client, buffer)
 				lsp_keymaps(buffer)
-
-				local ok, navic = pcall(require, "nvim-navic")
-				if ok then
-					navic.attach(client, buffer)
-				end
 			end
 			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 

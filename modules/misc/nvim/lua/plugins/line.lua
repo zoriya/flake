@@ -5,8 +5,6 @@ return {
 		opts = function()
 			vim.opt["showmode"] = false
 
-			local gps = require("nvim-navic")
-
 			return {
 				options = {
 					theme = "auto",
@@ -56,7 +54,13 @@ return {
 							color = "ErrorMsg",
 							cond = function() return not vim.g.auto_save_state end,
 						},
-						{ 'filetype', colored = true, icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+						{
+							'filetype',
+							colored = true,
+							icon_only = true,
+							separator = "",
+							padding = { left = 1, right = 0 }
+						},
 						{
 							'filename',
 							separator = '>',
@@ -67,7 +71,9 @@ return {
 								unnamed = '[No Name]',
 							},
 						},
-						{ gps.get_location, cond = gps.is_available },
+						{
+							"navic",
+						},
 					},
 					lualine_x = {
 						-- require "dap".status,
@@ -100,6 +106,11 @@ return {
 		dependencies = {
 			"neovim/nvim-lspconfig",
 		},
-		opts = {highlight = true},
+		opts = {
+			highlight = true,
+			lsp = {
+				auto_attach = true,
+			},
+		},
 	}
 }
