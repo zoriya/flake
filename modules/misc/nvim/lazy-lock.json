@@ -54,5 +54,6 @@
   "vim-lumen": { "branch": "master", "commit": "58a4ba8c7c674196bcc7e9220aa7b8c1ac800de6" },
   "vim-sleuth": { "branch": "master", "commit": "1cc4557420f215d02c4d2645a748a816c220e99b" },
   "vim-wordmotion": { "branch": "master", "commit": "81d9bd298376ab0dc465c85d55afa4cb8d5f47a1" },
+  "virtcolumn.nvim": { "branch": "main", "commit": "2291fe12098f1541483e7ee4d0fa0835c1f028f6" },
   "which-key.nvim": { "branch": "main", "commit": "4433e5ec9a507e5097571ed55c02ea9658fb268a" }
 }

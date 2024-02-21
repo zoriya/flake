@@ -29,8 +29,8 @@ return {
 	},
 
 	{
-		"xiyaowong/virtcolumn.nvim",
-		dev = true,
+		"zoriya/virtcolumn.nvim",
+		-- "xiyaowong/virtcolumn.nvim",
 		event = "VeryLazy",
 		init = function()
 			vim.g.virtcolumn_char = '▕'
