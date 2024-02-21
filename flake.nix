@@ -8,6 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     neovim-nightly = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +39,7 @@
     dwl-source,
     flood,
     impermanence,
+    nixos-hardware,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -90,15 +92,17 @@
   in {
     nixosConfigurations = {
       fuhen = mkSystem "fuhen" "dwl" [
+        nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
         ({
           lib,
           pkgs,
           ...
         }: {
-          hardware.tuxedo-rs = {
-            enable = true;
-            tailor-gui.enable = true;
-          };
+
+          # hardware.tuxedo-rs = {
+          #   enable = true;
+          #   tailor-gui.enable = true;
+          # };
 
           hardware.keyboard.zsa.enable = true;
           environment.systemPackages = with pkgs; [wally-cli];
