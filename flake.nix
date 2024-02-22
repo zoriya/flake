@@ -9,6 +9,10 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     neovim-nightly = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +44,7 @@
     flood,
     impermanence,
     nixos-hardware,
+    nix-index-database,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -82,6 +87,7 @@
                   imports = [
                     ./modules/misc/home.nix
                     (./modules + "/${de}/home.nix")
+                    nix-index-database.hmModules.nix-index
                   ];
                 };
               };

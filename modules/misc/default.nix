@@ -36,6 +36,7 @@
 
   programs.zsh.enable = true;
   environment.shells = with pkgs; [zsh];
+  programs.command-not-found.enable = false;
 
   services.locate = {
     enable = true;

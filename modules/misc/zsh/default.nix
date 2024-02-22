@@ -45,6 +45,12 @@ in {
   #   config.theme = "base16";
   # };
 
+  programs.command-not-found.enable = false;
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.less.enable = true;
 
   programs.zsh = {
@@ -140,7 +146,6 @@ in {
         "git"
         "copypath"
         "copyfile"
-        "command-not-found"
       ];
     };
   };
