@@ -106,11 +106,12 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    extraPackages = with pkgs; [ vaapiVdpau ];
+    extraPackages = with pkgs; [vaapiVdpau];
   };
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
+  virtualisation.docker.enableNvidia = true;
 
   hardware.nvidia = {
     # Modesetting is required.
