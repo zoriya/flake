@@ -26,6 +26,7 @@ in {
     zip
     scc
     bc
+    glow
     nodePackages.http-server
     nodePackages.live-server
     bat
