@@ -124,6 +124,8 @@
           environment.systemPackages = with pkgs; [tmux python3Packages.guessit mediainfo yt-dlp];
         })
       ];
+
+      lucca = mkSystem "lucca" "none" [];
     };
   };
 }
