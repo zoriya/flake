@@ -9,6 +9,10 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -125,7 +129,19 @@
         })
       ];
 
-      lucca = mkSystem "lucca" "none" [];
+      lucca = mkSystem "lucca" "none" [
+        ({pkgs, ...}: {
+          imports = [
+            inputs.nixos-wsl.nixosModules.wsl
+          ];
+          wsl.enable = true;
+          wsl.defaultUser = "zoriya";
+          environment.systemPackages = with pkgs; [
+            wslu
+            wsl-open
+          ];
+        })
+      ];
     };
   };
 }
