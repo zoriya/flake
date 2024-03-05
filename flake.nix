@@ -140,6 +140,14 @@
             wslu
             wsl-open
           ];
+
+          environment.persistence."/nix/persist" = {
+            users.zoriya = {
+              directories = [
+                "work"
+              ];
+            };
+          };
         })
       ];
     };
