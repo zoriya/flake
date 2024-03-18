@@ -37,13 +37,6 @@
     userName = "Zoe Roux";
   };
 
-  programs.gh = {
-    enable = true;
-    settings = {
-      git_protocol = "ssh";
-    };
-  };
-
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
     }'';

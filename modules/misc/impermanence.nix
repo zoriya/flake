@@ -72,6 +72,7 @@
         ".config/google-chrome"
         ".config/discord"
         ".config/YouTube\ Music"
+        ".config/gh"
         # Don't reinstall plugins on reboot
         ".local/share/nvim"
         ".local/state/nvim"

@@ -27,6 +27,7 @@ in {
     scc
     bc
     glow
+    gh
     nodePackages.http-server
     nodePackages.live-server
   ];
