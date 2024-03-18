@@ -9,6 +9,7 @@ return {
 				changedelete = { text = "▕" },
 				untracked = { text = "▕" },
 			},
+			word_diff = true,
 			on_attach = function(buffer)
 				local gs = package.loaded.gitsigns
 

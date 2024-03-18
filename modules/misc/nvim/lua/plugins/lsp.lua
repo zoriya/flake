@@ -53,6 +53,7 @@ return {
 					"sqls",
 					"rome",
 				},
+				prefer_local = true,
 				preferred_servers = {
 					haskell = { "hls" },
 					rust = { "rust_analyzer" },
@@ -167,12 +168,13 @@ return {
 						settings = {
 							enable_build_on_save = true,
 						},
-						on_new_config = function(new_config, new_root_dir)
-							-- Simply disable the nix-shell wrapping and use zls from the shell.nix of the projects
-							-- I use nightly builds of zigs/zls
-							pcall(require("lspconfig").zls.document_config.default_config.on_new_config, new_config,
-								new_root_dir)
-						end,
+						-- I think this can be disabled with prefer_local but not tested yet.
+						-- on_new_config = function(new_config, new_root_dir)
+						-- 	-- Simply disable the nix-shell wrapping and use zls from the shell.nix of the projects
+						-- 	-- I use nightly builds of zigs/zls
+						-- 	pcall(require("lspconfig").zls.document_config.default_config.on_new_config, new_config,
+						-- 		new_root_dir)
+						-- end,
 					},
 				},
 			}
@@ -351,7 +353,7 @@ return {
 				csharpier = function()
 					return {
 						cwd = require("conform.util").root_file(function(name)
-							return name:match('.*%.sln$')
+							return name:match('.*%.sln$') or name:match('.*%.csproj$')
 						end),
 						require_cwd = true,
 					}

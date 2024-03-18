@@ -107,6 +107,10 @@ vim.cmd [[
 
 vim.g.zig_fmt_autosave = 0
 if vim.call("has", "wsl") then
+	-- Lumen takes 170ms on windows and I only use the windows laptop at work, with light mode.
+	vim.g.lumen_startup_overwrite = 0
+	vim.opt.background="light"
+
 	vim.g.clipboard = {
 		name = 'WslClipboard',
 		copy = {

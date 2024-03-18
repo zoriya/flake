@@ -96,6 +96,7 @@ return {
 					"quickfix",
 					"lazy",
 					"trouble",
+					"oil",
 				},
 			}
 		end
