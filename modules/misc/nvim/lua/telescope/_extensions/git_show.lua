@@ -39,7 +39,7 @@ local git_file_show = function(opts)
 					cwd = opts.cwd,
 					callback = function(bufnr)
 						if vim.api.nvim_buf_is_valid(bufnr) then
-							putils.regex_highlighter(bufnr, "diff")
+							putils.regex_highlighter(bufnr, "diff", opts)
 						end
 					end,
 				})
@@ -49,12 +49,15 @@ local git_file_show = function(opts)
 end
 
 local git_show = function(opts)
-	opts = opts or { cwd = vim.loop.cwd() }
+	opts = opts or {}
+	opts.cwd =  opts.cwd or vim.loop.cwd()
 	opts.ref = opts.ref or "HEAD"
 
 	local gen_new_finder = function()
 		local git_cmd = { "git", "show", "--name-status", '--pretty=tformat:', opts.ref }
 		local output  = utils.get_os_command_output(git_cmd, opts.cwd)
+		-- We convert {StatusInOneChar}\t{Path} to {StatusInOneChar}{NoStatusInOneChar} {Path} where NoStatusInOneChar is a space.
+		-- This is to conform to git status --porcelaine=v1
 		output        = map(output, function(x) return string.gsub(x, "\t", "  ", 1) end)
 
 		return finders.new_table {

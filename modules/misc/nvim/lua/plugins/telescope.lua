@@ -51,7 +51,7 @@ return {
 							["<A-k>"]  = actions.move_selection_previous,
 							["<A-j>"]  = actions.move_selection_next,
 							["<c-t>"]  = function()
-							local has_trouble, trouble_action = pcall(require, "trouble.providers.telescope")
+								local has_trouble, trouble_action = pcall(require, "trouble.providers.telescope")
 								if has_trouble then
 									trouble_action.open_with_trouble()
 								end
@@ -97,8 +97,6 @@ return {
 		end,
 		config = function(_, opts)
 			local telescope = require("telescope")
-			-- Load my override of git_status
-			require("telescope._extensions.git_status")
 			telescope.setup(opts)
 			telescope.load_extension("fzf")
 			telescope.load_extension("git_show")
