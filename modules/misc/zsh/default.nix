@@ -29,7 +29,6 @@ in {
     glow
     nodePackages.http-server
     nodePackages.live-server
-    bat
   ];
 
   programs.atuin = {
@@ -40,11 +39,10 @@ in {
     };
   };
 
-  # Broken due to https://github.com/nix-community/home-manager/issues/4826
-  # programs.bat = {
-  #   enable = true;
-  #   config.theme = "base16";
-  # };
+  programs.bat = {
+    enable = true;
+    config.theme = "base16";
+  };
 
   programs.command-not-found.enable = false;
   programs.nix-index = {
@@ -57,7 +55,7 @@ in {
   programs.zsh = {
     enable = true;
     autocd = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     dotDir = ".config/zsh";
