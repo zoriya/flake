@@ -59,6 +59,7 @@ return {
 					rust = { "rust_analyzer" },
 					c = { "clangd" },
 					cpp = { "clangd" },
+					cs = { "omnisharp" },
 					python = { "pyright" },
 					nix = { "nil_ls" },
 					typescript = { "tsserver" },
