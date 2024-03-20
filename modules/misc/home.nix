@@ -29,6 +29,7 @@
       pull.ff = "only";
       advice.diverging = false;
       rerere.enabled = true;
+      rebase.updateRefs = true;
       branch.sort = "-committerdate";
       # TODO: enable git maintenance
     };
