@@ -6,6 +6,8 @@ local utils = require "telescope.utils"
 local putils = require "telescope.previewers.utils"
 local from_entry = require "telescope.from_entry"
 local conf = require("telescope.config").values
+local actions = require "telescope.actions"
+local action_state = require "telescope.actions.state"
 
 local function map(t, f)
 	local t1 = {}
@@ -50,7 +52,7 @@ end
 
 local git_show = function(opts)
 	opts = opts or {}
-	opts.cwd =  opts.cwd or vim.loop.cwd()
+	opts.cwd = opts.cwd or vim.loop.cwd()
 	opts.ref = opts.ref or "HEAD"
 
 	local gen_new_finder = function()
@@ -76,6 +78,14 @@ local git_show = function(opts)
 			prompt_title = "Git show " .. opts.ref,
 			finder = initial_finder,
 			previewer = git_file_show(opts),
+			attach_mappings = function(prompt_bufnr, _)
+				actions.select_default:replace(function()
+					actions.close(prompt_bufnr)
+					local selection = action_state.get_selected_entry()
+					-- Run git show {opts.ref} {selection.value}
+				end)
+				return true
+			end,
 		})
 		:find()
 end

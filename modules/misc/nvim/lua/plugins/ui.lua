@@ -206,4 +206,13 @@ return {
 		event = "VeryLazy",
 		config = true,
 	},
+
+	{
+		"folke/zen-mode.nvim",
+		keys = {
+			{ "<leader>z", "<cmd>ZenMode<cr>", desc = "Toogle zen mode" },
+		},
+		cmd = "ZenMode",
+		config = true
+	},
 }
