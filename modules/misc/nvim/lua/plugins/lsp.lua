@@ -32,8 +32,6 @@ return {
 					{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
 				},
 			},
-			"b0o/SchemaStore.nvim",
-			"Hoffs/omnisharp-extended-lsp.nvim",
 			"cmp-nvim-lsp",
 		},
 		opts = function()
@@ -45,13 +43,13 @@ return {
 			local lspconfig = require("lspconfig")
 
 			return {
+				experimental_lazy_setup = true,
 				excluded_servers = {
 					-- Disable generic purpose LSP that I don't care about.
 					"efm",
 					"diagnosticls",
-					-- Bugged servers
-					"sqls",
-					"rome",
+					-- Slow lsps to configure
+					"turtle_ls",
 				},
 				prefer_local = true,
 				preferred_servers = {
@@ -79,9 +77,15 @@ return {
 				},
 				configs = {
 					jsonls = {
+						on_new_config = function(new_config)
+							new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+							vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+						end,
 						settings = {
 							json = {
-								schemas = require('schemastore').json.schemas(),
+								format = {
+									enable = true,
+								},
 								validate = { enable = true },
 							},
 						},
@@ -104,7 +108,9 @@ return {
 					},
 					omnisharp = {
 						handlers = {
-							["textDocument/definition"] = require('omnisharp_extended').handler,
+							["textDocument/definition"] = require('omnisharp_extended').definition_handler,
+							["textDocument/references"] = require('omnisharp_extended').references_handler,
+							["textDocument/implementation"] = require('omnisharp_extended').implementation_handler,
 						},
 						enable_editorconfig_support = true,
 						enable_roslyn_analyzers = true,
@@ -115,6 +121,7 @@ return {
 							["OMNISHARP_msbuild:EnablePackageAutoRestore"] = true,
 						},
 						on_new_config = function(new_config, new_root_dir)
+							-- lazy-lsp magics for nix
 							pcall(require("lspconfig").omnisharp.document_config.default_config.on_new_config,
 								new_config, new_root_dir)
 							local custom_nix_pkgs = { "omnisharp-roslyn" }
@@ -211,6 +218,17 @@ return {
 				border = "rounded",
 			})
 		end,
+	},
+
+	{
+		"b0o/SchemaStore.nvim",
+		lazy = true,
+		version = false
+	},
+
+	{
+		"Hoffs/omnisharp-extended-lsp.nvim",
+		lazy = true,
 	},
 
 	{
