@@ -404,7 +404,7 @@ return {
 
 	{
 		"RRethy/vim-illuminate",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			providers = {
 				"lsp",
@@ -412,6 +412,11 @@ return {
 			},
 			under_cursor = false,
 			min_count_to_highlight = 2,
+			delay = 200,
+			large_file_cutoff = 2000,
+			large_file_overrides = {
+				providers = { "lsp" },
+			},
 		},
 		config = function(_, opts) require("illuminate").configure(opts) end,
 	},
