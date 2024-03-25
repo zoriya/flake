@@ -24,7 +24,7 @@ return {
 	{
 		"dundalek/lazy-lsp.nvim",
 		-- dev = true,
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		dependencies = {
 			{
 				"neovim/nvim-lspconfig",
@@ -35,7 +35,7 @@ return {
 			"cmp-nvim-lsp",
 		},
 		opts = function()
-			local lsp_on_attach = function(client, buffer)
+			local lsp_on_attach = function(_, buffer)
 				lsp_keymaps(buffer)
 			end
 			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -211,7 +211,7 @@ return {
 				update_in_insert = true,
 				float = {
 					border = "rounded",
-					source = "always",
+					source = true,
 				},
 			})
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -251,6 +251,7 @@ return {
 
 	{
 		"ray-x/lsp_signature.nvim",
+		event = "LspAttach",
 		opts = {
 			doc_lines = 100,
 			fix_pos = true,
@@ -264,6 +265,7 @@ return {
 
 	{
 		"stevearc/conform.nvim",
+		cmd = "ConformInfo",
 		keys = {
 			{
 				"<leader>lf",
@@ -311,7 +313,7 @@ return {
 
 	{
 		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		config = function(_, opts)
 			local override_severity = function(linter)
 				local old_parser = linter.parser;

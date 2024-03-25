@@ -3,7 +3,7 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		build = ":TSUpdate",
-		event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects"
 		},
@@ -53,7 +53,6 @@ return {
 					if cstr then
 						return cstr
 					end
-					print(vim.bo.commentstring)
 					if vim.bo.commentstring == "/*%s*/" then
 						return "// %s"
 					end
