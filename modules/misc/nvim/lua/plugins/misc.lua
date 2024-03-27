@@ -28,4 +28,7 @@ return {
 			{ "<leader>u", vim.cmd.UndotreeToggle, desc = "Show undotree" },
 		},
 	},
+
+	-- TODO: upstream this to vim
+	"towolf/vim-helm"
 }

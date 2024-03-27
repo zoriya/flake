@@ -43,7 +43,6 @@ return {
 			local lspconfig = require("lspconfig")
 
 			return {
-				experimental_lazy_setup = true,
 				excluded_servers = {
 					-- Disable generic purpose LSP that I don't care about.
 					"efm",
@@ -131,6 +130,7 @@ return {
 					robotframework_ls = {
 						cmd = { "nix-shell", "-p", "python3", "--command",
 							"cd /tmp && python3 -m venv venv && . venv/bin/activate && pip install robotframework_lsp RESTInstance && robotframework_ls" },
+						filetypes = { "robot" },
 						settings = {
 							robot = {
 								codeFormatter = "robotidy",
