@@ -21,7 +21,6 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nur.url = "github:nix-community/NUR";
     dwl-source = {
       # Use dwl's master.
       url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
@@ -61,7 +60,6 @@
             impermanence.nixosModules.impermanence
             ./modules/misc
             (./modules + "/${de}")
-            # nur.nixosModules.nur
             {
               nixpkgs.overlays = [
                 (import ./overlays {inherit dwl-source flood;})
@@ -108,12 +106,6 @@
           pkgs,
           ...
         }: {
-
-          # hardware.tuxedo-rs = {
-          #   enable = true;
-          #   tailor-gui.enable = true;
-          # };
-
           hardware.keyboard.zsa.enable = true;
           environment.systemPackages = with pkgs; [wally-cli];
 
