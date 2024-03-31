@@ -18,7 +18,7 @@ return {
 			{ "<leader>F",  "<cmd>Telescope live_grep theme=ivy<cr>", desc = "Grep" },
 			{ "<leader>gl", "<cmd>Telescope git_commits<CR>",         desc = "Git log" },
 			{ "<leader>gh", "<cmd>Telescope git_bcommits<CR>",        desc = "Git history" },
-			{ "<leader>gb", "<cmd>Telescope git_branches<CR>",        desc = "Git branches" },
+			{ "<leader>gB", "<cmd>Telescope git_branches<CR>",        desc = "Git branches" },
 			{ "<leader>gs", "<cmd>Telescope git_status<CR>",          desc = "Git status" },
 			{ "<leader>gc", "<cmd>Telescope git_show<CR>",            desc = "Show last commit" },
 		},

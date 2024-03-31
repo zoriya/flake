@@ -22,7 +22,6 @@ return {
 				map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
 				map("n", "<leader>gu", gs.undo_stage_hunk, "Unstage Hunk")
 				map("n", "<leader>gA", gs.stage_buffer, "Add buffer")
-				map("n", "<leader>gB", gs.blame_line, "Blame")
 				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
 				map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
 				map("n", "<leader>gd", gs.diffthis, "Diff This")
@@ -46,8 +45,29 @@ return {
 		opts = {
 			default_mappings = false,
 		},
-		init = function ()
+		init = function()
 			vim.keymap.del("n", "gx")
 		end
-	}
+	},
+
+	{
+		-- "FabijanZulj/blame.nvim",
+		"zoriya/blame.nvim",
+		-- dev = true,
+		keys = {
+			{ "<leader>gb", "<cmd>ToggleBlame window<CR>", desc = "Git blame" },
+		},
+		cmd = "ToggleBlame",
+		opts = {
+			date_format = "%Y/%m/%d",
+			width = 50,
+			commit_detail_view = "current",
+			format = function(blame)
+				if string.sub(blame.hash, 0, 8) == "00000000" then
+					return "Not Committed Yet"
+				end
+				return string.format("%s %s %s", blame.author, blame.date, blame.summary)
+			end,
+		},
+	},
 }

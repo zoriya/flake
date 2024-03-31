@@ -30,7 +30,8 @@ return {
 			},
 			custom_highlights = function (colors)
 				return {
-					FlashLabel = { fg = colors.red }
+					FlashLabel = { fg = colors.red },
+					NotCommitedBlame = { fg = "DimGray" },
 				}
 			end
 		},
