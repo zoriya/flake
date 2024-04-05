@@ -19,6 +19,7 @@ local options = {
 	cursorline = true,
 	sidescrolloff = 8,
 	wrap = false,
+	linebreak = true, -- When using set wrap, do not break in the middle of a word.
 
 	termguicolors = true,
 	swapfile = false,

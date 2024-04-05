@@ -144,6 +144,7 @@ in {
       plugins = [
         "sudo"
         "git"
+        "kubectl"
         "copypath"
         "copyfile"
       ];
