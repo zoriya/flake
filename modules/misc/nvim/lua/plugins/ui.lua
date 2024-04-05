@@ -74,6 +74,13 @@ return {
 					reverse = false,
 				},
 			},
+			routes = {
+				-- Remove Checking document notifications from ltx-ls
+				{
+					filter = { event = "lsp", kind = "progress", find = "Checking document" },
+					opts = { skip = true },
+				},
+			},
 		},
 	},
 

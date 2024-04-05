@@ -49,6 +49,9 @@ return {
 					"diagnosticls",
 					-- Slow lsps to configure
 					"turtle_ls",
+					-- enabled on too many ft
+					"zk",
+					"tailwindcss",
 				},
 				prefer_local = true,
 				preferred_servers = {
@@ -68,6 +71,7 @@ return {
 					go = { "gopls" },
 					json = { "jsonls" },
 					yaml = { "yamlls" },
+					markdown = { "ltex", "marksman" },
 				},
 
 				default_config = {
