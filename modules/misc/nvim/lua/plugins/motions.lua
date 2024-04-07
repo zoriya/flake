@@ -95,6 +95,7 @@ return {
 			{ "gA", desc = "Align with preview" }
 		},
 		as = "mini.align",
+		config = true,
 		version = '*',
 	},
 
