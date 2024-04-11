@@ -47,6 +47,7 @@ in {
   users.users.zoriya.openssh.authorizedKeys.keys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGcLP/ZEjnSgkzQMBeLLOWn5uejSr9Gg1h9PJZECVTLm+VDQ7KyI3ORZt+qbfEnsnGL73iwcAqB5Upy9Cdj0182mnrTk2ZViNMeFT7kLBF0yXpiajQTtMjENYj0nbNWpQ5+sJrtJKKYK/tBghW8PyTrJPpVQcrLcf4D66U5DkkJNRDeu4v9SjHKaASUeyia4gRSVV59Ugtrl0lz8sl4yBSL4957zwzdkNR0pVmftaKmUP4KfBvpNcFOOpHcdvzDtEPQs8j0g2l65YOQNNFSMsYQfxt1X4zmEi4unRIlECglaPz12CyoTiM2xmCWa/mS5nm0dR1VbEHFMRtGbbgm9MwedXoxYAfycbu08fqi1AAvg7MQxDNLfWWBIHe7+imGLKrVkqk8B89I409iI4YiOytnUkxKZkxynqVYtEE0bx5J15mniq2vJTw9JD89qSVkvGjZNGuJgh4leIlxPGj4iP8KY3N3Ifaf72PsmmwW4rB5JPDW93RL1DZV8lk3NgyF8M= zoriya@fuhen"
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0Rkye1t+iS00HBb4qgRkIAmZVGwFDJncckmMH6YKhlsj6Gw601Enn0x2GvG1FTCSH2ERGP4MPK9+ZsIcJf2MAmLsa8mR6HLBoN9ipqZQYBIrqWkO4tW7EJemAwgCTxGdOOEfE25ke7+ZvxlkmkBIVTRR6S8BqM+ARifbfw8DhSuUlBDQB3KzSVo/7Qhbvwpuwfn9Ws3pYhPG9yPfSECDGZB9Mf1XRt46/CA81Cqqp0izwo3Zwzd+LW8ZcBRwiCvWmDvKJaBHyUo5FRIGKGvZpfOTXOGeNFC7W7Ja3m/vQikrTboAMnfMhSxi3brZzCjQh57MxwglCHW7UqT95PSvtKVioM5662Mav8kUMOXZpkEWq/NDrWUOqbNkDXga8Lbi6fiybASwJ+Gmq19AFc8mW3pUavAFEuZ/uRebbEMp+V6tRwY2Le05oY1QwcRNLG2ln9HMHDDPaycArTuZC+YJlQv5bNzht3RAsNyFZ4Zx7yvzE38uFhrYHEIcJFXNprUc= u0_a266@localhost"
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8HuwM/zouKaWAxX8B8IsZXCn9Ax2EDaYctDAjVejD/nqnvHd49AfRSmOreh10qVMqug0jTPltCUkQaoSmeruR8oQ8QsIXP9dGkwtOdcaUqzFUwfr+12xC11x3zOiNUG6LsJ+amcdLIst7WtZ6yMNyxHK1rFqF3JiOkUbUE6f7aqnfLSm5CwRG7qvjm2vb01snr3Vfm04CdQBghMY+3aiyT9Tkv4NOzuyjNJm+3YpIHQIdmLjhsbAnEtALf5Wl0L+1S9aa1NVIGu6dftqMqQfxTV6YbnUzHDj++w1Rpg204t1rxmI7N3+rgIqQB15wF/L0K3qDPPr6E6BaJRtkkAyLq4+jwVzQDww/SifdAbuetFRamXAYBg/PqAGDofgtlDtRLYcbZvJ/y5NlLo9xCPRGd0IiJ98LkMXlKvy28crlKbJf6Sd1U2YlqperlWhmGOxWy1YCm+2hq3MKlL//VobP5LQdvdu1FNwckFdCYVhIk/uaPrCnruy+wTfmdL9UqXM= zoriya@lucca"
   ];
 
   services.fail2ban = {
@@ -93,6 +94,7 @@ in {
         extraConfig = "proxy_pass_header Authorization;";
       };
     };
+
     virtualHosts."flood.sdg.moe" = {
       enableACME = true;
       forceSSL = true;
@@ -102,6 +104,16 @@ in {
         extraConfig = "proxy_pass_header Authorization;";
       };
     };
+
+    # virtualHosts."reader.sdg.moe" = {
+    #   enableACME = true;
+    #   forceSSL = true;
+    #   locations."/" = {
+    #     proxyPass = "http://localhost:3000";
+    #     proxyWebsockets = true;
+    #     extraConfig = "proxy_pass_header Authorization;";
+    #   };
+    # };
   };
   security.acme = {
     acceptTerms = true;
