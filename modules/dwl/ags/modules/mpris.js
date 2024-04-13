@@ -112,7 +112,7 @@ const PositionSlider = ({ player, ...props }) => {
 	});
 };
 
-export const MprisPlayer = ({ player = "youtube-music", ...props } = {}) =>
+export const MprisPlayer = ({ player = "YoutubeMusic", ...props } = {}) =>
 	CoverArt({
 		vexpand: false,
 		children: [
