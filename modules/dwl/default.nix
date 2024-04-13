@@ -1,21 +1,21 @@
 {pkgs, inputs, ...}: {
   services.xserver = {
     enable = true;
-    displayManager = {
-      gdm = {
-        enable = true;
-        settings = {
-          "org/gnome/desktop/peripherals/touchpad" = {
-            tap-to-click = true;
-          };
+    displayManager.gdm = {
+      enable = true;
+      settings = {
+        "org/gnome/desktop/peripherals/touchpad" = {
+          tap-to-click = true;
         };
       };
-      autoLogin = {
-        enable = true;
-        user = "zoriya";
-      };
-      sessionPackages = [pkgs.dwl];
     };
+  };
+  services.displayManager = {
+    autoLogin = {
+      enable = true;
+      user = "zoriya";
+    };
+    sessionPackages = [pkgs.dwl];
   };
 
   networking.networkmanager.enable = true;
