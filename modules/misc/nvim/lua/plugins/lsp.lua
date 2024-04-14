@@ -12,12 +12,12 @@ local lsp_keymaps = function(buffer)
 	map("n", "gr", '<cmd>lua vim.lsp.buf.references()<CR>', "Go to reference(s)")
 	map("n", "gs", '<cmd>lua vim.lsp.buf.type_definition()<CR>', "Type definition")
 
-	map("n", "<leader>lr", '<cmd>lua vim.lsp.buf.rename()<CR>', "Rename")
+	map("n", "<leader>r", '<cmd>lua vim.lsp.buf.rename()<CR>', "Rename")
 	map("n", "<leader>la", '<cmd>lua vim.lsp.buf.code_action()<CR>', "Code action")
 	map("n", "<leader>ll", '<cmd>lua vim.lsp.codelens.run()<CR>', "Run code lens")
 	map("n", "<leader>lg", '<cmd>Telescope lsp_document_symbols<CR>', "Go to symbol")
 
-	map("v", "<leader>lf", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Range Format")
+	map("v", "<leader>e", '<cmd>lua vim.lsp.buf.format({async=true})<CR>', "Range Format")
 end
 
 return {
@@ -272,7 +272,7 @@ return {
 		cmd = "ConformInfo",
 		keys = {
 			{
-				"<leader>lf",
+				"<leader>e",
 				function()
 					require("conform").format({ async = true, lsp_fallback = true --[["always"--]] })
 				end,
