@@ -12,6 +12,7 @@ with lib; let
   player = "mpv.desktop";
 in {
   imports = [
+    ./ghostty.nix
     ./kitty.nix
     ./gtk.nix
   ];
