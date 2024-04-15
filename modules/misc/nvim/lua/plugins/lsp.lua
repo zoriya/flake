@@ -52,6 +52,8 @@ return {
 					-- enabled on too many ft
 					"zk",
 					"tailwindcss",
+					-- bugged/deprecated
+					"ruby_ls",
 				},
 				prefer_local = true,
 				preferred_servers = {

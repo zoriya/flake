@@ -21,6 +21,9 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty = {
+      url = "git+ssh://git@github.com/mitchellh/ghostty";
+    };
     dwl-source = {
       # Use dwl's master.
       url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
@@ -40,9 +43,9 @@
     self,
     home-manager,
     neovim-nightly,
-    # nur,
     ags,
     nixpkgs,
+    ghostty,
     dwl-source,
     flood,
     impermanence,
@@ -76,6 +79,7 @@
                 isNormalUser = true;
                 extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
                 shell = pkgs.zsh;
+                packages = [ghostty.packages.x86_64-linux.default];
               };
             })
             ./hosts/${hostname}/hardware-configuration.nix
