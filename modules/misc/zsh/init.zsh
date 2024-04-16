@@ -39,9 +39,6 @@ function zvm_after_init() {
 
 }
 
-export YSU_MESSAGE_FORMAT="Alias: %alias - %command";
-export YSU_IGNORED_ALIASES=("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")
-export DIRENV_LOG_FORMAT=
 eval "$(nix-your-shell zsh)"
 
 setopt rm_star_silent

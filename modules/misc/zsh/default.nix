@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   configThemeNormal = ./p10k.zsh;
   configThemeTTY = ./p10k-tty.zsh;
 in {
@@ -98,11 +95,6 @@ in {
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
       {
-        name = "bd";
-        src = pkgs.zsh-bd;
-        file = "share/zsh-bd/bd.zsh";
-      }
-      {
         name = "you-should-use";
         src = pkgs.zsh-you-should-use;
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
@@ -144,10 +136,18 @@ in {
       plugins = [
         "sudo"
         "git"
+        "tmux"
         "kubectl"
         "copypath"
         "copyfile"
       ];
+    };
+
+    sessionVariables = {
+      YSU_MESSAGE_FORMAT = "Alias: %alias - %command";
+      YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
+      DIRENV_LOG_FORMAT = "";
+      ZSH_TMUX_AUTOSTART = true;
     };
   };
 }
