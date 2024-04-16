@@ -33,7 +33,7 @@ in {
   ];
 
   home.sessionVariables = rec {
-    TERMINAL = "kitty";
+    TERMINAL = "ghostty";
     BROWSER = "firefox";
     DEFAULT_BROWSER = BROWSER;
     # For rider

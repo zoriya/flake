@@ -41,6 +41,22 @@
     userName = "Zoe Roux";
   };
 
+  programs.tmux = {
+    enable = true;
+    escapeTime = 0;
+    terminal = "\$TERM";
+    shortcut = "t";
+    mouse = true;
+    aggressiveResize = true;
+    clock24 = true;
+    historyLimit = 50000;
+    extraConfig = ''
+    set -g status off
+    set focus-events on
+    set -g set-clipboard on
+    '';
+  };
+
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
     }'';
