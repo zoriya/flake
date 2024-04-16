@@ -13,15 +13,17 @@
     packages = with pkgs; [
       roboto
       dejavu_fonts
+      commit-mono
+      (nerdfonts.override {fonts = ["JetBrainsMono"];})
       # Some japanese fonts
       ipafont
       kochi-substitute
-      (nerdfonts.override {fonts = ["JetBrainsMono"];})
     ];
 
     fontconfig = {
       defaultFonts = {
         monospace = [
+          "CommitMono"
           "JetBrainsMono NL Nerd Font"
           "IPAGothic"
         ];
