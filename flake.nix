@@ -79,7 +79,6 @@
                 isNormalUser = true;
                 extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
                 shell = pkgs.zsh;
-                packages = [ghostty.packages.x86_64-linux.default];
               };
             })
             ./hosts/${hostname}/hardware-configuration.nix
@@ -111,7 +110,10 @@
           ...
         }: {
           hardware.keyboard.zsa.enable = true;
-          environment.systemPackages = with pkgs; [wally-cli];
+          environment.systemPackages = with pkgs; [
+            wally-cli
+            ghostty.packages.x86_64-linux.default
+          ];
 
           programs.gamescope.enable = true;
         })
