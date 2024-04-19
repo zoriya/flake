@@ -66,7 +66,6 @@
             {
               nixpkgs.overlays = [
                 (import ./overlays {inherit dwl-source flood;})
-                # nur.overlay
                 neovim-nightly.overlay
               ];
             }
@@ -123,7 +122,7 @@
 
       kadan = mkSystem "kadan" "server" [
         ({pkgs, ...}: {
-          environment.systemPackages = with pkgs; [tmux python3Packages.guessit mediainfo yt-dlp];
+          environment.systemPackages = with pkgs; [python3Packages.guessit mediainfo yt-dlp];
         })
       ];
 
@@ -138,14 +137,9 @@
             wslu
             wsl-open
           ];
-
-          environment.persistence."/nix/persist" = {
-            users.zoriya = {
-              directories = [
-                "work"
-              ];
-            };
-          };
+          
+          # Disable it for wls
+          environment.persistence."/nix/persist".enable = false;
         })
       ];
     };

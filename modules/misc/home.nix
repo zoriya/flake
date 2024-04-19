@@ -41,7 +41,6 @@
     userName = "Zoe Roux";
   };
 
-  home.packages = with pkgs; [tmux];
   xdg.configFile."tmux/tmux.conf".text = ''
     unbind C-b
     set -g prefix C-t

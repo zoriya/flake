@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./fonts.nix
+    ./nix.nix
     ./impermanence.nix
   ];
 
@@ -32,6 +33,7 @@
     man-pages
     man-pages-posix
     vim
+    tmux
   ];
 
   programs.zsh.enable = true;
