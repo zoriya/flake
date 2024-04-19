@@ -61,7 +61,7 @@
 
     bind-key -r f run-shell "tmux neww tmux-sessionizer"
     bind-key -r F run-shell "tmux-sessionizer ~/projects/flake"
-    bind-key -r H run-shell "tmux-sessionizer ~/projects/kyoo"
+    bind-key -r h run-shell "tmux-sessionizer ~/projects/kyoo"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
   '';

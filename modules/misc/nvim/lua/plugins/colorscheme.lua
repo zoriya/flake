@@ -28,7 +28,7 @@ return {
 				},
 				illuminate = true,
 			},
-			custom_highlights = function (colors)
+			custom_highlights = function(colors)
 				return {
 					FlashLabel = { fg = colors.red },
 					NotCommitedBlame = { fg = "DimGray" },
