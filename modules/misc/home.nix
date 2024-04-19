@@ -41,6 +41,9 @@
     userName = "Zoe Roux";
   };
 
+  home.packages = [
+    (pkgs.writeShellScriptBin "tmux-sessionizer" (builtins.readFile ./tmux-sessionizer.sh))
+  ];
   xdg.configFile."tmux/tmux.conf".text = ''
     unbind C-b
     set -g prefix C-t
@@ -49,6 +52,16 @@
     set -g mouse on
     set -g status off
     set -g set-clipboard on
+
+    set-window-option -g mode-keys vi
+    bind v copy-mode
+    bind -T copy-mode-vi v send -X begin-selection
+    bind -T copy-mode-vi V send -X select-line
+    bind -T copy-mode-vi y send -X copy-selection-and-cancel
+
+    bind-key -r f run-shell "tmux neww tmux-sessionizer"
+    bind-key -r F run-shell "tmux-sessionizer ~/projects/flake"
+    bind-key -r H run-shell "tmux-sessionizer ~/projects/kyoo"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
   '';
