@@ -94,7 +94,6 @@ return {
 			{ "ga", desc = "Align" },
 			{ "gA", desc = "Align with preview" }
 		},
-		as = "mini.align",
 		config = true,
 		version = '*',
 	},
@@ -112,7 +111,6 @@ return {
 				join = 'gJ',
 			},
 		},
-		as = "mini.splitjoin",
 		version = '*',
 	},
 }
