@@ -55,15 +55,18 @@
 
     set-window-option -g mode-keys vi
     bind v copy-mode
+    bind -T copy-mode-vi i send -X cancel
     bind -T copy-mode-vi v send -X begin-selection
     bind -T copy-mode-vi V send -X select-line
-    bind -T copy-mode-vi y send -X copy-selection-and-cancel
+    bind -T copy-mode-vi y send -X copy-selection -x
+    bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection -x
 
     bind-key -r f run-shell "tmux neww tmux-sessionizer"
     bind-key -r F run-shell "tmux-sessionizer ~/projects/flake"
     bind-key -r h run-shell "tmux-sessionizer ~/projects/kyoo"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
+    run-shell ${pkgs.tmuxPlugins.fzf-tmux-url.rtp}
   '';
     # terminal = "\$TERM";
 

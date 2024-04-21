@@ -48,8 +48,8 @@
   xdg.configFile."kitty/light.conf".source = "${pkgs.kitty-themes}/share/kitty-themes/themes/Catppuccin-Latte.conf";
   xdg.configFile."kitty/dark.conf".source = "${pkgs.kitty-themes}/share/kitty-themes/themes/Catppuccin-Mocha.conf";
 
-  programs.zsh.shellAliases = {
-    ssh = "kitty +kitten ssh";
-  };
+  # programs.zsh.shellAliases = {
+  #   ssh = "kitty +kitten ssh";
+  # };
 }
 
