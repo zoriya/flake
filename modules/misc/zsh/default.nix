@@ -148,6 +148,8 @@ in {
       YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
       DIRENV_LOG_FORMAT = "";
       ZSH_TMUX_AUTOSTART = true;
+      ZSH_TMUX_AUTONAME_SESSION = false;
+      ZSH_TMUX_DEFAULT_SESSION_NAME = "home";
     };
   };
 }

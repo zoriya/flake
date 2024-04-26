@@ -62,7 +62,7 @@
     bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection -x
 
     bind-key -r f run-shell "tmux neww tmux-sessionizer"
-    bind-key -r F run-shell "tmux-sessionizer ~/projects/flake"
+    bind-key -r c run-shell "tmux-sessionizer ~/projects/flake"
     bind-key -r h run-shell "tmux-sessionizer ~/projects/kyoo"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
