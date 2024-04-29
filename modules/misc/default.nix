@@ -34,6 +34,7 @@
     man-pages-posix
     vim
     tmux
+    jq
   ];
 
   programs.zsh.enable = true;

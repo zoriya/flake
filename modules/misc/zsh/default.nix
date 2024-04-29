@@ -7,7 +7,6 @@ in {
     viu
     htop-vim
     tldr
-    jq
     fd
     duf
     ncdu
