@@ -105,15 +105,15 @@ in {
       };
     };
 
-    # virtualHosts."reader.sdg.moe" = {
-    #   enableACME = true;
-    #   forceSSL = true;
-    #   locations."/" = {
-    #     proxyPass = "http://localhost:3000";
-    #     proxyWebsockets = true;
-    #     extraConfig = "proxy_pass_header Authorization;";
-    #   };
-    # };
+    virtualHosts."reader.sdg.moe" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:2345";
+        proxyWebsockets = true;
+        extraConfig = "proxy_pass_header Authorization;";
+      };
+    };
   };
   security.acme = {
     acceptTerms = true;
