@@ -1,5 +1,4 @@
-push()
-{
+push() {
 	if [[ -z "$1" ]]; then
 		git push
 		return
@@ -8,6 +7,7 @@ push()
 }
 
 git-branch-clear() {
+	git fetch --prune origin
 	git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
 }
 
@@ -28,8 +28,7 @@ EOF
 	direnv allow
 }
 
-flakify()
-{
+flakify() {
 	if [ ! -e flake.nix ]; then
 		nix flake new -t github:nix-community/nix-direnv .
 	elif [ ! -e .envrc ]; then
@@ -73,4 +72,8 @@ robot_install() {
 		source /tmp/robot/bin/activate
 		pip3 install robotframework RESTinstance
 	fi
+}
+
+touchp() {
+	mkdir -p "$(dirname "$1")" && touch "$1"
 }
