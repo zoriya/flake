@@ -111,17 +111,4 @@ if vim.call("has", "wsl") == 1 then
 	-- Lumen takes 170ms on windows and I only use the windows laptop at work, with light mode.
 	vim.g.lumen_startup_overwrite = 0
 	vim.opt.background="light"
-
-	vim.g.clipboard = {
-		name = 'WslClipboard',
-		copy = {
-			['+'] = 'clip.exe',
-			['*'] = 'clip.exe',
-		},
-		paste = {
-			['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-			['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-		},
-		cache_enabled = 0,
-	}
 end
