@@ -30,6 +30,7 @@ in {
     youtube-music
     wl-clipboard
     alsa-utils
+    postman
   ];
 
   home.sessionVariables = rec {

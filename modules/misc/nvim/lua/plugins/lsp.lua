@@ -291,12 +291,13 @@ return {
 						return { "isort", "black" }
 					end
 				end,
-				javascript = { { "prettierd", "prettier" } },
-				typescript = { { "prettierd", "prettier" } },
-				javascriptreact = { { "prettierd", "prettier" } },
-				typescriptreact = { { "prettierd", "prettier" } },
-				css = { { "prettierd", "prettier" } },
-				html = { { "prettierd", "prettier" } },
+				javascript = { { "biome", "prettierd", "prettier" } },
+				typescript = { { "biome", "prettierd", "prettier" } },
+				javascriptreact = { { "biome", "prettierd", "prettier" } },
+				typescriptreact = { { "biome", "prettierd", "prettier" } },
+				json = { { "biome", "prettierd", "prettier" } },
+				css = { { "biome", "prettierd", "prettier" } },
+				html = { { "biome", "prettierd", "prettier" } },
 				sql = { "pg_format" },
 				cs = { "csharpier" },
 				["*"] = { "injected" }
@@ -332,19 +333,20 @@ return {
 				end
 			end
 			override_severity(require("lint").linters.eslint_d)
+			override_severity(require("lint").linters.biomejs)
 
 			require("lint").linters_by_ft = opts
 			vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
 				callback = function()
-					require("lint").try_lint()
+					require("lint").try_lint(nil, { ignore_errors = true })
 				end,
 			})
 		end,
 		opts = {
-			javascript = { "eslint_d" },
-			typescript = { "eslint_d" },
-			javascriptreact = { "eslint_d" },
-			typescriptreact = { "eslint_d" },
+			javascript = { "biomejs", "eslint_d" },
+			typescript = { "biomejs", "eslint_d" },
+			javascriptreact = { "biomejs", "eslint_d" },
+			typescriptreact = { "biomejs", "eslint_d" },
 		},
 	},
 
