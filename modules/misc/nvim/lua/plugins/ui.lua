@@ -55,13 +55,13 @@ return {
 				command_palette = true,
 				inc_rename = true,
 			},
+			messages = { enabled = true },
+			notify = { enabled = false },
 			lsp = {
-				signature = {
-					enabled = false,
-				},
-				hover = {
-					enabled = false,
-				},
+				progress = { enabled = false },
+				signature = { enabled = false },
+				hover = { enabled = false },
+				message = { enabled = false },
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = false,
 					["vim.lsp.util.stylize_markdown"] = false,
@@ -74,14 +74,33 @@ return {
 					reverse = false,
 				},
 			},
-			routes = {
-				-- Remove Checking document notifications from ltx-ls
-				{
-					filter = { event = "lsp", kind = "progress", find = "Checking document" },
-					opts = { skip = true },
+			-- routes = {
+			-- 	-- Remove Checking document notifications from ltx-ls
+			-- 	{
+			-- 		filter = { event = "lsp", kind = "progress", find = "Checking document" },
+			-- 		opts = { skip = true },
+			-- 	},
+			-- },
+		},
+	},
+
+	{
+		"j-hui/fidget.nvim",
+		event = "VeryLazy",
+		opts = {
+			progress = {
+				ignore = { "ltx-ls" },
+				display = {
+					render_limit = 5,
 				},
 			},
+			notification = {
+				override_vim_notify = true,
+			},
 		},
+		init = function()
+			vim.opt.cmdheight = 0
+		end,
 	},
 
 	{
