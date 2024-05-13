@@ -73,6 +73,7 @@ return {
 						},
 						{
 							"navic",
+							color_correction = "static",
 						},
 					},
 					lualine_x = {
