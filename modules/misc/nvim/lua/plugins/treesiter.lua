@@ -30,6 +30,7 @@ return {
 					},
 				},
 			},
+			matchup = { enable = true },
 		},
 		main = "nvim-treesitter.configs",
 	},
@@ -77,5 +78,12 @@ return {
 		keys = {
 			{ "<leader>n", "<cmd>Neogen<cr>", desc = "Generate documentation" },
 		},
+	},
+
+	{
+		"andymass/vim-matchup",
+		setup = function()
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+		end,
 	}
 }

@@ -53,6 +53,7 @@
   "vim-helm": { "branch": "master", "commit": "86cc6766db60b8cc5731068d0c2111dee1f2b328" },
   "vim-illuminate": { "branch": "master", "commit": "e522e0dd742a83506db0a72e1ced68c9c130f185" },
   "vim-lumen": { "branch": "master", "commit": "6864405e06a90d077b04b9f95faf3f9cd5ae7b10" },
+  "vim-matchup": { "branch": "master", "commit": "2d660e4aa7c566014c667af2cda0458043527902" },
   "vim-sleuth": { "branch": "master", "commit": "1cc4557420f215d02c4d2645a748a816c220e99b" },
   "vim-wordmotion": { "branch": "master", "commit": "81d9bd298376ab0dc465c85d55afa4cb8d5f47a1" },
   "virtcolumn.nvim": { "branch": "main", "commit": "2291fe12098f1541483e7ee4d0fa0835c1f028f6" },
