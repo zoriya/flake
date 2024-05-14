@@ -7,4 +7,9 @@
   gtk.enable = lib.mkForce false;
   services.xsettingsd.enable = lib.mkForce false;
   qt.enable = lib.mkForce false;
+
+  home.sessionVariables = {
+    WAYLAND_DISPLAY = "wayland-0";
+  };
+
 }
