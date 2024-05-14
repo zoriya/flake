@@ -1,26 +1,18 @@
 return {
 	{
-
-		"folke/flash.nvim",
-		event = "VeryLazy",
-		opts = {
-			search = {
-				multi_window = false,
-			},
-			modes = {
-				search = { enabled = false, },
-				char = { highlight = { backdrop = false } },
-			}
-		},
+		"ggandor/leap.nvim",
 		keys = {
-			{ "s", mode = { "n", "x" }, function() require("flash").jump() end, desc = "Flash" },
-			{ "z", mode = "o",          function() require("flash").jump() end, desc = "Flash" },
-			"f",
-			"F",
-			"t",
-			"T",
+			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
+			{ "S", "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
+			{ "z", "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
+			{ "Z", "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
 		},
+	},
 
+	{
+		"ggandor/flit.nvim",
+		keys = { "f", "F", "t", "T" },
+		opts = true,
 	},
 
 	{

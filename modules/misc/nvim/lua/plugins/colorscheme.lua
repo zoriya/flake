@@ -13,6 +13,7 @@ return {
 					style = "nvchad",
 				},
 				noice = true,
+				fidget = true,
 				mini = true,
 				cmp = true,
 				native_lsp = {
@@ -20,7 +21,7 @@ return {
 				},
 				navic = true,
 				harpoon = true,
-				flash = true,
+				leap = true,
 				gitsigns = true,
 				semantic_tokens = true,
 				indent_blankline = {
