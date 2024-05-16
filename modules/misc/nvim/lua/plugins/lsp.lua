@@ -3,7 +3,6 @@ local lsp_keymaps = function(buffer)
 		vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 	end
 
-	map("n", "K", '<cmd>lua vim.lsp.buf.hover()<CR>', "See informations")
 	map("n", "<C-k>", '<cmd>lua vim.lsp.buf.signature_help()<CR>', "See signature help")
 
 	map("n", "gD", '<cmd>lua vim.lsp.buf.declaration()<CR>', "Go to declaration")
@@ -207,8 +206,6 @@ return {
 			local function map(l, r, desc)
 				vim.keymap.set("n", l, r, { desc = desc })
 			end
-			map("[d", '<cmd>lua vim.diagnostic.goto_prev()<CR>', "Prev diagnostic")
-			map("]d", '<cmd>lua vim.diagnostic.goto_next()<CR>', "Next diagnostic")
 			map("gl", "<cmd>lua vim.diagnostic.open_float()<CR>", "See diagnostics")
 			map("<leader>li", "<cmd>LspInfo<cr>", "Info")
 
