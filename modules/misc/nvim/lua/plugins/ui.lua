@@ -89,7 +89,7 @@ return {
 		event = "VeryLazy",
 		opts = {
 			progress = {
-				ignore = { "ltx-ls" },
+				ignore = { "ltex" },
 				display = {
 					render_limit = 5,
 				},
