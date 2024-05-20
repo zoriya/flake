@@ -36,31 +36,9 @@ return {
 	},
 
 	{
-		"echasnovski/mini.comment",
-		version = '*',
-		dependencies = {
-			{
-				"JoosepAlviste/nvim-ts-context-commentstring",
-				opts = {
-					enable_autocmd = false,
-				}
-			},
-		},
+		"folke/ts-comments.nvim",
+		opts = {},
 		event = "VeryLazy",
-		opts = {
-			options = {
-				custom_commentstring = function()
-					local cstr = require("ts_context_commentstring").calculate_commentstring()
-					if cstr then
-						return cstr
-					end
-					if vim.bo.commentstring == "/*%s*/" then
-						return "// %s"
-					end
-					return vim.bo.commentstring
-				end,
-			}
-		},
 	},
 
 	{

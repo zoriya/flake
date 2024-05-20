@@ -53,6 +53,8 @@ return {
 					"tailwindcss",
 					-- bugged/deprecated
 					"ruby_ls",
+					"drools_lsp",
+					"mutt_ls",
 				},
 				prefer_local = true,
 				preferred_servers = {
