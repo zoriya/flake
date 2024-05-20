@@ -29,12 +29,9 @@
 
       # map kitty_mod+r launch --type background --stdin-source=@screen_scrollback sh -c 'grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | rofi -dmenu -p "Launch in browser" | xargs xdg-open'
       map kitty_mod+r open_url_with_hints
-      map kitty_mod+t launch --type=tab --cwd=current
 
       map kitty_mod+e scroll_line_up
       map kitty_mod+y scroll_line_down
-      map kitty_mod+h previous_tab
-      map kitty_mod+l next_tab
 
       map kitty_mod+o scroll_to_prompt -1
       map kitty_mod+i scroll_to_prompt 1
