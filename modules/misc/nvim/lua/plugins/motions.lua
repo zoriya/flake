@@ -2,10 +2,10 @@ return {
 	{
 		"ggandor/leap.nvim",
 		keys = {
-			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
-			{ "S", "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
-			{ "z", "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
-			{ "Z", "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
+			{ "s",  "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
+			{ "S",  "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
+			{ "z",  "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
+			{ "Z",  "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
 		},
 	},
 

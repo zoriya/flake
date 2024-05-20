@@ -83,8 +83,11 @@ return {
 	{
 		"andymass/vim-matchup",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		setup = function()
+		init = function()
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
 		end,
+		config = function()
+			vim.keymap.del("o", "z%")
+		end
 	}
 }
