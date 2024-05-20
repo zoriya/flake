@@ -33,6 +33,7 @@ in {
     flags = ["--disable-up-arrow"];
     settings = {
       update_check = false;
+      show_preview = true;
     };
   };
 

@@ -300,6 +300,10 @@ return {
 				["*"] = { "injected" }
 			},
 			formatters = {
+				biome = {
+					-- disable node module search since native binaries can't be run from nix
+					command = "biome",
+				},
 				csharpier = function()
 					return {
 						cwd = require("conform.util").root_file(function(name)
