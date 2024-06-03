@@ -99,16 +99,21 @@ keymap("t", "<C-W>", "<C-\\><C-N>", "Normal mode")
 
 vim.cmd("autocmd FileType qf setl nolist")
 vim.cmd("syntax on")
-vim.cmd [[
-	augroup highlight_yank
-		autocmd!
-		autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
-	augroup end
-]]
 
-vim.g.zig_fmt_autosave = 0
+vim.api.nvim_create_autocmd('TextYankPost', {
+	group = vim.api.nvim_create_augroup("HighlightYank", {}),
+	pattern = '*',
+	callback = function()
+		vim.highlight.on_yank({
+			higroup = 'Visual',
+			timeout = 200,
+		})
+	end,
+})
+
+
 if vim.call("has", "wsl") == 1 then
 	-- Lumen takes 170ms on windows and I only use the windows laptop at work, with light mode.
 	vim.g.lumen_startup_overwrite = 0
-	vim.opt.background="light"
+	vim.opt.background = "light"
 end

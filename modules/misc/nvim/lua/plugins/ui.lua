@@ -138,11 +138,6 @@ return {
 		event = "VeryLazy",
 		opts = {
 			plugins = { spelling = true },
-			operators = {
-				gc = "Comments",
-				ys = "Add Surroundings",
-				yS = "Add Surroundings",
-			}
 		},
 		config = function(_, opts)
 			vim.opt["timeoutlen"] = 500

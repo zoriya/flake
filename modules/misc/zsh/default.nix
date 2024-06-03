@@ -24,6 +24,7 @@ in {
     bc
     glow
     gh
+    alejandra
     nodePackages.http-server
     nodePackages.live-server
   ];

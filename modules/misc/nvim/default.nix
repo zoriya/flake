@@ -1,7 +1,6 @@
 {pkgs, config, ...}: {
   home.packages = with pkgs; [
-    # neovim
-    neovim-nightly
+    neovim
   ];
   xdg.configFile."nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim/lua";
   xdg.configFile."nvim/after".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim/after";

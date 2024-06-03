@@ -25,12 +25,7 @@ return {
 		-- dev = true,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		dependencies = {
-			{
-				"neovim/nvim-lspconfig",
-				dependencies = {
-					{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
-				},
-			},
+			"neovim/nvim-lspconfig",
 			"cmp-nvim-lsp",
 		},
 		opts = function()
@@ -144,15 +139,6 @@ return {
 							},
 						}
 					},
-					nil_ls = {
-						settings = {
-							["nil"] = {
-								formatting = {
-									command = { "nix-shell", "-p", "alejandra", "--run", "alejandra -" },
-								},
-							},
-						},
-					},
 					gopls = {
 						settings = {
 							-- https://go.googlesource.com/vscode-go/+/HEAD/docs/settings.md#settings-for
@@ -195,23 +181,18 @@ return {
 			}
 		end,
 		init = function()
-			local signs = {
-				{ name = "DiagnosticSignError", text = "󰅚" },
-				{ name = "DiagnosticSignWarn", text = "" },
-				{ name = "DiagnosticSignHint", text = "󰌶" },
-				{ name = "DiagnosticSignInfo", text = "" },
-			}
-			for _, sign in ipairs(signs) do
-				vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-			end
-
-			local function map(l, r, desc)
-				vim.keymap.set("n", l, r, { desc = desc })
-			end
-			map("gl", "<cmd>lua vim.diagnostic.open_float()<CR>", "See diagnostics")
-			map("<leader>li", "<cmd>LspInfo<cr>", "Info")
+			vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "See diagnostics" })
+			vim.keymap.set("n", "<leader>li", "<cmd>LspInfo<cr>", { desc = "Info" })
 
 			vim.diagnostic.config({
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = "󰅚",
+						[vim.diagnostic.severity.WARN] = "",
+						[vim.diagnostic.severity.HINT] = "󰌶",
+						[vim.diagnostic.severity.INFO] = "",
+					},
+				},
 				virtual_text = false,
 				update_in_insert = true,
 				float = {
@@ -237,6 +218,19 @@ return {
 	},
 
 	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		dependencies = {
+			{ "Bilal2453/luvit-meta", lazy = true }
+		},
+		opts = {
+			library = {
+				"luvit-meta/library",
+			},
+		},
+	},
+
+	{
 		"zbirenbaum/neodim",
 		event = "LspAttach",
 		opts = {
@@ -256,7 +250,7 @@ return {
 
 	{
 		"ray-x/lsp_signature.nvim",
-		event = "LspAttach",
+		event = "VeryLazy",
 		opts = {
 			doc_lines = 100,
 			fix_pos = true,
@@ -299,6 +293,7 @@ return {
 				html = { { "biome", "prettierd", "prettier" } },
 				sql = { "pg_format" },
 				cs = { "csharpier" },
+				nix = { "alejandra" },
 				["*"] = { "injected" }
 			},
 			formatters = {

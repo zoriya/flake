@@ -66,7 +66,7 @@
             {
               nixpkgs.overlays = [
                 (import ./overlays {inherit dwl-source flood;})
-                neovim-nightly.overlay
+                neovim-nightly.overlays.default
               ];
             }
 
