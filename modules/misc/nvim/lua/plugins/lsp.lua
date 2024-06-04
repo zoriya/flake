@@ -70,6 +70,7 @@ return {
 					json = { "jsonls" },
 					yaml = { "yamlls" },
 					markdown = { "ltex", "marksman" },
+					tex = { "texlab" },
 				},
 
 				default_config = {
