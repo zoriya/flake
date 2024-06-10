@@ -69,8 +69,9 @@ return {
 					go = { "gopls" },
 					json = { "jsonls" },
 					yaml = { "yamlls" },
-					markdown = { "ltex", "marksman" },
-					tex = { "texlab" },
+					markdown = { "marksman", "ltex" },
+					tex = { "texlab", "ltex" },
+					html = { "html" },
 				},
 
 				default_config = {
@@ -228,6 +229,16 @@ return {
 			library = {
 				"luvit-meta/library",
 			},
+		},
+	},
+
+	{
+		"barreiroleo/ltex_extra.nvim",
+		branch = "dev",
+		ft = { "markdown", "tex" },
+		opts = {
+			-- See https://valentjn.github.io/ltex/supported-languages.html#natural-languages
+			load_langs = { 'en-US' },
 		},
 	},
 
