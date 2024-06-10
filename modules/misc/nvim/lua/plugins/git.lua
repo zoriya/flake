@@ -39,8 +39,8 @@ return {
 			{ "gxt", "<Plug>(git-conflict-theirs)",        desc = "Accept theirs" },
 			{ "gxb", "<Plug>(git-conflict-both)",          desc = "Accept both" },
 			{ "gx0", "<Plug>(git-conflict-none)",          desc = "Accept none" },
-			{ "]x",  "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
-			{ "[x",  "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
+			{ "[x",  "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
+			{ "]x",  "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
 		},
 		opts = {
 			default_mappings = false,
