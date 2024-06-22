@@ -1,4 +1,5 @@
 import Gio from "gi://Gio";
+import GioUnix from "gi://GioUnix";
 
 import Service from 'resource:///com/github/Aylur/ags/service.js'
 
@@ -17,7 +18,7 @@ class DwlService extends Service {
 
 		this.watchSocket(
 			new Gio.DataInputStream({
-				base_stream: new Gio.UnixInputStream({ fd: 0 }),
+				base_stream: new GioUnix.InputStream({ fd: 0 }),
 				close_base_stream: true,
 			})
 		);

@@ -24,8 +24,6 @@ return {
 				map("n", "<leader>gA", gs.stage_buffer, "Add buffer")
 				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
 				map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
-				map("n", "<leader>gd", gs.diffthis, "Diff This")
-				map("n", "<leader>gD", function() gs.diffthis("~") end, "Diff This ~")
 				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Git Select Hunk")
 			end,
 		},
