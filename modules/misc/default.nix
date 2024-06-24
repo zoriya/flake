@@ -35,6 +35,7 @@
     vim
     tmux
     jq
+    mosh
   ];
 
   programs.zsh.enable = true;
