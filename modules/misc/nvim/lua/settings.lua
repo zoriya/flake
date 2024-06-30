@@ -20,7 +20,7 @@ local options = {
 	sidescrolloff = 8,
 	wrap = false,
 	linebreak = true, -- When using set wrap, do not break in the middle of a word.
-	spell = true,
+	spell = false,
 
 	termguicolors = true,
 	swapfile = false,

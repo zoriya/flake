@@ -23,8 +23,8 @@ return {
 			{ "<leader>gc", "<cmd>Telescope git_show<CR>",            desc = "Show last commit" },
 		},
 		opts = function()
-			local actions = require "telescope.actions"
-			local action_state = require "telescope.actions.state"
+			local actions = require("telescope.actions")
+			local action_state = require("telescope.actions.state")
 
 			local function git_show()
 				local entry = action_state.get_selected_entry()
