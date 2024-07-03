@@ -115,6 +115,14 @@ in {
         extraConfig = "proxy_pass_header Authorization;";
       };
     };
+
+    virtualHosts."proxy.sdg.moe" = {
+      locations."/" = {
+        proxyPass = "http://localhost:5000";
+        proxyWebsockets = true;
+        extraConfig = "proxy_pass_header Authorization;";
+      };
+    };
   };
   security.acme = {
     acceptTerms = true;
