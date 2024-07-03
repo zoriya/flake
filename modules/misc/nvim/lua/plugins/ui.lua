@@ -202,9 +202,8 @@ return {
 	{
 		"folke/trouble.nvim",
 		keys = {
-			{ "<leader>ld", "<cmd>Trouble document_diagnostics<cr>",  desc = "Document Diagnostics" },
-			{ "<leader>lw", "<cmd>Trouble workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
-			{ "<leader>lt", "<cmd>TroubleToggle<CR>",                 desc = "Toogle trouble window" },
+			{ "<leader>lw", "<cmd>Trouble diagnostics<cr>", desc = "Diagnostics" },
+			{ "<leader>lt", "<cmd>TroubleToggle<CR>",       desc = "Toogle trouble window" },
 		},
 		opts = {
 			auto_close = true,

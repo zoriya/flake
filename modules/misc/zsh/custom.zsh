@@ -77,3 +77,8 @@ robot_install() {
 touchp() {
 	mkdir -p "$(dirname "$1")" && touch "$1"
 }
+
+
+proxy() {
+	ssh -nR "5000:localhost:$1" ssh.sdg.moe
+}
