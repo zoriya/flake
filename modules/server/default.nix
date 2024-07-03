@@ -120,7 +120,10 @@ in {
       locations."/" = {
         proxyPass = "http://localhost:5000";
         proxyWebsockets = true;
-        extraConfig = "proxy_pass_header Authorization;";
+        extraConfig = ''
+          proxy_pass_header Authorization;
+          add_header Access-Control-Allow-Origin *;
+        '';
       };
     };
   };
