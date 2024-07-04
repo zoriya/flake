@@ -37,6 +37,7 @@
           mode = "0700";
         }
         ".local/share/direnv"
+        ".cache/direnv"
         ".local/share/flatpak"
         ".local/share/waydroid"
         ".var"
