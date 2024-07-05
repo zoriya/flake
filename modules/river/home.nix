@@ -86,6 +86,9 @@ in {
           "Super+Shift BTN_LEFT" = "move-view";
           "Super+Shift BTN_RIGHT" = "resize-view";
 
+          "Super R" = "spawn $BROWSER";
+          "Super E" = "spawn $TERMINAL";
+          "Super P" = "spawn 'rofi -show drun -show-icons'";
           "Super X" = "spawn '${screenshot}/bin/screenshot'";
           "Super B" = "spawn '${pkgs.hyperpicker}/bin/hyperpicker | wl-copy'";
           "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
@@ -113,4 +116,33 @@ in {
     gnome.gnome-weather
     wdisplays
   ];
+
+  services.kanshi = {
+    enable = true;
+    profiles = {
+      undocked = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            scale = 1.75;
+          }
+        ];
+      };
+      docked = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            status = "disable";
+          }
+          {
+            criteria = "DP-2";
+          }
+          {
+            criteria = "DP-1";
+            position = "0,1180";
+          }
+        ];
+      };
+    };
+  };
 }
