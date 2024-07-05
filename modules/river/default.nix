@@ -1,18 +1,8 @@
 {pkgs, ...}: {
-  services.xserver = {
+  programs.greetd = {
     enable = true;
-    displayManager.gdm = {
-      enable = true;
-      settings = {
-        "org/gnome/desktop/peripherals/touchpad" = {
-          tap-to-click = true;
-        };
-      };
-    };
-  };
-  services.displayManager = {
-    autoLogin = {
-      enable = true;
+    initial_session = {
+      command = "river";
       user = "zoriya";
     };
   };
