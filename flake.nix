@@ -101,7 +101,7 @@
       };
   in {
     nixosConfigurations = {
-      fuhen = mkSystem "fuhen" "dwl" [
+      fuhen = mkSystem "fuhen" "river" [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
         ({
           lib,

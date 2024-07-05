@@ -63,7 +63,7 @@ in {
       rule-add = {
         "-app-id" = {
           "discord" = "tags '3'";
-          "YouTube Music" = "tags '2'";
+          "'YouTube Music'" = "tags '2'";
           # disable all client side decorations
           "'*'" = "ssd";
         };

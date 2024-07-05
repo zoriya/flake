@@ -37,7 +37,7 @@
       map kitty_mod+i scroll_to_prompt 1
       map kitty_mod+space show_last_command_output
 
-      include light.conf
+      include dark.conf
       include theme.conf
     '';
   };

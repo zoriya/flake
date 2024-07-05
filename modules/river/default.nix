@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, inputs, ...}: {
   services.greetd = {
     enable = true;
     settings = {
@@ -50,6 +50,8 @@
   };
 
   environment.systemPackages = with pkgs; [
+    # TODO: Remove this
+    inputs.ags.packages.x86_64-linux.default
     gnome.gnome-bluetooth
     polkit_gnome
     wineWowPackages.stable
