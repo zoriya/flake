@@ -4,8 +4,20 @@
     name = "screenshot";
     runtimeInputs = [pkgs.slurp pkgs.grim];
     text = ''
-      grim -g \"$(slurp -b 00000000 -s 61616140)\" - | wl-copy
+      grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy
     '';
+  };
+
+  common_binds = {
+    "None XF86AudioRaiseVolume" = "spawn '${pkgs.pamixer}/bin/pamixer -i 5'";
+    "None XF86AudioLowerVolume" = "spawn '${pkgs.pamixer}/bin/pamixer  -d 5'";
+    "None XF86AudioMute" = "spawn '${pkgs.pamixer}/bin/pamixer  --toggle-mute'";
+    "None XF86AudioMedia" = "spawn '${pkgs.playerctl}/bin/playerctl play-pause'";
+    "None XF86AudioPlay" = "spawn '${pkgs.playerctl}/bin/playerctl  play-pause'";
+    "None XF86AudioPrev" = "spawn ${pkgs.playerctl}/bin/playerctl playerctl previous'";
+    "None XF86AudioNext" = "spawn ${pkgs.playerctl}/bin/playerctl playerctl next'";
+    "None XF86MonBrightnessUp" = "spawn '${pkgs.brightnessctl}/bin/brightnessctl s +5%'";
+    "None XF86MonBrightnessDown" = "spawn '${pkgs.brightnessctl}/bin/brightnessctl s 5%-'";
   };
 in {
   imports = [
@@ -31,14 +43,14 @@ in {
         when-typing = true;
       };
       set-repeat = "25 600";
-      keyboard-layout = "-options 'caps:escape_shifted_capslock'";
+      keyboard-layout = "-options 'caps:escape_shifted_capslock' us";
       input = {
-        "*" = {
+        "'*'" = {
           events = true;
           accel-profile = "adaptive";
           pointer-accel = 0;
           click-method = "button-areas";
-          tap = false;
+          tap = true;
           drag = true;
           disable-while-typing = true;
           middle-emulation = true;
@@ -50,48 +62,54 @@ in {
 
       rule-add = {
         "-app-id" = {
-          "discord" = "tags '2'";
-          "YouTube Music" = "tags '1'";
+          "discord" = "tags '3'";
+          "YouTube Music" = "tags '2'";
           # disable all client side decorations
-          "*" = "ssd";
+          "'*'" = "ssd";
         };
       };
 
       map = {
+        normal =
+          {
+            "Super+Shift Q" = "exit";
+            "Super C" = "close";
+
+            "Super K" = "focus-view next";
+            "Super J" = "focus-view previous";
+            "Super+Shift K" = "swap previous";
+            "Super+Shift J" = "swap previous";
+            "Super Return" = "zoom";
+
+            "Super Period" = "focus-output next";
+            "Super Comma" = "focus-output previous";
+            "Super+Shift Period" = "send-to-output next";
+            "Super+Shift Comma" = "send-to-output previous";
+
+            "Super H" = "send-layout-cmd rivercarro 'main-ratio -0.05'";
+            "Super L" = "send-layout-cmd rivercarro 'main-ratio +0.05'";
+            "Super U" = "send-layout-cmd rivercarro 'main-count -1'";
+            "Super I" = "send-layout-cmd rivercarro 'main-count +1'";
+
+            "Super T" = "send-layout-cmd rivercarro 'main-location left'";
+            "Super M" = "send-layout-cmd rivercarro 'main-location monocle'";
+            "Super F" = "toggle-fullscreen";
+            "Super+Shift F" = "toggle-float";
+
+            "Super R" = "spawn $BROWSER";
+            "Super E" = "spawn $TERMINAL";
+            "Super P" = "spawn 'rofi -show drun -show-icons'";
+            "Super X" = "spawn '${screenshot}/bin/screenshot'";
+            "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyperpicker | wl-copy'";
+            "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
+          }
+          // common_binds;
+        locked = common_binds;
+      };
+      map-pointer = {
         normal = {
-          "Super+Shift Q" = "exit";
-          "Super C" = "close";
-
-          "Super K" = "focus-view next";
-          "Super J" = "focus-view previous";
-          "Super+Shift K" = "swap previous";
-          "Super+Shift J" = "swap previous";
-          "Super Return" = "zoom";
-
-          "Super Period" = "focus-output next";
-          "Super Comma" = "focus-output previous";
-          "Super+Shift Period" = "send-to-output next";
-          "Super+Shift Comma" = "send-to-output previous";
-
-          "Super H" = "send-layout-cmd rivercarro 'main-ratio -0.05'";
-          "Super L" = "send-layout-cmd rivercarro 'main-ratio +0.05'";
-          "Super U" = "send-layout-cmd rivercarro 'main-count -1'";
-          "Super I" = "send-layout-cmd rivercarro 'main-count +1'";
-
-          "Super T" = "send-layout-cmd rivercarro 'main-location-cycle left,monocle'";
-          "Super M" = "send-layout-cmd rivercarro 'main-location-cycle left,monocle'";
-          "Super F" = "toggle-fullscreen";
-          "Super+Shift F" = "toggle-float";
-
           "Super+Shift BTN_LEFT" = "move-view";
           "Super+Shift BTN_RIGHT" = "resize-view";
-
-          "Super R" = "spawn $BROWSER";
-          "Super E" = "spawn $TERMINAL";
-          "Super P" = "spawn 'rofi -show drun -show-icons'";
-          "Super X" = "spawn '${screenshot}/bin/screenshot'";
-          "Super B" = "spawn '${pkgs.hyperpicker}/bin/hyperpicker | wl-copy'";
-          "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
         };
       };
     };
@@ -119,6 +137,7 @@ in {
 
   services.kanshi = {
     enable = true;
+    systemdTarget = "graphical-session.target";
     profiles = {
       undocked = {
         outputs = [

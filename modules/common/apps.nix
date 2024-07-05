@@ -16,6 +16,7 @@ in {
     ./kitty.nix
     ./gtk.nix
     ./rofi
+    ./ags
   ];
 
   home.packages = with pkgs; [
