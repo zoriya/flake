@@ -8,6 +8,9 @@
     '';
   };
 in {
+  imports = [
+    ../common/apps.nix
+  ];
   services.cliphist.enable = true;
 
   wayland.windowManager.river = {
@@ -85,7 +88,7 @@ in {
 
           "Super X" = "spawn '${screenshot}/bin/screenshot'";
           "Super B" = "spawn '${pkgs.hyperpicker}/bin/hyperpicker | wl-copy'";
-          "Super V" = "spawn '${cliphist} list | rofi -dmenu | ${cliphist} decode | wl-copy'";
+          "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
         };
       };
     };
@@ -109,8 +112,5 @@ in {
     gnome-control-center
     gnome.gnome-weather
     wdisplays
-    wlr-randr
-    alsa-utils
-    playerctl
   ];
 }

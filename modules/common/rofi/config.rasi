@@ -12,7 +12,6 @@
 /*****----- Configuration -----*****/
 configuration {
 	modi: "run,drun";
-	show-icons: true;
 	display-drun: "";
 	display-run: "";
 	drun-display-format: "{name}";
@@ -152,7 +151,6 @@ listview {
 /*****----- Elements -----*****/
 element {
 	enabled: true;
-	spacing: 10px;
 	padding: 14px;
 	border-radius: 0px;
 	background-color: transparent;

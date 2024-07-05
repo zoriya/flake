@@ -15,7 +15,6 @@
   };
 in {
   imports = [
-    ./rofi
     ../common/apps.nix
   ];
 

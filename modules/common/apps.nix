@@ -15,6 +15,7 @@ in {
     ./ghostty.nix
     ./kitty.nix
     ./gtk.nix
+    ./rofi
   ];
 
   home.packages = with pkgs; [
@@ -29,7 +30,9 @@ in {
     xdg-utils
     youtube-music
     wl-clipboard
+    wlr-randr
     alsa-utils
+    playerctl
     postman
   ];
 
