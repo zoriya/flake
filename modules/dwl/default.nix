@@ -71,4 +71,7 @@
 
   # i18n.inputMethod.enabled = "ibus";
   # i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [mozc];
+
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 }

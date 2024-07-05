@@ -76,7 +76,7 @@
               users.users.${user} = {
                 hashedPassword = builtins.readFile ./password/${user};
                 isNormalUser = true;
-                extraGroups = ["wheel" "input" "docker" "audio" "mlocate"];
+                extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
                 shell = pkgs.zsh;
               };
             })

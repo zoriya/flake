@@ -118,5 +118,26 @@
       allowUnfree = true;
     }'';
 
+  # Allow gsettings to work
+  xdg.systemDirs.data = [
+    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+  ];
+
+  # For virt-manager to detect hypervisor
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
+
+  # Use geoclue2 for weather location
+  dconf.settings = {
+    "org/gnome/shell/weather" = {
+      automatic-location = true;
+    };
+  };
+
   home.stateVersion = "22.11";
 }
