@@ -117,6 +117,8 @@ in {
     };
 
     virtualHosts."proxy.sdg.moe" = {
+      enableACME = true;
+      addSSL = true;
       locations."/" = {
         proxyPass = "http://localhost:5000";
         proxyWebsockets = true;
