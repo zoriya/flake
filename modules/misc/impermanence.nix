@@ -3,17 +3,22 @@
     hideMounts = true;
     directories = [
       "/var/log"
+      "/var/lib/nixos"
       "/var/lib/bluetooth"
       "/var/lib/systemd/coredump"
       "/var/lib/docker"
+      "/var/lib/libvirt"
+      "/var/lib/qemu"
+      "/var/lib/nixos-containers"
+      "/var/lib/lxd"
       "/var/lib/waydroid"
       "/var/lib/flatpak"
       "/var/lib/tcc"
-      "/etc/tailord/"
       "/var/lib/flood"
       "/var/lib/transmission"
       "/var/lib/acme"
       "/etc/NetworkManager/system-connections"
+      "/etc/tailord/"
     ];
     files = [
       "/etc/machine-id"
@@ -22,6 +27,7 @@
       "/etc/ssh/ssh_host_rsa_key"
       "/etc/ssh/ssh_host_rsa_key.pub"
       "/var/snapraid.content"
+      "/var/cache/locatedb"
     ];
     users.zoriya = {
       directories = [
