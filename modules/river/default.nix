@@ -1,9 +1,16 @@
 {pkgs, ...}: {
-  programs.greetd = {
+  services.greetd = {
     enable = true;
-    initial_session = {
-      command = "river";
-      user = "zoriya";
+    settings = {
+      default_session = {
+        command = "agreety --cmd /bin/sh";
+        user = "greeter";
+      };
+      initial_session = {
+        # TODO: Start river in locked mode or exit if locker crashes.
+        command = "river";
+        user = "zoriya";
+      };
     };
   };
 
@@ -43,7 +50,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    gnome-bluetooth
+    gnome.gnome-bluetooth
     polkit_gnome
     wineWowPackages.stable
     wineWowPackages.waylandFull
