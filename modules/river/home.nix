@@ -25,6 +25,10 @@ in {
   ];
   services.cliphist.enable = true;
 
+  home.sessionVariables = {
+    XDG_CURRENT_DESKTOP = "GNOME";
+  };
+
   wayland.windowManager.river = {
     enable = true;
     settings = {
@@ -62,8 +66,8 @@ in {
 
       rule-add = {
         "-app-id" = {
-          "discord" = "tags '3'";
-          "'YouTube Music'" = "tags '2'";
+          "discord" = "tags $((1 << 2))";
+          "'YouTube Music'" = "tags $((1 << 1))";
           # disable all client side decorations
           "'*'" = "ssd";
         };
@@ -100,7 +104,7 @@ in {
             "Super E" = "spawn $TERMINAL";
             "Super P" = "spawn 'rofi -show drun -show-icons'";
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
-            "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyperpicker | wl-copy'";
+            "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
           }
           // common_binds;
@@ -162,6 +166,14 @@ in {
           }
         ];
       };
+    };
+  };
+
+  # Disable close/resize buttons on GTK windows that really want CSD.
+  # gsettings set org.gnome.desktop.wm.preferences button-layout ""
+  dconf.settings = {
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = "";
     };
   };
 }

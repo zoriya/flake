@@ -8,7 +8,8 @@
       };
       initial_session = {
         # TODO: Start river in locked mode or exit if locker crashes.
-        command = "river";
+        # zsh -c is to give river access to profile variables
+        command = "zsh -c river";
         user = "zoriya";
       };
     };
