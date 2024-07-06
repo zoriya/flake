@@ -10,12 +10,14 @@ const Header = () =>
 		children: [
 			notifications.DNDToggle({
 				className: "surface p10 round",
-				css: "min-width: 24px; min-height: 24px;",
+				css: `
+					min-width: 24px;
+					min-height: 24px;
+				`,
 				hpack: "start",
 				hexpand: true,
 			}),
 			notifications.ClearButton({
-				className: "surface p10 r100",
 				hpack: "end",
 				hexpand: true,
 			}),
@@ -28,10 +30,16 @@ export const Notifications = () =>
 		exclusivity: "exclusive",
 		transition: "slide_down",
 		layout: "top-center",
+		duration: 300,
 		child: Widget.Box({
 			vertical: true,
-			className: "bgcont qs-container",
-			css: "min-width: 600px",
+			className: "bgcont",
+			css: `
+				min-width: 600px;
+				margin: 10px;
+				padding: 12px;
+				border-radius: 40px;
+			`,
 			children:
 				/** @type {any} */
 				(

@@ -64,7 +64,7 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
 		return Widget.Box({
 			vpack: "start",
 			hexpand: false,
-			class_name: "icon img",
+			className: "r20",
 			css: `
 				background-image: url("${image}");
 				background-size: cover;
@@ -72,6 +72,7 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
 				background-position: center;
 				min-width: 78px;
 				min-height: 78px;
+				margin-right: 12px;
 			`,
 		});
 	}
@@ -83,10 +84,11 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
 	return Widget.Box({
 		vpack: "start",
 		hexpand: false,
-		class_name: "icon",
+		className: "r20",
 		css: `
 			min-width: 78px;
 			min-height: 78px;
+			margin-right: 12px;
 		`,
 		child: Widget.Icon({
 			icon,
@@ -108,7 +110,6 @@ const time = (time, format = "%H:%M") =>
 /** @param {import("types/service/notifications").Notification} notification */
 export const Notification = (notification) => {
 	const content = Widget.Box({
-		className: "content",
 		children: [
 			NotificationIcon(notification),
 			Widget.Box({
@@ -118,7 +119,10 @@ export const Notification = (notification) => {
 					Widget.Box({
 						children: [
 							Widget.Label({
-								class_name: "title",
+								css: `
+									font-size: 1.1em;
+									margin-right: 12pt;
+								`,
 								xalign: 0,
 								justification: "left",
 								hexpand: true,
@@ -129,12 +133,15 @@ export const Notification = (notification) => {
 								use_markup: true,
 							}),
 							Widget.Label({
-								class_name: "time",
 								vpack: "start",
 								label: time(notification.time),
 							}),
 							Widget.Button({
-								class_name: "close-button",
+								css: `
+									margin-left: 6pt;
+									min-width: 1.2em;
+									min-height: 1.2em;
+								`,
 								vpack: "start",
 								child: Widget.Icon("window-close-symbolic"),
 								on_clicked: notification.close,
@@ -142,7 +149,7 @@ export const Notification = (notification) => {
 						],
 					}),
 					Widget.Label({
-						class_name: "description",
+						css: "font-size: .9em;",
 						hexpand: true,
 						use_markup: true,
 						xalign: 0,
@@ -165,7 +172,7 @@ export const Notification = (notification) => {
 							class_name: "actions horizontal",
 							children: notification.actions.map((action) =>
 								Widget.Button({
-									class_name: "action-button",
+									className: "button",
 									on_clicked: () => notification.invoke(action.id),
 									hexpand: true,
 									child: Widget.Label(action.label),
@@ -194,7 +201,7 @@ export const Notification = (notification) => {
 	});
 
 	return Widget.Box({
-		class_name: `surface r20 p10 notification ${notification.urgency}`,
+		className: "surface r20 p10",
 		css: "margin: 8px 0;",
 		child: eventbox,
 	});
@@ -238,6 +245,7 @@ export const Placeholder = (props) =>
 /** @param {import("types/widgets/button").ButtonProps} props */
 export const ClearButton = (props) =>
 	Widget.Button({
+		className: "button surface",
 		onClicked: () => notifications.clear(),
 		sensitive: notifications.bind("notifications").as((x) => x.length > 0),
 		child: Widget.Box({

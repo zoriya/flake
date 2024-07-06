@@ -67,6 +67,11 @@
 	min-height: 1px;
 }
 
+.button {
+	border-radius: 20px;
+	padding: 10px;
+}
+
 /* Slider */
 slider {
 	box-shadow: none;
@@ -196,22 +201,4 @@ mark {
 	min-height: 4px;
 	min-width: 4px;
 	background-color: #fff;
-}
-
-
-.powermenu {
-	padding: 20px;
-	border-radius: 30px;
-}
-
-.powermenu button image {
-	margin: 10px;
-	border-radius: 10px;
-	min-width: 120px;
-	min-height: 120px;
-	font-size: 68px;
-}
-.powermenu button:hover image, .powermenu button:focus image {
-	background-color: #11111B;
-	color: #94e2d5;
 }
