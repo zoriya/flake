@@ -44,7 +44,11 @@ return {
 
 	{
 		"vimpostor/vim-lumen",
-		lazy = false,
-		priority = 1000,
+		event = "VeryLazy",
+		init = function()
+			-- keep vim's default behavior of checking the terminal's colors
+			-- Only use lumen to detect runtime changes (that's why VeryLazy is used).
+			vim.g.lumen_startup_overwrite = 0
+		end
 	},
 }

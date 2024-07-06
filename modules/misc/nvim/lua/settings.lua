@@ -113,10 +113,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 		})
 	end,
 })
-
-
-if vim.call("has", "wsl") == 1 then
-	-- Lumen takes 170ms on windows and I only use the windows laptop at work, with light mode.
-	vim.g.lumen_startup_overwrite = 0
-	vim.opt.background = "light"
-end
