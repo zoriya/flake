@@ -1,5 +1,3 @@
-// import { FontIcon } from "../misc.js";
-
 const notifications = await Service.import("notifications");
 notifications.popupTimeout = 2000; //in seconds
 notifications.forceTimeout = true; //force all notifications to timeout
@@ -9,6 +7,25 @@ export const DNDIndicator = (props) =>
 	Widget.Icon({
 		visible: notifications.bind("dnd"),
 		icon: "notifications-disabled-symbolic",
+		...props,
+	});
+
+/** @param {import("types/widgets/button").ButtonProps} props */
+export const DNDToggle = (props) =>
+	Widget.Button({
+		onClicked: () => {
+			notifications.dnd = !notifications.dnd;
+		},
+		child: Widget.Icon({
+			icon: notifications
+				.bind("dnd")
+				.as((x) =>
+					x
+						? "preferences-system-notifications-symbolic"
+						: "notifications-disabled-symbolic",
+				),
+		}),
+		className: notifications.bind("dnd").as((x) => (x ? "on" : "")),
 		...props,
 	});
 
@@ -41,209 +58,199 @@ export const Indicator = ({ ...props }) =>
 	});
 let old_notif = "";
 
-// const NotificationIcon = ({ appEntry, appIcon, image }) => {
-// 	if (image) {
-// 		return Widget.Box({
-// 			vpack: "start",
-// 			hexpand: false,
-// 			className: "icon img",
-// 			css: `
-// 				background-image: url("${image}");
-// 				background-size: contain;
-// 				background-repeat: no-repeat;
-// 				background-position: center;
-// 				min-width: 78px;
-// 				min-height: 78px;
-// 			`,
-// 		});
-// 	}
-//
-// 	let icon = "dialog-information-symbolic";
-// 	if (lookUpIcon(appIcon)) icon = appIcon;
-//
-// 	if (lookUpIcon(appEntry)) icon = appEntry;
-//
-// 	return Widget.Box({
-// 		vpack: "start",
-// 		hexpand: false,
-// 		className: "icon",
-// 		css: `
-// 			min-width: 78px;
-// 			min-height: 78px;
-// 		`,
-// 		children: [
-// 			Widget.Icon({
-// 				icon,
-// 				size: 58,
-// 				hpack: "center",
-// 				hexpand: true,
-// 				vpack: "center",
-// 				vexpand: true,
-// 			}),
-// 		],
-// 	});
-// };
-//
-// export const Notification = (n) =>
-// 	Widget.EventBox({
-// 		className: `surface r20 p10 notification ${n.urgency}`,
-// 		css: "margin: 8px 0;",
-// 		onPrimaryClick: () => n.dismiss(),
-// 		properties: [["hovered", false]],
-// 		onHover: (self) => {
-// 			if (self._hovered) return;
-//
-// 			// if there are action buttons and they are hovered
-// 			// EventBox onHoverLost will fire off immediately,
-// 			// so to prevent this we delay it
-// 			timeout(300, () => (self._hovered = true));
-// 		},
-// 		onHoverLost: (self) => {
-// 			if (!self._hovered) return;
-//
-// 			self._hovered = false;
-// 			n.dismiss();
-// 		},
-// 		vexpand: false,
-// 		child: Widget.Box({
-// 			vertical: true,
-// 			children: [
-// 				Widget.Box({
-// 					children: [
-// 						NotificationIcon(n),
-// 						Widget.Box({
-// 							hexpand: true,
-// 							vertical: true,
-// 							children: [
-// 								Widget.Box({
-// 									children: [
-// 										Widget.Label({
-// 											className: "title",
-// 											xalign: 0,
-// 											justification: "left",
-// 											hexpand: true,
-// 											maxWidthChars: 24,
-// 											truncate: "end",
-// 											wrap: true,
-// 											label: n.summary,
-// 											useMarkup: true,
-// 										}),
-// 										Widget.Button({
-// 											className: "close-button",
-// 											vpack: "start",
-// 											child: Widget.Icon("window-close-symbolic"),
-// 											onClicked: n.close.bind(n),
-// 										}),
-// 									],
-// 								}),
-// 								Widget.Label({
-// 									className: "description",
-// 									hexpand: true,
-// 									useMarkup: true,
-// 									xalign: 0,
-// 									justification: "left",
-// 									label: n.body,
-// 									wrap: true,
-// 								}),
-// 							],
-// 						}),
-// 					],
-// 				}),
-// 				Widget.Box({
-// 					className: "actions",
-// 					children: n.actions.map(({ id, label }) =>
-// 						Widget.Button({
-// 							className: "action-button",
-// 							onClicked: () => n.invoke(id),
-// 							hexpand: true,
-// 							child: Widget.Label(label),
-// 						}),
-// 					),
-// 				}),
-// 			],
-// 		}),
-// 	});
-//
-// export const List = (props) =>
-// 	Box({
-// 		...props,
-// 		vertical: true,
-// 		connections: [
-// 			[
-// 				Notifications,
-// 				(box) => {
-// 					box.children = Notifications.notifications.map((n) =>
-// 						Notification(n),
-// 					);
-//
-// 					box.visible = Notifications.notifications.length > 0;
-// 				},
-// 			],
-// 		],
-// 	});
-//
-// export const Placeholder = (props) =>
-// 	Box({
-// 		vertical: true,
-// 		vpack: "center",
-// 		hpack: "center",
-// 		...props,
-// 		children: [
-// 			Label({ label: "󰂛", css: "margin-top: 150px;" }),
-// 			Label({ label: "Your inbox is empty", css: "margin-bottom: 150px;" }),
-// 		],
-// 		connections: [
-// 			[
-// 				Notifications,
-// 				(box) => (box.visible = Notifications.notifications.length === 0),
-// 			],
-// 		],
-// 	});
-//
-// export const ClearButton = (props) =>
-// 	Button({
-// 		...props,
-// 		onClicked: () => Notifications.clear(),
-// 		connections: [
-// 			[
-// 				Notifications,
-// 				(button) => (button.sensitive = Notifications.notifications.length > 0),
-// 			],
-// 		],
-// 		child: Box({
-// 			children: [
-// 				Label("Clear "),
-// 				Stack({
-// 					items: [
-// 						["true", Icon("user-trash-full-symbolic")],
-// 						["false", Icon("user-trash-symbolic")],
-// 					],
-// 					connections: [
-// 						[
-// 							Notifications,
-// 							(stack) => {
-// 								stack.shown = `${Notifications.notifications.length > 0}`;
-// 							},
-// 						],
-// 					],
-// 				}),
-// 			],
-// 		}),
-// 	});
-//
-// export const DNDToggle = (props) =>
-// 	Button({
-// 		...props,
-// 		onClicked: () => {
-// 			Notifications.dnd = !Notifications.dnd;
-// 		},
-// 		child: DNDIndicator(),
-// 		connections: [
-// 			[
-// 				Notifications,
-// 				(button) => {
-// 					button.toggleClassName("on", Notifications.dnd);
-// 				},
-// 			],
-// 		],
-// 	});
+/** @param {import("types/service/notifications").Notification} param */
+const NotificationIcon = ({ app_entry, app_icon, image }) => {
+	if (image) {
+		return Widget.Box({
+			vpack: "start",
+			hexpand: false,
+			class_name: "icon img",
+			css: `
+				background-image: url("${image}");
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center;
+				min-width: 78px;
+				min-height: 78px;
+			`,
+		});
+	}
+
+	let icon = "dialog-information-symbolic";
+	if (Utils.lookUpIcon(app_icon)) icon = app_icon;
+	if (Utils.lookUpIcon(app_entry || "")) icon = app_entry || "";
+
+	return Widget.Box({
+		vpack: "start",
+		hexpand: false,
+		class_name: "icon",
+		css: `
+			min-width: 78px;
+			min-height: 78px;
+		`,
+		child: Widget.Icon({
+			icon,
+			size: 58,
+			hpack: "center",
+			hexpand: true,
+			vpack: "center",
+			vexpand: true,
+		}),
+	});
+};
+
+import GLib from "gi://GLib";
+
+/** @param {number} time */
+const time = (time, format = "%H:%M") =>
+	GLib.DateTime.new_from_unix_local(time).format(format);
+
+/** @param {import("types/service/notifications").Notification} notification */
+export const Notification = (notification) => {
+	const content = Widget.Box({
+		className: "content",
+		children: [
+			NotificationIcon(notification),
+			Widget.Box({
+				hexpand: true,
+				vertical: true,
+				children: [
+					Widget.Box({
+						children: [
+							Widget.Label({
+								class_name: "title",
+								xalign: 0,
+								justification: "left",
+								hexpand: true,
+								max_width_chars: 24,
+								truncate: "end",
+								wrap: true,
+								label: notification.summary.trim(),
+								use_markup: true,
+							}),
+							Widget.Label({
+								class_name: "time",
+								vpack: "start",
+								label: time(notification.time),
+							}),
+							Widget.Button({
+								class_name: "close-button",
+								vpack: "start",
+								child: Widget.Icon("window-close-symbolic"),
+								on_clicked: notification.close,
+							}),
+						],
+					}),
+					Widget.Label({
+						class_name: "description",
+						hexpand: true,
+						use_markup: true,
+						xalign: 0,
+						justification: "left",
+						label: notification.body.trim(),
+						max_width_chars: 24,
+						wrap: true,
+					}),
+				],
+			}),
+		],
+	});
+
+	const actionsbox =
+		notification.actions.length > 0
+			? Widget.Revealer({
+					transition: "slide_down",
+					child: Widget.EventBox({
+						child: Widget.Box({
+							class_name: "actions horizontal",
+							children: notification.actions.map((action) =>
+								Widget.Button({
+									class_name: "action-button",
+									on_clicked: () => notification.invoke(action.id),
+									hexpand: true,
+									child: Widget.Label(action.label),
+								}),
+							),
+						}),
+					}),
+				})
+			: null;
+
+	const eventbox = Widget.EventBox({
+		vexpand: false,
+		on_primary_click: notification.dismiss,
+		on_hover() {
+			if (actionsbox) actionsbox.reveal_child = true;
+		},
+		on_hover_lost() {
+			if (actionsbox) actionsbox.reveal_child = true;
+
+			notification.dismiss();
+		},
+		child: Widget.Box({
+			vertical: true,
+			children: actionsbox ? [content, actionsbox] : [content],
+		}),
+	});
+
+	return Widget.Box({
+		class_name: `surface r20 p10 notification ${notification.urgency}`,
+		css: "margin: 8px 0;",
+		child: eventbox,
+	});
+};
+
+/** @param {import("types/widgets/scrollable").ScrollableProps} props */
+export const List = (props) =>
+	Widget.Scrollable({
+		vscroll: "automatic",
+		hscroll: "never",
+		css: "min-height: 500px;",
+		child: Widget.Box({
+			vertical: true,
+			children: notifications
+				.bind("notifications")
+				.as((x) => x.map(Notification)),
+		}),
+		...props,
+	});
+
+/** @param {import("types/widgets/box").BoxProps} props */
+export const Placeholder = (props) =>
+	Widget.Box({
+		vertical: true,
+		vpack: "center",
+		hpack: "center",
+		children: [
+			Widget.Icon({
+				icon: "notifications-disabled-symbolic",
+				size: 75,
+				css: "margin: 50px 0",
+			}),
+			Widget.Label({
+				label: "Your inbox is empty",
+				css: "margin-bottom: 150px;",
+			}),
+		],
+		...props,
+	});
+
+/** @param {import("types/widgets/button").ButtonProps} props */
+export const ClearButton = (props) =>
+	Widget.Button({
+		onClicked: () => notifications.clear(),
+		sensitive: notifications.bind("notifications").as((x) => x.length > 0),
+		child: Widget.Box({
+			children: [
+				Widget.Label({ label: "Clear " }),
+				Widget.Icon({
+					icon: notifications
+						.bind("notifications")
+						.as((x) =>
+							x.length > 0 ? "user-trash-full-symbolic" : "user-trash-symbolic",
+						),
+				}),
+			],
+		}),
+		...props,
+	});

@@ -1,5 +1,5 @@
 import { Bar } from "./layouts/bar.js";
-// import { Notifications } from "./layouts/notifications.js";
+ import { Notifications } from "./layouts/notifications.js";
 // import { OSD } from "./layouts/osd.js";
 // import { Powermenu } from "./layouts/powermenu.js";
 // import { Quicksettings } from "./layouts/quicksettings.js";
@@ -24,7 +24,7 @@ App.config({
 	windows: [
 		...forMonitors(Bar),
 		// Quicksettings(),
-		// Notifications(),
+		 Notifications(),
 		// OSD(),
 		// Powermenu(),
 	],
