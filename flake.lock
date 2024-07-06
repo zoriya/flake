@@ -1,25 +1,5 @@
 {
   "nodes": {
-    "ags": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1700329027,
-        "narHash": "sha256-zZy1Obdtek9bHbssEjl6EXBY3pFWYyT4Um/oEruG2us=",
-        "owner": "zoriya",
-        "repo": "ags",
-        "rev": "90eab170202f233e1600154da0beffda2dc9ef7c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zoriya",
-        "repo": "ags",
-        "type": "github"
-      }
-    },
     "dwl-source": {
       "flake": false,
       "locked": {
@@ -540,7 +520,6 @@
     },
     "root": {
       "inputs": {
-        "ags": "ags",
         "dwl-source": "dwl-source",
         "flood": "flood",
         "ghostty": "ghostty",

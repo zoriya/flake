@@ -1,17 +1,14 @@
-import { Label } from 'resource:///com/github/Aylur/ags/widget.js';
-const { DateTime } = imports.gi.GLib;
+import GLib from "gi://GLib";
 
-export const Clock = ({
-	format = "%a %d %b %H:%M ",
-	interval = 1000,
-	...props
-} = {}) =>
-	Label({
+export const clock = Variable(GLib.DateTime.new_now_local(), {
+	poll: [1000, () => GLib.DateTime.new_now_local()],
+});
+
+/**
+ * @param {{format?: string} & import("types/widgets/label").LabelProps} props
+ */
+export const Clock = ({ format = "%a %d %b %H:%M ", ...props } = {}) =>
+	Widget.Label({
 		...props,
-		connections: [
-			[
-				interval,
-				(label) => (label.label = DateTime.new_now_local().format(format)),
-			],
-		],
+		label: Utils.derive([clock], (c) => c.format(format) || "").bind(),
 	});

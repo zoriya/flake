@@ -29,10 +29,6 @@
       url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
       flake = false;
     };
-    ags = {
-      url = "github:zoriya/ags";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flood = {
       url = "github:zoriya/flood";
       flake = false;
@@ -43,7 +39,6 @@
     self,
     home-manager,
     neovim-nightly,
-    ags,
     nixpkgs,
     ghostty,
     dwl-source,

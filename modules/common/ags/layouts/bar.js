@@ -1,39 +1,38 @@
 import { Clock } from "../modules/clock.js";
-import * as dwl from "../modules/dwl.js";
 import * as audio from "../modules/audio.js";
 import * as network from "../modules/network.js";
 import * as bluetooth from "../modules/bluetooth.js";
 import * as battery from "../modules/battery.js";
 import * as notifications from "../modules/notifications.js";
 
-import App from 'resource:///com/github/Aylur/ags/app.js';
-import { Window, CenterBox, Box, Button } from 'resource:///com/github/Aylur/ags/widget.js';
-
-export const Bar = (mon, monId) =>
-	Window({
-		name: `bar${monId}`,
+/**
+ *@param {number} monitor
+ */
+export const Bar = (monitor) =>
+	Widget.Window({
+		monitor,
+		name: `bar${monitor}`,
 		className: "transparent",
-		exclusive: true,
+		exclusivity: "exclusive",
 		anchor: ["top", "left", "right"],
 		layer: "bottom",
-		gdkmonitor: mon,
-		child: CenterBox({
-			startWidget: Box({
+		child: Widget.CenterBox({
+			startWidget: Widget.Box({
 				children: [
-					dwl.Tags({
-						mon: monId,
-						labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
-					}),
-					dwl.Layout({
-						mon: monId,
-					}),
-					dwl.ClientLabel({ mon: monId }),
+					// dwl.Tags({
+					// 	mon: monId,
+					// 	labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
+					// }),
+					// dwl.Layout({
+					// 	mon: monId,
+					// }),
+					// dwl.ClientLabel({ mon: monId }),
 				],
 			}),
-			centerWidget: Box({
+			centerWidget: Widget.Box({
 				hpack: "center",
 				children: [
-					Button({
+					Widget.Button({
 						css: "min-width: 200px;",
 						onClicked: () => App.toggleWindow("notifications"),
 						child: notifications.Indicator({
@@ -43,39 +42,38 @@ export const Bar = (mon, monId) =>
 					}),
 				],
 			}),
-			endWidget: Box({
+			endWidget: Widget.Box({
 				hpack: "end",
 				children: [
-					// TODO:
-					// ScreenShare()
-					// Webcam
-					// ScreenRecord(),
-					// ColorPicker(),
-					Button({
+					Widget.Button({
 						onClicked: () => App.toggleWindow("quicksettings"),
 						className: "module quicksettings",
-						connections: [
-							[
-								App,
-								(btn, win, visible) => {
-									btn.toggleClassName("active", win === "quicksettings" && visible);
-								},
-							],
-						],
-						child: Box({
+						child: Widget.Box({
 							children: [
-								// audio.MicUseIndicator({ className: "qs-icon" }),
-								audio.MicrophoneMuteIndicator({ unmuted: null, className: "qs-item" }),
-								notifications.DNDIndicator({ noisy: null, className: "qs-item" }),
+								audio.MicrophoneIndicator({
+									className: "qs-item",
+								}),
+								notifications.DNDIndicator({
+									className: "qs-item",
+								}),
 								network.Indicator({ className: "qs-item" }),
-								audio.SpeakerIndicator({ className: "qs-item" }),
-								bluetooth.Indicator({ disabled: null, className: "qs-item" }),
+								audio.VolumeIndicator({ className: "qs-item" }),
+								bluetooth.Indicator({
+									hideIfDisabled: true,
+									className: "qs-item",
+								}),
 								battery.Indicator({ className: "qs-item" }),
 							],
 						}),
+					}).hook(App, (self, win, visible) => {
+						self.toggleClassName("active", win === "quicksettings" && visible);
 					}),
 					Clock({ format: "%a %d %b", className: "module bold" }),
-					Clock({ format: "%H:%M", className: "module accent bold", css: "margin-right: 0px" }),
+					Clock({
+						format: "%H:%M",
+						className: "module accent bold",
+						css: "margin-right: 0px",
+					}),
 				],
 			}),
 		}),

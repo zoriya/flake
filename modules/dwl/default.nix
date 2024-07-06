@@ -23,7 +23,6 @@
   environment.systemPackages = with pkgs; [
     dwl
     polkit_gnome
-    inputs.ags.packages.x86_64-linux.default
     wineWowPackages.stable
     wineWowPackages.waylandFull
     winetricks
