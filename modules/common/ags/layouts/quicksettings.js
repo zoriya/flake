@@ -69,7 +69,10 @@ export const Quicksettings = () =>
 			vertical: true,
 			className: "bgcont qs-container",
 			children: [
-				Row([audio.Volume({ type: "speaker" })], [audio.SinkSelector({})]),
+				Row(
+					[audio.Volume({ type: "speaker" })],
+					[audio.SinkSelector({}), audio.AppMixer({})],
+				),
 				// 	BrightnessBox(),
 				// 	Widget.Box({
 				// 		children: [network.Toggle({}), bluetooth.Toggle({})],

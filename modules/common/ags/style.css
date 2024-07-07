@@ -52,7 +52,7 @@
 	padding: 10px;
 }
 
-.separator {
+separator {
 	border-radius: 10px;
 	min-height: 1px;
 	min-width: 1px;
@@ -134,7 +134,7 @@ mark {
 	transition: color 0.3s ease-in-out;
 }
 .qs-icon {
-	padding: 18px;
+	padding: 12px;
 }
 
 .qs-slider > * {
@@ -143,7 +143,7 @@ mark {
 
 .qs-submenu {
 	margin-top: 8px;
-	padding: 18px;
+	padding: 12px;
 	border-radius: 30px;
 }
 .qs-sub-title {

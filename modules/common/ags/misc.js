@@ -107,11 +107,3 @@ export const Progress = ({ height, width, vertical = false, ...props }) => {
 	};
 	return progress;
 };
-
-export const Separator = ({ className = "", ...props } = {}) =>
-	Box({
-		hexpand: false,
-		vexpand: false,
-		...props,
-		className: `${className} separator accent`,
-	});

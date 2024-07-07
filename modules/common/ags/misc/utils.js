@@ -1,4 +1,4 @@
-import GLib from "gi://GLib?version=2.0"
+import GLib from "gi://GLib?version=2.0";
 
 /**
  * @param {string | null | undefined} name
