@@ -1,3 +1,4 @@
+import GObject from "gi://GObject?version=2.0";
 import Gtk from "gi://Gtk?version=3.0";
 
 export const opened = Variable("");
@@ -44,7 +45,53 @@ export const Arrow = ({ name, activate, ...props }) => {
 /**
  * @typedef {{
  *   name: string,
- *   icon: string,
+ *   icon: Gtk.Widget,
+ *   label: Gtk.Widget,
+ *   activate: () => void
+ *   deactivate: () => void
+ *   activateOnArrow?: boolean
+ *   connection: [GObject.Object, () => boolean]
+ * } & import("types/widgets/box").BoxProps} ArrowToggleButtonProps
+ * @param {ArrowToggleButtonProps} props
+ */
+export const ArrowToggleButton = ({
+	name,
+	icon,
+	label,
+	activate,
+	deactivate,
+	activateOnArrow = true,
+	connection: [service, condition],
+}) =>
+	Widget.Box({
+		className: "qs-button surface",
+		setup: (self) =>
+			self.hook(service, () => {
+				self.toggleClassName("accent", condition());
+			}),
+		children: [
+			Widget.Button({
+				child: Widget.Box({
+					hexpand: true,
+					children: [icon, label],
+				}),
+				onClicked: () => {
+					if (condition()) {
+						deactivate();
+						if (opened.value === name) opened.value = "";
+					} else {
+						activate();
+					}
+				},
+			}),
+			Arrow({ name, activate: activateOnArrow && activate }),
+		],
+	});
+
+/**
+ * @typedef {{
+ *   name: string,
+ *   icon: Gtk.Widget,
  *   title: string,
  *   content: Gtk.Widget[],
  * } & import("types/widgets/revealer").RevealerProps} MenuProps
@@ -61,9 +108,7 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 				Widget.Box({
 					className: "qs-sub-title accent",
 					children: [
-						Widget.Icon({
-							icon,
-						}),
+						icon,
 						Widget.Label({
 							className: "bold f16",
 							truncate: "end",
@@ -77,6 +122,23 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 					className: "qs-sub-content",
 					children: content,
 				}),
+			],
+		}),
+		...props,
+	});
+
+/** @param {{type: string} & import("types/widgets/button").ButtonProps} props */
+export const SettingsButton = ({type, ...props}) =>
+	Widget.Button({
+		onClicked: () => {
+			Utils.execAsync(`gnome-control-center ${type}`);
+			App.closeWindow("quicksettings");
+		},
+		hexpand: true,
+		child: Widget.Box({
+			children: [
+				Widget.Icon("emblem-system-symbolic"),
+				Widget.Label("Settings"),
 			],
 		}),
 		...props,

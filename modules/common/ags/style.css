@@ -127,7 +127,7 @@ mark {
 .qs-button {
 	padding: 0px;
 	margin: 5px;
-	border-radius: 30px;
+	border-radius: 20px;
 	min-width: 225px;
 	min-height: 75px;
 	transition: background-color 0.3s ease-in-out;
@@ -144,7 +144,7 @@ mark {
 .qs-submenu {
 	margin-top: 8px;
 	padding: 12px;
-	border-radius: 30px;
+	border-radius: 20px;
 }
 .qs-sub-title {
 	padding: 14px 20px;
@@ -157,12 +157,13 @@ mark {
 .qs-sub-content image {
 	margin-right: 8px;
 }
-.qs-sub-content > button, .qs-sub-content > box {
-	margin: 8px;
+
+.qs-sub-content > * {
+	margin: 6px;
 }
-.qs-sub-content > button:last-child, .qs-sub-content > box:last-child {
-	margin: 8px;
-	margin-bottom: 0px;
+
+.qs-sub-sub-content > * {
+	margin: 6px 0px;
 }
 
 .mpris-cover-art {

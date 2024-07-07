@@ -1,5 +1,4 @@
-// import { ArrowToggle } from "../services/quicksettings.js";
-// import { Separator } from "../misc.js";
+import { ArrowToggleButton, Menu, SettingsButton } from "../misc/menu.js";
 
 const network = await Service.import("network");
 
@@ -19,109 +18,105 @@ export const Indicator = (props) =>
 		shown: network.bind("primary").as((p) => p || "wifi"),
 	});
 
-// export const SSIDLabel = (props) =>
-// 	Label({
-// 		truncate: "end",
-// 		...props,
-// 		connections: [
-// 			[
-// 				Network,
-// 				(label) => {
-// 					if (Network.primary === "wifi")
-// 						label.label = Network.wifi?.ssid || "Not Connected";
-// 					else
-// 						label.label =
-// 							Network.wired?.internet === "connected" ||
-// 							Network.wired?.internet === "connection"
-// 								? "Wired"
-// 								: "Not Connected";
-// 				},
-// 			],
-// 		],
-// 	});
-//
-// export const WifiStrengthLabel = (props) =>
-// 	Label({
-// 		...props,
-// 		connections: [
-// 			[Network, (label) => (label.label = `${Network.wifi?.strength || -1}`)],
-// 		],
-// 	});
+/** @param {import("types/widgets/label").LabelProps} props */
+export const SSIDLabel = (props) =>
+	Widget.Label({
+		truncate: "end",
+		...props,
+	}).hook(network, (self) => {
+		if (network.primary === "wifi")
+			self.label = network.wifi.ssid || "Not Connected";
+		else
+			self.label =
+				network.wired.internet !== "disconnected" ? "Wired" : "Not Connected";
+	});
 
-// export const Toggle = (props) =>
-// 	ArrowToggle({
-// 		...props,
-// 		name: "network",
-// 		icon: Indicator(),
-// 		label: SSIDLabel(),
-// 		toggle: Network.toggleWifi,
-// 		expand: () => {
-// 			Network.wifi.enabled = true;
-// 			Network.wifi.scan();
-// 		},
-// 		connections: [
-// 			[
-// 				Network,
-// 				(button) => {
-// 					button.toggleClassName("accent", Network.wifi?.enabled);
-// 				},
-// 			],
-// 		],
-// 	});
-//
-// const icons = [
-// 	{ value: 80, icon: "network-wireless-signal-excellent-symbolic" },
-// 	{ value: 60, icon: "network-wireless-signal-good-symbolic" },
-// 	{ value: 40, icon: "network-wireless-signal-ok-symbolic" },
-// 	{ value: 20, icon: "network-wireless-signal-weak-symbolic" },
-// 	{ value: 0, icon: "network-wireless-signal-none-symbolic" },
-// ];
-//
-// export const Selection = (props) =>
-// 	Box({
-// 		...props,
-// 		vertical: true,
-// 		connections: [
-// 			[
-// 				Network,
-// 				(box) => {
-// 					box.children = Network.wifi?.accessPoints
-// 						.reduce((acc, x) => {
-// 							if (!acc[x.bssid]) acc.push(x);
-// 							return acc;
-// 						}, [])
-// 						.map((ap) =>
-// 							Button({
-// 								onClicked: () =>
-// 									execAsync(`nmcli device wifi connect ${ap.bssid}`),
-// 								child: Box({
-// 									children: [
-// 										Icon(icons.find(({ value }) => value <= ap.strength).icon),
-// 										Label(ap.ssid),
-// 										ap.active &&
-// 											Icon({
-// 												icon: "object-select-symbolic",
-// 												hexpand: true,
-// 												hpack: "end",
-// 											}),
-// 									],
-// 								}),
-// 							}),
-// 						)
-// 						.concat([
-// 							Separator(),
-// 							Button({
-// 								onClicked: () => {
-// 									execAsync("gnome-control-center").catch(print);
-// 									App.closeWindow("quicksettings");
-// 								},
-// 								child: Label({
-// 									label: "Settings",
-// 									xalign: 0,
-// 								}),
-// 							}),
-// 						]);
-// 				},
-// 			],
-// 		],
-// 	});
+/** @param {Partial<import("misc/menu").ArrowToggleButtonProps>} props */
+export const Toggle = (props) =>
+	ArrowToggleButton({
+		name: "network",
+		icon: Indicator({ className: "qs-icon" }),
+		label: SSIDLabel({
+			max_width_chars: 20,
+		}),
+		activate: () => {
+			network.wifi.enabled = true;
+			network.wifi.scan();
+		},
+		deactivate: () => {
+			network.wifi.enabled = false;
+		},
+		connection: [network.wifi, () => network.wifi.enabled],
+		...props,
+	});
+
+/** @param {Partial<import("../misc/menu.js").MenuProps>} props */
+export const Selection = (props) =>
+	Menu({
+		name: "network",
+		icon: Indicator({}),
+		title: "Network Selection",
+		content: [
+			Wired(),
+			Widget.Box({
+				vertical: true,
+				className: "qs-sub-sub-content",
+				children: network.wifi.bind("access_points").as((x) =>
+					x
+						.sort((a, b) => b.strength - a.strength)
+						.reduce((acc, x) => {
+							if (!acc.find((y) => y.ssid === x.ssid)) acc.push(x);
+							return acc;
+						}, [])
+						.slice(0, 10)
+						.map(WifiItem),
+				),
+			}),
+			Widget.Separator({ className: "accent" }),
+			SettingsButton({ type: "wifi" }),
+		],
+		...props,
+	});
+
+const Wired = () =>
+	Widget.Button({
+		// onClicked:
+		visible: network.wired.bind("state").as(x => (console.log(x), true)),
+		child: Widget.Box({
+			children: [
+				Widget.Icon({ icon: network.wired.bind("icon_name") }),
+				Widget.Label("Wired"),
+				Widget.Icon({
+					icon: "object-select-symbolic",
+					hexpand: true,
+					hpack: "end",
+					visible: network.bind("primary").as((x) => x === "wired"),
+				}),
+			],
+		}),
+	});
+
+/** @param {import("types/service/network").Wifi["access_points"][0]} wifi */
+const WifiItem = (wifi) =>
+	Widget.Button({
+		onClicked: () => Utils.execAsync(`nmcli device wifi connect ${wifi.bssid}`),
+		child: Widget.Box({
+			children: [
+				Widget.Icon(wifi.iconName),
+				Widget.Label({
+					truncate: "end",
+					max_width_chars: 28,
+					label: wifi.ssid || "",
+				}),
+				Widget.Icon({
+					icon: "object-select-symbolic",
+					hexpand: true,
+					hpack: "end",
+					setup: (self) =>
+						Utils.idle(() => {
+							if (!self.is_destroyed) self.visible = wifi.active;
+						}),
+				}),
+			],
+		}),
+	});

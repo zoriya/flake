@@ -1,5 +1,5 @@
 import { icon } from "../misc/utils.js";
-import { Arrow, Menu } from "../misc/menu.js";
+import { Arrow, Menu, SettingsButton } from "../misc/menu.js";
 
 const audio = await Service.import("audio");
 
@@ -118,35 +118,20 @@ export const Volume = ({ type = "speaker", ...props }) =>
 // 		],
 // 	});
 
-/** @param {import("types/widgets/button").ButtonProps} props */
-const SettingsButton = (props) =>
-	Widget.Button({
-		onClicked: () => {
-			Utils.execAsync("gnome-control-center sound");
-		},
-		hexpand: true,
-		child: Widget.Box({
-			children: [
-				Widget.Icon("emblem-system-symbolic"),
-				Widget.Label("Settings"),
-			],
-		}),
-		...props,
-	});
-
 /** @param {Partial<import("../misc/menu.js").MenuProps>} props */
 export const SinkSelector = (props) =>
 	Menu({
 		name: "sink-selector",
-		icon: "audio-headphones-symbolic",
+		icon: Widget.Icon("audio-headphones-symbolic"),
 		title: "Sink Selector",
 		content: [
 			Widget.Box({
+				className: "qs-sub-sub-content",
 				vertical: true,
 				children: audio.bind("speakers").as((a) => a.map(SinkItem)),
 			}),
 			Widget.Separator({ className: "accent" }),
-			SettingsButton({}),
+			SettingsButton({ type: "sound" }),
 		],
 		...props,
 	});
@@ -159,7 +144,6 @@ const SinkItem = (stream) =>
 			audio.speaker = stream;
 		},
 		child: Widget.Box({
-			css: "margin-top: 6px; margin-bottom: 6px;",
 			children: [
 				Widget.Icon({
 					icon: icon(stream.icon_name, "audio-x-generic-symbolic"),
@@ -182,16 +166,16 @@ const SinkItem = (stream) =>
 export const AppMixer = (props) =>
 	Menu({
 		name: "app-mixer",
-		icon: "audio-volume-high-symbolic",
+		icon: Widget.Icon("audio-volume-high-symbolic"),
 		title: "App Mixer",
 		content: [
 			Widget.Box({
 				vertical: true,
-				class_name: "vertical mixer-item-box",
+				className: "qs-sub-sub-content",
 				children: audio.bind("apps").as((a) => a.map(MixerItem)),
 			}),
 			Widget.Separator({ className: "accent" }),
-			SettingsButton({}),
+			SettingsButton({ type: "sound" }),
 		],
 		...props,
 	});
