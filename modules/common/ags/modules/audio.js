@@ -1,6 +1,6 @@
-// import { Separator, FontIcon, addElipsis } from "../misc.js";
-// import { ArrowToggle, opened } from "../services/quicksettings.js";
-//
+import { icon } from "../misc/utils.js";
+import { Arrow, Menu } from "../misc/menu.js";
+
 const audio = await Service.import("audio");
 
 const volumeIcons = /** @type {const} */ ([
@@ -11,16 +11,18 @@ const volumeIcons = /** @type {const} */ ([
 	[0, "muted"],
 ]);
 
-/** @param {import("types/widgets/icon").IconProps} props */
-export const VolumeIndicator = (props) =>
-	Widget.Icon({
-		icon: audio.speaker.bind("volume").as((vol) => {
-			const val = volumeIcons.find(
-				([threshold]) => threshold <= vol * 100,
-			)?.[1];
-			return `audio-volume-${val}-symbolic`;
-		}),
-		...props,
+/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/icon").IconProps} props */
+export const VolumeIndicator = ({ type = "speaker", ...props }) =>
+	Widget.Icon(props).hook(audio, (self) => {
+		if (audio[type].is_muted) {
+			self.icon = "audio-volume-muted-symbolic";
+			self.tooltip_text = "Muted";
+			return;
+		}
+		const vol = audio[type].volume * 100;
+		const icon = volumeIcons.find(([threshold]) => threshold <= vol)?.[1];
+		self.icon = `audio-volume-${icon}-symbolic`;
+		self.tooltip_text = `Volume: ${Math.floor(vol)}%`;
 	});
 
 /** @param {import("types/widgets/icon").IconProps} props */
@@ -45,23 +47,52 @@ export const MicrophoneIndicator = (props) =>
 // 	return item;
 // };
 //
-//
-// export const SpeakerPercentLabel = (props) =>
-// 	Label({
-// 		...props,
-// 		connections: [
-// 			[
-// 				Audio,
-// 				(label) => {
-// 					if (!Audio.speaker) return;
-//
-// 					const perc = Math.floor(Audio.speaker.volume * 100);
-// 					label.label = `${("  " + perc).slice(-3)}%`;
-// 				},
-// 				"speaker-changed",
-// 			],
-// 		],
-// 	});
+
+/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/slider").SliderProps} props */
+const VolumeSlider = ({ type = "speaker", ...props }) =>
+	Widget.Slider({
+		hexpand: true,
+		draw_value: false,
+		onChange: ({ value, dragging }) => {
+			if (dragging) {
+				audio[type].volume = value;
+				audio[type].is_muted = false;
+			}
+		},
+		value: audio[type].bind("volume"),
+		css: audio[type].bind("is_muted").as((x) => `opacity: ${x ? 0.7 : 1}`),
+		...props,
+	});
+
+/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/box").BoxProps} props */
+export const Volume = ({ type = "speaker", ...props }) =>
+	Widget.Box({
+		className: "qs-slider",
+		children: [
+			Widget.Button({
+				onClicked: () => {
+					audio[type].is_muted = !audio[type].is_muted;
+				},
+				child: VolumeIndicator({ type }),
+			}),
+			VolumeSlider({ type }),
+			Widget.Label({
+				label: audio[type]
+					.bind("volume")
+					.as((vol) => `${Math.floor(vol * 100)}%`),
+			}),
+			Widget.Box({
+				vpack: "center",
+				child: Arrow({ name: "sink-selector" }),
+			}),
+			Widget.Box({
+				vpack: "center",
+				child: Arrow({ name: "app-mixer" }),
+				visible: audio.bind("apps").as((a) => a.length > 0),
+			}),
+		],
+		...props,
+	});
 //
 // export const SpeakerSlider = (props) => {
 // 	const slider = Slider({
@@ -87,7 +118,7 @@ export const MicrophoneIndicator = (props) =>
 // 	slider.max = 1.5;
 // 	return slider;
 // };
-//
+
 // export const MuteToggle = (props) =>
 // 	Button({
 // 		...props,
@@ -192,61 +223,45 @@ export const MicrophoneIndicator = (props) =>
 // 		],
 // 	});
 // };
-//
-// export const StreamSelector = ({ streams = "speakers", ...props } = {}) =>
-// 	Box({
-// 		...props,
-// 		vertical: true,
-// 		connections: [
-// 			[
-// 				Audio,
-// 				(box) => {
-// 					box.children = Audio[streams]
-// 						.map((stream) =>
-// 							Button({
-// 								child: Box({
-// 									children: [
-// 										Icon({
-// 											icon: iconSubstitute(stream.iconName),
-// 											tooltipText: stream.iconName,
-// 										}),
-// 										Label(stream.description.split(" ").slice(0, 4).join(" ")),
-// 										Icon({
-// 											icon: "object-select-symbolic",
-// 											hexpand: true,
-// 											hpack: "end",
-// 											connections: [
-// 												[
-// 													"draw",
-// 													(icon) => {
-// 														icon.visible = Audio.speaker === stream;
-// 													},
-// 												],
-// 											],
-// 										}),
-// 									],
-// 								}),
-// 								onClicked: () => {
-// 									if (streams === "speakers") Audio.speaker = stream;
-//
-// 									if (streams === "microphones") Audio.microphone = stream;
-// 								},
-// 							}),
-// 						)
-// 						.concat([
-// 							Separator(),
-// 							Button({
-// 								onClicked: () => {
-// 									execAsync("pavucontrol").catch(print);
-// 									App.closeWindow("quicksettings");
-// 								},
-// 								child: Label({
-// 									label: "Settings",
-// 									xalign: 0,
-// 								}),
-// 							}),
-// 						]);
-// 				},
-// 			],
-// 		],
-// 	});
+
+/** @param {Partial<import("../misc/menu.js").MenuProps>} props */
+export const SinkSelector = (props) =>
+	Menu({
+		name: "sink-selector",
+		icon: "audio-headphones-symbolic",
+		title: "Sink Selector",
+		content: [
+			Widget.Box({
+				vertical: true,
+				children: audio.bind("speakers").as((a) => a.map(SinkItem)),
+			}),
+			Widget.Separator(),
+			// SettingsButton(),
+		],
+		...props,
+	});
+
+/** @param {import("types/service/audio").Stream} stream */
+const SinkItem = (stream) =>
+	Widget.Button({
+		hexpand: true,
+		onClicked: () => (audio.speaker = stream),
+		child: Widget.Box({
+			css: "margin-top: 6px; margin-bottom: 6px;",
+			children: [
+				Widget.Icon({
+					icon: icon(stream.icon_name, "audio-x-generic-symbolic"),
+					tooltip_text: stream.icon_name || "",
+				}),
+				Widget.Label({
+					label: (stream.description || "").split(" ").slice(0, 4).join(" "),
+				}),
+				Widget.Icon({
+					icon: "object-select-symbolic",
+					hexpand: true,
+					hpack: "end",
+					visible: audio.speaker.bind("stream").as((s) => s === stream.stream),
+				}),
+			],
+		}),
+	});

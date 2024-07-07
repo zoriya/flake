@@ -19,7 +19,7 @@ export const Padding = (
 		vexpand,
 		can_focus: false,
 		child: Widget.Box({ css }),
-		setup: (w) => w.on("button-press-event", () => App.toggleWindow(name)),
+		 setup: (w) => w.on("button-press-event", () => App.toggleWindow(name)),
 	});
 /**
  * @param {string} name

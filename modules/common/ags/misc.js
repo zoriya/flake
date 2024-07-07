@@ -2,16 +2,6 @@ import App from 'resource:///com/github/Aylur/ags/app.js'
 import { Box, Label, Revealer, EventBox, Overlay, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
 import { timeout } from 'resource:///com/github/Aylur/ags/utils.js';
 
-export const addElipsis = (str, max = 20, position = "end") => {
-	if (str.length <= max) return str;
-	switch (position) {
-		case "middle":
-			max -= 3;
-			return str.substring(0, Math.ceil(max / 2)) + "..." + str.substring(str.length - Math.floor(max / 2));
-		case "end":
-			return str.substring(0, max - 3) + "...";
-	}
-};
 
 export const Spinner = ({ icon = "process-working-symbolic" } = {}) =>
 	Icon({
@@ -125,70 +115,3 @@ export const Separator = ({ className = "", ...props } = {}) =>
 		...props,
 		className: `${className} separator accent`,
 	});
-
-const PopupCloser = (windowName) =>
-	EventBox({
-		hexpand: true,
-		vexpand: true,
-		connections: [["button-press-event", () => App.toggleWindow(windowName)]],
-	});
-
-const PopupRevealer = (windowName, transition, child) =>
-	Box({
-		css: "padding: 1px;",
-		children: [
-			Revealer({
-				transition,
-				child,
-				transitionDuration: 350,
-				connections: [
-					[
-						App,
-						(revealer, name, visible) => {
-							if (name === windowName) revealer.reveal_child = visible;
-						},
-					],
-				],
-			}),
-		],
-	});
-
-export const PopupOverlay = (windowName, layout, child) => {
-	switch (layout) {
-		case "top":
-			return Box({
-				children: [
-					PopupCloser(windowName),
-					Box({
-						hexpand: false,
-						vertical: true,
-						children: [PopupRevealer(windowName, "slide_down", child), PopupCloser(windowName)],
-					}),
-					PopupCloser(windowName),
-				],
-			});
-		case "top right":
-			return Box({
-				children: [
-					PopupCloser(windowName),
-					Box({
-						hexpand: false,
-						vertical: true,
-						children: [PopupRevealer(windowName, "slide_down", child), PopupCloser(windowName)],
-					}),
-				],
-			});
-		case "center":
-			return Box({
-				children: [
-					PopupCloser(windowName),
-					Box({
-						hexpand: false,
-						vertical: true,
-						children: [PopupCloser(windowName), PopupRevealer(windowName, "crossfade", child), PopupCloser(windowName)],
-					}),
-					PopupCloser(windowName),
-				],
-			});
-	}
-};

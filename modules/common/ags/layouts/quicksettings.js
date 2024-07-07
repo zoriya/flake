@@ -1,4 +1,5 @@
-// import * as audio from "../modules/audio.js";
+import Gtk from "gi://Gtk?version=3.0";
+import * as audio from "../modules/audio.js";
 // import * as brightness from "../modules/brightness.js";
 // import * as network from "../modules/network.js";
 // import * as bluetooth from "../modules/bluetooth.js";
@@ -18,7 +19,7 @@ const mprisService = await Service.import("mpris");
 // 			[opened, (r) => (r.reveal_child = menuName === opened.value)],
 // 		],
 // 		child: Box({
-// 			className: "qs-submenu surface",
+// 			className: "",
 // 			vertical: true,
 // 			children: [
 // 				Box({
@@ -29,33 +30,24 @@ const mprisService = await Service.import("mpris");
 // 			],
 // 		}),
 // 	});
-//
-// const VolumeBox = () =>
-// 	Box({
-// 		vertical: true,
-// 		children: [
-// 			Box({
-// 				className: "qs-slider",
-// 				children: [
-// 					Button({
-// 						child: audio.SpeakerIndicator(),
-// 						onClicked: () =>
-// 							execAsync("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
-// 					}),
-// 					audio.SpeakerSlider({ hexpand: true }),
-// 					audio.SpeakerPercentLabel(),
-// 					Arrow({ name: "stream-selector" }),
-// 				],
-// 			}),
-// 			Submenu({
-// 				menuName: "stream-selector",
-// 				icon: Icon("audio-volume-medium-symbolic"),
-// 				title: "Audio Stream",
-// 				contentType: audio.StreamSelector,
-// 			}),
-// 		],
-// 	});
-//
+
+/**
+ * @param {Array<Gtk.Widget>} toggles
+ * @param {Array<Gtk.Widget>} menus
+ */
+const Row = (toggles = [], menus = []) =>
+	Widget.Box({
+		vertical: true,
+		children: [
+			Widget.Box({
+				homogeneous: true,
+				class_name: "row horizontal",
+				children: toggles,
+			}),
+			...menus,
+		],
+	});
+
 // const BrightnessBox = () =>
 // 	Box({
 // 		className: "qs-slider",
@@ -76,40 +68,41 @@ export const Quicksettings = () =>
 		child: Widget.Box({
 			vertical: true,
 			className: "bgcont qs-container",
-			children:
-				mprisService
-					.bind("players")
-					.as((x) => x.map((player) => mpris.MprisPlayer({ player }))),
-			// children: [
-			// 	VolumeBox(),
-			// 	BrightnessBox(),
-			// 	Widget.Box({
-			// 		children: [network.Toggle({}), bluetooth.Toggle({})],
-			// 	}),
-			// 	Submenu({
-			// 		menuName: "network",
-			// 		icon: "network-wireless-symbolic",
-			// 		title: "Network",
-			// 		contentType: network.Selection,
-			// 	}),
-			// 	Submenu({
-			// 		menuName: "bluetooth",
-			// 		icon: "bluetooth-symbolic",
-			// 		title: "Bluetooth",
-			// 		contentType: bluetooth.Devices,
-			// 	}),
-			// 	Box({
-			// 		children: [darkmode.DarkToggle(), nightmode.NightToggle()],
-			// 	}),
-			// 	Box({
-			// 		children: [audio.AppMixerToggle(), audio.MuteToggle()],
-			// 	}),
-			// 	Submenu({
-			// 		menuName: "app-mixer",
-			// 		icon: FontIcon({ icon: "" }),
-			// 		title: "App Mixer",
-			// 		contentType: audio.AppMixer,
-			// 	}),
-			// ],
+			children: [
+				Row([audio.Volume({ type: "speaker" })], [audio.SinkSelector({})]),
+				// 	BrightnessBox(),
+				// 	Widget.Box({
+				// 		children: [network.Toggle({}), bluetooth.Toggle({})],
+				// 	}),
+				// 	Submenu({
+				// 		menuName: "network",
+				// 		icon: "network-wireless-symbolic",
+				// 		title: "Network",
+				// 		contentType: network.Selection,
+				// 	}),
+				// 	Submenu({
+				// 		menuName: "bluetooth",
+				// 		icon: "bluetooth-symbolic",
+				// 		title: "Bluetooth",
+				// 		contentType: bluetooth.Devices,
+				// 	}),
+				// 	Box({
+				// 		children: [darkmode.DarkToggle(), nightmode.NightToggle()],
+				// 	}),
+				// 	Box({
+				// 		children: [audio.AppMixerToggle(), audio.MuteToggle()],
+				// 	}),
+				// 	Submenu({
+				// 		menuName: "app-mixer",
+				// 		icon: FontIcon({ icon: "" }),
+				// 		title: "App Mixer",
+				// 		contentType: audio.AppMixer,
+				// 	}),
+				Widget.Box({
+					children: mprisService
+						.bind("players")
+						.as((x) => x.map((player) => mpris.MprisPlayer({ player }))),
+				}),
+			],
 		}),
 	});
