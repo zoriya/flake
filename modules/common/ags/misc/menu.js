@@ -90,6 +90,47 @@ export const ArrowToggleButton = ({
 
 /**
  * @typedef {{
+ *   icon: Gtk.Widget,
+ *   label: Gtk.Widget,
+ *   activate: () => void
+ *   deactivate: () => void
+ *   connection: [GObject.Object, () => boolean]
+ * } & import("types/widgets/box").BoxProps} SimpleToggleButtonProps
+ * @param {SimpleToggleButtonProps} props
+ */
+export const SimpleToggleButton = ({
+	icon,
+	label,
+	activate,
+	deactivate,
+	connection: [service, condition],
+}) =>
+	Widget.Box({
+		className: "qs-button surface",
+		setup: (self) =>
+			self.hook(service, () => {
+				self.toggleClassName("accent", condition());
+			}),
+		children: [
+			Widget.Button({
+				child: Widget.Box({
+					hexpand: true,
+					children: [icon, label],
+				}),
+				onClicked: () => {
+					if (condition()) {
+						deactivate();
+					} else {
+						activate();
+					}
+				},
+			}),
+		],
+	});
+
+
+/**
+ * @typedef {{
  *   name: string,
  *   icon: Gtk.Widget,
  *   title: string,

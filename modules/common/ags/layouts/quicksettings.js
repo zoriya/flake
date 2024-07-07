@@ -3,7 +3,7 @@ import * as audio from "../modules/audio.js";
 import * as brightness from "../modules/brightness.js";
 import * as network from "../modules/network.js";
 import * as bluetooth from "../modules/bluetooth.js";
-// import * as darkmode from "../modules/darkmode.js";
+import * as darkmode from "../modules/darkmode.js";
 // import * as nightmode from "../modules/nightmode.js";
 import * as mpris from "../modules/mpris.js";
 import PopupWindow from "../misc/popup.js";
@@ -20,7 +20,6 @@ const Row = (toggles = [], menus = []) =>
 		children: [
 			Widget.Box({
 				homogeneous: true,
-				class_name: "row horizontal",
 				children: toggles,
 			}),
 			...menus,
@@ -45,17 +44,12 @@ export const Quicksettings = () =>
 					[network.Toggle({}), bluetooth.Toggle({})],
 					[network.Selection({}), bluetooth.Selection({})],
 				),
-				// 	Box({
-				// 		children: [darkmode.DarkToggle(), nightmode.NightToggle()],
-				// 	}),
+				Widget.Box({
+					homogeneous: true,
+					children: [darkmode.Toggle(), darkmode.Toggle()],
+				}),
 				// 	Box({
 				// 		children: [audio.AppMixerToggle(), audio.MuteToggle()],
-				// 	}),
-				// 	Submenu({
-				// 		menuName: "app-mixer",
-				// 		icon: FontIcon({ icon: "" }),
-				// 		title: "App Mixer",
-				// 		contentType: audio.AppMixer,
 				// 	}),
 				Widget.Box({
 					children: mprisService
