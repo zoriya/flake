@@ -15,24 +15,14 @@
     ];
     installPhase = "install -Dm755 ${./covercolors.py} $out/bin/covercolors";
   };
-  # ags = pkgs.stdenv.mkDerivation rec {
-  #   name = "ags";
-  #   nativeBuildInputs = with pkgs; [makeWrapper];
-  #   propagatedBuildInputs = [
-  #     covercolors
-  #   ];
-  #   dontUnpack = true;
-  #   installPhase = "
-  #      wrapProgram ${pkgs.ags}/bin/ags --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
-  #    ";
-  # };
-  ags = pkgs.ags.overrideAttrs (oldAttrs: {
-    runtimeDependencies = [covercolors];
-  });
   systemdTarget = "graphical-session.target";
 in {
-  # TODO: Remove this after testing
-  home.packages = [ags];
+  home.packages = [
+    # TODO: Remove this after testing
+    pkgs.ags
+	# TODO: Find a way to add this for ags only
+    covercolors
+  ];
   systemd.user.services.ags = {
     Unit = {
       Description = " A customizable and extensible shell ";
@@ -43,7 +33,7 @@ in {
 
     Service = {
       Type = "simple";
-      ExecStart = "${ags}/bin/ags";
+      ExecStart = "${pkgs.ags}/bin/ags";
       Restart = "always";
     };
 

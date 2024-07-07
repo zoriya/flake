@@ -1,5 +1,3 @@
-import { getMaterialColors } from "./materialcolors.js";
-
 const mpris = await Service.import("mpris");
 
 /** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/icon").IconProps} props */
@@ -115,77 +113,110 @@ export const MprisPlayer = ({ player, ...props }) => {
 	return Widget.Box({
 		visible: player.bind("play_back_status").as((x) => x !== "Stopped"),
 		className: `mpris-cover-art ${props.className}`,
-		css: colors.bind().as(
-			(x) => `
-				background-image: radial-gradient(circle, rgba(0, 0, 0, 0.4) 30%, ${x.primary}), url("${x.coverPath}"); \
-				color: ${x.onBackground};
+		css: Utils.merge(
+			[colors.bind(), player.bind("cover_path")],
+			(colors, cover) => `
+				background-image: radial-gradient(circle, rgba(0, 0, 0, 0.4) 30%, ${colors.primary}), url("${cover}"); \
+				color: ${colors.onBackground};
 			`,
 		),
 		vexpand: false,
 		children: [
-			Widget.Box({
+			Widget.CenterBox({
 				vertical: true,
 				hexpand: true,
-				children: [
-					Widget.Box({
-						vertical: true,
-						vexpand: true,
-						css: colors.bind().as((x) => `color: ${x.onBackground}`),
-						child: PlayerIcon({ player }),
-					}),
-					Widget.Box({
-						hexpand: true,
-						children: [
-							Widget.Box({
-								css: colors.bind().as((x) => `color: ${x.onBackground}`),
-								vertical: true,
-								vpack: "center",
-								hexpand: true,
-								children: [
-									TitleLabel({
-										player,
-										css: "font-weight: 600; font-size: 19px;",
-									}),
-									ArtistLabel({
-										player,
-										css: "font-weight: 400; font-size: 17px;",
-									}),
-								],
-							}),
-							Widget.Box({
-								children: [
-									PlayPause({
-										player,
-										hpack: "end",
-										className: "mpris-play",
-										css: colors.bind().as(
-											(x) => `
+				startWidget: Widget.Box({
+					vertical: true,
+					vexpand: true,
+					css: colors.bind().as((x) => `color: ${x.onBackground}`),
+					child: PlayerIcon({ player }),
+				}),
+				centerWidget: Widget.Box({
+					hexpand: true,
+					children: [
+						Widget.Box({
+							css: colors.bind().as(
+								(x) => `
+									color: ${x.onBackground};
+									margin-right: 12px;
+								`,
+							),
+							vertical: true,
+							vpack: "center",
+							hexpand: true,
+							children: [
+								TitleLabel({
+									player,
+									css: "font-weight: 600; font-size: 19px;",
+									maxWidthChars: 33,
+								}),
+								ArtistLabel({
+									player,
+									css: "font-weight: 400; font-size: 17px;",
+									maxWidthChars: 40,
+								}),
+							],
+						}),
+						Widget.Box({
+							children: [
+								PlayPause({
+									player,
+									hpack: "end",
+									className: "mpris-play",
+									css: colors.bind().as(
+										(x) => `
 												background-color: ${x.primary};
 												color: ${x.onPrimary};
 											`,
-										),
-									}),
-								],
-							}),
-						],
-					}),
-					Widget.Box({
-						css: colors.bind().as((x) => `color: ${x.onBackground}`),
-						vpack: "end",
-						children: [
-							Widget.Box({
-								hexpand: true,
-								children: [
-									PreviousButton({ player, css: "margin-left: 16px;" }),
-									PositionSlider({ player, hexpand: true }),
-									NextButton({ player, css: "margin-right: 16px;" }),
-								],
-							}),
-						],
-					}),
-				],
+									),
+								}),
+							],
+						}),
+					],
+				}),
+				endWidget: Widget.Box({
+					css: colors.bind().as((x) => `color: ${x.onBackground}`),
+					vpack: "end",
+					children: [
+						Widget.Box({
+							hexpand: true,
+							children: [
+								PreviousButton({ player, css: "margin-left: 16px;" }),
+								PositionSlider({ player, hexpand: true }),
+								NextButton({ player, css: "margin-right: 16px;" }),
+							],
+						}),
+					],
+				}),
 			}),
 		],
 		...props,
 	});
+};
+
+// TODO: Move ret inside getMaterialColors to support multiple players.
+const ret = Variable({
+	primary: "#222222",
+	onPrimary: "#ffffff",
+	background: "#222222",
+	onBackground: "#ffffff",
+});
+/** @param {import("types/service/mpris").MprisPlayer} player */
+export const getMaterialColors = (player) => {
+	// TODO: Move that to a hook to allow graceful disconnections
+	player.connect("changed", (player) => {
+		const cover = player.cover_path;
+		// TODO: Wait for the cover to be downloaded, currently we hope that it's ready in <100ms
+		Utils.timeout(100, () => {
+			Utils.execAsync(["covercolors", cover])
+				.then((colors) => {
+					const col = JSON.parse(colors);
+					if (!col) return;
+					ret.setValue(col);
+				})
+				.catch(print);
+		});
+	});
+
+	return ret;
 };

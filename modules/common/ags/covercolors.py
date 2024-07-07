@@ -13,8 +13,7 @@ def cache_and_get_colors(file_path):
 	file_hash = hashlib.sha256(file_path.encode('utf-8')).hexdigest()
 	cache_path = os.path.join(CACHE_DIR, file_hash[:2], file_hash[2:])
 
-	if not os.path.exists(cache_path):
-		os.makedirs(cache_path)
+	os.makedirs(cache_path, exist_ok=True)
 
 	colors_path = os.path.join(cache_path, "colors.json")
 	if os.path.exists(colors_path):
