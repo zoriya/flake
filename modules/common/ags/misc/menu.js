@@ -157,7 +157,6 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 						}),
 					],
 				}),
-				Widget.Separator(),
 				Widget.Box({
 					vertical: true,
 					className: "qs-sub-content",

@@ -16,13 +16,17 @@
     installPhase = "install -Dm755 ${./covercolors.py} $out/bin/covercolors";
   };
   systemdTarget = "graphical-session.target";
+  # TODO: Add this in the offcial ags derivation
+  ags = pkgs.ags.overrideAttrs (_: prev: {
+    buildInputs = prev.buildInputs ++ [pkgs.libdbusmenu-gtk3];
+  });
 in {
   home.packages = with pkgs; [
     # TODO: Remove this after testing
     ags
-	# TODO: Find a way to add this for ags only
+    # TODO: Find a way to add this for ags only
     covercolors
-	brightnessctl
+    brightnessctl
   ];
   systemd.user.services.ags = {
     Unit = {

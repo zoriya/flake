@@ -141,7 +141,7 @@ switch image {
 
 /* Quick settings */
 .qs-container {
-	min-width: 500px;
+	min-width: 400px;
 	padding: 25px;
 	margin: 10px;
 	border-radius: 20px;
@@ -187,6 +187,19 @@ switch image {
 
 .qs-sub-sub-content > * {
 	margin: 6px 0px;
+}
+
+.avatar {
+	border-radius: 50%;
+	min-width: 70px;
+	min-height: 70px;
+	background-size: cover;
+}
+
+.sys-button {
+	min-width: 40px;
+	min-height: 40px;
+	border-radius: 15px;
 }
 
 .mpris-cover-art {
