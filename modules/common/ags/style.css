@@ -165,6 +165,7 @@ switch image {
 
 .qs-submenu {
 	margin-top: 8px;
+	margin-bottom: 8px;
 	padding: 12px;
 	border-radius: 20px;
 }

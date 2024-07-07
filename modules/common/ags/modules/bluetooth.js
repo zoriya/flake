@@ -80,11 +80,13 @@ const DeviceItem = (device) =>
 				visible: device.bind("connecting"),
 			}),
 			Widget.Switch({
-				active: device.connected,
+				active: device.bind("connected"),
 				visible: device.bind("connecting").as((p) => !p),
+				// sensitive: false,
 				setup: (self) =>
-					self.on("notify::active", () => {
+					self.connect("state_set", () => {
 						device.setConnection(self.active);
+						return true;
 					}),
 			}),
 		],

@@ -14,14 +14,15 @@ export const Padding = (
 	name,
 	{ css = "", hexpand = true, vexpand = true } = {},
 ) =>
-	Widget.Box({});
-	// Widget.EventBox({
-	// 	hexpand,
-	// 	vexpand,
-	// 	can_focus: false,
-	// 	child: Widget.Box({ css }),
-	// 	 setup: (w) => w.on("button-press-event", () => App.toggleWindow(name)),
-	// });
+	// Widget.Box({});
+	 Widget.EventBox({
+	 	hexpand,
+	 	vexpand,
+	 	can_focus: false,
+	 	child: Widget.Box({ css }),
+	 	 setup: (w) => w.on("button-press-event", () => App.toggleWindow(name)),
+	 });
+
 /**
  * @param {string} name
  * @param {Child} child
@@ -190,8 +191,8 @@ export default ({
 		keymode: "on-demand",
 		exclusivity,
 		layer: "top",
-		 anchor: ["top", "right"],
-		// anchor: ["top", "bottom", "right", "left"],
+		// anchor: ["top", "right"],
+		anchor: ["top", "bottom", "right", "left"],
 		child: Layout(name, child, transition, duration)[layout](),
 		...props,
 	});
