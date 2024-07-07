@@ -1,5 +1,5 @@
 import { icon } from "../misc/utils.js";
-import { Arrow, Menu, SettingsButton } from "../misc/menu.js";
+import { Arrow, Menu, SettingsButton, SimpleToggleButton } from "../misc/menu.js";
 
 const audio = await Service.import("audio");
 
@@ -83,40 +83,29 @@ export const Volume = ({ type = "speaker", ...props }) =>
 		...props,
 	});
 
-// export const MuteToggle = (props) =>
-// 	Button({
-// 		...props,
-// 		classame: "qs-button surface",
-// 		onClicked: () => execAsync("pactl set-source-mute @DEFAULT_SOURCE@ toggle"),
-// 		child: Box({
-// 			children: [
-// 				MicrophoneMuteIndicator({ classame: "qs-icon" }),
-// 				Label({
-// 					connections: [
-// 						[
-// 							Audio,
-// 							(label) => {
-// 								if (!Audio.microphone) return;
-// 								label.label = Audio.microphone.isMuted ? "Muted" : "Not muted";
-// 							},
-// 							"microphone-changed",
-// 						],
-// 					],
-// 				}),
-// 			],
-// 		}),
-// 		connections: [
-// 			[
-// 				Audio,
-// 				(button) => {
-// 					if (!Audio.microphone) return;
-//
-// 					button.toggleClassName("accent", Audio.microphone.isMuted);
-// 				},
-// 				"microphone-changed",
-// 			],
-// 		],
-// 	});
+/** @param {Partial<import("../misc/menu.js").SimpleToggleButtonProps>} props */
+export const MuteToggle = ({ ...props } = {}) =>
+	SimpleToggleButton({
+		icon: Widget.Icon({
+			className: "qs-icon",
+			icon: audio.microphone
+				.bind("is_muted")
+				.as((x) =>
+					x
+						? "microphone-disabled-symbolic"
+						: "microphone-sensitivity-high-symbolic",
+				),
+		}),
+		label: Widget.Label({
+			label: audio.microphone
+				.bind("is_muted")
+				.as((x) => (x ? "Unmute" : "Mute")),
+		}),
+		activate: () => (audio.microphone.is_muted = true),
+		deactivate: () => (audio.microphone.is_muted = false),
+		connection: [audio.microphone, () => audio.microphone.is_muted],
+		...props,
+	});
 
 /** @param {Partial<import("../misc/menu.js").MenuProps>} props */
 export const SinkSelector = (props) =>

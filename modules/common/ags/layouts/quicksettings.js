@@ -142,15 +142,12 @@ export const Quicksettings = () =>
 				),
 				Widget.Box({
 					homogeneous: true,
-					children: [darkmode.Toggle(), darkmode.Toggle({})],
+					children: [darkmode.Toggle(), audio.MuteToggle({})],
 				}),
 				Row(
 					[systray.Toggle({}), powerprofile.Toggle({})],
 					[systray.Selection({}), powerprofile.Selection({})],
 				),
-				// 	Box({
-				// 		children: [audio.MuteToggle()],
-				// 	}),
 				Widget.Box({
 					children: mprisService
 						.bind("players")
