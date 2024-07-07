@@ -1,40 +1,45 @@
-import Service from 'resource:///com/github/Aylur/ags/service.js';
-import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
+const screen = await Utils.execAsync(
+	"bash -c 'ls -w1 /sys/class/backlight | head -n 1'",
+);
+const max = Number(await Utils.execAsync("brightnessctl m"));
 
-class BrightnessService extends Service {
+class Brightness extends Service {
 	static {
-		Service.register(this, {}, { "screen": ["float", "rw"]});
+		Service.register(this, {}, { screen: ["float", "rw"] });
 	}
 
-	_screen = 0;
+	#screen = 0;
 
-	get screen() { return this._screen; }
+	get screen() {
+		return this.#screen;
+	}
 
 	set screen(percent) {
-		if (percent < 0)
-			percent = 0;
+		if (percent < 0) percent = 0;
 
-		if (percent > 1)
-			percent = 1;
+		if (percent > 1) percent = 1;
 
-		execAsync(`brightnessctl s ${percent * 100}% -q`)
+		Utils.execAsync(`brightnessctl s ${percent * 100}% -q`)
 			.then(() => {
-				this._screen = percent;
+				this.#screen = percent;
 
-				this.emit('changed');
-				this.notify('screen');
+				this.emit("changed");
+				this.notify("screen");
 			})
 			.catch(print);
 	}
 
 	constructor() {
 		super();
-		const current = Number(exec('brightnessctl g'));
-		const max = Number(exec('brightnessctl m'));
-		this._screen = current / max;
+		this.#screen = Number(Utils.exec("brightnessctl g")) / max;
+
+		const screenPath = `/sys/class/backlight/${screen}/brightness`;
+
+		Utils.monitorFile(screenPath, async (f) => {
+			const v = await Utils.readFileAsync(f);
+			this.#screen = Number(v) / max;
+			this.changed("screen");
+		});
 	}
 }
-
-export const Brightness = new BrightnessService();
-export default Brightness;
-globalThis.brightness = Brightness;
+export default new Brightness();

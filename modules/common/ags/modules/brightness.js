@@ -1,41 +1,38 @@
-import { Brightness } from "../services/brightness.js";
+import brightness from "../services/brightness.js";
 
-import Service from 'resource:///com/github/Aylur/ags/service.js';
-import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
-import { Icon, Label, Slider } from 'resource:///com/github/Aylur/ags/widget.js';
-
-export const BrightnessSlider = (props) =>
-	Slider({
-		...props,
+/** @param {import("types/widgets/slider").SliderProps} props */
+const BrightnessSlider = (props) =>
+	Widget.Slider({
 		drawValue: false,
 		hexpand: true,
-		connections: [
-			[
-				Brightness,
-				(slider) => {
-					slider.value = Brightness.screen;
-				},
-			],
-		],
-		onChange: ({ value }) => (Brightness.screen = value),
+		value: brightness.bind("screen"),
+		onChange: ({ value }) => {
+			brightness.screen = value;
+		},
+		...props,
 	});
 
-export const Indicator = (props) =>
-	Icon({
-		...props,
-		icon: "display-brightness-symbolic",
-	});
-
-export const PercentLabel = (props) =>
-	Label({
-		...props,
-		connections: [
-			[
-				Brightness,
-				(label) => {
-					const perc = Math.floor(Brightness.screen * 100);
-					label.label = `${("  " + perc).slice(-3)}%`;
-				},
-			],
+/** @param {import("types/widgets/box").BoxProps} props */
+export const Brightness = (props) =>
+	Widget.Box({
+		className: "qs-slider",
+		children: [
+			Widget.Icon({
+				vpack: "center",
+				icon: "display-brightness-symbolic",
+				tooltipText: brightness
+					.bind("screen")
+					.as((x) => `Screen Brightness: ${Math.floor(x * 100)}%`),
+			}),
+			BrightnessSlider({}),
+			Widget.Label({
+				label: brightness.bind("screen").as(
+					(x) =>
+						`${Math.floor(x * 100)
+							.toString()
+							.padStart(3)}%`,
+				),
+			}),
 		],
+		...props,
 	});

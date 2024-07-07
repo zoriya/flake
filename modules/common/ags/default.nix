@@ -17,11 +17,12 @@
   };
   systemdTarget = "graphical-session.target";
 in {
-  home.packages = [
+  home.packages = with pkgs; [
     # TODO: Remove this after testing
-    pkgs.ags
+    ags
 	# TODO: Find a way to add this for ags only
     covercolors
+	brightnessctl
   ];
   systemd.user.services.ags = {
     Unit = {

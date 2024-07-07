@@ -1,35 +1,14 @@
 import Gtk from "gi://Gtk?version=3.0";
 import * as audio from "../modules/audio.js";
-// import * as brightness from "../modules/brightness.js";
+import * as brightness from "../modules/brightness.js";
 // import * as network from "../modules/network.js";
 // import * as bluetooth from "../modules/bluetooth.js";
 // import * as darkmode from "../modules/darkmode.js";
 // import * as nightmode from "../modules/nightmode.js";
 import * as mpris from "../modules/mpris.js";
 import PopupWindow from "../misc/popup.js";
-// import { opened, Arrow } from "../services/quicksettings.js";
-// import { FontIcon, PopupOverlay } from "../misc.js";
 
 const mprisService = await Service.import("mpris");
-
-// const Submenu = ({ menuName, icon, title, contentType }) =>
-// 	Revealer({
-// 		transition: "slide_down",
-// 		connections: [
-// 			[opened, (r) => (r.reveal_child = menuName === opened.value)],
-// 		],
-// 		child: Box({
-// 			className: "",
-// 			vertical: true,
-// 			children: [
-// 				Box({
-// 					className: "qs-sub-title accent",
-// 					children: [icon, Label({ label: title, className: "bold f16" })],
-// 				}),
-// 				contentType({ className: "qs-sub-content", hexpand: true }),
-// 			],
-// 		}),
-// 	});
 
 /**
  * @param {Array<Gtk.Widget>} toggles
@@ -47,18 +26,6 @@ const Row = (toggles = [], menus = []) =>
 			...menus,
 		],
 	});
-
-// const BrightnessBox = () =>
-// 	Box({
-// 		className: "qs-slider",
-// 		children: [
-// 			brightness.Indicator(),
-// 			brightness.BrightnessSlider({ hexpand: true }),
-// 			brightness.PercentLabel(),
-// 			Box({ className: "qs-icon", css: "margin-right: 18px;" }),
-// 		],
-// 	});
-
 export const Quicksettings = () =>
 	PopupWindow({
 		name: "quicksettings",
@@ -73,7 +40,7 @@ export const Quicksettings = () =>
 					[audio.Volume({ type: "speaker" })],
 					[audio.SinkSelector({}), audio.AppMixer({})],
 				),
-				// 	BrightnessBox(),
+				brightness.Brightness({}),
 				// 	Widget.Box({
 				// 		children: [network.Toggle({}), bluetooth.Toggle({})],
 				// 	}),

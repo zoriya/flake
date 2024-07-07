@@ -117,16 +117,6 @@ export const Volume = ({ type = "speaker", ...props }) =>
 // 			],
 // 		],
 // 	});
-//
-// export const AppMixerToggle = (props) =>
-// 	ArrowToggle({
-// 		icon: FontIcon({ icon: "", className: "qs-icon" }),
-// 		label: Label("App Mixer"),
-// 		name: "app-mixer",
-// 		toggle: () =>
-// 			(opened.value = opened.value === "app-mixer" ? "" : "app-mixer"),
-// 		...props,
-// 	});
 
 /** @param {import("types/widgets/button").ButtonProps} props */
 const SettingsButton = (props) =>
