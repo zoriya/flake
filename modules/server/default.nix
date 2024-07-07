@@ -3,20 +3,19 @@
   lib,
   ...
 }: let
-  guesspath =
-    pkgs.stdenv.mkDerivation rec {
-      name = "guesspath";
-      nativeBuildInputs = with pkgs; [makeWrapper];
-      propagatedBuildInputs = with pkgs; [
-        python3Packages.guessit
-        transmission_4
-      ];
-      dontUnpack = true;
-      installPhase = "
-     install -Dm755 ${./guesspath.sh} $out/bin/guesspath
-     wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
-   ";
-    };
+  guesspath = pkgs.stdenv.mkDerivation rec {
+    name = "guesspath";
+    nativeBuildInputs = with pkgs; [makeWrapper];
+    propagatedBuildInputs = with pkgs; [
+      python3Packages.guessit
+      transmission_4
+    ];
+    dontUnpack = true;
+    installPhase = "
+        install -Dm755 ${./guesspath.sh} $out/bin/guesspath
+        wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
+      ";
+  };
 
   smartrss = pkgs.stdenv.mkDerivation rec {
     name = "smartrss";
@@ -28,9 +27,9 @@
     ];
     dontUnpack = true;
     installPhase = "
-        install -Dm755 ${./smartrss.sh} $out/bin/smartrss
-        wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
-      ";
+       install -Dm755 ${./smartrss.sh} $out/bin/smartrss
+       wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
+     ";
   };
 in {
   # Make it use predictable interface names starting with eth0

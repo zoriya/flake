@@ -38,7 +38,7 @@ export const Notifications = () =>
 				min-width: 600px;
 				margin: 10px;
 				padding: 12px;
-				border-radius: 40px;
+				border-radius: 20px;
 			`,
 			children:
 				/** @type {any} */
