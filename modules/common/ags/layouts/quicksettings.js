@@ -1,8 +1,8 @@
 import Gtk from "gi://Gtk?version=3.0";
 import * as audio from "../modules/audio.js";
 import * as brightness from "../modules/brightness.js";
- import * as network from "../modules/network.js";
-// import * as bluetooth from "../modules/bluetooth.js";
+import * as network from "../modules/network.js";
+import * as bluetooth from "../modules/bluetooth.js";
 // import * as darkmode from "../modules/darkmode.js";
 // import * as nightmode from "../modules/nightmode.js";
 import * as mpris from "../modules/mpris.js";
@@ -42,24 +42,9 @@ export const Quicksettings = () =>
 				),
 				brightness.Brightness({}),
 				Row(
-					[network.Toggle({}), network.Toggle({})],
-					[network.Selection({})],
+					[network.Toggle({}), bluetooth.Toggle({})],
+					[network.Selection({}), bluetooth.Selection({})],
 				),
-				// 	Widget.Box({
-				// 		children: [network.Toggle({}), bluetooth.Toggle({})],
-				// 	}),
-				// 	Submenu({
-				// 		menuName: "network",
-				// 		icon: "network-wireless-symbolic",
-				// 		title: "Network",
-				// 		contentType: network.Selection,
-				// 	}),
-				// 	Submenu({
-				// 		menuName: "bluetooth",
-				// 		icon: "bluetooth-symbolic",
-				// 		title: "Bluetooth",
-				// 		contentType: bluetooth.Devices,
-				// 	}),
 				// 	Box({
 				// 		children: [darkmode.DarkToggle(), nightmode.NightToggle()],
 				// 	}),

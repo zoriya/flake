@@ -1,8 +1,11 @@
 * {
-	all: unset;
 	font-family: monospace;
 	padding: 0;
 	margin: 0;
+}
+
+button {
+	all: unset;
 }
 
 /* Colors */
@@ -87,7 +90,7 @@ trough {
 	background-color: #000;
 	border-radius: 100px;
 }
-highlight, progress {
+highlight, fill {
 	background-color: #94e2d5;
 	border-radius: 100px;
 }
@@ -95,6 +98,25 @@ mark {
 	background-color: #F38BA8;
 	min-width: 1px;
 	min-height: 3px;
+}
+
+switch {
+	background-color: #000;
+	border-radius: 100px;
+}
+
+switch slider {
+	all: unset;
+	transition: 200ms;
+	background-color: #94e2d5;
+	border-radius: 100px;
+	min-width: 1rem;
+	min-height: 1rem;
+}
+
+switch image {
+	all: unset;
+	color: transparent;
 }
 
 /* Bar */

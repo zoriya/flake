@@ -17,7 +17,15 @@
 
   networking.networkmanager.enable = true;
   hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    settings = {
+      General = {
+        # enable battery reporting
+        Experimental = true;
+      };
+    };
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;

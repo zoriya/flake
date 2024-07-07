@@ -81,7 +81,7 @@ export const Selection = (props) =>
 const Wired = () =>
 	Widget.Button({
 		// onClicked:
-		visible: network.wired.bind("state").as(x => (console.log(x), true)),
+		// visible: network.wired.bind("state").as(x => (console.log(x), true)),
 		child: Widget.Box({
 			children: [
 				Widget.Icon({ icon: network.wired.bind("icon_name") }),
