@@ -1,5 +1,4 @@
 {pkgs, ...}: let
-  wallpaper = pkgs.writeShellScriptBin "wallpaper" (builtins.readFile ./wallpaper.sh);
   dwlstartup = pkgs.writeShellScriptBin "dwlstartup" (builtins.readFile ./dwlstartup.sh);
 in {
   imports = [
@@ -13,11 +12,9 @@ in {
     pavucontrol
     blueberry
     networkmanagerapplet
-    wbg
     glib
     # Only used for pactl.
     pulseaudio
-    wallpaper
     dwlstartup
     hyprpicker
     wdisplays

@@ -35,6 +35,7 @@ in {
       default-layout = "rivercarro";
       spawn = [
         "${pkgs.rivercarro}/bin/rivercarro"
+        "wallpaper"
         "discord"
         "youtube-music"
       ];

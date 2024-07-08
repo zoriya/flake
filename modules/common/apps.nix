@@ -10,6 +10,15 @@ with lib; let
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
+  wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
+    WALLPAPERS=~/wallpapers/
+
+    WP=$(find $WALLPAPERS -type f | shuf -n 1)
+    ln -fs "$WP" ~/.cache/current-wallpaper
+
+    ${pkgs.wbg}/bin/wbg "$WP" > /dev/null 2> /dev/null & disown
+    echo "$WP"
+  '';
 in {
   imports = [
     ./ghostty.nix
@@ -20,6 +29,7 @@ in {
   ];
 
   home.packages = with pkgs; [
+    wallpaper
     google-chrome
     discord
     firefox
