@@ -9,9 +9,9 @@
     "checkJs": true,
     "strict": true,
     "noImplicitAny": false,
-    "baseUrl": ".",
+    "baseUrl": "../../gui/ags",
     "typeRoots": [
-      "./types"
+      "../../gui/ags/types"
     ],
     "skipLibCheck": true
   }

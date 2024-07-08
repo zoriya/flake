@@ -56,7 +56,7 @@
         modules =
           [
             impermanence.nixosModules.impermanence
-            ./modules/misc
+            ./modules/cli
             (./modules + "/${de}")
             {
               nixpkgs.overlays = [
@@ -84,7 +84,7 @@
                 useUserPackages = true;
                 users.${user} = {
                   imports = [
-                    ./modules/misc/home.nix
+                    ./modules/cli/home.nix
                     (./modules + "/${de}/home.nix")
                     nix-index-database.hmModules.nix-index
                   ];

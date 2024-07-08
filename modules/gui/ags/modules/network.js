@@ -2,7 +2,7 @@ import { ArrowToggleButton, Menu, SettingsButton } from "../misc/menu.js";
 
 const network = await Service.import("network");
 
-/** @param {import("types/widgets/icon").IconProps} props*/
+/** @param {import("../types/widgets/icon.js").IconProps} props*/
 export const Indicator = (props) =>
 	Widget.Stack({
 		children: {
@@ -18,7 +18,7 @@ export const Indicator = (props) =>
 		shown: network.bind("primary").as((p) => p || "wifi"),
 	});
 
-/** @param {import("types/widgets/label").LabelProps} props */
+/** @param {import("../types/widgets/label.js").LabelProps} props */
 export const SSIDLabel = (props) =>
 	Widget.Label({
 		truncate: "end",
@@ -31,7 +31,7 @@ export const SSIDLabel = (props) =>
 				network.wired.internet !== "disconnected" ? "Wired" : "Not Connected";
 	});
 
-/** @param {Partial<import("misc/menu").ArrowToggleButtonProps>} props */
+/** @param {Partial<import("../misc/menu.js").ArrowToggleButtonProps>} props */
 export const Toggle = (props) =>
 	ArrowToggleButton({
 		name: "network",
@@ -96,7 +96,7 @@ const Wired = () =>
 		}),
 	});
 
-/** @param {import("types/service/network").Wifi["access_points"][0]} wifi */
+/** @param {import("../types/service/network.js").Wifi["access_points"][0]} wifi */
 const WifiItem = (wifi) =>
 	Widget.Button({
 		onClicked: () => Utils.execAsync(`nmcli device wifi connect ${wifi.bssid}`),

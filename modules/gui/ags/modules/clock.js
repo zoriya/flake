@@ -5,7 +5,7 @@ export const clock = Variable(GLib.DateTime.new_now_local(), {
 });
 
 /**
- * @param {{format?: string} & import("types/widgets/label").LabelProps} props
+ * @param {{format?: string} & import("../types/widgets/label").LabelProps} props
  */
 export const Clock = ({ format = "%a %d %b %H:%M ", ...props } = {}) =>
 	Widget.Label({

@@ -22,7 +22,7 @@ export const getIcon = (volume) => {
 	return `audio-volume-${icon}-symbolic`;
 };
 
-/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/icon").IconProps} props */
+/** @param {{type?: "speaker" | "microphone"} & import("../types/widgets/icon.js").IconProps} props */
 export const VolumeIndicator = ({ type = "speaker", ...props }) =>
 	Widget.Icon(props).hook(audio, (self) => {
 		if (audio[type].is_muted) {
@@ -35,7 +35,7 @@ export const VolumeIndicator = ({ type = "speaker", ...props }) =>
 		self.tooltip_text = `Volume: ${Math.floor(vol)}%`;
 	});
 
-/** @param {import("types/widgets/icon").IconProps} props */
+/** @param {import("../types/widgets/icon.js").IconProps} props */
 export const MicrophoneIndicator = (props) =>
 	Widget.Icon(props).hook(audio, (self) => {
 		self.visible = audio.microphone.is_muted || audio.recorders.length > 0;
@@ -44,7 +44,7 @@ export const MicrophoneIndicator = (props) =>
 			self.icon = "microphone-sensitivity-high-symbolic";
 	});
 
-/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/slider").SliderProps} props */
+/** @param {{type?: "speaker" | "microphone"} & import("../types/widgets/slider.js").SliderProps} props */
 const VolumeSlider = ({ type = "speaker", ...props }) =>
 	Widget.Slider({
 		hexpand: true,
@@ -60,7 +60,7 @@ const VolumeSlider = ({ type = "speaker", ...props }) =>
 		...props,
 	});
 
-/** @param {{type?: "speaker" | "microphone"} & import("types/widgets/box").BoxProps} props */
+/** @param {{type?: "speaker" | "microphone"} & import("../types/widgets/box.js").BoxProps} props */
 export const Volume = ({ type = "speaker", ...props }) =>
 	Widget.Box({
 		className: "qs-slider",
@@ -139,7 +139,7 @@ export const SinkSelector = (props) =>
 		...props,
 	});
 
-/** @param {import("types/service/audio").Stream} stream */
+/** @param {import("../types/service/audio.js").Stream} stream */
 const SinkItem = (stream) =>
 	Widget.Button({
 		hexpand: true,
@@ -183,7 +183,7 @@ export const AppMixer = (props) =>
 		...props,
 	});
 
-/** @param {import("types/service/audio").Stream} stream */
+/** @param {import("../types/service/audio.js").Stream} stream */
 const MixerItem = (stream) =>
 	Widget.Box({
 		hexpand: true,

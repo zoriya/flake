@@ -7,7 +7,7 @@ const connected = Utils.merge(
 	(enabled, devices) => enabled && devices.length > 0,
 );
 
-/** @param {{hideIfDisabled?: boolean} & import("types/widgets/icon").IconProps} props */
+/** @param {{hideIfDisabled?: boolean} & import("../types/widgets/icon.js").IconProps} props */
 export const Indicator = ({ hideIfDisabled = false, ...props } = {}) =>
 	Widget.Icon({
 		icon: connected.as(
@@ -17,7 +17,7 @@ export const Indicator = ({ hideIfDisabled = false, ...props } = {}) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/label").LabelProps} props */
+/** @param {import("../types/widgets/label.js").LabelProps} props */
 export const ConnectedLabel = (props) =>
 	Widget.Label(props).hook(bluetooth, (self) => {
 		if (!bluetooth.enabled) self.label = "Disabled";
@@ -28,7 +28,7 @@ export const ConnectedLabel = (props) =>
 		else self.label = `${bluetooth.connected_devices.length} Connected`;
 	});
 
-/** @param {Partial<import("misc/menu").ArrowToggleButtonProps>} props */
+/** @param {Partial<import("../misc/menu.js").ArrowToggleButtonProps>} props */
 export const Toggle = (props) =>
 	ArrowToggleButton({
 		name: "bluetooth",
@@ -64,7 +64,7 @@ export const Selection = (props) =>
 		...props,
 	});
 
-/** @param {import("types/service/bluetooth.js").BluetoothDevice} device */
+/** @param {import("../types/service/bluetooth.js").BluetoothDevice} device */
 const DeviceItem = (device) =>
 	Widget.Box({
 		children: [

@@ -2,7 +2,7 @@ const notifications = await Service.import("notifications");
 notifications.popupTimeout = 2000; //in seconds
 notifications.forceTimeout = true; //force all notifications to timeout
 
-/** @param {import("types/widgets/icon").IconProps} props */
+/** @param {import("../types/widgets/icon").IconProps} props */
 export const DNDIndicator = (props) =>
 	Widget.Icon({
 		visible: notifications.bind("dnd"),
@@ -10,7 +10,7 @@ export const DNDIndicator = (props) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/button").ButtonProps} props */
+/** @param {import("../types/widgets/button").ButtonProps} props */
 export const DNDToggle = (props) =>
 	Widget.Button({
 		onClicked: () => {
@@ -29,7 +29,7 @@ export const DNDToggle = (props) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/box").BoxProps} props */
+/** @param {import("../types/widgets/box").BoxProps} props */
 export const Indicator = ({ ...props }) =>
 	Widget.Box({
 		visible: notifications.bind("notifications").as((x) => x.length > 0),
@@ -58,7 +58,7 @@ export const Indicator = ({ ...props }) =>
 	});
 let old_notif = "";
 
-/** @param {import("types/service/notifications").Notification} param */
+/** @param {import("../types/service/notifications").Notification} param */
 const NotificationIcon = ({ app_entry, app_icon, image }) => {
 	if (image) {
 		return Widget.Box({
@@ -107,7 +107,7 @@ import GLib from "gi://GLib";
 const time = (time, format = "%H:%M") =>
 	GLib.DateTime.new_from_unix_local(time).format(format);
 
-/** @param {import("types/service/notifications").Notification} notification */
+/** @param {import("../types/service/notifications").Notification} notification */
 export const Notification = (notification) => {
 	const content = Widget.Box({
 		children: [
@@ -207,7 +207,7 @@ export const Notification = (notification) => {
 	});
 };
 
-/** @param {import("types/widgets/scrollable").ScrollableProps} props */
+/** @param {import("../types/widgets/scrollable").ScrollableProps} props */
 export const List = (props) =>
 	Widget.Scrollable({
 		vscroll: "automatic",
@@ -222,7 +222,7 @@ export const List = (props) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/box").BoxProps} props */
+/** @param {import("../types/widgets/box").BoxProps} props */
 export const Placeholder = (props) =>
 	Widget.Box({
 		vertical: true,
@@ -242,7 +242,7 @@ export const Placeholder = (props) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/button").ButtonProps} props */
+/** @param {import("../types/widgets/button").ButtonProps} props */
 export const ClearButton = (props) =>
 	Widget.Button({
 		className: "surface r20 p10",

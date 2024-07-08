@@ -11,7 +11,7 @@
       tree-sitter
     ];
   };
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/misc/nvim";
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/flake/modules/cli/nvim";
 
   programs.zsh.shellAliases = {
     n = "nvim";

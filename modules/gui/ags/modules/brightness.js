@@ -1,6 +1,6 @@
 import brightness from "../services/brightness.js";
 
-/** @param {import("types/widgets/slider").SliderProps} props */
+/** @param {import("../types/widgets/slider.js").SliderProps} props */
 const BrightnessSlider = (props) =>
 	Widget.Slider({
 		drawValue: false,
@@ -12,7 +12,7 @@ const BrightnessSlider = (props) =>
 		...props,
 	});
 
-/** @param {import("types/widgets/box").BoxProps} props */
+/** @param {import("../types/widgets/box.js").BoxProps} props */
 export const Brightness = (props) =>
 	Widget.Box({
 		className: "qs-slider",

@@ -10,6 +10,7 @@ with lib; let
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
+
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
     WALLPAPERS=~/wallpapers/
 

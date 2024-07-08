@@ -2,7 +2,7 @@ import { ArrowToggleButton, Menu } from "../misc/menu.js";
 
 const systemtray = await Service.import("systemtray");
 
-/** @param {Partial<import("misc/menu").ArrowToggleButtonProps>} props */
+/** @param {Partial<import("../misc/menu.js").ArrowToggleButtonProps>} props */
 export const Toggle = (props) =>
 	ArrowToggleButton({
 		name: "systray",
@@ -30,7 +30,7 @@ export const Selection = (props) =>
 		...props,
 	});
 
-/** @param {import('types/service/systemtray').TrayItem} item */
+/** @param {import('../types/service/systemtray.js').TrayItem} item */
 const SysTrayItem = (item) =>
 	Widget.Button({
 		css: "margin: 12px;",

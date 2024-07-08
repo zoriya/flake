@@ -1,6 +1,6 @@
 const mpris = await Service.import("mpris");
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/icon").IconProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/icon").IconProps} props */
 const PlayerIcon = ({ player, ...props }) =>
 	Widget.Icon({
 		size: 24,
@@ -18,7 +18,7 @@ const PlayerIcon = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/label").LabelProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
 const TitleLabel = ({ player, ...props }) =>
 	Widget.Label({
 		wrap: true,
@@ -28,7 +28,7 @@ const TitleLabel = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/label").LabelProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
 const ArtistLabel = ({ player, ...props }) =>
 	Widget.Label({
 		wrap: true,
@@ -38,7 +38,7 @@ const ArtistLabel = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/button").ButtonProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
 export const PlayPause = ({ player, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({
@@ -56,7 +56,7 @@ export const PlayPause = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/button").ButtonProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
 const PreviousButton = ({ player, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({ icon: "media-skip-backward-symbolic" }),
@@ -65,7 +65,7 @@ const PreviousButton = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/button").ButtonProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
 const NextButton = ({ player, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({ icon: "media-skip-forward-symbolic" }),
@@ -74,7 +74,7 @@ const NextButton = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("types/service/mpris").MprisPlayer} & import("types/widgets/slider").SliderProps} props */
+/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/slider").SliderProps} props */
 const PositionSlider = ({ player, ...props }) =>
 	Widget.Slider({
 		className: "mpris-position-slider",
@@ -105,7 +105,7 @@ const PositionSlider = ({ player, ...props }) =>
 // 	(name) => mpris.getPlayer(name),
 // );
 
-/** @param {{player?: import("types/service/mpris").MprisPlayer | null} & import("types/widgets/box").BoxProps} props */
+/** @param {{player?: import("../types/service/mpris").MprisPlayer | null} & import("../types/widgets/box").BoxProps} props */
 export const MprisPlayer = ({ player, ...props }) => {
 	if (!player) return Widget.Box({ visible: false });
 	const colors = getMaterialColors(player);
@@ -201,7 +201,7 @@ const ret = Variable({
 	background: "#222222",
 	onBackground: "#ffffff",
 });
-/** @param {import("types/service/mpris").MprisPlayer} player */
+/** @param {import("../types/service/mpris").MprisPlayer} player */
 export const getMaterialColors = (player) => {
 	// TODO: Move that to a hook to allow graceful disconnections
 	player.connect("changed", (player) => {

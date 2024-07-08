@@ -13,7 +13,7 @@ App.connect("window-toggled", (_, name, visible) => {
  * @param {{
  *   name: string,
  *   activate?: false | (() => void),
- * } & import("types/widgets/button").ButtonProps} props
+ * } & import("../types/widgets/button").ButtonProps} props
  */
 export const Arrow = ({ name, activate, ...props }) => {
 	let deg = 0;
@@ -53,7 +53,7 @@ export const Arrow = ({ name, activate, ...props }) => {
  *   deactivate: () => void
  *   activateOnArrow?: boolean
  *   connection: [GObject.Object, () => boolean]
- * } & import("types/widgets/box").BoxProps} ArrowToggleButtonProps
+ * } & import("../types/widgets/box").BoxProps} ArrowToggleButtonProps
  * @param {ArrowToggleButtonProps} props
  */
 export const ArrowToggleButton = ({
@@ -97,7 +97,7 @@ export const ArrowToggleButton = ({
  *   activate: () => void
  *   deactivate: () => void
  *   connection: [GObject.Object, () => boolean]
- * } & import("types/widgets/box").BoxProps} SimpleToggleButtonProps
+ * } & import("../types/widgets/box").BoxProps} SimpleToggleButtonProps
  * @param {SimpleToggleButtonProps} props
  */
 export const SimpleToggleButton = ({
@@ -136,7 +136,7 @@ export const SimpleToggleButton = ({
  *   icon: Gtk.Widget,
  *   title: string,
  *   content: Gtk.Widget[],
- * } & import("types/widgets/revealer").RevealerProps} MenuProps
+ * } & import("../types/widgets/revealer").RevealerProps} MenuProps
  * @param {MenuProps} props
  */
 export const Menu = ({ name, icon, title, content, ...props }) =>
@@ -168,7 +168,7 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 		...props,
 	});
 
-/** @param {{type: string} & import("types/widgets/button").ButtonProps} props */
+/** @param {{type: string} & import("../types/widgets/button").ButtonProps} props */
 export const SettingsButton = ({ type, ...props }) =>
 	Widget.Button({
 		onClicked: () => {

@@ -1,6 +1,6 @@
 const battery = await Service.import("battery");
 
-/** @param {import("types/widgets/box").BoxProps} props */
+/** @param {import("../types/widgets/box").BoxProps} props */
 export const Indicator = ({ ...props }) =>
 	Widget.Box({
 		children: [

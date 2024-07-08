@@ -1,8 +1,8 @@
 // Stollen from https://github.com/Aylur/dotfiles/blob/main/ags/widget/PopupWindow.ts#
 
-/** @typedef {import('types/widgets/window').WindowProps} WindowProps */
-/** @typedef {import('types/widgets/revealer').RevealerProps} RevealerProps */
-/** @typedef {import('types/widgets/eventbox').EventBoxProps} EventBoxProps */
+/** @typedef {import('../types/widgets/window').WindowProps} WindowProps */
+/** @typedef {import('../types/widgets/revealer').RevealerProps} RevealerProps */
+/** @typedef {import('../types/widgets/eventbox').EventBoxProps} EventBoxProps */
 /** @typedef {import('gi://Gtk?version=3.0')} Gtk */
 
 /**

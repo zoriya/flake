@@ -5,7 +5,7 @@ const powerProfiles = await Service.import("powerprofiles");
 /** @param {string} x */
 const capitalize = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 
-/** @param {Partial<import("misc/menu").ArrowToggleButtonProps>} props */
+/** @param {Partial<import("../misc/menu.js").ArrowToggleButtonProps>} props */
 export const Toggle = (props) =>
 	ArrowToggleButton({
 		name: "powerprofile",
