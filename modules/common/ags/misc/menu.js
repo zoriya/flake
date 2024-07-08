@@ -4,7 +4,9 @@ import Gtk from "gi://Gtk?version=3.0";
 export const opened = Variable("");
 App.connect("window-toggled", (_, name, visible) => {
 	if (name === "quicksettings" && !visible)
-		Utils.timeout(500, () => (opened.value = ""));
+		Utils.timeout(500, () => {
+			opened.value = "";
+		});
 });
 
 /**
@@ -128,7 +130,6 @@ export const SimpleToggleButton = ({
 		],
 	});
 
-
 /**
  * @typedef {{
  *   name: string,
@@ -168,7 +169,7 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 	});
 
 /** @param {{type: string} & import("types/widgets/button").ButtonProps} props */
-export const SettingsButton = ({type, ...props}) =>
+export const SettingsButton = ({ type, ...props }) =>
 	Widget.Button({
 		onClicked: () => {
 			Utils.execAsync(`gnome-control-center ${type}`);
