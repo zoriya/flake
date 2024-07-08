@@ -1,5 +1,10 @@
 import { icon } from "../misc/utils.js";
-import { Arrow, Menu, SettingsButton, SimpleToggleButton } from "../misc/menu.js";
+import {
+	Arrow,
+	Menu,
+	SettingsButton,
+	SimpleToggleButton,
+} from "../misc/menu.js";
 
 const audio = await Service.import("audio");
 
@@ -11,6 +16,12 @@ const volumeIcons = /** @type {const} */ ([
 	[0, "muted"],
 ]);
 
+/** @param {number} volume */
+export const getIcon = (volume) => {
+	const icon = volumeIcons.find(([threshold]) => threshold <= volume)?.[1];
+	return `audio-volume-${icon}-symbolic`;
+};
+
 /** @param {{type?: "speaker" | "microphone"} & import("types/widgets/icon").IconProps} props */
 export const VolumeIndicator = ({ type = "speaker", ...props }) =>
 	Widget.Icon(props).hook(audio, (self) => {
@@ -20,8 +31,7 @@ export const VolumeIndicator = ({ type = "speaker", ...props }) =>
 			return;
 		}
 		const vol = audio[type].volume * 100;
-		const icon = volumeIcons.find(([threshold]) => threshold <= vol)?.[1];
-		self.icon = `audio-volume-${icon}-symbolic`;
+		self.icon = getIcon(vol);
 		self.tooltip_text = `Volume: ${Math.floor(vol)}%`;
 	});
 
@@ -38,7 +48,7 @@ export const MicrophoneIndicator = (props) =>
 const VolumeSlider = ({ type = "speaker", ...props }) =>
 	Widget.Slider({
 		hexpand: true,
-		draw_value: false,
+		drawValue: false,
 		onChange: ({ value, dragging }) => {
 			if (dragging) {
 				audio[type].volume = value;
@@ -101,9 +111,13 @@ export const MuteToggle = ({ ...props } = {}) =>
 				.bind("is_muted")
 				.as((x) => (x ? "Unmute" : "Mute")),
 		}),
-		activate: () => (audio.microphone.is_muted = true),
-		deactivate: () => (audio.microphone.is_muted = false),
-		connection: [audio.microphone, () => audio.microphone.is_muted],
+		activate: () => {
+			audio.microphone.is_muted = true;
+		},
+		deactivate: () => {
+			audio.microphone.is_muted = false;
+		},
+		connection: [audio.microphone, () => audio.microphone.is_muted || false],
 		...props,
 	});
 

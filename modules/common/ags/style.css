@@ -61,20 +61,6 @@ separator {
 	min-width: 1px;
 }
 
-/* Progress bar */
-.progress {
-	border-radius: 10px;
-}
-.max-indicator {
-	min-width: 1px;
-	min-height: 1px;
-}
-
-.button {
-	border-radius: 20px;
-	padding: 10px;
-}
-
 /* Slider */
 slider {
 	box-shadow: none;
@@ -93,6 +79,7 @@ trough {
 highlight, fill {
 	background-color: #94e2d5;
 	border-radius: 100px;
+	transition: 200ms;
 }
 mark {
 	background-color: #F38BA8;
@@ -133,10 +120,10 @@ switch image {
 
 /* On Screen Display */
 .osd {
-	border-radius: 50px;
+	border-radius: 20px;
 	margin-bottom: 150px;
-	min-width: 300px;
-	min-height: 80px;
+	min-width: 175px;
+	min-height: 30px;
 }
 
 /* Quick settings */

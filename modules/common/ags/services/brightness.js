@@ -16,7 +16,6 @@ class Brightness extends Service {
 
 	set screen(percent) {
 		if (percent < 0) percent = 0;
-
 		if (percent > 1) percent = 1;
 
 		Utils.execAsync(`brightnessctl s ${percent * 100}% -q`)

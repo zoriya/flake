@@ -126,6 +126,7 @@ export const Quicksettings = () =>
 		exclusivity: "exclusive",
 		transition: "slide_down",
 		layout: "top-right",
+		duration: 300,
 		child: Widget.Box({
 			vertical: true,
 			className: "bgcont qs-container",

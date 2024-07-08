@@ -245,7 +245,7 @@ export const Placeholder = (props) =>
 /** @param {import("types/widgets/button").ButtonProps} props */
 export const ClearButton = (props) =>
 	Widget.Button({
-		className: "button surface",
+		className: "surface r20 p10",
 		onClicked: () => notifications.clear(),
 		sensitive: notifications.bind("notifications").as((x) => x.length > 0),
 		child: Widget.Box({

@@ -6,7 +6,7 @@ const systemtray = await Service.import("systemtray");
 export const Toggle = (props) =>
 	ArrowToggleButton({
 		name: "systray",
-		icon: Widget.Icon({ className: "qs-icon" }),
+		icon: Widget.Icon({ icon: "open-menu-symbolic", className: "qs-icon" }),
 		label: Widget.Label("Systray"),
 		activate: () => {},
 		deactivate: () => {},
@@ -18,7 +18,7 @@ export const Toggle = (props) =>
 export const Selection = (props) =>
 	Menu({
 		name: "systray",
-		icon: Widget.Icon(),
+		icon: Widget.Icon("open-menu-symbolic"),
 		title: "Systray",
 		content: [
 			Widget.Box({

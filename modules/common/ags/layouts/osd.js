@@ -1,86 +1,85 @@
-import { lookUpIcon } from 'resource:///com/github/Aylur/ags/utils.js';
-import { Window, Revealer, Stack, Box, Icon } from 'resource:///com/github/Aylur/ags/widget.js'
-import { FontIcon, Progress } from "../misc.js";
-import Indicator from "../services/osd.js";
+import { getIcon } from "../modules/audio.js";
+import brightness from "../services/brightness.js";
+
+const audio = await Service.import("audio");
+
+const DELAY = 1000;
+
+function OnScreenProgress() {
+	const indicator = Widget.Icon({
+		vpack: "start",
+		hpack: "center",
+		size: 30,
+		css: "padding-right: 12px;",
+	});
+	const progress = Widget.Slider({
+		drawValue: false,
+		hexpand: true,
+	});
+	const revealer = Widget.Revealer({
+		transition: "crossfade",
+		css: "opacity: 0",
+		revealChild: true,
+		vpack: "center",
+		hpack: "center",
+		child: Widget.Box({
+			vpack: "center",
+			hpack: "center",
+			className: "osd bgcount",
+			css: "padding: 20px;",
+			children: [indicator, progress],
+		}),
+	});
+	// Prevent OSD to be shown when starting ags.
+	Utils.timeout(DELAY * 2, () => {
+		revealer.css = "opacity: 1";
+	});
+
+	let count = 0;
+	/**
+	 * @param {number} value
+	 * @param {string} icon
+	 */
+	function show(value, icon) {
+		revealer.reveal_child = true;
+		indicator.icon = icon;
+		progress.value = value;
+		count++;
+		Utils.timeout(DELAY, () => {
+			count--;
+			if (count === 0) revealer.reveal_child = false;
+		});
+	}
+	return revealer
+		.hook(
+			brightness,
+			() => show(brightness.screen, "display-brightness-symbolic"),
+			"notify::screen",
+		)
+		.hook(
+			audio.speaker,
+			() => show(audio.speaker.volume, getIcon(audio.speaker.volume * 100)),
+			"notify::volume",
+		)
+		.hook(
+			audio.speaker,
+			() =>
+				show(
+					audio.speaker.is_muted ? 0 : audio.speaker.volume,
+					audio.speaker.is_muted
+						? "audio-volume-muted-symbolic"
+						: getIcon(audio.speaker.volume * 100),
+				),
+			"notify::is-muted",
+		);
+}
 
 export const OSD = () =>
-	Window({
+	Widget.Window({
 		name: "osd",
-		popup: true,
-		// Follow active monitor
-		monitor: undefined,
-		visible: false,
+		className: "indicator",
 		layer: "overlay",
+		clickThrough: true,
 		anchor: ["bottom"],
-		child: Revealer({
-			transition: "crossfade",
-			connections: [
-				[
-					Indicator,
-					(revealer, value) => {
-						revealer.revealChild = value > -1;
-					},
-				],
-			],
-			child: Box({
-				className: "osd bgcont osd",
-				vpack: "center",
-				hpack: "center",
-				children: [
-					Stack({
-						vpack: "center",
-						hpack: "center",
-						css: "padding: 20px;",
-						hexpand: false,
-						items: [
-							[
-								"true",
-								Icon({
-									hpack: "center",
-									vpack: "center",
-									size: 40,
-									connections: [[Indicator, (icon, _v, name) => (icon.icon = name || "")]],
-								}),
-							],
-							[
-								"false",
-								FontIcon({
-									hpack: "center",
-									vpack: "center",
-									hexpand: true,
-									css: `font-size: 40px;`,
-									connections: [[Indicator, ({ label }, _v, name) => (label.label = name || "")]],
-								}),
-							],
-						],
-						connections: [
-							[
-								Indicator,
-								(stack, _v, name) => {
-									stack.shown = `${!!lookUpIcon(name)}`;
-								},
-							],
-						],
-					}),
-					Progress({
-						width: 200,
-						height: 10,
-						hpack: "center",
-						vpack: "center",
-						css: "margin-right: 20px;",
-						hexpand: false,
-						vexpand: false,
-						connections: [
-							[
-								Indicator,
-								(progress, value, icon) => {
-									if (!icon) return;
-									progress.setValue(value, icon.startsWith("audio") ? 1.5 : 1);
-								},
-							],
-						],
-					}),
-				],
-			}),
-		}),
+		child: OnScreenProgress(),
 	});

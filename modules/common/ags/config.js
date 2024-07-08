@@ -1,7 +1,7 @@
 import { Bar } from "./layouts/bar.js";
- import { Notifications } from "./layouts/notifications.js";
-// import { OSD } from "./layouts/osd.js";
- import { Quicksettings } from "./layouts/quicksettings.js";
+import { Notifications } from "./layouts/notifications.js";
+import { OSD } from "./layouts/osd.js";
+import { Quicksettings } from "./layouts/quicksettings.js";
 
 import Gtk from "gi://Gtk?version=3.0";
 import Gdk from "gi://Gdk";
@@ -17,13 +17,14 @@ export function forMonitors(widget) {
 App.config({
 	closeWindowDelay: {
 		quicksettings: 300,
-		notifications: 300,
+		notifications: 200,
+		osd: 300,
 	},
 	style: `${App.configDir}/style.css`,
 	windows: [
 		...forMonitors(Bar),
-		 Quicksettings(),
-		 Notifications(),
-		// OSD(),
+		Quicksettings(),
+		Notifications(),
+		OSD(),
 	],
 });
