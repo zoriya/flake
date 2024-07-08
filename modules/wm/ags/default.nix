@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  inputs,
+  ...
+}: let
   covercolors = pkgs.stdenv.mkDerivation {
     name = "covercolors";
     dontUnpack = true;
@@ -14,7 +18,12 @@
   systemdTarget = "graphical-session.target";
   # TODO: Add this in the offcial ags derivation
   ags = pkgs.ags.overrideAttrs (_: prev: {
-    buildInputs = prev.buildInputs ++ [pkgs.libdbusmenu-gtk3];
+    buildInputs =
+      prev.buildInputs
+      ++ [
+        pkgs.libdbusmenu-gtk3
+        inputs.astal-river.packages.x86_64-linux.default
+      ];
   });
 in {
   home.packages = with pkgs; [

@@ -1,4 +1,5 @@
 import { Clock } from "../modules/clock.js";
+import * as wm from "../modules/wm.js";
 import * as audio from "../modules/audio.js";
 import * as network from "../modules/network.js";
 import * as bluetooth from "../modules/bluetooth.js";
@@ -19,14 +20,14 @@ export const Bar = (monitor) =>
 		child: Widget.CenterBox({
 			startWidget: Widget.Box({
 				children: [
-					// dwl.Tags({
-					// 	mon: monId,
-					// 	labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
-					// }),
+					wm.Tags({
+						monitor,
+						labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
+					}),
 					// dwl.Layout({
 					// 	mon: monId,
 					// }),
-					// dwl.ClientLabel({ mon: monId }),
+					wm.ClientLabel({ monitor }),
 				],
 			}),
 			centerWidget: Widget.Box({

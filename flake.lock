@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "astal-river": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1720432748,
+        "narHash": "sha256-DuU5zs+IbGqIS6z61j/CBOl0x/ZPc7ssq7NiVhs8YKM=",
+        "owner": "zoriya",
+        "repo": "astal-river",
+        "rev": "013175591de537eb4419697a283106ce91e0983d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zoriya",
+        "repo": "astal-river",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -503,6 +523,7 @@
     },
     "root": {
       "inputs": {
+        "astal-river": "astal-river",
         "flood": "flood",
         "ghostty": "ghostty",
         "home-manager": "home-manager",
