@@ -1,7 +1,4 @@
-{
-  dwl-source,
-  flood,
-}: self: super: let
+{flood}: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
       name = drv.name;
@@ -18,42 +15,6 @@
       --add-flags "--enable-features=UseOzonePlatform" \
       --add-flags "--ozone-platform=wayland"'';
 in {
-  # Patch dwl.
-  dwl =
-    (super.dwl.override
-      {
-        wlroots = super.pkgs.wlroots_0_16;
-        conf = ../modules/dwl/config.h;
-      })
-    .overrideAttrs (oldAttrs: {
-      version = "0.4";
-      src = dwl-source;
-      enableXWayland = true;
-      passthru.providedSessions = ["dwl"];
-      patches = [
-        ../dwl_patches/autostart.patch
-        ../dwl_patches/deck.patch
-        ../dwl_patches/output-power-managment.patch
-        ../dwl_patches/keyboard-shortcut-inhibit.patch
-        ../dwl_patches/cursor_warp.patch
-        ../dwl_patches/vanitygaps.patch
-        ../dwl_patches/vanity_deck.patch
-        ../dwl_patches/smartborders.patch
-        ../dwl_patches/desktop.patch
-        ../dwl_patches/togglelayout.patch
-        ../dwl_patches/toggletag.patch
-        ../dwl_patches/singletagset.patch
-        ../dwl_patches/montagset.patch
-        ../dwl_patches/movestack.patch
-        ../dwl_patches/gdk_monitors_status.patch
-        ../dwl_patches/rotatetags.patch
-        ../dwl_patches/naturalscrolltrackpad.patch
-        ../dwl_patches/pointer-gesture.patch
-        ../dwl_patches/sway-pointer-contraints.patch
-        ../dwl_patches/retore-tiling.patch
-      ];
-    });
-
   # Use my fork of flood to enable smart scripts.
   flood = self.pkgs.buildNpmPackage {
     pname = "flood";

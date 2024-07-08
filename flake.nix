@@ -24,11 +24,6 @@
     ghostty = {
       url = "git+ssh://git@github.com/mitchellh/ghostty";
     };
-    dwl-source = {
-      # Use dwl's master.
-      url = "github:djpohly/dwl?ref=755fcae2afbed51f38c167bdc56a5437cda8137a";
-      flake = false;
-    };
     flood = {
       url = "github:zoriya/flood";
       flake = false;
@@ -41,7 +36,6 @@
     neovim-nightly,
     nixpkgs,
     ghostty,
-    dwl-source,
     flood,
     impermanence,
     nixos-hardware,
@@ -57,10 +51,10 @@
           [
             impermanence.nixosModules.impermanence
             ./modules/cli
-            (./modules + "/${de}")
+            (./environments + "/${de}")
             {
               nixpkgs.overlays = [
-                (import ./overlays {inherit dwl-source flood;})
+                (import ./overlays {inherit flood;})
                 neovim-nightly.overlays.default
               ];
             }
@@ -85,7 +79,7 @@
                 users.${user} = {
                   imports = [
                     ./modules/cli/home.nix
-                    (./modules + "/${de}/home.nix")
+                    (./environments + "/${de}/home.nix")
                     nix-index-database.hmModules.nix-index
                   ];
                 };
