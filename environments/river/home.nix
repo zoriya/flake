@@ -21,7 +21,8 @@
   };
 in {
   imports = [
-    ../gui/apps.nix
+    ../../modules/gui
+    ../../modules/wm/home.nix
   ];
   services.cliphist.enable = true;
 

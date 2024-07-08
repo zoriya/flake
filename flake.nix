@@ -102,8 +102,6 @@
             wally-cli
             ghostty.packages.x86_64-linux.default
           ];
-
-          programs.gamescope.enable = true;
         })
       ];
 

@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{pkgs, ...}: let
   covercolors = pkgs.stdenv.mkDerivation {
     name = "covercolors";
     dontUnpack = true;

@@ -1,36 +1,21 @@
 {
-  lib,
   config,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   # When editing this, don't forget to edit home.sessionVariables.
   browser = "firefox.desktop";
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
-
-  wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
-    WALLPAPERS=~/wallpapers/
-
-    WP=$(find $WALLPAPERS -type f | shuf -n 1)
-    ln -fs "$WP" ~/.cache/current-wallpaper
-
-    ${pkgs.wbg}/bin/wbg "$WP" > /dev/null 2> /dev/null & disown
-    echo "$WP"
-  '';
 in {
   imports = [
     ./ghostty.nix
     ./kitty.nix
     ./gtk.nix
-    ./rofi
-    ./ags
   ];
 
   home.packages = with pkgs; [
-    wallpaper
     google-chrome
     discord
     firefox
@@ -39,7 +24,6 @@ in {
     zathura
     libreoffice
     qbittorrent
-    xdg-utils
     youtube-music
     wl-clipboard
     wlr-randr

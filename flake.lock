@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "dwl-source": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1694364153,
-        "narHash": "sha256-dzSct9JfjeE65tdL4ny5VZhrhkWYX4hRQvjxJrfSXqU=",
-        "owner": "djpohly",
-        "repo": "dwl",
-        "rev": "755fcae2afbed51f38c167bdc56a5437cda8137a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "djpohly",
-        "ref": "755fcae2afbed51f38c167bdc56a5437cda8137a",
-        "repo": "dwl",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -520,7 +503,6 @@
     },
     "root": {
       "inputs": {
-        "dwl-source": "dwl-source",
         "flood": "flood",
         "ghostty": "ghostty",
         "home-manager": "home-manager",

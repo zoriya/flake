@@ -1,11 +1,8 @@
 {
-  config,
   lib,
   pkgs,
-  inputs,
   ...
-}:
-{
+}: {
   services.xserver = {
     enable = true;
     displayManager = {
@@ -31,7 +28,7 @@
   fileSystems."/home/zoriya/.local/share/gnome-shell/extensions/fairy@zoriya.dev" = {
     device = "/home/zoriya/projects/fairy/";
     fsType = "none";
-    options = [ "bind" ];
+    options = ["bind"];
   };
 
   environment.systemPackages = with pkgs; [gnome3.gnome-tweaks];

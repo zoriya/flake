@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -199,7 +198,7 @@ in {
       show-indicator = false;
     };
 
-    "org/gnome/shell/extensions/fairy" = { 
+    "org/gnome/shell/extensions/fairy" = {
       tag-names = ["一" "二" "三" " 四" "五" "六" "七" "八" "九"];
     };
 

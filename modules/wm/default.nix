@@ -1,20 +1,4 @@
 {pkgs, ...}: {
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "agreety --cmd /bin/sh";
-        user = "greeter";
-      };
-      initial_session = {
-        # TODO: Start river in locked mode or exit if locker crashes.
-        # zsh -c is to give river access to profile variables
-        command = "zsh -c river";
-        user = "zoriya";
-      };
-    };
-  };
-
   networking.networkmanager.enable = true;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth = {
@@ -50,24 +34,9 @@
 
   programs.dconf.enable = true;
   services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    # gtk portal needed to make gtk apps happy
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    config.common.default = "*";
-  };
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-bluetooth
     polkit_gnome
-    wineWowPackages.stable
-    wineWowPackages.waylandFull
-    winetricks
   ];
-  hardware.steam-hardware.enable = true;
-  services.flatpak.enable = true;
-
-  virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true;
 }
