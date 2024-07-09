@@ -4,6 +4,10 @@
 	margin: 0;
 }
 
+window {
+	all: unset;
+}
+
 button {
 	all: unset;
 }

@@ -19,7 +19,7 @@ export const error = Variable(
 
 const auth = new AstalAuth.Pam();
 let lock;
-const windows = [];
+let windows = [];
 
 let hasInit = false;
 
@@ -111,6 +111,7 @@ function unlock() {
 		windows.forEach((w) => {
 			w.window.destroy();
 		});
+		windows = [];
 		lock = undefined;
 
 		Gdk.Display.get_default()?.sync();
@@ -171,11 +172,15 @@ const LoginBox = () =>
 export const LockWindow = () =>
 	new Gtk.Window({
 		child: Widget.Box({
+			hexpand: true,
+			vexpand: true,
 			children: [
 				Widget.Revealer({
-					reveal_child: isLocked.bind(),
+					reveal_child: false,
 					transition: "crossfade",
 					transition_duration: DELAY,
+					hexpand: true,
+					vexpand: true,
 					child: Widget.Box({
 						css: `
 							background-image: url("/home/${Utils.USER}/.cache/current-wallpaper");
@@ -183,14 +188,15 @@ export const LockWindow = () =>
 							background-size: cover;
 						`,
 						vertical: true,
+						hexpand: true,
+						vexpand: true,
 						child: LoginBox(),
 					}),
-				}),
-				// .on("realize", (self) =>
-				// 	Utils.idle(() => {
-				// 		self.reveal_child = true;
-				// 	}),
-				// ),
+				}).on("realize", (self) =>
+					Utils.idle(() => {
+						self.reveal_child = true;
+					}),
+				),
 			],
 		}),
 	});

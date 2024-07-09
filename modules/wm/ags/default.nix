@@ -21,6 +21,7 @@
     buildInputs =
       prev.buildInputs
       ++ [
+        pkgs.bash
         pkgs.libdbusmenu-gtk3
         inputs.astal-river.packages.x86_64-linux.default
         inputs.astal-auth.packages.x86_64-linux.default
@@ -52,8 +53,5 @@ in {
     Install = {WantedBy = [systemdTarget];};
   };
 
-  xdg.configFile."ags" = {
-    source = ./.;
-    recursive = true;
-  };
+  xdg.configFile."ags".source = ./.;
 }
