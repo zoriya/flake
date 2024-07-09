@@ -39,4 +39,6 @@
     gnome.gnome-bluetooth
     polkit_gnome
   ];
+
+  security.pam.services.astal-auth = {};
 }

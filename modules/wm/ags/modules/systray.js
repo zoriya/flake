@@ -1,3 +1,4 @@
+import { icon } from "../misc/utils.js";
 import { ArrowToggleButton, Menu } from "../misc/menu.js";
 
 const systemtray = await Service.import("systemtray");
@@ -36,7 +37,7 @@ const SysTrayItem = (item) =>
 		css: "margin: 12px;",
 		child: Widget.Box({
 			children: [
-				Widget.Icon({ icon: item.bind("icon") }),
+				Widget.Icon({ icon: item.bind("icon").as(icon) }),
 				Widget.Label({
 					truncate: "end",
 					maxWidthChars: 28,

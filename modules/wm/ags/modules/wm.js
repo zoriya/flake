@@ -34,7 +34,8 @@ export const Tags = ({ monitor, labels, ...props }) =>
 			);
 			self.children.forEach((button, i) => {
 				// We need to set this here because assigning children to self calls show_all() and ignore visibility
-				button.visible = !!(occupied & (1 << i));
+				// @ts-ignore
+				button.visible = button.attribute;
 			});
 		},
 		"changed",
@@ -51,7 +52,7 @@ export const Tags = ({ monitor, labels, ...props }) =>
 const TagItem = ({ occupied, selected, urgent, i, output, label }) =>
 	Widget.EventBox({
 		classNames: [selected ? "accent" : "", urgent ? "secondary" : ""],
-		visible: occupied,
+		attribute: occupied || selected,
 		onPrimaryClickRelease: () => {
 			river.run_command_async(["set-focused-tags", `${1 << i}`], null);
 		},

@@ -29,7 +29,15 @@
       flake = false;
     };
     astal-river = {
-      url ="github:zoriya/astal-river";
+      url = "github:zoriya/astal-river";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    astal-auth = {
+      url = "github:astal-sh/auth";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    gtk-session-lock = {
+      url = "github:Cu3PO42/gtk-session-lock";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -44,7 +52,6 @@
     impermanence,
     nixos-hardware,
     nix-index-database,
-    astal-river,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -81,7 +88,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = {inherit inputs;};
                 users.${user} = {
                   imports = [
                     ./modules/cli/home.nix

@@ -23,6 +23,8 @@
       ++ [
         pkgs.libdbusmenu-gtk3
         inputs.astal-river.packages.x86_64-linux.default
+        inputs.astal-auth.packages.x86_64-linux.default
+        inputs.gtk-session-lock.packages.x86_64-linux.default
       ];
   });
 in {
@@ -43,7 +45,7 @@ in {
 
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.ags}/bin/ags";
+      ExecStart = "${ags}/bin/ags";
       Restart = "always";
     };
 

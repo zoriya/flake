@@ -1,10 +1,14 @@
+import Gtk from "gi://Gtk?version=3.0";
+import Gdk from "gi://Gdk";
+
 import { Bar } from "./layouts/bar.js";
 import { Notifications } from "./layouts/notifications.js";
 import { OSD } from "./layouts/osd.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
+import { lockscreen } from "./lockscreen.js";
 
-import Gtk from "gi://Gtk?version=3.0";
-import Gdk from "gi://Gdk";
+// @ts-ignore
+App.lock = lockscreen;
 
 /**
  * @param {Array<(monitor: number) => Gtk.Window>} widgets
@@ -26,6 +30,7 @@ export function forMonitors(widgets) {
 
 	display?.connect("monitor-removed", (disp, monitor) => {
 		App.windows.forEach((win) => {
+			// @ts-ignore
 			if (win.gdkmonitor === monitor) App.removeWindow(win);
 		});
 	});

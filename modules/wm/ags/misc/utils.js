@@ -2,16 +2,18 @@ import GLib from "gi://GLib?version=2.0";
 
 /**
  * @param {string | null | undefined} name
- * @param {string | null | undefined} fallback
+ * @param {string | null | undefined} [fallback]
  */
 export function icon(name, fallback) {
 	if (!name) return fallback || "";
-
-	if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
+	if (typeof name !== "string") return name;
 
 	const sub = substitutes[name];
 	if (sub && Utils.lookUpIcon(sub)) return sub;
 	if (Utils.lookUpIcon(name)) return name;
+
+	if (GLib.file_test(name, GLib.FileTest.EXISTS)) return name;
+
 	return fallback || "";
 }
 
