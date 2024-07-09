@@ -132,6 +132,9 @@ in {
       all_tags=$(((1 << 32) - 1))
       riverctl map normal Super 0 set-focused-tags "$all_tags"
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
+
+      trap "systemctl --user stop river-session.target" INT TERM
+      sleep infinity
     '';
   };
 
