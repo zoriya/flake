@@ -16,7 +16,6 @@
     installPhase = "install -Dm755 ${./covercolors.py} $out/bin/covercolors";
   };
   systemdTarget = "graphical-session.target";
-  # TODO: Add this in the offcial ags derivation
   ags = pkgs.ags.overrideAttrs (_: prev: {
     buildInputs =
       prev.buildInputs
@@ -24,8 +23,6 @@
         pkgs.bash
         pkgs.libdbusmenu-gtk3
         inputs.astal-river.packages.x86_64-linux.default
-        inputs.astal-auth.packages.x86_64-linux.default
-        inputs.gtk-session-lock.packages.x86_64-linux.default
       ];
   });
 in {

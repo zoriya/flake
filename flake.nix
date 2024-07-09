@@ -32,14 +32,6 @@
       url = "github:zoriya/astal-river";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    astal-auth = {
-      url = "github:astal-sh/auth";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    gtk-session-lock = {
-      url = "github:Cu3PO42/gtk-session-lock";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {

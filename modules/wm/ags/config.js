@@ -5,10 +5,6 @@ import { Bar } from "./layouts/bar.js";
 import { Notifications } from "./layouts/notifications.js";
 import { OSD } from "./layouts/osd.js";
 import { Quicksettings } from "./layouts/quicksettings.js";
-import { lockscreen } from "./lockscreen.js";
-
-// @ts-ignore
-App.lock = lockscreen;
 
 /**
  * @param {Array<(monitor: number) => Gtk.Window>} widgets

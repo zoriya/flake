@@ -1,25 +1,5 @@
 {
   "nodes": {
-    "astal-auth": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1718556609,
-        "narHash": "sha256-EeYnp9HEpQXNGweF/Ea6ZfjTSV6biHFSsZV010nDHaM=",
-        "owner": "astal-sh",
-        "repo": "auth",
-        "rev": "b35a38aa93670f6be06202f2ad3066a227f0a1b9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "astal-sh",
-        "repo": "auth",
-        "type": "github"
-      }
-    },
     "astal-river": {
       "inputs": {
         "nixpkgs": [
@@ -326,26 +306,6 @@
         "type": "github"
       }
     },
-    "gtk-session-lock": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1713713322,
-        "narHash": "sha256-A9U/BnzdypE1rt53uhw5X4JQkayR8CkD2Qhn/vhmUSU=",
-        "owner": "Cu3PO42",
-        "repo": "gtk-session-lock",
-        "rev": "b9ddb2792b613d14622acada73c64f16a2635b40",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Cu3PO42",
-        "repo": "gtk-session-lock",
-        "type": "github"
-      }
-    },
     "hercules-ci-effects": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -563,11 +523,9 @@
     },
     "root": {
       "inputs": {
-        "astal-auth": "astal-auth",
         "astal-river": "astal-river",
         "flood": "flood",
         "ghostty": "ghostty",
-        "gtk-session-lock": "gtk-session-lock",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "neovim-nightly": "neovim-nightly",

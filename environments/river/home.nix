@@ -26,10 +26,6 @@ in {
   ];
   services.cliphist.enable = true;
 
-  home.sessionVariables = {
-    XDG_CURRENT_DESKTOP = "GNOME";
-  };
-
   wayland.windowManager.river = {
     enable = true;
     settings = {

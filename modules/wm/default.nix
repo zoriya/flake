@@ -40,5 +40,5 @@
     polkit_gnome
   ];
 
-  security.pam.services.astal-auth = {};
+  security.pam.services.hyprlock = {};
 }
