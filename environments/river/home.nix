@@ -104,6 +104,7 @@ in {
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
+            "Super+Shift L" = "spawn 'loginctl lock-session'";
           }
           // common_binds;
         locked = common_binds;

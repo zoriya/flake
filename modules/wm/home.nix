@@ -21,7 +21,7 @@ in {
     enable = true;
     settings = {
       general = {
-        grace = 10;
+        grace = 3;
         ignore_emauthpty_input = true;
       };
       background = {
@@ -47,7 +47,7 @@ in {
       label = [
         {
           monitor = "";
-          text = ''cmd[update:1000] echo "<b><big> $(date +"%H:%M") </big></b>"'';
+          text = ''cmd[update:1000] echo "<b><big> $(${pkgs.coreutils}/bin/date +"%H:%M") </big></b>"'';
           color = "#ff0000";
 
           font_size = 64;
@@ -60,7 +60,7 @@ in {
 
         {
           monitor = "";
-          text = ''cmd[update:18000000] echo "<b> "$(date +'%A, %-d %B %Y')" </b>"'';
+          text = ''cmd[update:18000000] echo "<b> "$(${pkgs.coreutils}/bin/date +'%A, %-d %B %Y')" </b>"'';
           color = "#ff0000";
 
           font_size = 24;
@@ -69,6 +69,23 @@ in {
           position = "0, -120";
           halign = "center";
           valign = "center";
+        }
+      ];
+    };
+  };
+
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        lock_cmd = "${pkgs.procps}/bin/pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+        before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
+      };
+
+      listener = [
+        {
+          timeout = 1800;
+          on-timeout = "${pkgs.procps}/bin/pidof hyprlock && ${pkgs.systemd}/bin/systemctl suspend";
         }
       ];
     };
