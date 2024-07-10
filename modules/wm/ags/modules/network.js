@@ -4,18 +4,10 @@ const network = await Service.import("network");
 
 /** @param {import("../types/widgets/icon.js").IconProps} props*/
 export const Indicator = (props) =>
-	Widget.Stack({
-		children: {
-			wifi: Widget.Icon({
-				icon: network.wifi.bind("icon_name"),
-				...props,
-			}),
-			wired: Widget.Icon({
-				icon: network.wired.bind("icon_name"),
-				...props,
-			}),
-		},
-		shown: network.bind("primary").as((p) => p || "wifi"),
+	Widget.Icon(props).hook(network, (self) => {
+		self.icon =
+			network[network.primary || "wifi"].icon_name ??
+			"network-wireless-offline-symbolic";
 	});
 
 /** @param {import("../types/widgets/label.js").LabelProps} props */
