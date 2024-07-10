@@ -107,7 +107,7 @@ in {
             "Super+Shift F" = "toggle-float";
 
             "Super R" = "spawn ${config.home.sessionVariables.BROWSER}";
-            "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}}";
+            "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}";
             "Super P" = "spawn 'rofi -show drun -show-icons'";
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
