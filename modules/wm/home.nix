@@ -88,4 +88,9 @@ in {
       ];
     };
   };
+  systemd.user.services.hypridle = {
+    Unit = {
+      After = ["graphical-session.target"];
+    };
+  };
 }

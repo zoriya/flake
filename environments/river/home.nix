@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   cliphist = "${pkgs.cliphist}/bin/cliphist";
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
@@ -102,8 +106,8 @@ in {
             "Super F" = "toggle-fullscreen";
             "Super+Shift F" = "toggle-float";
 
-            "Super R" = "spawn $BROWSER";
-            "Super E" = "spawn $TERMINAL";
+            "Super R" = "spawn ${config.home.sessionVariables.BROWSER}";
+            "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}}";
             "Super P" = "spawn 'rofi -show drun -show-icons'";
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
@@ -134,31 +138,46 @@ in {
       riverctl map normal Super 0 set-focused-tags "$all_tags"
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
     '';
-    systemd.extraCommands = [
-      "systemctl --user reset-failed"
-      # "systemctl --user import-environment $VARIABLES"
-      "systemctl --user start river-session.target"
-      "trap 'systemctl --user start --job-mode=replace-irreversibly river-session-shutdown.target' INT TERM"
-      # && systemctl --user unset-environment $VARIABLES (in trap)
-      "hyprlock --immediate"
-      "sleep infinity"
-    ];
+    systemd = {
+      # Only import env vars, do not use their systemctl --user start river-session.target that we override below.
+      enable = true;
+      extraCommands = [
+        "systemd-notify --ready"
+        "hyprlock --immediate"
+      ];
+    };
   };
 
-  systemd.user.targets.river-session-shutdown = {
+  # Run river in systemd directly and not by hand. Failing to do so will make graphical-session.target never stop.
+  # So a big wait time when shutting down & graphical services are not restarted when starting river again.
+  systemd.user.targets.river-session = {
     Unit = {
-      Description = "shutdown river compositor session";
-      DefaultDependencies = "no";
-      StopWhenUnneeded = true;
-      Conflicts = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
-      After = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
-      Before = ["shutdown.target"];
+      Description = "river compositor session";
+      Documentation = ["man:systemd.special(7)"];
+      BindsTo = ["graphical-session.target"];
+      Before = ["graphical-session.target"];
+      Wants = ["graphical-session-pre.target"];
+      After = ["graphical-session-pre.target"];
+      RefuseManualStart = "yes";
+      StopWhenUnneeded = "yes";
     };
+  };
+
+  systemd.user.services.river = {
+    Unit = {
+      Description = "River compositor";
+      Documentation = "man:river(1)";
+      BindsTo = ["river-session.target"];
+      Before = ["river-session.target"];
+    };
+
     Service = {
-      ExecStart = "${pkgs.procps}/bin/pidof river && ${pkgs.river}/bin/riverctl exit";
-    };
-    Install = {
-      WantedBy = ["shutdown.target"];
+      Type = "notify";
+      #  used to get env/session vars (and path).
+      ExecStart = "/bin/sh -lc ${pkgs.river}/bin/river";
+      TimeoutStopSec = 10;
+      NotifyAccess = "all";
+      ExecStopPost = "${pkgs.systemd}/bin/systemctl --user unset-environment ${builtins.concatStringsSep " " config.wayland.windowManager.river.systemd.variables}";
     };
   };
 
