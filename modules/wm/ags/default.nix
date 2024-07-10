@@ -15,40 +15,38 @@
     ];
     installPhase = "install -Dm755 ${./covercolors.py} $out/bin/covercolors";
   };
-  systemdTarget = "graphical-session.target";
+  # systemdTarget = "graphical-session.target";
   ags = pkgs.ags.overrideAttrs (_: prev: {
     buildInputs =
       prev.buildInputs
       ++ [
-        pkgs.bash
         pkgs.libdbusmenu-gtk3
         inputs.astal-river.packages.x86_64-linux.default
       ];
   });
 in {
   home.packages = with pkgs; [
-    # TODO: Remove this after testing
     ags
     # TODO: Find a way to add this for ags only
     covercolors
     brightnessctl
   ];
-  systemd.user.services.ags = {
-    Unit = {
-      Description = " A customizable and extensible shell ";
-      PartOf = systemdTarget;
-      Requires = systemdTarget;
-      After = systemdTarget;
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${ags}/bin/ags";
-      Restart = "always";
-    };
-
-    Install = {WantedBy = [systemdTarget];};
-  };
+  # systemd.user.services.ags = {
+  #   Unit = {
+  #     Description = " A customizable and extensible shell ";
+  #     PartOf = systemdTarget;
+  #     Requires = systemdTarget;
+  #     After = systemdTarget;
+  #   };
+  #
+  #   Service = {
+  #     Type = "simple";
+  #     ExecStart = "${ags}/bin/ags";
+  #     Restart = "always";
+  #   };
+  #
+  #   Install = {WantedBy = [systemdTarget];};
+  # };
 
   xdg.configFile."ags".source = ./.;
 }

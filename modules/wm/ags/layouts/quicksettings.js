@@ -79,7 +79,7 @@ const Header = () =>
 				name: "shutdown",
 				icon: "system-shutdown-symbolic",
 				title: "Shutdown?",
-				command: "shutdown --now",
+				command: "shutdown now",
 			}),
 		],
 	});

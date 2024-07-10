@@ -28,11 +28,15 @@ in {
 
   wayland.windowManager.river = {
     enable = true;
+    extraSessionVariables = {
+      XDG_CURRENT_DESKTOP = "river";
+    };
     settings = {
       default-layout = "rivercarro";
       spawn = [
         "${pkgs.rivercarro}/bin/rivercarro"
         "wallpaper"
+        "ags"
         "discord"
         "youtube-music"
       ];
@@ -131,9 +135,24 @@ in {
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
     '';
     systemd.extraCommands = [
-      "trap 'systemctl --user stop river-session.target' INT TERM"
+      "systemctl --user reset-failed"
+      # "systemctl --user import-environment $VARIABLES"
+      "systemctl --user start river-session.target"
+      "trap 'systemctl --user start --job-mode=replace-irreversibly river-session-shutdown.target' INT TERM"
+      # && systemctl --user unset-environment $VARIABLES (in trap)
+      "hyprlock --immediate"
       "sleep infinity"
     ];
+  };
+
+  systemd.user.targets.river-session-shutdown = {
+    Unit = {
+      Description = "shutdown river compositor session";
+      DefaultDependencies = "no";
+      StopWhenUnneeded = true;
+      Conflicts = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
+      After = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
+    };
   };
 
   home.packages = with pkgs; [

@@ -7,11 +7,10 @@
     enable = true;
     settings = {
       default_session = {
-        command = "agreety --cmd /bin/sh";
+        command = "${pkgs.greetd.greetd}/bin/agreety --cmd zsh";
         user = "greeter";
       };
       initial_session = {
-        # TODO: Start river in locked mode or exit if locker crashes.
         # zsh -c is to give river access to profile variables
         command = "zsh -c river";
         user = "zoriya";
