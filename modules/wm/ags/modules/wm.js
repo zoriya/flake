@@ -66,6 +66,18 @@ const TagItem = ({ occupied, selected, urgent, i, output, label }) =>
 		child: Widget.Label({ label, className: "tags" }),
 	});
 
+/** @param {{monitor: number } & import("types/widgets/label").LabelProps} props */
+export const Layout = ({ monitor, ...props }) =>
+	Widget.Label(props).hook(
+		river,
+		(self) => {
+			const output = getOutput(monitor);
+			if (!output) return;
+			self.label = output.layout_name;
+		},
+		"changed",
+	);
+
 /** @param {{monitor: number, fallback?: string} & import("types/widgets/label").LabelProps} props */
 export const ClientLabel = ({ monitor, fallback = "", ...props }) =>
 	Widget.Label({
