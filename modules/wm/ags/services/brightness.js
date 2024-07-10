@@ -1,5 +1,5 @@
 const screen = await Utils.execAsync(
-	"bash -c 'ls -w1 /sys/class/backlight | head -n 1'",
+	"/bin/sh -c 'ls -w1 /sys/class/backlight | head -n 1'",
 );
 const max = Number(await Utils.execAsync("brightnessctl m"));
 

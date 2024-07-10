@@ -34,7 +34,6 @@ in {
         size = "250, 50";
         outline_thickness = 0;
         dots_size = 0.26;
-        inner_color = "rgb(255, 0, 0)";
         dots_spacing = 0.64;
         dots_center = true;
         fade_on_empty = true;
@@ -49,7 +48,6 @@ in {
         {
           monitor = "";
           text = ''cmd[update:1000] echo "<b><big> $(${pkgs.coreutils}/bin/date +"%H:%M") </big></b>"'';
-          color = "rgb(255, 0, 0)";
 
           font_size = 64;
           font_family = "monospace";
@@ -62,7 +60,6 @@ in {
         {
           monitor = "";
           text = ''cmd[update:18000000] echo "<b> "$(${pkgs.coreutils}/bin/date +'%A, %-d %B %Y')" </b>"'';
-          color = "rgb(255, 0, 0)";
 
           font_size = 24;
           font_family = "monospace";

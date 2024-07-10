@@ -152,6 +152,13 @@ in {
       StopWhenUnneeded = true;
       Conflicts = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
       After = ["graphical-session.target" "graphical-session-pre.target" "river-session.target"];
+      Before = ["shutdown.target"];
+    };
+    Service = {
+      ExecStart = "${pkgs.procps}/bin/pidof river && ${pkgs.river}/bin/riverctl exit";
+    };
+    Install = {
+      WantedBy = ["shutdown.target"];
     };
   };
 

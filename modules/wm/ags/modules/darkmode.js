@@ -44,7 +44,7 @@ function init() {
 
 		const conf = GLib.get_user_config_dir();
 		Utils.execAsync(
-			`bash -c 'ln -sf ${conf}/kitty/${theme.value}.conf ${conf}/kitty/theme.conf && pkill -USR1 kitty'`,
+			`/bin/sh -c 'ln -sf ${conf}/kitty/${theme.value}.conf ${conf}/kitty/theme.conf && pkill -USR1 kitty'`,
 		).catch(print);
 	});
 }

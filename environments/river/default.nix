@@ -12,7 +12,7 @@
       };
       initial_session = {
         # zsh -c is to give river access to profile variables
-        command = "zsh -c river";
+        command = "river";
         user = "zoriya";
       };
     };
