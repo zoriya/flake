@@ -64,10 +64,17 @@ function handle_layout(args)
 	local mcount = math.min(output.mcount, args.count)
 	local scount = math.max(args.count - mcount, 0)
 
+	local old_scount = scount
+	if output.layout == "deck" and scount > 0 then
+		scount = 1;
+	end
+
 	local main_w = (width * output.mfact) - (inner_gaps / 2)
 	local side_w = (width * (1 - output.mfact)) - (inner_gaps / 2)
 	local main_h = (height - (inner_gaps * (mcount - 1))) / mcount
 	local side_h = (height - (inner_gaps * (scount - 1))) / scount
+
+	scount = old_scount
 
 	if args.count <= output.mcount then
 		main_w = width
@@ -82,9 +89,14 @@ function handle_layout(args)
 		})
 	end
 	for i = 0, (scount - 1) do
+		local y = outer_gaps + i * (side_h + inner_gaps)
+		if output.layout == "deck" then
+			y = outer_gaps
+		end
+
 		table.insert(ret, {
 			main_w + outer_gaps * 2,
-			outer_gaps + i * (side_h + inner_gaps),
+			y,
 			side_w,
 			side_h,
 		})
@@ -102,6 +114,8 @@ function handle_metadata(args)
 		return { name = "[]=" }
 	elseif output.layout == "monocle" then
 		return { name = string.format("[%d]", args.count) }
+	elseif output.layout == "deck" then
+		return { name = "[D]" }
 	else
 		return { name = "><>" }
 	end
@@ -160,4 +174,3 @@ function inspect(tbl)
 	end
 	return result .. "}"
 end
-

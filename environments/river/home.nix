@@ -111,6 +111,7 @@ in {
 
             "Super T" = "send-layout-cmd luatile 'set_layout(\"tiling\")'";
             "Super M" = "send-layout-cmd luatile 'set_layout(\"monocle\")'";
+            "Super D" = "send-layout-cmd luatile 'set_layout(\"deck\")'";
             "Super F" = "toggle-fullscreen";
             "Super+Shift F" = "toggle-float";
 
