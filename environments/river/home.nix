@@ -30,6 +30,8 @@ in {
   ];
   services.cliphist.enable = true;
 
+  xdg.configFile."river-luatile/layout.lua".source = ./layout.lua;
+
   wayland.windowManager.river = {
     enable = true;
     extraSessionVariables = {

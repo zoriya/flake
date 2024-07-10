@@ -68,7 +68,10 @@ const TagItem = ({ occupied, selected, urgent, i, output, label }) =>
 
 /** @param {{monitor: number } & import("types/widgets/label").LabelProps} props */
 export const Layout = ({ monitor, ...props }) =>
-	Widget.Label(props).hook(
+	Widget.Label({
+		className: "module",
+		...props,
+	}).hook(
 		river,
 		(self) => {
 			const output = getOutput(monitor);

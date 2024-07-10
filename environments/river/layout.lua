@@ -21,31 +21,6 @@ function _get_output(name)
 	return outputs[name]
 end
 
-function inspect(tbl)
-	local result = "{"
-	for k, v in pairs(tbl) do
-		-- Check the key type (ignore any numerical keys - assume its an array)
-		if type(k) == "string" then
-			result = result .. "[\"" .. k .. "\"]" .. "="
-		end
-
-		-- Check the value type
-		if type(v) == "table" then
-			result = result .. inspect(v)
-		elseif type(v) == "boolean" then
-			result = result .. tostring(v)
-		else
-			result = result .. "\"" .. v .. "\""
-		end
-		result = result .. ","
-	end
-	-- Remove leading commas from the result
-	if result ~= "" then
-		result = result:sub(1, result:len() - 1)
-	end
-	return result .. "}"
-end
-
 -- The most important function - the actual layout generator
 --
 -- The argument is a table with:
@@ -65,7 +40,6 @@ end
 -- This example is a simplified version of `rivertile`
 function handle_layout(args)
 	local output = _get_output(args.output)
-	print(inspect(output))
 
 	-- Prevent mcount from growing too much. We can't do that in the set function.
 	output.mcount = math.min(output.mcount, args.count)
@@ -82,7 +56,6 @@ function handle_layout(args)
 				table.insert(ret, { outer_gaps, outer_gaps, args.width - outer_gaps * 2, args.height - outer_gaps * 2 })
 			end
 		end
-		print("monocle", inspect(ret), args.count)
 		return ret
 	end
 
@@ -116,7 +89,6 @@ function handle_layout(args)
 			side_h,
 		})
 	end
-	print("tiling", inspect(ret), args.count)
 	return ret
 end
 
@@ -162,3 +134,30 @@ function set_layout(name)
 		output.layout = name
 	end
 end
+
+-- Just an helper function to print tables.
+function inspect(tbl)
+	local result = "{"
+	for k, v in pairs(tbl) do
+		-- Check the key type (ignore any numerical keys - assume its an array)
+		if type(k) == "string" then
+			result = result .. "[\"" .. k .. "\"]" .. "="
+		end
+
+		-- Check the value type
+		if type(v) == "table" then
+			result = result .. inspect(v)
+		elseif type(v) == "boolean" then
+			result = result .. tostring(v)
+		else
+			result = result .. "\"" .. v .. "\""
+		end
+		result = result .. ","
+	end
+	-- Remove leading commas from the result
+	if result ~= "" then
+		result = result:sub(1, result:len() - 1)
+	end
+	return result .. "}"
+end
+
