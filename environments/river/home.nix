@@ -36,9 +36,9 @@ in {
       XDG_CURRENT_DESKTOP = "river";
     };
     settings = {
-      default-layout = "rivercarro";
+      default-layout = "luatile";
       spawn = [
-        "${pkgs.rivercarro}/bin/rivercarro"
+        "${pkgs.river-luatile}/bin/river-luatile"
         "wallpaper"
         "ags"
         "discord"
@@ -70,6 +70,12 @@ in {
         };
       };
 
+       border-color-focused = "0x94e2d5";
+       border-color-unfocused = "0x00000000";
+       border-color-urgent = "0xcba6f7";
+       border-width = 2;
+
+
       rule-add = {
         "-app-id" = {
           "discord" = "tags $((1 << 2))";
@@ -96,13 +102,13 @@ in {
             "Super+Shift Period" = "send-to-output next";
             "Super+Shift Comma" = "send-to-output previous";
 
-            "Super H" = "send-layout-cmd rivercarro 'main-ratio -0.05'";
-            "Super L" = "send-layout-cmd rivercarro 'main-ratio +0.05'";
-            "Super U" = "send-layout-cmd rivercarro 'main-count -1'";
-            "Super I" = "send-layout-cmd rivercarro 'main-count +1'";
+            "Super H" = "send-layout-cmd luatile 'set_mfact(-0.05)'";
+            "Super L" = "send-layout-cmd luatile 'set_mfact( 0.05)'";
+            "Super U" = "send-layout-cmd luatile 'set_mcount(-1)'";
+            "Super I" = "send-layout-cmd luatile 'set_mcount( 1)'";
 
-            "Super T" = "send-layout-cmd rivercarro 'main-location left'";
-            "Super M" = "send-layout-cmd rivercarro 'main-location monocle'";
+            "Super T" = "send-layout-cmd luatile 'set_layout(\"tiling\")'";
+            "Super M" = "send-layout-cmd luatile 'set_layout(\"monocle\")'";
             "Super F" = "toggle-fullscreen";
             "Super+Shift F" = "toggle-float";
 
