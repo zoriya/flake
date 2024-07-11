@@ -87,6 +87,7 @@ in {
         };
       };
 
+      declare-mode = ["normal" "locked" "passthrough"];
       map = {
         normal =
           {
@@ -101,8 +102,8 @@ in {
 
             "Super Period" = "focus-output next";
             "Super Comma" = "focus-output previous";
-            "Super+Shift Period" = "send-to-output next";
-            "Super+Shift Comma" = "send-to-output previous";
+            "Super+Shift Period" = "send-to-output -current-tags next";
+            "Super+Shift Comma" = "send-to-output -current-tags previous";
 
             "Super H" = "send-layout-cmd luatile 'set_mfact(-0.05)'";
             "Super L" = "send-layout-cmd luatile 'set_mfact( 0.05)'";
@@ -122,9 +123,14 @@ in {
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
             "Super+Shift L" = "spawn 'loginctl lock-session'";
+
+            "Super+Shift Backslash" = "enter-mode passthrough";
           }
           // common_binds;
         locked = common_binds;
+        passthrough = {
+            "Super+Shift Backslash" = "enter-mode normal";
+        };
       };
       map-pointer = {
         normal = {
