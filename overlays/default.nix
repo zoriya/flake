@@ -1,4 +1,7 @@
-{flood}: self: super: let
+{
+  flood,
+  river-src,
+}: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
       name = drv.name;
@@ -35,6 +38,11 @@ in {
       license = licenses.gpl3Only;
       maintainers = with maintainers; [winter];
     };
+  };
+
+  river = super.river.overrideAttrs {
+    src = river-src;
+    deps = self.callPackage ./river.build.zig.zon.nix { };
   };
 
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.

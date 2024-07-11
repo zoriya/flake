@@ -3,6 +3,9 @@
     ../../modules/wm
   ];
 
+  # this is called manually in the river init script.
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
+
   services.greetd = {
     enable = true;
     settings = {

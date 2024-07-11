@@ -4,7 +4,8 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager";
+      # url = "github:zoriya/home-manager";
+      url = "/home/zoriya/projects/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
@@ -32,6 +33,10 @@
       url = "github:zoriya/astal-river";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    river-src = {
+      url = "github:zoriya/river";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -41,6 +46,7 @@
     nixpkgs,
     ghostty,
     flood,
+    river-src,
     impermanence,
     nixos-hardware,
     nix-index-database,
@@ -58,7 +64,7 @@
             (./environments + "/${de}")
             {
               nixpkgs.overlays = [
-                (import ./overlays {inherit flood;})
+                (import ./overlays {inherit flood river-src;})
                 neovim-nightly.overlays.default
               ];
             }

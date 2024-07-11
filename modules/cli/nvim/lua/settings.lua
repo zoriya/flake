@@ -113,3 +113,5 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 		})
 	end,
 })
+
+vim.g.zig_fmt_autosave = 0

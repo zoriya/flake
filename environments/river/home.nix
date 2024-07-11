@@ -72,11 +72,10 @@ in {
         };
       };
 
-       border-color-focused = "0x94e2d5";
-       border-color-unfocused = "0x00000000";
-       border-color-urgent = "0xcba6f7";
-       border-width = 2;
-
+      border-color-focused = "0x94e2d5";
+      border-color-unfocused = "0x00000000";
+      border-color-urgent = "0xcba6f7";
+      border-width = 2;
 
       rule-add = {
         "-app-id" = {
@@ -129,7 +128,7 @@ in {
           // common_binds;
         locked = common_binds;
         passthrough = {
-            "Super+Shift Backslash" = "enter-mode normal";
+          "Super+Shift Backslash" = "enter-mode normal";
         };
       };
       map-pointer = {
@@ -143,58 +142,30 @@ in {
       for i in $(seq 1 9)
       do
           tags=$((1 << (i - 1)))
-          riverctl map normal Super "$i" set-focused-tags $tags
+          riverctl map normal Super "$i" set-focused-tags -alternate $tags
           riverctl map normal Super+Shift "$i" set-view-tags $tags
           riverctl map normal Super+Control "$i" toggle-focused-tags $tags
           riverctl map normal Super+Shift+Control "$i" toggle-view-tags $tags
       done
 
       all_tags=$(((1 << 32) - 1))
-      riverctl map normal Super 0 set-focused-tags "$all_tags"
+      riverctl map normal Super 0 set-focused-tags -alternate "$all_tags"
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
+
+      hyprlock --immediate
     '';
+
     systemd = {
-      # Only import env vars, do not use their systemctl --user start river-session.target that we override below.
       enable = true;
+      runInService = true;
       extraCommands = [
-        "systemd-notify --ready"
-        "hyprlock --immediate"
+        "${pkgs.systemd}/bin/systemctl --user start xdg-autostart-if-no-desktop-manager.target"
       ];
     };
   };
 
   # Run river in systemd directly and not by hand. Failing to do so will make graphical-session.target never stop.
   # So a big wait time when shutting down & graphical services are not restarted when starting river again.
-  systemd.user.targets.river-session = {
-    Unit = {
-      Description = "river compositor session";
-      Documentation = ["man:systemd.special(7)"];
-      BindsTo = ["graphical-session.target"];
-      Before = ["graphical-session.target"];
-      Wants = ["graphical-session-pre.target"];
-      After = ["graphical-session-pre.target"];
-      RefuseManualStart = "yes";
-      StopWhenUnneeded = "yes";
-    };
-  };
-
-  systemd.user.services.river = {
-    Unit = {
-      Description = "River compositor";
-      Documentation = "man:river(1)";
-      BindsTo = ["river-session.target"];
-      Before = ["river-session.target"];
-    };
-
-    Service = {
-      Type = "notify";
-      #  used to get env/session vars (and path).
-      ExecStart = "/bin/sh -lc ${pkgs.river}/bin/river";
-      TimeoutStopSec = 10;
-      NotifyAccess = "all";
-      ExecStopPost = "${pkgs.systemd}/bin/systemctl --user unset-environment ${builtins.concatStringsSep " " config.wayland.windowManager.river.systemd.variables}";
-    };
-  };
 
   home.packages = with pkgs; [
     gnome-control-center

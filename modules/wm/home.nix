@@ -88,9 +88,63 @@ in {
       ];
     };
   };
-  systemd.user.services.hypridle = {
+
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      WantedBy = ["graphical-session.target"];
+      Wants = ["graphical-session.target"];
       After = ["graphical-session.target"];
     };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
+
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5 = {
+      addons = with pkgs; [
+        fcitx5-mozc
+        fcitx5-gtk
+      ];
+    };
+  };
+
+  xdg.configFile."fcitx5/config" = {
+    force = true;
+    text = ''
+      [Hotkey/TriggerKeys]
+      0=Super+space
+
+      [Behavior]
+      ShowInputMethodInformation=False
+      CompactInputMethodInformation=False
+      ShowFirstInputMethodInformation=False
+    '';
+  };
+  xdg.configFile."fcitx5/profile" = {
+    force = true;
+    text = ''
+      [Groups/0]
+      Name=Default
+      Default Layout=us
+      DefaultIM=mozc
+
+      [Groups/0/Items/0]
+      Name=keyboard-us
+      Layout=
+
+      [Groups/0/Items/1]
+      Name=mozc
+      Layout=
+
+      [GroupOrder]
+      0=Default
+    '';
   };
 }

@@ -335,17 +335,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1720045378,
-        "narHash": "sha256-lmE7B+QXw7lWdBu5GQlUABSpzPk3YBb9VbV+IYK5djk=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "0a30138c694ab3b048ac300794c2eb599dc40266",
-        "type": "github"
+        "lastModified": 1720601689,
+        "narHash": "sha256-G6MgCUWjJAonm9vgd1zR0rOF7A0YxN83gcXyEs/tWzY=",
+        "ref": "refs/heads/master",
+        "rev": "04216763901f904e7e59afe23d30bb814d6c5d14",
+        "revCount": 3642,
+        "type": "git",
+        "url": "file:///home/zoriya/projects/home-manager"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/zoriya/projects/home-manager"
       }
     },
     "impermanence": {
@@ -521,6 +521,22 @@
         "type": "github"
       }
     },
+    "river-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1720674112,
+        "narHash": "sha256-DIgE19Vo8c6clz2BDHCWkQyu4XegYAh/f6/arLYuVxk=",
+        "owner": "zoriya",
+        "repo": "river",
+        "rev": "7b9b4b6cd6401f7f094dcc19be61069d87fdca5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zoriya",
+        "repo": "river",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "astal-river": "astal-river",
@@ -532,7 +548,8 @@
         "nix-index-database": "nix-index-database",
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "river-src": "river-src"
       }
     },
     "systems": {
