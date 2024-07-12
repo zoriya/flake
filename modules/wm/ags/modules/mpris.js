@@ -175,6 +175,10 @@ mpris.connect("player-added", (_, bus) => {
 		}
 	});
 });
+mpris.connect("player-closed", (_, bus) => {
+	if (activePlayer.value.bus_name === bus)
+		activePlayer.value = mpris.players[0];
+});
 
 /** @param {{player?: import("types/service/mpris").MprisPlayer | null} & import("../types/widgets/box").BoxProps} props */
 export const MprisPlayer = ({ player, ...props }) => {
