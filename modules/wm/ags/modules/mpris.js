@@ -144,6 +144,7 @@ const PositionCircle = ({ player, child, ...props }) =>
 /** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/box").BoxProps} props */
 export const LinePlayer = ({ player, ...props }) =>
 	Widget.Box({
+		visible: player.bind("play_back_status").as((x) => x !== "Stopped"),
 		children: [
 			PositionCircle({
 				player,

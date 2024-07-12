@@ -18,8 +18,9 @@
     "None XF86AudioMute" = "spawn '${pkgs.pamixer}/bin/pamixer  --toggle-mute'";
     "None XF86AudioMedia" = "spawn '${pkgs.playerctl}/bin/playerctl play-pause'";
     "None XF86AudioPlay" = "spawn '${pkgs.playerctl}/bin/playerctl  play-pause'";
-    "None XF86AudioPrev" = "spawn ${pkgs.playerctl}/bin/playerctl playerctl previous'";
-    "None XF86AudioNext" = "spawn ${pkgs.playerctl}/bin/playerctl playerctl next'";
+    "None XF86AudioPause" = "spawn '${pkgs.playerctl}/bin/playerctl  play-pause'";
+    "None XF86AudioPrev" = "spawn '${pkgs.playerctl}/bin/playerctl playerctl previous'";
+    "None XF86AudioNext" = "spawn '${pkgs.playerctl}/bin/playerctl playerctl next'";
     "None XF86MonBrightnessUp" = "spawn '${pkgs.brightnessctl}/bin/brightnessctl s +5%'";
     "None XF86MonBrightnessDown" = "spawn '${pkgs.brightnessctl}/bin/brightnessctl s 5%-'";
   };
