@@ -59,7 +59,7 @@ export const Selection = (props) =>
 				children: bluetooth.bind("devices").as((x) => x.map(DeviceItem)),
 			}),
 			Widget.Separator({ className: "accent" }),
-			SettingsButton({ type: "bluetooth" }),
+			SettingsButton({ command: "blueberry" }),
 		],
 		...props,
 	});
@@ -70,11 +70,12 @@ const DeviceItem = (device) =>
 		children: [
 			Widget.Icon(`${device.icon_name}-symbolic`),
 			Widget.Label(device.name),
+			Widget.Box({ hexpand: true }),
 			Widget.Label({
 				label: `${device.battery_percentage}%`,
+				css: "padding-right: 24px;",
 				visible: device.bind("battery_percentage").as((x) => x > 0),
 			}),
-			Widget.Box({ hexpand: true }),
 			Widget.Spinner({
 				active: device.bind("connecting"),
 				visible: device.bind("connecting"),
@@ -82,8 +83,8 @@ const DeviceItem = (device) =>
 			Widget.Switch({
 				active: device.bind("connected"),
 				visible: device.bind("connecting").as((p) => !p),
-				// sensitive: false,
 				setup: (self) =>
+					// TODO: If connecting to the device failed, reset back the switch to `active: false`.
 					self.connect("state_set", () => {
 						device.setConnection(self.active);
 						return true;

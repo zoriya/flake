@@ -30,6 +30,7 @@ in {
     # TODO: Find a way to add this for ags only
     covercolors
     brightnessctl
+    blueberry
   ];
   # systemd.user.services.ags = {
   #   Unit = {

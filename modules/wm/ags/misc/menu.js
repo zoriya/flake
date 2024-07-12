@@ -168,11 +168,11 @@ export const Menu = ({ name, icon, title, content, ...props }) =>
 		...props,
 	});
 
-/** @param {{type: string} & import("../types/widgets/button").ButtonProps} props */
-export const SettingsButton = ({ type, ...props }) =>
+/** @param {{type?: string, command?: string} & import("../types/widgets/button").ButtonProps} props */
+export const SettingsButton = ({ type, command, ...props }) =>
 	Widget.Button({
 		onClicked: () => {
-			Utils.execAsync(`gnome-control-center ${type}`);
+			Utils.execAsync(command ?? `gnome-control-center ${type}`);
 			App.closeWindow("quicksettings");
 		},
 		hexpand: true,
