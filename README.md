@@ -1,21 +1,11 @@
 # Flake
 
-## To install
+![screenshot](./screen.png)
 
-fdisk DEVICE
 
-200M EFI fat32 labelled boot -> on /boot 
+## Notes
 
-ext4 labbelled fuhen -> on /nix
-
-mkdir -p /nix/persist/home (else persisted seems to be bugged)
+`mkdir -p /nix/persist/home` (else persisted seems to be bugged)
 
 
 `nix-shell --run 'mkpasswd -m SHA-512' -p mkpasswd` to generate a password
-
-
-```sh
-nix-channel --add https://nixos.org/channels/nixos-unstable nixos
-nix-channel --update
-```
-
