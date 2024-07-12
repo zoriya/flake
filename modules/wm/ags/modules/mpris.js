@@ -117,13 +117,6 @@ const PositionCircle = ({ player, child, ...props }) =>
 				extraSetup: (self) => {
 					function update() {
 						const value = player.position / player.length;
-						console.log(
-							value,
-							player.position,
-							player.length,
-							player.name,
-							player.track_title,
-						);
 						self.css = `
 							font-size: ${Math.max(value * 100, 0)}px;
 							min-width: 0.136rem;
