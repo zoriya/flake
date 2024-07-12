@@ -5,6 +5,7 @@ import * as network from "../modules/network.js";
 import * as bluetooth from "../modules/bluetooth.js";
 import * as battery from "../modules/battery.js";
 import * as notifications from "../modules/notifications.js";
+import * as mpris from "../modules/mpris.js";
 
 /**
  *@param {number} monitor
@@ -44,6 +45,14 @@ export const Bar = (monitor) =>
 			endWidget: Widget.Box({
 				hpack: "end",
 				children: [
+					Widget.Box({
+						className: "module",
+						css: "margin-right: 48px",
+						visible: mpris.activePlayer.bind().as((x) => !!x),
+						children: mpris.activePlayer
+							.bind()
+							.as((player) => (player ? [mpris.LinePlayer({ player })] : [])),
+					}),
 					Widget.Button({
 						onClicked: () => App.toggleWindow("quicksettings"),
 						className: "module quicksettings",

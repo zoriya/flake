@@ -1,6 +1,8 @@
+import { AnimatedCircProg } from "../misc/circular-progress.js";
+
 const mpris = await Service.import("mpris");
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/icon").IconProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/icon").IconProps} props */
 const PlayerIcon = ({ player, ...props }) =>
 	Widget.Icon({
 		size: 24,
@@ -18,7 +20,7 @@ const PlayerIcon = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
 const TitleLabel = ({ player, ...props }) =>
 	Widget.Label({
 		wrap: true,
@@ -28,7 +30,7 @@ const TitleLabel = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/label").LabelProps} props */
 const ArtistLabel = ({ player, ...props }) =>
 	Widget.Label({
 		wrap: true,
@@ -38,8 +40,11 @@ const ArtistLabel = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
-export const PlayPause = ({ player, ...props }) =>
+/** @param {{
+ *    player: import("types/service/mpris").MprisPlayer,
+ *    iconProps?: import("types/widgets/icon").IconProps,
+ * } & import("types/widgets/button").ButtonProps} props */
+export const PlayPause = ({ player, iconProps = {}, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({
 			icon: player.bind("play_back_status").as(
@@ -50,13 +55,14 @@ export const PlayPause = ({ player, ...props }) =>
 						Stopped: "media-playback-start-symbolic",
 					})[x],
 			),
+			...iconProps,
 		}),
 		onClicked: () => player.playPause(),
 		visible: player.bind("can_play"),
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
 const PreviousButton = ({ player, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({ icon: "media-skip-backward-symbolic" }),
@@ -65,7 +71,7 @@ const PreviousButton = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/button").ButtonProps} props */
 const NextButton = ({ player, ...props }) =>
 	Widget.Button({
 		child: Widget.Icon({ icon: "media-skip-forward-symbolic" }),
@@ -74,7 +80,7 @@ const NextButton = ({ player, ...props }) =>
 		...props,
 	});
 
-/** @param {{player: import("../types/service/mpris").MprisPlayer} & import("../types/widgets/slider").SliderProps} props */
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/slider").SliderProps} props */
 const PositionSlider = ({ player, ...props }) =>
 	Widget.Slider({
 		className: "mpris-position-slider",
@@ -95,10 +101,72 @@ const PositionSlider = ({ player, ...props }) =>
 		...props,
 	});
 
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/box").BoxProps} props */
+const PositionCircle = ({ player, child, ...props }) =>
+	Widget.Box({
+		child: Widget.Overlay({
+			child: AnimatedCircProg({
+				css: `
+			min-width: 0.136rem;
+			min-height: 1.636rem;
+			padding: 0rem;
+		`,
+				vpack: "center",
+				hpack: "center",
+				className: "accent-rev",
+				extraSetup: (self) => {
+					function update() {
+						const value = player.position / player.length;
+						console.log(
+							value,
+							player.position,
+							player.length,
+							player.name,
+							player.track_title,
+						);
+						self.css = `
+							font-size: ${Math.max(value * 100, 0)}px;
+							min-width: 0.136rem;
+							min-height: 1.636rem;
+							padding: 0rem;
+						`;
+					}
+					self.hook(player, update);
+					self.hook(player, update, "position");
+					self.poll(1000, update);
+				},
+			}),
+			overlays: [child],
+		}),
+		...props,
+	});
+
+/** @param {{player: import("types/service/mpris").MprisPlayer} & import("../types/widgets/box").BoxProps} props */
+export const LinePlayer = ({ player, ...props }) =>
+	Widget.Box({
+		children: [
+			PositionCircle({
+				player,
+				child: PlayPause({ player, iconProps: { size: 10 } }),
+				css: "margin-right: 12px;",
+			}),
+			Widget.Label({
+				label: Utils.merge(
+					[player.bind("track_title"), player.bind("track_artists")],
+					(title, artists) => `${title} - ${artists.join(", ")}`,
+				),
+				maxWidthChars: 30,
+				wrap: true,
+				truncate: "end",
+				hpack: "start",
+			}),
+		],
+		...props,
+	});
+
 export const activePlayer = Variable(mpris.players[0]);
 mpris.connect("player-added", (_, bus) => {
 	mpris.getPlayer(bus)?.connect("changed", (player) => {
-		console.log("Player changed", bus, player);
 		if (player?.play_back_status !== "Stopped") {
 			activePlayer.value = player || mpris.players[0];
 		} else {
@@ -107,7 +175,7 @@ mpris.connect("player-added", (_, bus) => {
 	});
 });
 
-/** @param {{player?: import("../types/service/mpris").MprisPlayer | null} & import("../types/widgets/box").BoxProps} props */
+/** @param {{player?: import("types/service/mpris").MprisPlayer | null} & import("../types/widgets/box").BoxProps} props */
 export const MprisPlayer = ({ player, ...props }) => {
 	if (!player) return Widget.Box({ visible: false });
 	const colors = getMaterialColors(player);
@@ -203,7 +271,7 @@ const ret = Variable({
 	background: "#222222",
 	onBackground: "#ffffff",
 });
-/** @param {import("../types/service/mpris").MprisPlayer} player */
+/** @param {import("types/service/mpris").MprisPlayer} player */
 export const getMaterialColors = (player) => {
 	// TODO: Move that to a hook to allow graceful disconnections
 	player.connect("changed", (player) => {

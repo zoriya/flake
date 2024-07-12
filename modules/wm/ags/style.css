@@ -24,6 +24,10 @@ button {
 	background-color: #94e2d5;
 	color: #1e1e2e;
 }
+.accent-rev {
+	color: #94e2d5;
+	background-color: #1e1e2e;
+}
 .secondary {
 	background-color: #cba6f7;
 	color: #1e1e2e;
