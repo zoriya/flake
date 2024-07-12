@@ -150,9 +150,9 @@ export const Quicksettings = () =>
 					[systray.Selection({}), powerprofile.Selection({})],
 				),
 				Widget.Box({
-					children: mprisService
-						.bind("players")
-						.as((x) => x.map((player) => mpris.MprisPlayer({ player }))),
+					children: mpris.activePlayer
+						.bind()
+						.as((player) => player ? [mpris.MprisPlayer({ player })] : []),
 				}),
 			],
 		}),

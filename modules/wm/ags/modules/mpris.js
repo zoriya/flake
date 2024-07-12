@@ -95,15 +95,17 @@ const PositionSlider = ({ player, ...props }) =>
 		...props,
 	});
 
-// export const currentPlayer = Utils.watch(
-// 	null,
-// 	[
-// 		[mpris, "player-added"],
-// 		[mpris, "player-changed"],
-// 	],
-// 	/** @param {any} name */
-// 	(name) => mpris.getPlayer(name),
-// );
+export const activePlayer = Variable(mpris.players[0]);
+mpris.connect("player-added", (_, bus) => {
+	mpris.getPlayer(bus)?.connect("changed", (player) => {
+		console.log("Player changed", bus, player);
+		if (player?.play_back_status !== "Stopped") {
+			activePlayer.value = player || mpris.players[0];
+		} else {
+			activePlayer.value = mpris.players[0];
+		}
+	});
+});
 
 /** @param {{player?: import("../types/service/mpris").MprisPlayer | null} & import("../types/widgets/box").BoxProps} props */
 export const MprisPlayer = ({ player, ...props }) => {
