@@ -30,7 +30,7 @@
       flake = false;
     };
     astal-river = {
-      url = "github:zoriya/astal-river";
+      url = "github:astal-sh/river";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     river-src = {

@@ -7,16 +7,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1720432748,
+        "lastModified": 1720868637,
         "narHash": "sha256-DuU5zs+IbGqIS6z61j/CBOl0x/ZPc7ssq7NiVhs8YKM=",
-        "owner": "zoriya",
-        "repo": "astal-river",
-        "rev": "013175591de537eb4419697a283106ce91e0983d",
+        "owner": "astal-sh",
+        "repo": "river",
+        "rev": "1296dc824446984038c08a2278ebeea1c537ebf7",
         "type": "github"
       },
       "original": {
-        "owner": "zoriya",
-        "repo": "astal-river",
+        "owner": "astal-sh",
+        "repo": "river",
         "type": "github"
       }
     },
