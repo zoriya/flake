@@ -25,8 +25,9 @@
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
       push.autoSetupRemote = true;
-      init.defaultBranch = "master";
       push.default = "upstream";
+      pull.ff = "only";
+      init.defaultBranch = "master";
       advice.diverging = false;
       rerere.enabled = true;
       rebase.updateRefs = true;
