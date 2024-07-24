@@ -71,6 +71,9 @@ in {
           tap-button-map = "left-right-middle";
           scroll-method = "two-finger";
         };
+        "'*Mouse'" = {
+          natural-scroll = "disabled";
+        };
       };
 
       border-color-focused = "0x94e2d5";
@@ -153,6 +156,12 @@ in {
       riverctl map normal Super 0 set-focused-tags -alternate "$all_tags"
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
 
+      # Focus second screen by default (also spawn apps there)
+      riverctl focus-output DP-1
+      riverctl set-focused-tags "$all_tags"
+      riverctl focus-output DP-2
+      riverctl set-focused-tags $((1 << 3))
+
       hyprlock --immediate
     '';
 
@@ -177,31 +186,37 @@ in {
   services.kanshi = {
     enable = true;
     systemdTarget = "graphical-session.target";
-    profiles = {
-      undocked = {
-        outputs = [
+    settings = [
+      {
+        output.criteria = "eDP-1";
+        output.scale = 1.75;
+      }
+      {
+        profile.name = "undocked";
+        profile.outputs = [
           {
             criteria = "eDP-1";
-            scale = 1.75;
           }
         ];
-      };
-      docked = {
-        outputs = [
+      }
+      {
+        profile.name = "docked";
+        profile.outputs = [
           {
             criteria = "eDP-1";
             status = "disable";
           }
           {
-            criteria = "DP-2";
+            criteria = "DP-1";
+            position = "0,0";
           }
           {
-            criteria = "DP-1";
+            criteria = "DP-2";
             position = "0,1180";
           }
         ];
-      };
-    };
+      }
+    ];
   };
 
   # Disable close/resize buttons on GTK windows that really want CSD.
