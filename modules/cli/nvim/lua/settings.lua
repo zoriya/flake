@@ -93,7 +93,7 @@ keymap({ "n", "x" }, "<leader>P", '"+P', "Past line from system clipboard")
 
 keymap("n", "<C-.>", "<cmd>cnext<CR>zz", "Next quickfix")
 keymap("n", "<C-,>", "<cmd>cprev<CR>zz", "Prev quickfix")
-keymap("n", "<leader>c", "<cmd>cclose<cr>", "Close quickfix")
+keymap("n", "<leader>q", "<cmd>cclose<cr>", "Close quickfix")
 
 keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")
 keymap("t", "<C-W>", "<C-\\><C-N>", "Normal mode")
@@ -115,3 +115,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.g.zig_fmt_autosave = 0
+vim.g.omni_sql_no_default_maps = 1

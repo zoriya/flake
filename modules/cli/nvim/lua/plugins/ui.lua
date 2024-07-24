@@ -202,7 +202,7 @@ return {
 	{
 		"folke/trouble.nvim",
 		keys = {
-			{ "<leader>lw", "<cmd>Trouble diagnostics<cr>", desc = "Diagnostics" },
+			{ "<leader>lw", "<cmd>Trouble cascade<cr>", desc = "Diagnostics" },
 			{ "<leader>lt", "<cmd>TroubleToggle<CR>",       desc = "Toogle trouble window" },
 		},
 		opts = {
@@ -210,7 +210,34 @@ return {
 			auto_preview = false,
 			cycle_results = false,
 			use_diagnostic_signs = true,
-			severity = vim.diagnostic.severity.ERORR,
+			follow = false,
+			icons = {
+				indent = {
+					middle = " ",
+					last = " ",
+					top = " ",
+					ws = "│  ",
+				},
+			},
+			modes = {
+				diagnostics = {
+					groups = {
+						{ "filename", format = "{file_icon} {basename:Title} {count}" },
+					},
+				},
+				cascade = {
+					mode = "diagnostics", -- inherit from diagnostics mode
+					filter = function(items)
+						local severity = vim.diagnostic.severity.HINT
+						for _, item in ipairs(items) do
+							severity = math.min(severity, item.severity)
+						end
+						return vim.tbl_filter(function(item)
+							return item.severity == severity
+						end, items)
+					end,
+				},
+			}
 		},
 	},
 
