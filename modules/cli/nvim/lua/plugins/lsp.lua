@@ -263,13 +263,14 @@ return {
 			{
 				"<leader>e",
 				function()
-					require("conform").format({ async = true, lsp_fallback = true --[["always"--]] })
+					require("conform").format()
 				end,
 				desc = "Format",
 				mode = { "n", "v" },
 			},
 		},
 		opts = {
+			default_format_opts = { async = true, lsp_format = "fallback" },
 			formatters_by_ft = {
 				python = function(bufnr)
 					if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -288,6 +289,7 @@ return {
 				sql = { "pg_format" },
 				cs = { "csharpier" },
 				nix = { "alejandra" },
+				-- ["_"] = { "injected", lsp_format = "last" },
 				["*"] = { "injected" }
 			},
 			formatters = {

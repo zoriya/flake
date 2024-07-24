@@ -139,23 +139,8 @@ return {
 		opts = {
 			plugins = { spelling = true },
 		},
-		config = function(_, opts)
+		init = function()
 			vim.opt["timeoutlen"] = 500
-
-			local wk = require("which-key")
-			wk.setup(opts)
-
-			wk.register({
-				gx = { name = "+Git conflict" },
-			})
-			wk.register({
-				mode = { "n", "v" },
-				["g"] = { name = "+goto" },
-				["]"] = { name = "+next" },
-				["["] = { name = "+prev" },
-				["<leader>g"] = { name = "+git" },
-				["<leader>l"] = { name = "+lsp" },
-			})
 		end,
 	},
 
@@ -203,7 +188,7 @@ return {
 		"folke/trouble.nvim",
 		keys = {
 			{ "<leader>lw", "<cmd>Trouble cascade<cr>", desc = "Diagnostics" },
-			{ "<leader>lt", "<cmd>TroubleToggle<CR>",       desc = "Toogle trouble window" },
+			{ "<leader>lt", "<cmd>TroubleToggle<CR>",   desc = "Toogle trouble window" },
 		},
 		opts = {
 			auto_close = true,
