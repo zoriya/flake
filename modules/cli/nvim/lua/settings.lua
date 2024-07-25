@@ -98,7 +98,8 @@ keymap("n", "<leader>q", "<cmd>cclose<cr>", "Close quickfix")
 keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")
 keymap("t", "<C-W>", "<C-\\><C-N>", "Normal mode")
 
-vim.keymap.set({"n", "x"}, "gq", "gw", { desc = "Reformat using textwidth (tw)", noremap = true })
+vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "Reformat using textwidth (tw)", noremap = true })
+vim.keymap.set("n", "<C-L>", "<C-L><cmd>lua vim.snippet.stop()<cr>", { noremap = true })
 
 vim.cmd("autocmd FileType qf setl nolist")
 vim.cmd("syntax on")
