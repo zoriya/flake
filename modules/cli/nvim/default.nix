@@ -1,11 +1,13 @@
 {
   pkgs,
   config,
+  inputs,
   ...
 }: {
   programs.neovim = {
     enable = true;
     withNodeJs = true;
+    package = inputs.neovim-nightly.packages.${pkgs.system}.default;
     extraPackages = with pkgs; [
       gcc
       tree-sitter
