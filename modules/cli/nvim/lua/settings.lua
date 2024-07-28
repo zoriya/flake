@@ -51,6 +51,11 @@ local options = {
 
 	completeopt = { "menuone", "popup", "noinsert", "fuzzy" },
 	pumheight = 15,
+
+	foldcolumn = "1",
+	foldlevel = 99,
+	foldlevelstart = 99,
+	foldenable = true,
 }
 
 vim.g.loaded_python3_provider = 0

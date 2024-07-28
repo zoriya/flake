@@ -33,6 +33,10 @@ return {
 			matchup = { enable = true },
 		},
 		main = "nvim-treesitter.configs",
+		init = function()
+			vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+		end
 	},
 
 	{

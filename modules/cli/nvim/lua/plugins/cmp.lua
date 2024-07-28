@@ -12,6 +12,9 @@ return {
 		opts = function()
 			local cmp = require("cmp")
 			return {
+				completion = {
+					autocomplete = false
+				},
 				snippet = {
 					expand = function(args)
 						vim.snippet.expand(args.body)

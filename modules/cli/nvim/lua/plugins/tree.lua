@@ -20,10 +20,6 @@ return {
 			},
 			keymaps = {
 				["<BS>"] = "actions.parent",
-
-				-- Disable default mappings that conflict with harpoon.
-				["<C-h>"] = false,
-				["<C-t>"] = false,
 			},
 		},
 	},
