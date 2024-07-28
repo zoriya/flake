@@ -3,7 +3,9 @@ local lsp_keymaps = function(buffer)
 		vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 	end
 
-	map("n", "<C-k>", '<cmd>lua vim.lsp.buf.signature_help()<CR>', "See signature help")
+
+	map("i", "<C-Space>", '<cmd>lua vim.lsp.completion.trigger()<CR>', "Open completion menu")
+	map({ "n", "i" }, "<C-k>", '<cmd>lua vim.lsp.buf.signature_help()<CR>', "See signature help")
 
 	map("n", "gD", '<cmd>lua vim.lsp.buf.declaration()<CR>', "Go to declaration")
 	map("n", "gd", '<cmd>lua vim.lsp.buf.definition()<CR>', "Go to definition")
@@ -26,14 +28,12 @@ return {
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		dependencies = {
 			"neovim/nvim-lspconfig",
-			"cmp-nvim-lsp",
 		},
 		opts = function()
-			local lsp_on_attach = function(_, buffer)
+			local lsp_on_attach = function(client, buffer)
 				lsp_keymaps(buffer)
+				vim.lsp.completion.enable(true, client.id, buffer)
 			end
-			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
 			local lspconfig = require("lspconfig")
 
 			return {
@@ -76,7 +76,6 @@ return {
 
 				default_config = {
 					on_attach = lsp_on_attach,
-					capabilities = lsp_capabilities,
 				},
 				configs = {
 					jsonls = {
@@ -183,7 +182,6 @@ return {
 			}
 		end,
 		init = function()
-			vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "See diagnostics" })
 			vim.keymap.set("n", "<leader>li", "<cmd>LspInfo<cr>", { desc = "Info" })
 
 			vim.diagnostic.config({
@@ -204,6 +202,9 @@ return {
 			})
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 				border = "rounded",
+			})
+			vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+				border = 'rounded',
 			})
 		end,
 	},
@@ -240,20 +241,6 @@ return {
 			-- See https://valentjn.github.io/ltex/supported-languages.html#natural-languages
 			load_langs = { 'en-US' },
 		},
-	},
-
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "VeryLazy",
-		opts = {
-			doc_lines = 100,
-			fix_pos = true,
-			always_trigger = true,
-			select_signature_key = "<C-J>",
-			toggle_key = "<C-k>",
-			toggle_key_flip_floatwin_setting = true,
-			floating_window = false,
-		}
 	},
 
 	{
