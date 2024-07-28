@@ -12,6 +12,7 @@ return {
 			on_attach = function(buffer)
 				local gs = package.loaded.gitsigns
 
+
 				local function map(mode, l, r, desc)
 					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 				end
@@ -25,6 +26,7 @@ return {
 				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
 				map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
 				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Git Select Hunk")
+				map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "Git Select Hunk")
 			end,
 		},
 	},
@@ -67,5 +69,60 @@ return {
 				return string.format("%s %s %s", blame.author, blame.date, blame.summary)
 			end,
 		},
+	},
+
+	{
+		"ruifm/gitlinker.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = true,
+		keys = {
+			{ "<leader>gy", mode = { "n", "v" }, desc = "Yank remote git url" },
+			{
+				"<leader>go",
+				function()
+					require("gitlinker").get_buf_range_url("n", {
+						action_callback = require "gitlinker.actions".open_in_browser
+					})
+				end,
+				mode = "n",
+				desc = "Open in browser"
+			},
+			{
+				"<leader>go",
+				function()
+					require("gitlinker").get_buf_range_url("v", {
+						action_callback = require "gitlinker.actions".open_in_browser
+					})
+				end,
+				mode = "v",
+				desc = "Open in browser"
+			},
+		},
+	},
+
+	{
+		"echasnovski/mini-git",
+		main = 'mini.git',
+		config = true,
+		cmd = "Git",
+		keys = {
+			{
+				"<leader>gi",
+				function()
+					require("mini.git").show_at_cursor({})
+				end,
+				desc = "Show info at cursor",
+				mode = { "n", "x" },
+			},
+		},
+		init = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("MiniGit", { clear = true }),
+				pattern = "git",
+				callback = function()
+					vim.bo.foldexpr = "v:lua.MiniGit.diff_foldexpr()"
+				end,
+			})
+		end
 	},
 }
