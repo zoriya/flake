@@ -24,6 +24,7 @@ return {
 					['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
 					['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
 					["<C-e>"] = cmp.mapping.abort(),
+					["<C-y>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 					["<C-h>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				}),
 				sources = cmp.config.sources({
@@ -61,9 +62,5 @@ return {
 				},
 			}
 		end,
-		init = function()
-			vim.opt.completeopt = { "menuone", "preview", }
-			vim.opt.pumheight = 15
-		end
 	},
 }

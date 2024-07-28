@@ -48,7 +48,15 @@ local options = {
 		foldsep = " ",
 		foldclose = "",
 	},
+
+	completeopt = { "menuone", "popup", "noinsert", "fuzzy" },
+	pumheight = 15,
 }
+
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
 
 for k, v in pairs(options) do
 	vim.opt[k] = v
@@ -61,52 +69,69 @@ vim.cmd("autocmd BufEnter * setlocal formatoptions-=ro")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-local function keymap(mode, l, r, desc)
-	vim.keymap.set(mode, l, r, { noremap = true, silent = true, desc = desc })
-end
-
-
 -- Stay in indent mode
-keymap("v", "<", "<gv")
-keymap("v", ">", ">gv")
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 
 -- Move in insert mode --
-keymap("i", "<A-j>", "<Down>")
-keymap("i", "<A-k>", "<Up>")
-keymap("i", "<A-h>", "<Left>")
-keymap("i", "<A-l>", "<Right>")
+vim.keymap.set("i", "<A-j>", "<Down>")
+vim.keymap.set("i", "<A-k>", "<Up>")
+vim.keymap.set("i", "<A-h>", "<Left>")
+vim.keymap.set("i", "<A-l>", "<Right>")
 
-keymap("i", "<C-BS>", "<C-w>")
-keymap("c", "<C-BS>", "<C-w>")
-keymap("i", "<C-H>", "<C-w>") -- Keymap for CTRL-BACKSPACE on some termial emulators.
-keymap("c", "<C-H>", "<C-w>")
+vim.keymap.set("i", "<C-BS>", "<C-w>")
+vim.keymap.set("c", "<C-BS>", "<C-w>")
+-- vim.keymap.set("i", "<C-H>", "<C-w>") -- Keymap for CTRL-BACKSPACE on some termial emulators.
+-- vim.keymap.set("c", "<C-H>", "<C-w>")
 
 -- Center screen when navigating search results
-keymap("n", "n", "nzz")
-keymap("n", "N", "Nzz")
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next result" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous result" })
 
-keymap({ "n", "x" }, "<leader>y", '"+y', "Yank to system clipboard")
-keymap({ "n", "x" }, "<leader>Y", '"+y$', "Yank line to system clipboard")
+vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>Y", '"+y$', { desc = "Yank line to system clipboard" })
 
-keymap({ "n", "x" }, "<leader>p", '"+p', "Past from system clipboard")
-keymap({ "n", "x" }, "<leader>P", '"+P', "Past line from system clipboard")
+vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Past from system clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Past line from system clipboard" })
 
-keymap("n", "<C-.>", "<cmd>cnext<CR>zz", "Next quickfix")
-keymap("n", "<C-,>", "<cmd>cprev<CR>zz", "Prev quickfix")
-keymap("n", "<leader>q", "<cmd>cclose<cr>", "Close quickfix")
+vim.keymap.set("n", "<C-.>", "<cmd>cnext<CR>zz", { desc = "Next quickfix" })
+vim.keymap.set("n", "<C-,>", "<cmd>cprev<CR>zz", { desc = "Prev quickfix" })
+vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>", { desc = "Close quickfix" })
+vim.keymap.set('n', '[q', '<cmd>cprev<cr>zvzz', { desc = 'Previous quickfix item' })
+vim.keymap.set('n', ']q', '<cmd>cnext<cr>zvzz', { desc = 'Next quickfix item' })
+vim.keymap.set('n', '[l', '<cmd>lprev<cr>zvzz', { desc = 'Previous loclist item' })
+vim.keymap.set('n', ']l', '<cmd>lnext<cr>zvzz', { desc = 'Next loclist item' })
 
-keymap("t", "<C-W>", "<C-\\><C-N><C-W>", "+windows")
-keymap("t", "<C-W>", "<C-\\><C-N>", "Normal mode")
+
+vim.keymap.set("t", "<C-W>", "<C-\\><C-N><C-W>", { desc = "+windows" })
+vim.keymap.set("t", "<C-W>", "<C-\\><C-N>", { desc = "Normal mode" })
 
 vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "Reformat using textwidth (tw)", noremap = true })
-vim.keymap.set("n", "<C-L>", "<C-L><cmd>lua vim.snippet.stop()<cr>", { noremap = true })
+
+-- Clear snippets with C-l and go to next/prev with C-n & C-p
+vim.keymap.set("n", "<C-l>", function()
+	if vim.snippet then
+		vim.snippet.stop()
+	end
+	return "<C-l>"
+end, { expr = true })
+vim.keymap.set({ "i", "s" }, "<C-n>", function()
+	if vim.snippet.active({ direction = 1 }) then
+		vim.snippet.jump(1)
+	end
+end)
+vim.keymap.set({ "i", "s" }, "<C-p>", function()
+	if vim.snippet.active({ direction = -1 }) then
+		vim.snippet.jump(-1)
+	end
+end)
 
 vim.cmd("autocmd FileType qf setl nolist")
 vim.cmd("syntax on")
 
 vim.api.nvim_create_autocmd('TextYankPost', {
-	group = vim.api.nvim_create_augroup("HighlightYank", {}),
-	pattern = '*',
+	group = vim.api.nvim_create_augroup("HighlightYank", { clear = true }),
+	desc = "highlight on yank",
 	callback = function()
 		vim.highlight.on_yank({
 			higroup = 'Visual',
