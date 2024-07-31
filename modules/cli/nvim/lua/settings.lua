@@ -118,7 +118,7 @@ vim.keymap.set("n", "<C-l>", function()
 	if vim.snippet then
 		vim.snippet.stop()
 	end
-	return "<C-l>"
+	return "<cmd>nohlsearch<cr><cmd>diffupdate<cr><C-l>"
 end, { expr = true })
 vim.keymap.set({ "i", "s" }, "<C-n>", function()
 	if vim.snippet.active({ direction = 1 }) then

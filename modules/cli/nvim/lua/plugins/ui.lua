@@ -183,7 +183,11 @@ return {
 		"folke/trouble.nvim",
 		keys = {
 			{ "<leader>lw", "<cmd>Trouble cascade<cr>", desc = "Diagnostics" },
-			{ "<leader>lt", "<cmd>TroubleToggle<CR>",   desc = "Toogle trouble window" },
+			{
+				"<leader>q",
+				"<cmd>Trouble close<cr><cmd>cclose<cr>",
+				desc = "Close quickfix",
+			},
 		},
 		opts = {
 			auto_close = true,
