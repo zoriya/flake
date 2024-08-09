@@ -34,7 +34,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     river-src = {
-      url = "github:zoriya/river";
+      url = "github:zoriya/river/br-v0.3.5";
       flake = false;
     };
   };

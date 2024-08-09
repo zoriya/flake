@@ -84,6 +84,9 @@ vim.keymap.set("i", "<A-k>", "<Up>")
 vim.keymap.set("i", "<A-h>", "<Left>")
 vim.keymap.set("i", "<A-l>", "<Right>")
 
+-- for all modes except terminal
+vim.keymap.set({"i", "n", "o", "x", "v", "s", "l", "c"}, "<C-c>", "<esc>")
+
 vim.keymap.set("i", "<C-BS>", "<C-w>")
 vim.keymap.set("c", "<C-BS>", "<C-w>")
 -- vim.keymap.set("i", "<C-H>", "<C-w>") -- Keymap for CTRL-BACKSPACE on some termial emulators.

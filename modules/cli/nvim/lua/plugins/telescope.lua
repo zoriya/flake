@@ -46,6 +46,7 @@ return {
 					mappings = {
 						i = {
 							["<esc>"]  = actions.close,
+							["<C-c>"]  = actions.close,
 							["<C-h>"]  = function() vim.api.nvim_input("<C-w>") end,
 							["<C-BS>"] = function() vim.api.nvim_input("<C-w>") end,
 							["<A-k>"]  = actions.move_selection_previous,

@@ -42,7 +42,6 @@ in {
 
   river = super.river.overrideAttrs {
     src = river-src;
-    deps = self.callPackage ./river.build.zig.zon.nix { };
   };
 
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.
