@@ -28,6 +28,7 @@ in {
     nativeBuildInputs = with self.pkgs; [
       nodejs
       pnpm.configHook
+      super.makeWrapper
     ];
 
     pnpmDeps = self.pkgs.pnpm.fetchDeps {
@@ -45,7 +46,7 @@ in {
       runHook preInstall
       mkdir -p $out/{lib,bin}
       cp -r {dist,node_modules} $out/lib
-      ${super.makeWrapper}/bin/wrapProgram ${self.pkgs.nodejs} $out/bin/flood --add-flags $out/lib/dist/index.js
+      makeWrapper ${self.pkgs.nodejs}/bin/node $out/bin/flood --add-flags $out/lib/dist/index.js
       runHook postInstall
     '';
 
