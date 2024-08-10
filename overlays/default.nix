@@ -19,13 +19,37 @@
       --add-flags "--ozone-platform=wayland"'';
 in {
   # Use my fork of flood to enable smart scripts.
-  flood = self.pkgs.buildNpmPackage {
+  flood = self.stdenv.mkDerivation (finalAttrs: {
     pname = "flood";
-    version = "4.8.2";
+    version = "4.8.3-dirty";
 
     src = flood;
 
-    npmDepsHash = "sha256-md76I7W5QQvfbOmk5ODssMtJAVOj8nvaJ2PakEZ8WUA=";
+    nativeBuildInputs = with self.pkgs; [
+      nodejs
+      pnpm.configHook
+    ];
+
+    pnpmDeps = self.pkgs.pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-ez+n4oieARNKCeyCF6L9TJom90QFVZc0oEpkQx/GpWc=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      pnpm build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/{lib,bin}
+      cp -r {dist,node_modules} $out/lib
+      makeWrapper ${self.pkgs.nodejs} $out/bin/flood --add-flags $out/lib/dist/index.js
+      runHook postInstall
+    '';
+
+    dontStrip = true;
 
     meta = with self.lib; {
       description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
@@ -33,7 +57,7 @@ in {
       license = licenses.gpl3Only;
       maintainers = with maintainers; [winter];
     };
-  };
+  });
 
   river = super.river.overrideAttrs {
     src = river-src;

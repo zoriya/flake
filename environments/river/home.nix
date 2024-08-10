@@ -196,6 +196,7 @@ in {
         profile.outputs = [
           {
             criteria = "eDP-1";
+            status = "enable";
           }
         ];
       }
