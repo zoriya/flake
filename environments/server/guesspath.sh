@@ -4,6 +4,9 @@ set -e
 
 OUT=/mnt/kyoo/shows
 
+if [[ -z "$TR_TORRENT_LABELS" ]]; then
+	exit
+fi
 echo "Running with $TR_TORRENT_NAME $TR_TORRENT_ID"
 
 # name=$(transmission-remote -t $TR_TORRENT_ID -l |
@@ -12,6 +15,6 @@ name=$TR_TORRENT_NAME
 dir=$(guessit "$name" -P "title")
 echo "Guessed '$dir' for torrent '$name'"
 
-transmission-remote -t $TR_TORRENT_ID --move "$OUT/$dir"
+transmission-remote -t "$TR_TORRENT_ID" --move "$OUT/$dir"
 
 # TODO: support multi-files torrent (currently wrapped in an usless directory)
