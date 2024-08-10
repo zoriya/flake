@@ -201,11 +201,11 @@
     "flood": {
       "flake": false,
       "locked": {
-        "lastModified": 1696809319,
-        "narHash": "sha256-imQlHzhGuLbZdhqTgqjgHv1z3tmlyhLmwtGD+mWutPQ=",
+        "lastModified": 1723298664,
+        "narHash": "sha256-tdJ4LPG/kAbEIScOBwzM//pPcYJjlhVhQGXqjm0Ehuw=",
         "owner": "zoriya",
         "repo": "flood",
-        "rev": "afba2fb35a1229e896b543159a1d13cf70ec6290",
+        "rev": "b06f183479f5a1e962581f24e65c13fb51af1f0e",
         "type": "github"
       },
       "original": {
@@ -222,11 +222,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1723168569,
-        "narHash": "sha256-VTo/HNmYQ1ctAzdCOvtInQf9grhSuRLGA8FGP/4pVew=",
+        "lastModified": 1723262140,
+        "narHash": "sha256-k4LYLBZzHV2xNZROeKwOR+OoOL9yg++0XE/8d3u8nbA=",
         "ref": "refs/heads/main",
-        "rev": "33d9c043ef828b062865f42db551d6ddc48e2def",
-        "revCount": 6848,
+        "rev": "6cb85efc501dba4257a94a384100272a6d2ca590",
+        "revCount": 6853,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -335,17 +335,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1721857762,
-        "narHash": "sha256-jK/mGN7iSKUhrX82ZsOSRBf5gNn0E3tLrEdvVfevv/A=",
-        "ref": "refs/heads/feat/river-inService",
-        "rev": "6e9380d4269682bbf0c4c95335627fa9d1260309",
-        "revCount": 3650,
-        "type": "git",
-        "url": "file:///home/zoriya/projects/home-manager"
+        "lastModified": 1720601909,
+        "narHash": "sha256-G6MgCUWjJAonm9vgd1zR0rOF7A0YxN83gcXyEs/tWzY=",
+        "owner": "zoriya",
+        "repo": "home-manager",
+        "rev": "421039337062171eb83a03f790bcb0657ca93a5c",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/zoriya/projects/home-manager"
+        "owner": "zoriya",
+        "repo": "home-manager",
+        "type": "github"
       }
     },
     "impermanence": {
@@ -387,11 +387,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723181997,
-        "narHash": "sha256-2WRdx86F0SjzhJ3/UH0s2RKjOFwo6IHaYUqz+3MnJlI=",
+        "lastModified": 1723228852,
+        "narHash": "sha256-vPk1MWy3atw4OxFWXdGpeLwqmx87Ph/qdAsGn7e1cy4=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "b37609dc280bc1b3f19065e261481f0d25768904",
+        "rev": "585d8caecf1561bec33529f2f890b234d8c5dabb",
         "type": "github"
       },
       "original": {
@@ -476,11 +476,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1722813957,
-        "narHash": "sha256-IAoYyYnED7P8zrBFMnmp7ydaJfwTnwcnqxUElC1I26Y=",
+        "lastModified": 1723175592,
+        "narHash": "sha256-M0xJ3FbDUc4fRZ84dPGx5VvgFsOzds77KiBMW/mMTnI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cb9a96f23c491c081b38eab96d22fa958043c9fa",
+        "rev": "5e0ca22929f3342b19569b21b2f3462f053e497b",
         "type": "github"
       },
       "original": {

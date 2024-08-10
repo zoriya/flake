@@ -21,16 +21,11 @@ in {
   # Use my fork of flood to enable smart scripts.
   flood = self.pkgs.buildNpmPackage {
     pname = "flood";
-    version = "4.7.0";
+    version = "4.8.2";
 
     src = flood;
 
-    npmDepsHash = "sha256-XmDnvq+ni5TOf3UQFc4JvGI3LiGpjbrLAocRvrW8qgk=";
-
-    # The prepack script runs the build script, which we'd rather do in the build phase.
-    npmPackFlags = ["--ignore-scripts"];
-
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    npmDepsHash = "sha256-md76I7W5QQvfbOmk5ODssMtJAVOj8nvaJ2PakEZ8WUA=";
 
     meta = with self.lib; {
       description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
