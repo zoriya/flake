@@ -45,7 +45,7 @@ in {
       runHook preInstall
       mkdir -p $out/{lib,bin}
       cp -r {dist,node_modules} $out/lib
-      makeWrapper ${self.pkgs.nodejs} $out/bin/flood --add-flags $out/lib/dist/index.js
+      ${super.makeWrapper}/bin/wrapProgram ${self.pkgs.nodejs} $out/bin/flood --add-flags $out/lib/dist/index.js
       runHook postInstall
     '';
 
