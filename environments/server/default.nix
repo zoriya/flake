@@ -105,6 +105,17 @@ in {
       };
     };
 
+    virtualHosts."komga.sdg.moe" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:4677";
+        proxyWebsockets = true;
+        extraConfig = "proxy_pass_header Authorization;";
+      };
+    };
+
+
     virtualHosts."reader.sdg.moe" = {
       enableACME = true;
       forceSSL = true;
@@ -163,5 +174,11 @@ in {
       User = "transmission";
       Restart = "on-failure";
     };
+  };
+
+
+  services.komga = {
+    enable = true;
+    port = 4677;
   };
 }
