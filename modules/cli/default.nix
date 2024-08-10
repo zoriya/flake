@@ -24,6 +24,9 @@
   services.geoclue2.geoProviderUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM";
   services.automatic-timezoned.enable = true;
 
+  programs.dconf.enable = true;
+  services.dbus.enable = true;
+
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

@@ -32,9 +32,6 @@
 
   services.avahi.enable = true;
 
-  programs.dconf.enable = true;
-  services.dbus.enable = true;
-
   environment.systemPackages = with pkgs; [
     gnome.gnome-bluetooth
     polkit_gnome
