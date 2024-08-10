@@ -105,16 +105,15 @@ in {
       };
     };
 
-    virtualHosts."komga.sdg.moe" = {
-      enableACME = true;
-      forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://localhost:4677";
-        proxyWebsockets = true;
-        extraConfig = "proxy_pass_header Authorization;";
-      };
-    };
-
+    # virtualHosts."suwayomi.sdg.moe" = {
+    #   enableACME = true;
+    #   forceSSL = true;
+    #   locations."/" = {
+    #     proxyPass = "http://localhost:4677";
+    #     proxyWebsockets = true;
+    #     extraConfig = "proxy_pass_header Authorization;";
+    #   };
+    # };
 
     virtualHosts."reader.sdg.moe" = {
       enableACME = true;
@@ -162,7 +161,12 @@ in {
     };
   };
   # Also allows transmission to reach thoses files
-  systemd.services.transmission.serviceConfig.BindPaths = ["/mnt/kyoo/shows"];
+  systemd.services.transmission.serviceConfig.BindPaths = [
+    "/mnt/kyoo/downloads"
+    "/mnt/kyoo/shows"
+    "/mnt/kyoo/lives"
+    "/mnt/kyoo/manga"
+  ];
   systemd.services.flood = {
     enable = true;
     wantedBy = ["multi-user.target"];
@@ -176,9 +180,16 @@ in {
     };
   };
 
-
-  services.komga = {
-    enable = true;
-    port = 4677;
-  };
+  # services.suwayomi-server = {
+  #   enable = true;
+  #   settings.server = {
+  #     port = 4677;
+  #     # basicAuthEnabled = true;
+  #     # basicAuthUsername = "zoriya";
+  #     # basicAuthPasswordFile = ../../password/zoriya;
+  #     extensionRepos = ["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"];
+  #     downloadAsCbz = true;
+  #   };
+  #   dataDir = "/mnt/kyoo/manga";
+  # };
 }
