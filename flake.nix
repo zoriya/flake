@@ -23,6 +23,8 @@
     };
     ghostty = {
       url = "git+ssh://git@github.com/mitchellh/ghostty";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs-unstable.follows = "nixpkgs";
     };
     flood = {
       url = "github:zoriya/flood";
