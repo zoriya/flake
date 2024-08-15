@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-name=$(guessit "$1" -P "title" | tr -d "[:punct:]")
+name=$(guessit "$1" -P title | tr -d "[:punct:]")
 
 ls /mnt/kyoo/shows/ | tr -d "[:punct:]" | grep -qix "$name"
 

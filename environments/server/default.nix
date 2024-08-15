@@ -52,7 +52,7 @@ in {
 
   services.fail2ban = {
     enable = true;
-    bantime = "-1";
+    bantime = "5w";
     ignoreIP = [
       "192.168.0.0/16"
     ];

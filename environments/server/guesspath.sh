@@ -4,7 +4,8 @@ set -e
 
 OUT=/mnt/kyoo/shows
 
-if [[ -z "$TR_TORRENT_LABELS" ]]; then
+if [[ ! -z "$TR_TORRENT_LABELS" ]]; then
+	echo "Ignoring $TR_TORRENT_NAME since it has labels $TR_TORRENT_LABELS"
 	exit
 fi
 echo "Running with $TR_TORRENT_NAME $TR_TORRENT_ID"
