@@ -181,6 +181,7 @@ in {
     gnome-control-center
     gnome.gnome-weather
     wdisplays
+    wf-recorder
   ];
 
   services.kanshi = {

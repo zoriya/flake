@@ -34,6 +34,8 @@
       rebase.autoStash = true;
       rebase.autoSquash = true;
       branch.sort = "-committerdate";
+      # Disable hooks
+      core.hookspath = "/dev/null";
       # TODO: enable git maintenance
     };
 
