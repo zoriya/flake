@@ -11,6 +11,14 @@
       grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy
     '';
   };
+  record = pkgs.writeShellApplication {
+    name = "record";
+    runtimeInputs = [pkgs.slurp pkgs.wf-recorder];
+    text = ''
+      pkill wf-recorder && exit
+      wf-recorder -g "$(slurp -b 00000000 -s 61616140)" -f "$HOME/rec-$(date +%Y-%m-%d_%H:%M:%S).mp4"
+    '';
+  };
 
   common_binds = {
     "None XF86AudioRaiseVolume" = "spawn '${pkgs.pamixer}/bin/pamixer -i 5'";
@@ -123,6 +131,7 @@ in {
             "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}";
             "Super P" = "spawn 'rofi -show drun -show-icons'";
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
+            "Super+Shift X" = "spawn '${record}/bin/record'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
             "Super+Shift L" = "spawn 'loginctl lock-session'";
@@ -181,7 +190,6 @@ in {
     gnome-control-center
     gnome.gnome-weather
     wdisplays
-    wf-recorder
   ];
 
   services.kanshi = {
