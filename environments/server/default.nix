@@ -105,6 +105,17 @@ in {
       };
     };
 
+    virtualHosts."git.sdg.moe" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:4789";
+        proxyWebsockets = true;
+        extraConfig = "proxy_pass_header Authorization;";
+      };
+    };
+
+
     # virtualHosts."suwayomi.sdg.moe" = {
     #   enableACME = true;
     #   forceSSL = true;
@@ -178,6 +189,14 @@ in {
       User = "transmission";
       Restart = "on-failure";
     };
+  };
+
+  services.gitea = rec {
+    enable = true;
+    disableRegistration = true;
+    domain = "sdg.moe";
+    rootUrl = "https://git.${domain}/";
+    httpPort = 4789;
   };
 
   # services.suwayomi-server = {

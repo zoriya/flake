@@ -83,7 +83,7 @@ in {
       dc = "docker-compose";
       dcd = "docker-compose -f docker-compose.dev.yml";
       op = "xdg-open";
-      py = "python3 2> /dev/null || nix-shell -p python3 --command python3";
+      py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
     };
@@ -148,8 +148,8 @@ in {
       YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
       DIRENV_LOG_FORMAT = "";
       ZSH_TMUX_AUTOSTART = true;
-      ZSH_TMUX_AUTONAME_SESSION = false;
-      ZSH_TMUX_DEFAULT_SESSION_NAME = "home";
+      # ZSH_TMUX_AUTONAME_SESSION = false;
+      # ZSH_TMUX_DEFAULT_SESSION_NAME = "home";
     };
   };
 }
