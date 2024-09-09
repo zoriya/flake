@@ -109,8 +109,6 @@
     bind-key -r C-h run-shell "tmux-sessionizer ~/projects/kyoo"
     bind-key -r C-s run-shell "tmux-sessionizer ~/projects/flake"
     bind-key -r C-n run-shell "tmux-sessionizer ~/projects/blog"
-    bind-key -r C-g run-shell "tmux-sessionizer ~/work/pagga"
-    bind-key -r C-c run-shell "tmux-sessionizer ~/work/Pay.Monitor"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
     run-shell ${pkgs.tmuxPlugins.fzf-tmux-url.rtp}

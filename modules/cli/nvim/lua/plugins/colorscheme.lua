@@ -51,6 +51,10 @@ return {
 			-- keep vim's default behavior of checking the terminal's colors
 			-- Only use lumen to detect runtime changes (that's why VeryLazy is used).
 			-- vim.g.lumen_startup_overwrite = 0
+			if vim.fn.has("wsl") then
+				vim.g.lumen_startup_overwrite = 0
+				vim.opt.background = "light"
+			end
 		end
 	},
 }
