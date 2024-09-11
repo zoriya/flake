@@ -47,6 +47,7 @@
         ".cache/direnv"
         ".local/share/flatpak"
         ".local/share/waydroid"
+        ".local/share/bottles"
         ".var"
         ".cache/flatpak"
         ".local/share/atuin"
