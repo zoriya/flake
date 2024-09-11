@@ -16,6 +16,7 @@
       "/var/lib/tcc"
       "/var/lib/flood"
       "/var/lib/transmission"
+      "/var/lib/gitea"
       "/var/lib/acme"
       "/etc/NetworkManager/system-connections"
       "/etc/tailord/"

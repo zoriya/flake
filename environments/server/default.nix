@@ -31,6 +31,7 @@
        wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
      ";
   };
+
 in {
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
@@ -115,7 +116,6 @@ in {
       };
     };
 
-
     # virtualHosts."suwayomi.sdg.moe" = {
     #   enableACME = true;
     #   forceSSL = true;
@@ -191,12 +191,14 @@ in {
     };
   };
 
-  services.gitea = rec {
+  services.gitea = {
     enable = true;
-    disableRegistration = true;
-    domain = "sdg.moe";
-    rootUrl = "https://git.${domain}/";
-    httpPort = 4789;
+    settings.server = rec {
+      DOMAIN = "sdg.moe";
+      ROOT_URL = "https://git.${DOMAIN}/";
+      HTTP_PORT = 4789;
+      DISABLE_SSH = true;
+    };
   };
 
   # services.suwayomi-server = {
