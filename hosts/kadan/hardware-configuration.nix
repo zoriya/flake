@@ -110,9 +110,7 @@
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
-  # see: https://github.com/NixOS/nixpkgs/issues/322400
-  virtualisation.docker.enableNvidia = true;
-  # hardware.nvidia-container-toolkit.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
 
   hardware.nvidia = {
     # Modesetting is required.
