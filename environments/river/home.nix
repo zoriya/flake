@@ -188,7 +188,7 @@ in {
 
   home.packages = with pkgs; [
     gnome-control-center
-    gnome.gnome-weather
+    gnome-weather
     wdisplays
   ];
 
