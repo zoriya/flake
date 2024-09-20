@@ -45,7 +45,7 @@
   services.avahi.enable = true;
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome-bluetooth
+    gnome-bluetooth
     polkit_gnome
   ];
 

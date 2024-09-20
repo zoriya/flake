@@ -21,7 +21,7 @@
       prev.buildInputs
       ++ [
         pkgs.libdbusmenu-gtk3
-        inputs.astal-river.packages.x86_64-linux.default
+        inputs.astal.packages.x86_64-linux.river
       ];
   });
 in {
