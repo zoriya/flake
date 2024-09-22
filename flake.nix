@@ -31,8 +31,7 @@
       flake = false;
     };
     astal = {
-      # url = "github:aylur/astal";
-      url = "github:zoriya/astal";
+      url = "github:aylur/astal";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     river-src = {
