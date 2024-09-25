@@ -5,6 +5,7 @@
     ./impermanence.nix
   ];
 
+  security.sudo.wheelNeedsPassword = true;
   security.sudo.extraConfig = ''
     Defaults  lecture="never"
   '';
