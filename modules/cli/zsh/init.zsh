@@ -45,5 +45,9 @@ setopt rm_star_silent
 
 # case insensitive completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+# use LS_COLORS for autocompletion
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# ctrl-left/right
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
