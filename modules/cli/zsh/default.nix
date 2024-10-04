@@ -182,6 +182,9 @@
       py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
+      # viu doesn't work with tmux, icat does. using that while waiting
+      viu = "kitty +kitten icat";
+      icat = "kitty +kitten icat";
     };
 
     plugins = [
