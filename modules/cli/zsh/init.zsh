@@ -3,10 +3,6 @@ if [[ -z "$TMUX" ]]; then
 	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
 fi
 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
@@ -47,3 +43,6 @@ function zvm_after_init() {
 eval "$(nix-your-shell zsh)"
 
 setopt rm_star_silent
+
+# case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'

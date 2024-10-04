@@ -1,7 +1,8 @@
-{pkgs, ...}: let
-  configThemeNormal = ./p10k.zsh;
-  configThemeTTY = ./p10k-tty.zsh;
-in {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     eza
     viu
@@ -51,11 +52,106 @@ in {
 
   programs.less.enable = true;
 
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+
+      format = lib.concatStrings [
+        "$fill"
+        "$hostname"
+        "$python"
+        "$nix_shell"
+        "$line_break"
+        "$directory"
+        "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
+        "$character"
+      ];
+
+      right_format = lib.concatStrings [
+        "$cmd_duration"
+        "$status"
+        "$jobs"
+      ];
+
+      fill = {
+        symbol = "·";
+        style = "fg:#808080";
+      };
+
+      directory = {
+        truncate_to_repo = false;
+        fish_style_pwd_dir_length = 1;
+        style = "bold fg:#00AFFF";
+      };
+
+      git_branch = {
+        format = "([($branch(: $remote_branch))]($style))";
+        style = "green";
+      };
+
+      git_commit = {
+        format = "[( $hash$tag)]($style)";
+        style = "green";
+        only_detached = true;
+        tag_disabled = false;
+      };
+
+      git_status = {
+        format = "([$all_status$ahead_behind]($style))";
+        style = "yellow";
+        ahead = " ⇡$count";
+        behind = " ⇣$count";
+        diverged = "";
+        conflicted = " =$count";
+        untracked = " ?$count";
+        stashed = " *$count";
+        modified = " !$count";
+        staged = " +$count";
+        deleted = "";
+        renamed = "";
+      };
+
+      git_state = {
+        format = ''[$state( $progress_current/$progress_total)]($style)'';
+        style = "bright-black";
+      };
+
+      status = {
+        format = " [($symbol ($signal_name )$status)]($style)";
+        pipestatus_format = "[$symbol $pipestatus]($style)";
+        pipestatus_segment_format = "[($signal_name )$status]($style)";
+        symbol = "x";
+        pipestatus = true;
+        disabled = false;
+      };
+
+      cmd_duration = {
+        format = " [$duration]($style)";
+      };
+
+      jobs = {
+        format = " [$symbol$number]($style)";
+      };
+
+      python = {
+        format = "[( \($virtualenv\))]($style)";
+      };
+
+      nix_shell = {
+        format = "[\( $name\) nix]($style)";
+        style = "cyan";
+        heuristic = true;
+      };
+    };
+  };
+
   programs.zsh = {
     enable = true;
     autocd = true;
     autosuggestion.enable = true;
-    enableCompletion = true;
+    # already handled at system level
+    enableCompletion = false;
     syntaxHighlighting.enable = true;
     dotDir = ".config/zsh";
     shellAliases = {
@@ -90,11 +186,6 @@ in {
 
     plugins = [
       {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
-      {
         name = "you-should-use";
         src = pkgs.zsh-you-should-use;
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
@@ -110,26 +201,7 @@ in {
         file = "./custom.zsh";
       }
     ];
-    initExtra = ''
-      # The powerlevel theme I'm using is distgusting in TTY, let's default
-      # to something else
-      # See https://github.com/romkatv/powerlevel10k/issues/325
-      # Instead of sourcing this file you could also add another plugin as
-      # this, and it will automatically load the file for us
-      # (but this way it is not possible to conditionally load a file)
-      # {
-      #   name = "powerlevel10k-config";
-      #   src = lib.cleanSource ./p10k-config;
-      #   file = "p10k.zsh";
-      # }
-      if zmodload zsh/terminfo && (( terminfo[colors] >= 256 )); then
-        [[ ! -f ${configThemeNormal} ]] || source ${configThemeNormal}
-      else
-        [[ ! -f ${configThemeTTY} ]] || source ${configThemeTTY}
-      fi
-
-      ${builtins.readFile ./init.zsh}
-    '';
+    initExtra = builtins.readFile ./init.zsh;
 
     oh-my-zsh = {
       enable = true;
