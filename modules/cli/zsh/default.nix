@@ -136,20 +136,18 @@ in {
       plugins = [
         "sudo"
         "git"
-        "tmux"
         "kubectl"
         "copypath"
         "copyfile"
       ];
     };
 
+    # zprof.enable = true;
+
     sessionVariables = {
       YSU_MESSAGE_FORMAT = "Alias: %alias - %command";
       YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
       DIRENV_LOG_FORMAT = "";
-      ZSH_TMUX_AUTOSTART = true;
-      # ZSH_TMUX_AUTONAME_SESSION = false;
-      # ZSH_TMUX_DEFAULT_SESSION_NAME = "home";
     };
   };
 }

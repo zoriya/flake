@@ -1,3 +1,8 @@
+# Create a new tmux session (with a random name) and attach.
+if [[ -z "$TMUX" ]]; then
+	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+fi
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
