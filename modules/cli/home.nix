@@ -36,6 +36,8 @@
       branch.sort = "-committerdate";
       # Disable hooks
       core.hookspath = "/dev/null";
+      # Break compat with older versions of git (and systems that doesn't support mtime) to have better performances
+      feature.manyFiles = true;
       # TODO: enable git maintenance
     };
 
