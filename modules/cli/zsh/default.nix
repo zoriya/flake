@@ -226,6 +226,13 @@
     ];
     initExtra = builtins.readFile ./init.zsh;
 
+    initExtraFirst = ''
+      # Create a new tmux session (with a random name) and attach.
+      if [[ -z "$TMUX" ]]; then
+      	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+      fi
+    '';
+
     # zprof.enable = true;
 
     sessionVariables = {

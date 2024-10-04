@@ -1,8 +1,3 @@
-# Create a new tmux session (with a random name) and attach.
-if [[ -z "$TMUX" ]]; then
-	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
-fi
-
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
