@@ -229,6 +229,7 @@
       YSU_MESSAGE_FORMAT = "Alias: %alias - %command";
       YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
       DIRENV_LOG_FORMAT = "";
+      WORDCHARS = "_-*";
     };
   };
 }
