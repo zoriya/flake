@@ -200,19 +200,28 @@
         src = ./.;
         file = "./custom.zsh";
       }
+      {
+        name = "sudo";
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/plugins/sudo/sudo.plugin.zsh";
+      }
+      {
+        name = "git";
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
+      }
+      {
+        name = "copypath";
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/plugins/copypath/copypath.plugin.zsh";
+      }
+      {
+        name = "copyfile";
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
+      }
     ];
     initExtra = builtins.readFile ./init.zsh;
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "sudo"
-        "git"
-        "kubectl"
-        "copypath"
-        "copyfile"
-      ];
-    };
 
     # zprof.enable = true;
 
