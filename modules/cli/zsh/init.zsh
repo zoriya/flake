@@ -42,6 +42,8 @@ setopt rm_star_silent
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 # use LS_COLORS for autocompletion
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+# allow manual selection in the completion menu
+zstyle ':completion:*:*:*:*:*' menu select
 
 # ctrl-left/right
 bindkey "^[[1;5C" forward-word
