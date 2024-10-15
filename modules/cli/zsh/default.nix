@@ -143,6 +143,10 @@
         style = "cyan";
         heuristic = true;
       };
+      
+      hostname = {
+        format = "[ $ssh_symbol$hostname]($style)";
+      };
     };
   };
 
