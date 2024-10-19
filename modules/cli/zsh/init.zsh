@@ -48,3 +48,8 @@ zstyle ':completion:*:*:*:*:*' menu select
 # ctrl-left/right
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
