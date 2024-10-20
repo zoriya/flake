@@ -29,6 +29,12 @@
     };
   };
 
+  powerManagement.powerDownCommands = ''
+    for device_wu in /sys/bus/usb/devices/*/power/wakeup; do
+      echo enabled > $device_wu
+    done
+  '';
+
   services.printing.enable = true;
   services.power-profiles-daemon.enable = true;
   security.polkit.enable = true;
