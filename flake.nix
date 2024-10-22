@@ -38,6 +38,10 @@
       url = "github:zoriya/river/br-v0.3.5";
       flake = false;
     };
+    nix-darwin = {
+	url = "github:LnL7/nix-darwin";
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -51,6 +55,7 @@
     impermanence,
     nixos-hardware,
     nix-index-database,
+	nix-darwin,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -134,5 +139,16 @@
 
       lucca = mkSystem "lucca" "wsl" [];
     };
+    darwinConfigurations."toto" = nix-darwin.lib.darwinSystem {
+      modules = [
+{
+nixpkgs.hostPlatform = "aarch64-darwin";
+system.stateVersion = 5;
+services.nix-daemon.enable = true;
+}
+	];
+    };
+
   };
 }
+
