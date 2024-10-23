@@ -39,8 +39,8 @@
       flake = false;
     };
     nix-darwin = {
-	url = "github:LnL7/nix-darwin";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -55,7 +55,7 @@
     impermanence,
     nixos-hardware,
     nix-index-database,
-	nix-darwin,
+    nix-darwin,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -139,16 +139,31 @@
 
       lucca = mkSystem "lucca" "wsl" [];
     };
-    darwinConfigurations."toto" = nix-darwin.lib.darwinSystem {
-      modules = [
-{
-nixpkgs.hostPlatform = "aarch64-darwin";
-system.stateVersion = 5;
-services.nix-daemon.enable = true;
-}
-	];
-    };
 
+    darwinConfigurations."zroux-mac" = nix-darwin.lib.darwinSystem {
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./modules/cli/darwin.nix
+        home-manager.darwinModules.home-manager
+        {
+          nixpkgs.hostPlatform = "aarch64-darwin";
+          system.stateVersion = 5;
+        }
+        {
+          users.users.zroux.home = "/Users/zroux";
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = {inherit inputs;};
+            users.zroux = {
+              imports = [
+                ./modules/cli/home.nix
+                  nix-index-database.hmModules.nix-index
+              ];
+            };
+          };
+        }
+      ];
+    };
   };
 }
-

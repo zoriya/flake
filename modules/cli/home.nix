@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}:
+{
   imports = [
     ./zsh
     ./nvim
@@ -45,48 +50,6 @@
     userName = "Zoe Roux";
   };
 
-  # programs.zellij = {
-  #   enable = true;
-  #   enableZshIntegration = true;
-  # };
-  # xdg.configFile."".text = ''
-  #   copy_on_select false
-  #   default_layout "compact"
-  #   pane_frames false
-  #
-  #   keybinds clear-defaults=true {
-  #     normal {
-  #       bind "Ctrl t" { SwitchToMode "tmux"; }
-  #     }
-  #     {
-  #       bind "[" { SwitchToMode "Scroll"; }
-  #       bind "Ctrl b" { Write 2; SwitchToMode "Normal"; }
-  #       bind "\"" { NewPane "Down"; SwitchToMode "Normal"; }
-  #       bind "%" { NewPane "Right"; SwitchToMode "Normal"; }
-  #       bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-  #       bind "c" { NewTab; SwitchToMode "Normal"; }
-  #       bind "," { SwitchToMode "RenameTab"; }
-  #       bind "p" { GoToPreviousTab; SwitchToMode "Normal"; }
-  #       bind "n" { GoToNextTab; SwitchToMode "Normal"; }
-  #       bind "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
-  #       bind "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
-  #       bind "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
-  #       bind "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
-  #       bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
-  #       bind "l" { MoveFocus "Right"; SwitchToMode "Normal"; }
-  #       bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
-  #       bind "k" { MoveFocus "Up"; SwitchToMode "Normal"; }
-  #       bind "o" { FocusNextPane; }
-  #       bind "d" { Detach; }
-  #       bind "Space" { NextSwapLayout; }
-  #       bind "x" { CloseFocus; SwitchToMode "Normal"; }
-  #     }
-  #   }
-  # '';
-  # programs.zsh.sessionVariables = {
-  #   ZELLIJ_AUTO_EXIT = true;
-  # };
-
   home.packages = [
     (pkgs.writeShellScriptBin "tmux-sessionizer" (builtins.readFile ./tmux-sessionizer.sh))
   ];
@@ -121,12 +84,6 @@
       allowUnfree = true;
       android_sdk.accept_license = true;
     }'';
-
-  # Allow gsettings to work
-  xdg.systemDirs.data = [
-    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
-  ];
 
   # For virt-manager to detect hypervisor
   dconf.settings = {

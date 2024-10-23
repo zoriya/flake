@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   inputs,
   config,
@@ -27,11 +28,24 @@
         "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
       ];
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
+    gc =
+      {
+        automatic = true;
+        options = "--delete-older-than 14d";
+      }
+      // (
+        if pkgs.stdenv.isLinux
+        then {
+          dates = "weekly";
+        }
+        else {
+          interval = {
+            Weekday = 0;
+            Hour = 0;
+            Minute = 0;
+          };
+        }
+      );
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true

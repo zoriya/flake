@@ -3,32 +3,35 @@
   lib,
   ...
 }: {
-  home.packages = with pkgs; [
-    eza
-    viu
-    htop-vim
-    tldr
-    fd
-    duf
-    ncdu
-    ripgrep
-    psmisc
-    fzf
-    nix-your-shell
-    mosh
-    unzip
-    usbutils
-    pciutils
-    sshfs-fuse
-    zip
-    scc
-    bc
-    glow
-    gh
-    alejandra
-    nodePackages.http-server
-    nodePackages.live-server
-  ];
+  home.packages = with pkgs;
+    [
+      eza
+      viu
+      htop-vim
+      tldr
+      fd
+      duf
+      ncdu
+      ripgrep
+      fzf
+      nix-your-shell
+      mosh
+      unzip
+      sshfs-fuse
+      zip
+      scc
+      bc
+      glow
+      gh
+      alejandra
+      nodePackages.http-server
+      nodePackages.live-server
+    ]
+    ++ lib.optional pkgs.stdenv.isLinux [
+      usbutils
+      pciutils
+      psmisc
+    ];
 
   programs.atuin = {
     enable = true;
@@ -143,7 +146,7 @@
         style = "cyan";
         heuristic = true;
       };
-      
+
       hostname = {
         format = "[ $ssh_symbol$hostname]($style)";
       };
