@@ -60,12 +60,12 @@ return {
 					cs = { "omnisharp" },
 					python = { "pyright" },
 					nix = { "nil_ls" },
-					typescript = { "tsserver" },
-					javascript = { "tsserver" },
-					jsx = { "tsserver" },
-					tsx = { "tsserver" },
-					javascriptreact = { "tsserver" },
-					typescriptreact = { "tsserver" },
+					typescript = { "ts_ls" },
+					javascript = { "ts_ls" },
+					jsx = { "ts_ls" },
+					tsx = { "ts_ls" },
+					javascriptreact = { "ts_ls" },
+					typescriptreact = { "ts_ls" },
 					go = { "gopls" },
 					json = { "jsonls" },
 					yaml = { "yamlls" },
@@ -92,8 +92,8 @@ return {
 							},
 						},
 					},
-					tsserver = {
-						root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", ".git"),
+					ts_ls = {
+						root_dir = lspconfig.util.root_pattern("yarn.lock", "package-lock.json", "bun.lockb", ".git"),
 						single_file_support = false,
 						commands = {
 							OrganizeImports = {
