@@ -33,7 +33,6 @@
     wineWowPackages.stable
     wineWowPackages.waylandFull
     winetricks
-    bottles
   ];
   hardware.steam-hardware.enable = true;
   programs.gamescope.enable = true;
