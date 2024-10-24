@@ -221,6 +221,16 @@
         file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
       }
       {
+        name = "kubectl";
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/plugins/kubectl/kubectl.plugin.zsh";
+      }
+      {
+        name = "clipcopy"; # dependency of copypath & copyfile
+        src = pkgs.oh-my-zsh;
+        file = "share/oh-my-zsh/lib/clipboard.zsh";
+      }
+      {
         name = "copypath";
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/copypath/copypath.plugin.zsh";
@@ -229,11 +239,6 @@
         name = "copyfile";
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
-      }
-      {
-        name = "clipcopy"; # dependency of copypath & copyfile
-        src = pkgs.oh-my-zsh;
-        file = "share/oh-my-zsh/lib/clipboard.zsh";
       }
     ];
     initExtra = builtins.readFile ./init.zsh;
