@@ -27,7 +27,7 @@
       nodePackages.http-server
       nodePackages.live-server
     ]
-    ++ lib.optional pkgs.stdenv.isLinux [
+    ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils
       pciutils
       psmisc

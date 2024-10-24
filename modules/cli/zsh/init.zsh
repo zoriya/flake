@@ -1,3 +1,7 @@
+export ZSH_CACHE_DIR="$HOME/.cache/zsh";
+mkdir -p "$ZSH_CACHE_DIR/completions"
+fpath+="$ZSH_CACHE_DIR/completions"
+
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
