@@ -10,7 +10,6 @@ return {
 		},
 		opts = {
 			write_all_buffers = true,
-			execution_message = { enabled = false },
 			condition = function(buf)
 				if not vim.g.auto_save_state then
 					return false
