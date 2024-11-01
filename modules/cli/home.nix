@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
-{
+{pkgs, ...}: {
   imports = [
     ./zsh
     ./nvim
@@ -26,6 +21,12 @@
       signByDefault = true;
       key = "~/.ssh/id_rsa.pub";
     };
+    # TODO: unstable feature not in my fork yet
+    # maintenance = {
+    #   enable = false;
+    #   # TODO: figure out a way to specify all repositories in ~/projects & ~/work at run time
+    #   repositories = [];
+    # };
     extraConfig = {
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
@@ -43,7 +44,6 @@
       core.hookspath = "/dev/null";
       # Break compat with older versions of git (and systems that doesn't support mtime) to have better performances
       feature.manyFiles = true;
-      # TODO: enable git maintenance
     };
 
     userEmail = "zoe.roux@zoriya.dev";

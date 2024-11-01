@@ -157,8 +157,6 @@
     enable = true;
     autocd = true;
     autosuggestion.enable = true;
-    # already handled at system level
-    enableCompletion = false;
     syntaxHighlighting.enable = true;
     dotDir = ".config/zsh";
     shellAliases = {
@@ -193,6 +191,12 @@
       viu = "kitty +kitten icat";
       icat = "kitty +kitten icat";
     };
+    shellGlobalAliases = {
+      "..." = "../..";
+      "...." = "../../..";
+      "....." = "../../../..";
+      "......" = "../../../../..";
+    };
 
     plugins = [
       {
@@ -204,11 +208,6 @@
         name = "zsh-vi-mode";
         src = pkgs.zsh-vi-mode;
         file = "share/zsh-vi-mode/zsh-vi-mode.zsh";
-      }
-      {
-        name = "custom";
-        src = ./.;
-        file = "./custom.zsh";
       }
       {
         name = "sudo";
@@ -241,13 +240,18 @@
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
     ];
-    initExtra = builtins.readFile ./init.zsh;
-
     initExtraFirst = ''
       # Create a new tmux session (with a random name) and attach.
       if [[ -z "$TMUX" ]]; then
       	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
       fi
+    '';
+    initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
+    initExtra = builtins.readFile ./init.zsh;
+
+    envExtra = ''
+      # disable /etc/zshrc & co (nixos one is really bad)
+      setopt no_global_rcs
     '';
 
     # zprof.enable = true;
