@@ -31,19 +31,27 @@ function zvm_after_init() {
 	}
 	zle -N foreground
 	bindkey ^Z foreground
-
 }
 
 eval "$(nix-your-shell zsh)"
 
+# * empty is not an error
 setopt rm_star_silent
+# allow comments in interactive sessions
+setopt interactivecomments
 
 # ctrl-left/right
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
+(whence -w run-help | grep -q alias) && unalias run-help
+autoload run-help
+
 # Allow customization per client.
 [[ -f ~/.config/zsh/custom.zsh ]] && source ~/.config/zsh/custom.zsh
+
+
+
 
 push() {
 	if [[ -z "$1" ]]; then
@@ -83,9 +91,6 @@ flakify() {
 	fi
 	direnv allow
 }
-
-(whence -w run-help | grep -q alias) && unalias run-help
-autoload run-help
 
 dotenv() {
 	DOTENV=".env"

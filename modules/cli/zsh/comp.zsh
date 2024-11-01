@@ -3,10 +3,10 @@ export ZSH_CACHE_DIR="$HOME/.cache/zsh";
 mkdir -p "$ZSH_CACHE_DIR/completions"
 fpath+="$ZSH_CACHE_DIR/completions"
 
-# case insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# enable completion from the middle of the word (MUST be specified just ofter the case-insensitive completion)
-zstyle ':completion:*' matcher-list '+l:|=* r:|=*'
+# default completion system
+zstyle ':completion:*' completer _complete
+# case insensitive completion & enable completion from the middle of the word 
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 # use LS_COLORS for autocompletion
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # allow manual selection in the completion menu
