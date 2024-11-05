@@ -205,11 +205,6 @@
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
       }
       {
-        name = "zsh-vi-mode";
-        src = pkgs.zsh-vi-mode;
-        file = "share/zsh-vi-mode/zsh-vi-mode.zsh";
-      }
-      {
         name = "sudo";
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/sudo/sudo.plugin.zsh";
