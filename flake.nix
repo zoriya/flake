@@ -141,7 +141,7 @@
     };
 
     darwinConfigurations."zroux-mac" = nix-darwin.lib.darwinSystem {
-      specialArgs = { inherit inputs; };
+      specialArgs = {inherit inputs;};
       modules = [
         ./modules/cli/darwin.nix
         home-manager.darwinModules.home-manager
@@ -158,7 +158,8 @@
             users.zroux = {
               imports = [
                 ./modules/cli/home.nix
-                  nix-index-database.hmModules.nix-index
+                ./modules/gui/ghostty.nix
+                nix-index-database.hmModules.nix-index
               ];
             };
           };

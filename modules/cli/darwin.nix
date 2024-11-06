@@ -19,7 +19,6 @@
     vim
     tmux
     jq
-    mosh
   ];
 
   programs.zsh.enable = true;
@@ -32,5 +31,4 @@
     };
     info.enable = true;
   };
-
 }

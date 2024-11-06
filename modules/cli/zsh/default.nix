@@ -15,7 +15,6 @@
       ripgrep
       fzf
       nix-your-shell
-      mosh
       unzip
       sshfs-fuse
       zip
@@ -238,7 +237,7 @@
     initExtraFirst = ''
       # Create a new tmux session (with a random name) and attach.
       if [[ -z "$TMUX" ]]; then
-      	exec tmux new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+      	exec tmux -u new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
       fi
     '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
