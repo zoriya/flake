@@ -21,7 +21,7 @@ in {
   # Use my fork of flood to enable smart scripts.
   flood = self.stdenv.mkDerivation (finalAttrs: {
     pname = "flood";
-    version = "4.8.3-dirty";
+    version = "4.8.4-dirty";
 
     src = flood;
 
@@ -33,7 +33,7 @@ in {
 
     pnpmDeps = self.pkgs.pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-ez+n4oieARNKCeyCF6L9TJom90QFVZc0oEpkQx/GpWc=";
+      hash = "sha256-as/ZVgR+yf9tkz+HG1U66oKGvpTGMW23dQ9M7QHnV4U=";
     };
 
     buildPhase = ''

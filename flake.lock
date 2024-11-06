@@ -149,11 +149,11 @@
     "flood": {
       "flake": false,
       "locked": {
-        "lastModified": 1723758821,
-        "narHash": "sha256-0j6BAla7uh2atcq3F9KbRnU7cDcPpRDelmrt4MqSubg=",
+        "lastModified": 1730890271,
+        "narHash": "sha256-YB+ijlU1Jtx8G/pzVRSswbfwvxpjmAvLgfEXRLVus2k=",
         "owner": "zoriya",
         "repo": "flood",
-        "rev": "b256916973cbdb2ff6f3e61345f360fc6472bfc1",
+        "rev": "bc56d5331cd0c6ff9fb7f65e500a5a34a3f3c411",
         "type": "github"
       },
       "original": {
