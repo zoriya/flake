@@ -37,6 +37,7 @@
       map kitty_mod+i scroll_to_prompt 1
       map kitty_mod+space show_last_command_output
 
+      cursor_shape beam
       include light.conf
       include theme.conf
     '';
