@@ -89,6 +89,7 @@
 
       git_branch = {
         format = "([($branch(: $remote_branch))]($style))";
+        only_attached = true;
         style = "green";
       };
 
@@ -115,8 +116,7 @@
       };
 
       git_state = {
-        format = ''[$state( $progress_current/$progress_total)]($style)'';
-        style = "bright-black";
+        format = "( [$state( $progress_current/$progress_total)]($style))";
       };
 
       status = {
@@ -182,6 +182,7 @@
       # Misc
       dc = "docker-compose";
       dcd = "docker-compose -f docker-compose.dev.yml";
+      k = "kubectl";
       op = "xdg-open";
       py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
       jctl = "sudo journalctl -n 1000 -fu";
@@ -214,11 +215,6 @@
         file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
       }
       {
-        name = "kubectl";
-        src = pkgs.oh-my-zsh;
-        file = "share/oh-my-zsh/plugins/kubectl/kubectl.plugin.zsh";
-      }
-      {
         name = "clipcopy"; # dependency of copypath & copyfile
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/lib/clipboard.zsh";
@@ -241,6 +237,19 @@
       fi
     '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
+    completionInit = ''
+      # The globbing is a little complicated here:
+      # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+      # - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+      # - '.' matches "regular files"
+      # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.autoload -Uz compinit
+      autoload -Uz compinit
+      if [[ -n $ZSH_CACHE_DIR/.zcompdump(#qN.mh+24) ]]; then
+      	compinit;
+      else
+      	compinit -C;
+      fi;
+    '';
     initExtra = builtins.readFile ./init.zsh;
 
     envExtra = ''
