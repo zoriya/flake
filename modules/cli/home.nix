@@ -77,6 +77,10 @@
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
     run-shell ${pkgs.tmuxPlugins.fzf-tmux-url.rtp}
+
+    # https://github.com/tmux/tmux/issues/4162
+    set -gu default-command
+    set -g default-shell "$SHELL"
   '';
   # terminal = "\$TERM";
 
