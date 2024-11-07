@@ -94,7 +94,7 @@
       };
 
       git_commit = {
-        format = "[( $hash$tag)]($style)";
+        format = "[($hash$tag)]($style)";
         style = "green";
         only_detached = true;
         tag_disabled = false;
