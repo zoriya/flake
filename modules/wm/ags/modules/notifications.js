@@ -32,7 +32,13 @@ export const DNDToggle = (props) =>
 /** @param {import("../types/widgets/box").BoxProps} props */
 export const Indicator = ({ ...props }) =>
 	Widget.Box({
-		visible: notifications.bind("notifications").as((x) => x.length > 0),
+		visible: Utils.merge(
+			[
+				notifications.bind("notifications").as((x) => x.length > 0),
+				notifications.bind("dnd"),
+			],
+			(hasNotif, dnd) => hasNotif && !dnd,
+		),
 		children: [
 			Widget.Icon({ icon: "preferences-system-notifications-symbolic" }),
 			Widget.Revealer({

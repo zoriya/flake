@@ -120,8 +120,8 @@
       };
 
       status = {
-        format = " [($symbol ($signal_name )$status)]($style)";
-        pipestatus_format = "[$symbol $pipestatus]($style)";
+        format = " [($symbol($signal_name )$status)]($style)";
+        pipestatus_format = "[$symbol$pipestatus]($style)";
         pipestatus_segment_format = "[($signal_name )$status]($style)";
         symbol = "x";
         pipestatus = true;
