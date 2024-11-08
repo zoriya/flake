@@ -1,7 +1,19 @@
 import Gio from "gi://Gio";
-import GLib from "gi://GLib?version=2.0";
-
 import { SimpleToggleButton } from "../misc/menu.js";
+
+const interfaceXml = `
+<node name="/nl/whynothugo/darkman">
+   <interface name="nl.whynothugo.darkman">
+      <signal name="ModeChanged">
+         <arg name="NewMode" type="s" />
+      </signal>
+      <property name="Mode" type="s" access="readwrite">
+         <annotation name="org.freedesktop.DBus.Property.EmitsChangedSignal" value="true" />
+      </property>
+   </interface>
+</node>
+`;
+const Darkman = Gio.DBusProxy.makeProxyWrapper(interfaceXml);
 
 const theme = Variable(/** @type {"light" | "dark"} */ ("light"));
 
@@ -28,24 +40,18 @@ export const Toggle = ({ ...props } = {}) =>
 	});
 
 function init() {
-	const settings = new Gio.Settings({
-		schema: "org.gnome.desktop.interface",
-	});
-	const initial = /** @type {"prefer-light" | "prefer-dark"}} */ (
-		settings.get_value("color-scheme").get_string()[0]
+	const darkman = Darkman(
+		Gio.DBus.session,
+		"nl.whynothugo.darkman",
+		"/nl/whynothugo/darkman",
 	);
-	theme.setValue(/** @type {any}} */ (initial.substring("prefer-".length)));
-	theme.connect("changed", () => {
-		settings.set_string("color-scheme", `prefer-${theme.value}`);
-		settings.set_string(
-			"gtk-theme",
-			`adw-gtk3${theme.value === "dark" ? "-dark" : ""}`,
-		);
 
-		const conf = GLib.get_user_config_dir();
-		Utils.execAsync(
-			`/bin/sh -c 'ln -sf ${conf}/kitty/${theme.value}.conf ${conf}/kitty/theme.conf && pkill -USR1 kitty'`,
-		).catch(print);
+	theme.value = darkman.Mode;
+	theme.connect("changed", () => {
+		darkman.Mode = theme.value;
+	});
+	darkman.connectSignal("ModeChanged", (_proxy, _senderName, nTheme) => {
+		theme.value = nTheme[0];
 	});
 }
 init();
