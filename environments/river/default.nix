@@ -14,7 +14,6 @@
         user = "greeter";
       };
       initial_session = {
-        # zsh -c is to give river access to profile variables
         command = "${pkgs.systemd}/bin/systemctl --wait --user start river.service";
         user = "zoriya";
       };

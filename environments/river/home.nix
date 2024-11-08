@@ -59,7 +59,7 @@ in {
       ];
 
       default-attach-mode = "top";
-      focus-follows-cursor = "normal"; # might try "always" if this does not feel right
+      focus-follows-cursor = "normal";
       set-cursor-warp = "on-focus-change";
 
       hide-cursor = {
