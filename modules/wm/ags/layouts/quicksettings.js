@@ -99,6 +99,7 @@ const VerificationMenu = ({ name, icon, title, command }) =>
 			Widget.Button({
 				onClicked: () => {
 					opened.value = "";
+					App.closeWindow("quicksettings");
 					Utils.execAsync(command);
 				},
 				child: Widget.Label({
