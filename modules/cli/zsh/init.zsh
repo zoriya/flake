@@ -130,12 +130,10 @@ dotenv() {
 		shift
 	fi
 
-	ENV=$(cat $DOTENV | sed '/^#/d' | tr '\n' ' ')
-
 	if [[ -z $* ]]; then
-		export ${=ENV}
+		set -a && source $DOTENV && set +a
 	else
-		(export ${=ENV}; $*)
+		(set -a && source $DOTENV && set +a && $*)
 	fi
 }
 
