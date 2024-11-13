@@ -120,7 +120,7 @@
       };
 
       status = {
-        format = " [($symbol($signal_name )$status)]($style)";
+        format = " [($symbol$status(-$signal_name))]($style)";
         pipestatus_format = "[$symbol$pipestatus]($style)";
         pipestatus_segment_format = "[($signal_name )$status]($style)";
         symbol = "x";
@@ -133,6 +133,7 @@
       };
 
       jobs = {
+        symbol = "&";
         format = " [$symbol$number]($style)";
       };
 

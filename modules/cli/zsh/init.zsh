@@ -159,3 +159,6 @@ proxy() {
 	echo "Proxying port $1 to http://proxy.sdg.moe"
 	ssh -NR "5000:localhost:$1" ssh.sdg.moe
 }
+
+# disable space between right prompt and end of line
+ZLE_RPROMPT_INDENT=0
