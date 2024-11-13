@@ -229,6 +229,5 @@ in {
     unite
   ];
 
-  xdg.configFile."autostart/discord.desktop".source = "${pkgs.discord}/share/applications/discord.desktop";
   xdg.configFile."autostart/youtube-music.desktop".source = "${pkgs.youtube-music}/share/applications/youtube-music.desktop";
 }

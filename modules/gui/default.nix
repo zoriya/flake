@@ -17,7 +17,7 @@ in {
 
   home.packages = with pkgs; [
     google-chrome
-    discord
+    vesktop
     firefox
     mpv
     xdg-utils
@@ -31,15 +31,6 @@ in {
     playerctl
     postman
   ];
-
-  xdg.configFile."discord/settings.json" = {
-    force = true;
-    text = ''
-      {
-        "SKIP_HOST_UPDATE": true
-      }
-    '';
-  };
 
   home.sessionVariables = rec {
     # Waiting for https://github.com/mitchellh/ghostty/issues/809 before switching to ghostty

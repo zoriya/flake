@@ -55,6 +55,7 @@
         ".mozilla"
         ".config/google-chrome"
         ".config/discord"
+        ".config/vesktop"
         ".config/YouTube\ Music"
         ".config/gh"
         # Don't reinstall plugins on reboot

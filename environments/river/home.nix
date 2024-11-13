@@ -54,7 +54,6 @@ in {
         "${pkgs.river-luatile}/bin/river-luatile"
         "wallpaper"
         "ags"
-        "discord"
         "youtube-music"
       ];
 
@@ -94,6 +93,7 @@ in {
       rule-add = {
         "-app-id" = {
           "discord" = "tags $((1 << 2))";
+          "vesktop" = "tags $((1 << 2))";
           "'YouTube Music'" = "tags $((1 << 1))";
           # disable all client side decorations
           "'*'" = "ssd";
