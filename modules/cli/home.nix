@@ -3,11 +3,12 @@
     ./zsh
     ./nvim
   ];
-
-  programs.direnv.enable = true;
-  programs.direnv.stdlib = builtins.readFile ./direnv.sh;
-  programs.direnv.nix-direnv.enable = true;
-  programs.direnv.config = {warn_timeout = "500h";};
+  programs.direnv = {
+    enable = true;
+    stdlib = builtins.readFile ./direnv.sh;
+    nix-direnv.enable = true;
+    config = {warn_timeout = "500h";};
+  };
 
   programs.git = {
     enable = true;

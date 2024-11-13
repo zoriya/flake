@@ -17,27 +17,31 @@ in {
     wallpaper
   ];
 
-  services.darkman = {
+  services.darkman = let
+    genTheme = theme: {
+      color-scheme = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface color-scheme prefer-${theme}";
+      gtk3 = let
+        suffix =
+          if theme == "light"
+          then ""
+          else "-dark";
+      in "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3${suffix}";
+      kit = ''
+        ${pkgs.coreutils}/bin/ln -sf $XDG_CONFIG_HOME/kitty/${theme}.conf $XDG_CONFIG_HOME/kitty/theme.conf
+        ${pkgs.procps}/bin/pkill -USR1 kitty
+      '';
+      # ghostty = ''
+      #   echo ${theme} > ~/.config/ghostty/theme.config
+      #   ghostty +reload_config
+      # '';
+    };
+  in {
     enable = true;
     settings = {
       usegeoclue = true;
     };
-    lightModeScripts = {
-      color-scheme = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface color-scheme prefer-light";
-      gtk3 = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3";
-      kittycs = ''
-        ${pkgs.coreutils}/bin/ln -sf $XDG_CONFIG_HOME/kitty/light.conf $XDG_CONFIG_HOME/kitty/theme.conf
-        ${pkgs.procps}/bin/pkill -USR1 kitty
-      '';
-    };
-    darkModeScripts = {
-      color-scheme = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface color-scheme prefer-dark";
-      gtk3 = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark";
-      kittycs = ''
-        ${pkgs.coreutils}/bin/ln -sf $XDG_CONFIG_HOME/kitty/dark.conf $XDG_CONFIG_HOME/kitty/theme.conf
-        ${pkgs.procps}/bin/pkill -USR1 kitty
-      '';
-    };
+    lightModeScripts = genTheme "light";
+    darkModeScripts = genTheme "dark";
   };
 
   programs.hyprlock = {
