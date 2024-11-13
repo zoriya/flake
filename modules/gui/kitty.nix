@@ -27,9 +27,6 @@
       map ctrl+minus change_font_size current -2.0
       map ctrl+backspace change_font_size current 0
 
-      # map kitty_mod+r launch --type background --stdin-source=@screen_scrollback sh -c 'grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | sort -u | rofi -dmenu -p "Launch in browser" | xargs xdg-open'
-      map kitty_mod+r open_url_with_hints
-
       map kitty_mod+e scroll_line_up
       map kitty_mod+y scroll_line_down
 

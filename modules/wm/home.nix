@@ -30,10 +30,15 @@ in {
         ${pkgs.coreutils}/bin/ln -sf $XDG_CONFIG_HOME/kitty/${theme}.conf $XDG_CONFIG_HOME/kitty/theme.conf
         ${pkgs.procps}/bin/pkill -USR1 kitty
       '';
-      # ghostty = ''
-      #   echo ${theme} > ~/.config/ghostty/theme.config
-      #   ghostty +reload_config
-      # '';
+      ghostty = let
+        variant =
+          if theme == "light"
+          then "latte"
+          else "mocha";
+      in ''
+          echo "theme = catppuccin-${variant}" > ~/.config/ghostty/theme.config
+        #   ghostty +reload_config
+      '';
     };
   in {
     enable = true;
