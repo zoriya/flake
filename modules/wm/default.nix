@@ -29,13 +29,17 @@
     };
   };
 
-  powerManagement.powerDownCommands = ''
-    for device_wu in /sys/bus/usb/devices/*/power/wakeup; do
-      echo enabled > $device_wu
-    done
-    # disable bluetooth
-    echo disabled > /sys/bus/usb/devices/3-10/power/wakeup
-  '';
+  powerManagement = {
+    powerDownCommands = ''
+      for device_wu in /sys/bus/usb/devices/*/power/wakeup; do
+        echo enabled > $device_wu
+      done
+      ${pkgs.util-linux}/bin/rfkill block bluetooth
+    '';
+    powerUpCommands = ''
+      ${pkgs.util-linux}/bin/rfkill unblock bluetooth
+    '';
+  };
 
   services.printing.enable = true;
   services.power-profiles-daemon.enable = true;
