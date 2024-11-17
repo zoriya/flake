@@ -54,6 +54,7 @@ in {
         "${pkgs.river-luatile}/bin/river-luatile"
         "wallpaper"
         "ags"
+        "vesktop"
         "youtube-music"
       ];
 
