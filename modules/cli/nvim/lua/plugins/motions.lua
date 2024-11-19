@@ -95,7 +95,7 @@ return {
 		keys = {
 			{ "gx" },
 			{ "cr",         desc = "Replace with register" },
-			{ "<leader>cr", '"+cr',                        desc = "Replace with system clipboard" },
+			{ "<leader>cr", '"+cr',                        remap = true, desc = "Replace with system clipboard" },
 		},
 	},
 

@@ -65,7 +65,7 @@ return {
 			},
 			views = {
 				mini = {
-					timeout = 5000,
+					timeout = 2000,
 					reverse = false,
 				},
 			},
