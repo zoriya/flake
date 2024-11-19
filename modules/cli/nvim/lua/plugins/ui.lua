@@ -150,7 +150,7 @@ return {
 			},
 			user_default_options = {
 				mode = "virtualtext",
-				RGB = true,
+				RGB = false,
 				RRGGBB = true,
 				names = false,
 				RRGGBBAA = true,
@@ -230,9 +230,6 @@ return {
 		dependencies = "nvim-lua/plenary.nvim",
 		config = true,
 		event = "VeryLazy",
-		keys = {
-			{ "<leader>t", "<cmd>TodoQuickFix<cr>", desc = "Open todo list" },
-		}
 	},
 
 	{

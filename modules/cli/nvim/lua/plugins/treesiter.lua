@@ -4,9 +4,6 @@ return {
 		version = false,
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects"
-		},
 		opts = {
 			highlight = {
 				enable = true,
@@ -15,21 +12,6 @@ return {
 			indent = { enable = true },
 			ensure_installed = "all",
 			sync_install = false,
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = false,
-
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-						["ia"] = "@parameter.inner",
-						["aa"] = "@parameter.outer",
-					},
-				},
-			},
 			matchup = { enable = true },
 		},
 		main = "nvim-treesitter.configs",
@@ -71,5 +53,16 @@ return {
 		config = function()
 			vim.keymap.del("o", "z%")
 		end
-	}
+	},
+
+	{
+		"echasnovski/mini.ai",
+		opts = {
+			custom_textobjects = {
+				B = { { "%b{}" }, "^.().*().$" }
+			},
+			n_lines = 500,
+		},
+		event = "VeryLazy",
+	},
 }

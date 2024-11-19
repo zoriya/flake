@@ -2,10 +2,10 @@ return {
 	{
 		"ggandor/leap.nvim",
 		keys = {
-			{ "s",  "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
-			{ "S",  "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
-			{ "z",  "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
-			{ "Z",  "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
+			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
+			{ "S", "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
+			{ "z", "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
+			{ "Z", "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
 		},
 	},
 
@@ -44,10 +44,36 @@ return {
 	"tpope/vim-sleuth",
 
 	{
-		"kylechui/nvim-surround",
-		version = "*",
-		event = "VeryLazy",
-		config = true,
+		"echasnovski/mini.surround",
+		opts = {
+			mappings = {
+				add = "ys",
+				replace = "cs",
+				delete = "ds",
+
+				find = '',
+				find_left = '',
+				highlight = '',
+				update_n_lines = '',
+				suffix_last = 'l',
+				suffix_next = 'n',
+			},
+			custom_surroundings = {
+				B = { output = { left = "{", right = "}" } },
+			},
+		},
+		config = function(_, opts)
+			require("mini.surround").setup(opts)
+
+			vim.keymap.del('x', 'ys')
+			vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
+			vim.keymap.set('n', 'yss', 'ys_', { remap = true })
+		end,
+		keys = {
+			{ "ys", desc = "Add surrounding" },
+			{ "cs", desc = "Change surroundings" },
+			{ "ds", desc = "Delete surroundings" },
+		},
 	},
 
 	{
@@ -59,10 +85,17 @@ return {
 	},
 
 	{
-		"vim-scripts/ReplaceWithRegister",
+		"echasnovski/mini.operators",
+		opts = {
+			replace = {
+				prefix = "cr",
+				reindent_linewise = true,
+			},
+		},
 		keys = {
-			{ "cr",         "<Plug>ReplaceWithRegisterOperator",   desc = "Replace with register" },
-			{ "<leader>cr", '"+<Plug>ReplaceWithRegisterOperator', desc = "Replace with system clipboard" },
+			{ "gx" },
+			{ "cr",         desc = "Replace with register" },
+			{ "<leader>cr", '"+cr',                        desc = "Replace with system clipboard" },
 		},
 	},
 
@@ -86,7 +119,6 @@ return {
 			{ "gA", desc = "Align with preview" }
 		},
 		config = true,
-		version = '*',
 	},
 
 	{
