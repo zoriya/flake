@@ -118,6 +118,8 @@ in {
             "Super Comma" = "focus-output previous";
             "Super+Shift Period" = "send-to-output -current-tags next";
             "Super+Shift Comma" = "send-to-output -current-tags previous";
+            "Super+Control+Shift Period" = "send-to-output next";
+            "Super+Control+Shift Comma" = "send-to-output previous";
 
             "Super H" = "send-layout-cmd luatile 'set_mfact(-0.05)'";
             "Super L" = "send-layout-cmd luatile 'set_mfact( 0.05)'";
