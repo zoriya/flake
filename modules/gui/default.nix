@@ -33,8 +33,7 @@ in {
   ];
 
   home.sessionVariables = rec {
-    # Waiting for https://github.com/mitchellh/ghostty/issues/809 before switching to ghostty
-    TERMINAL = "kitty";
+    TERMINAL = "ghostty";
     BROWSER = "firefox";
     DEFAULT_BROWSER = BROWSER;
     # For rider
