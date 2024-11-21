@@ -36,7 +36,7 @@ const ArtistLabel = ({ player, ...props }) =>
 		wrap: true,
 		truncate: "end",
 		hpack: "start",
-		label: player.bind("track_artists").transform((x) => x.join(", ")),
+		label: player.bind("track_artists").transform((x) => x.map(y => y.replace(/- Topic$/, "")).join(", ")),
 		...props,
 	});
 
@@ -147,7 +147,7 @@ export const LinePlayer = ({ player, ...props }) =>
 			Widget.Label({
 				label: Utils.merge(
 					[player.bind("track_title"), player.bind("track_artists")],
-					(title, artists) => `${title} - ${artists.join(", ")}`,
+					(title, artists) => `${title} - ${artists.map(x => x.replace(/- Topic$/, "")).join(", ")}`,
 				),
 				maxWidthChars: 30,
 				wrap: true,
