@@ -18,8 +18,14 @@ if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
 	exit 0
 fi
 
+current_session=$(tmux display-message -p "#S")
+
 if ! tmux has-session "-t=$selected_name" 2> /dev/null; then
 	tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
 tmux switch-client -t "$selected_name"
+
+if [[ "$current_session" == \#* ]]; then
+	tmux kill-session -t "$current_session"
+fi

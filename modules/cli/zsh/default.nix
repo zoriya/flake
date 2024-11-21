@@ -188,6 +188,7 @@
       py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
+      mi = "mediainfo";
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
       icat = "kitty +kitten icat";
@@ -234,7 +235,7 @@
     initExtraFirst = ''
       # Create a new tmux session (with a random name) and attach.
       if [[ -z "$TMUX" ]]; then
-      	exec tmux -u new-session -s "$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+      	exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
       fi
     '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
