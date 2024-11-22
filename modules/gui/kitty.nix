@@ -15,6 +15,8 @@
       tab_bar_edge = "top";
       dynamic_background_opacity = true;
     };
+    # Use ghostty one instead
+    shellIntegration.enableZshIntegration = false;
 
     extraConfig = ''
       clear_all_shortcuts yes

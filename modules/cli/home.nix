@@ -64,17 +64,22 @@
     set -g set-clipboard on
 
     set-window-option -g mode-keys vi
-    bind v copy-mode
-    bind -T copy-mode-vi i send -X cancel
-    bind -T copy-mode-vi v send -X begin-selection
-    bind -T copy-mode-vi V send -X select-line
-    bind -T copy-mode-vi y send -X copy-selection -x
+    bind-key v copy-mode
+    bind-key -T copy-mode-vi i send -X cancel
+    bind-key -T copy-mode-vi v send -X begin-selection
+    bind-key -T copy-mode-vi V send -X select-line
+    bind-key -T copy-mode-vi y send -X copy-selection -x
     bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection -x
 
-    bind-key -r f run-shell "tmux neww tmux-sessionizer"
-    bind-key -r C-h run-shell "tmux-sessionizer ~/projects/kyoo"
-    bind-key -r C-s run-shell "tmux-sessionizer ~/projects/flake"
-    bind-key -r C-n run-shell "tmux-sessionizer ~/projects/blog"
+    bind-key [ copy-mode \; send-keys -X previous-prompt
+    bind-key ] copy-mode \; send-keys -X next-prompt
+    bind-key -T copy-mode-vi [ send-keys -X previous-prompt
+    bind-key -T copy-mode-vi ] send-keys -X next-prompt
+
+    bind-key f run-shell "tmux neww tmux-sessionizer"
+    bind-key C-h run-shell "tmux-sessionizer ~/projects/kyoo"
+    bind-key C-s run-shell "tmux-sessionizer ~/projects/flake"
+    bind-key C-n run-shell "tmux-sessionizer ~/projects/blog"
 
     run-shell ${pkgs.tmuxPlugins.sensible.rtp}
     run-shell ${pkgs.tmuxPlugins.fzf-tmux-url.rtp}
@@ -83,7 +88,6 @@
     set -gu default-command
     set -g default-shell "$SHELL"
   '';
-  # terminal = "\$TERM";
 
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
