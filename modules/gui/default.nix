@@ -1,10 +1,11 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: let
   # When editing this, don't forget to edit home.sessionVariables.
-  browser = "firefox.desktop";
+  browser = "zen.desktop";
   editor = "nvim.desktop";
   pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
@@ -17,8 +18,9 @@ in {
 
   home.packages = with pkgs; [
     google-chrome
-    vesktop
     firefox
+    (import inputs.zen { system = "x86_64-linux"; }).zen-browser
+    vesktop
     mpv
     xdg-utils
     zathura
@@ -34,7 +36,7 @@ in {
 
   home.sessionVariables = rec {
     TERMINAL = "ghostty";
-    BROWSER = "firefox";
+    BROWSER = "zen";
     DEFAULT_BROWSER = BROWSER;
     # For rider
     FLATPAK_ENABLE_SDK_EXT = "*";

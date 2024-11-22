@@ -23,7 +23,7 @@
   fileSystems."/tmp" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "size=8G" "mode=755" ];
+    options = [ "size=32G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
@@ -36,7 +36,10 @@
     fsType = "vfat";
   };
 
-  swapDevices = [];
+  swapDevices = [{
+    device = "/nix/persist/var/cache/swapfile";
+    size = 64*1024;
+  }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

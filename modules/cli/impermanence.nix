@@ -49,6 +49,7 @@
         ".local/share/waydroid"
         ".local/share/bottles"
         ".var"
+        ".zen"
         ".cache/flatpak"
         ".local/share/atuin"
         # Cache for sessions (keep website logged in, plugin downloaded...)

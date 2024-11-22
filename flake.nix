@@ -42,6 +42,7 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen.url = "github:matthewpi/nixpkgs/zen-browser"; 
   };
 
   outputs = {
@@ -56,6 +57,7 @@
     nixos-hardware,
     nix-index-database,
     nix-darwin,
+    zen,
     ...
   } @ inputs: let
     user = "zoriya";
@@ -116,17 +118,6 @@
     nixosConfigurations = {
       fuhen = mkSystem "fuhen" "river" [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
-        ({
-          lib,
-          pkgs,
-          ...
-        }: {
-          hardware.keyboard.zsa.enable = true;
-          environment.systemPackages = with pkgs; [
-            wally-cli
-            ghostty.packages.x86_64-linux.default
-          ];
-        })
       ];
 
       saikai = mkSystem "saikai" "server" [];
