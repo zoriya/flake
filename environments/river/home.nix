@@ -171,8 +171,6 @@ in {
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
 
       # Focus second screen by default (also spawn apps there)
-      riverctl focus-output DP-1
-      riverctl set-focused-tags "$all_tags"
       riverctl focus-output DP-2
       riverctl set-focused-tags $((1 << 3))
 

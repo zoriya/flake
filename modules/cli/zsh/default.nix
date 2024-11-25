@@ -22,6 +22,7 @@
       bc
       glow
       gh
+      yq
       alejandra
       nodePackages.http-server
       nodePackages.live-server
