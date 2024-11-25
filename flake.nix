@@ -73,7 +73,12 @@
       env = "server";
       custom = [
         ({pkgs, ...}: {
-          environment.systemPackages = with pkgs; [python3Packages.guessit mediainfo yt-dlp];
+          environment.systemPackages = with pkgs; [
+            python3Packages.guessit
+            mediainfo
+            yt-dlp
+            mkvtoolnix-cli
+          ];
         })
       ];
     };
