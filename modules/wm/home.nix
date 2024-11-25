@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, user, ...}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
     WALLPAPERS=~/wallpapers/
 
@@ -50,7 +50,7 @@ in {
       };
       background = {
         monitor = "";
-        path = "/home/zoriya/.cache/current-wallpaper";
+        path = "/home/${user}/.cache/current-wallpaper";
       };
       input-field = {
         monitor = "";

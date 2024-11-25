@@ -1,3 +1,9 @@
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+	autoload -Uz -- "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+	ghostty-integration
+	unfunction ghostty-integration
+fi
+
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {

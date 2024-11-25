@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, user, ...}: {
   imports = [
     ../../modules/wm
   ];
@@ -15,7 +15,7 @@
       };
       initial_session = {
         command = "${pkgs.systemd}/bin/systemctl --wait --user start river.service";
-        user = "zoriya";
+        user = user;
       };
     };
   };
