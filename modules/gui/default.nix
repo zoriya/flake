@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  inputs,
+  zen,
   ...
 }: let
   # When editing this, don't forget to edit home.sessionVariables.
@@ -19,7 +19,7 @@ in {
   home.packages = with pkgs; [
     google-chrome
     firefox
-    (import inputs.zen { system = "x86_64-linux"; }).zen-browser
+    (import zen {system = "x86_64-linux";}).zen-browser
     vesktop
     mpv
     xdg-utils

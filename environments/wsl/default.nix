@@ -12,9 +12,6 @@
   environment.systemPackages = with pkgs; [
     wslu
     wsl-open
-
-    # jetbrains.rider Waiting for https://github.com/NixOS/nixpkgs/pull/284857
-    # jetbrains.jdk 
   ];
 
   services.flatpak.enable = true;

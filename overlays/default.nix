@@ -1,6 +1,7 @@
 {
   flood,
   river-src,
+...
 }: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
