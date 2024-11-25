@@ -1,5 +1,5 @@
-{ghostty, ...}: let
-  pkg = ghostty.packages.x86_64-linux.default;
+{ghostty, system, ...}: let
+  pkg = ghostty.packages.${system}.default;
 in {
   xdg.configFile."ghostty/config".source = ./ghostty.config;
 

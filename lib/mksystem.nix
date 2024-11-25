@@ -23,10 +23,11 @@
     if darwin
     then ../modules/cli/darwin.nix
     else ../modules/cli;
+
+  specialArgs = inputs // {inherit system;};
 in
   systemFunc {
-    inherit system;
-    specialArgs = inputs;
+    inherit system specialArgs;
     modules =
       [
         overlays
@@ -63,7 +64,7 @@ in
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = inputs;
+            extraSpecialArgs = specialArgs;
             users.${user} = {
               imports = [
                 ../modules/cli/home.nix
