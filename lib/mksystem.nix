@@ -9,6 +9,7 @@
   wsl ? false,
   darwin ? false,
   custom ? [],
+  customHome ? [],
 }: let
   systemFunc =
     if darwin
@@ -24,14 +25,13 @@
     then ../modules/cli/darwin.nix
     else ../modules/cli;
 
-  specialArgs = inputs // {inherit system;};
+  specialArgs = inputs // {inherit system user;};
 in
   systemFunc {
     inherit system specialArgs;
     modules =
       [
         overlays
-        inputs.impermanence.nixosModules.impermanence
         cli
         (../environments + "/${env}")
 
@@ -66,14 +66,34 @@ in
             useUserPackages = true;
             extraSpecialArgs = specialArgs;
             users.${user} = {
-              imports = [
-                ../modules/cli/home.nix
-                (../environments + "/${env}/home.nix")
-                inputs.nix-index-database.hmModules.nix-index
-              ];
+              imports =
+                [
+                  ../modules/cli/home.nix
+                  (../environments + "/${env}/home.nix")
+                  inputs.nix-index-database.hmModules.nix-index
+                ]
+                ++ customHome;
             };
           };
         }
+      ]
+      ++ nixpkgs.lib.optionals wsl [
+        inputs.nixos-wsl.nixosModules.wsl
+        ({pkgs, ...}: {
+          wsl.enable = true;
+          wsl.defaultUser = user;
+          environment.systemPackages = with pkgs; [
+            wslu
+            wsl-open
+          ];
+
+          services.flatpak.enable = true;
+          xdg.portal = {
+            enable = true;
+            wlr.enable = true;
+            config.common.default = "*";
+          };
+        })
       ]
       ++ custom;
   }

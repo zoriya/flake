@@ -1,4 +1,12 @@
 {
+  impermanence,
+  user,
+  ...
+}: {
+  imports = [
+    impermanence.nixosModules.impermanence
+  ];
+
   environment.persistence."/nix/persist" = {
     hideMounts = true;
     directories = [
@@ -30,7 +38,7 @@
       "/var/snapraid.content"
       "/var/cache/locatedb"
     ];
-    users.zoriya = {
+    users.${user} = {
       directories = [
         "downloads"
         "stuff"
