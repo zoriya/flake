@@ -14,8 +14,8 @@
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
+    optimise.automatic = true;
     settings = {
-      auto-optimise-store = true;
       warn-dirty = false;
       experimental-features = ["nix-command" "flakes"];
       use-xdg-base-directories = true;

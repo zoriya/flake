@@ -13,7 +13,7 @@
 }: let
   systemFunc =
     if darwin
-    then inputs.darwin.lib.darwinSystem
+    then inputs.nix-darwin.lib.darwinSystem
     else nixpkgs.lib.nixosSystem;
   home-manager =
     if darwin
@@ -37,16 +37,12 @@ in
 
         ({pkgs, ...}: {
           networking.hostName = hostname;
-          users.users.root.hashedPassword = builtins.readFile ../password/root;
 
           users.users.${user} = {
             home =
               if darwin
               then "/Users/${user}"
               else "/home/${user}";
-            hashedPassword = builtins.readFile ../password/${user};
-            isNormalUser = true;
-            extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
             shell = pkgs.zsh;
 
             openssh.authorizedKeys.keys = [
@@ -57,6 +53,18 @@ in
             ];
           };
         })
+        (
+          if (!darwin)
+          then {
+            users.users.root.hashedPassword = builtins.readFile ../password/root;
+            users.users.${user} = {
+              isNormalUser = true;
+              hashedPassword = builtins.readFile ../password/${user};
+              extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
+            };
+          }
+          else {}
+        )
         ../hosts/${hostname}/hardware-configuration.nix
 
         home-manager.home-manager
