@@ -220,12 +220,9 @@ in {
             status = "disable";
           }
           {
-            criteria = "DP-1";
+            criteria = "Dell Inc. DELL S2722QC 2HHZH24";
             position = "0,0";
-          }
-          {
-            criteria = "DP-2";
-            position = "0,1180";
+            scale = 1.6;
           }
         ];
       }

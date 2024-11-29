@@ -34,9 +34,17 @@
           "IPAPMincho"
         ];
       };
+
+      # HIDPI settings
+      subpixel.lcdfilter = "none";
+      hinting.enable = false;
     };
   };
   i18n.defaultLocale = "en_US.UTF-8";
+
+  environment.variables = {
+    FREETYPE_PROPERTIES = "cff:no-stem-darkening=0 autofitter:no-stem-darkening=0";
+  };
 
   # Create an FHS mount to support flatpak host icons/fonts
   system.fsPackages = [pkgs.bindfs];
