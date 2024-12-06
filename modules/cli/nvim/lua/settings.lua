@@ -111,8 +111,7 @@ vim.keymap.set('n', '[l', '<cmd>lprev<cr>zvzz', { desc = 'Previous loclist item'
 vim.keymap.set('n', ']l', '<cmd>lnext<cr>zvzz', { desc = 'Next loclist item' })
 
 
-vim.keymap.set("t", "<C-W>", "<C-\\><C-N><C-W>", { desc = "+windows" })
-vim.keymap.set("t", "<C-W>", "<C-\\><C-N>", { desc = "Normal mode" })
+vim.keymap.set("t", "<esc>", "<C-\\><C-N>", { desc = "Normal mode" })
 
 vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "Reformat using textwidth (tw)", noremap = true })
 
