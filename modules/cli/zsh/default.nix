@@ -238,10 +238,11 @@
       if [[ -z "$TMUX" ]]; then
       	exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
       else
+        session=$(tmux display-message -p "#S")
         # kill current sesion if we are quiting the only pane
         function __onExit {
-          if [[ $(tmux list-panes -s | wc -l) == 1 ]]; then
-            tmux kill-session
+          if [[ $(tmux list-panes -s -t $session | wc -l) == 1 ]]; then
+            tmux kill-session -t $session
           fi
         }
         trap __onExit EXIT
