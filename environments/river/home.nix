@@ -55,7 +55,7 @@ in {
         "wallpaper"
         "ags"
         "vesktop"
-        "youtube-music"
+        # "youtube-music"
       ];
 
       default-attach-mode = "top";
