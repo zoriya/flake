@@ -39,12 +39,6 @@ return {
 	},
 
 	{
-		"petertriho/nvim-scrollbar",
-		event = "VeryLazy",
-		config = true,
-	},
-
-	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		dependencies = {

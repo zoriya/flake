@@ -78,12 +78,6 @@ vim.g.maplocalleader = " "
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
--- Move in insert mode --
-vim.keymap.set("i", "<A-j>", "<Down>")
-vim.keymap.set("i", "<A-k>", "<Up>")
-vim.keymap.set("i", "<A-h>", "<Left>")
-vim.keymap.set("i", "<A-l>", "<Right>")
-
 -- for all modes except terminal
 vim.keymap.set({"i", "n", "o", "x", "v", "s", "l", "c"}, "<C-c>", "<esc>")
 
@@ -134,7 +128,6 @@ vim.keymap.set({ "i", "s" }, "<C-p>", function()
 end)
 
 vim.cmd("autocmd FileType qf setl nolist")
-vim.cmd("syntax on")
 
 vim.api.nvim_create_autocmd('TextYankPost', {
 	group = vim.api.nvim_create_augroup("HighlightYank", { clear = true }),
