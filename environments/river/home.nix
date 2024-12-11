@@ -217,13 +217,17 @@ in {
         profile.outputs = [
           {
             criteria = "eDP-1";
-            status = "enable";
-            position = "377,1450";
+            status = "disable";
           }
           {
             criteria = "Dell Inc. DELL S2722QC 2HHZH24";
-            position = "0,0";
+            position = "0,850";
             scale = 1.7;
+          }
+          {
+            criteria = "*";
+            position = "500,0";
+            scale = 1.5;
           }
         ];
       }

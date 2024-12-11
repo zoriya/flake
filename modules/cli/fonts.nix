@@ -13,7 +13,7 @@
     packages = with pkgs; [
       roboto
       dejavu_fonts
-      (nerdfonts.override {fonts = ["JetBrainsMono"];})
+      nerd-fonts.jetbrains-mono
       # Some japanese fonts
       ipafont
       kochi-substitute
