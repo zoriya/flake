@@ -86,10 +86,10 @@ in {
         };
       };
 
-      border-color-focused = "0x94e2d5";
-      border-color-unfocused = "0x00000000";
-      border-color-urgent = "0xcba6f7";
-      border-width = 2;
+      # border-color-focused = "0x94e2d5";
+      # border-color-unfocused = "0x00000000";
+      # border-color-urgent = "0xcba6f7";
+      border-width = 0;
 
       rule-add = {
         "-app-id" = {
