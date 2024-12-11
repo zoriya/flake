@@ -1,7 +1,6 @@
 {
   pkgs,
   astal,
-  system,
   ...
 }: let
   covercolors = pkgs.stdenv.mkDerivation {
@@ -22,7 +21,7 @@
       prev.buildInputs
       ++ [
         pkgs.libdbusmenu-gtk3
-        astal.packages.${system}.river
+        astal.packages.${pkgs.system}.river
       ];
   });
 in {

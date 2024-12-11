@@ -25,7 +25,7 @@
     then ../modules/cli/darwin.nix
     else ../modules/cli;
 
-  specialArgs = inputs // {inherit system user;};
+  specialArgs = inputs // {inherit user;};
 in
   systemFunc {
     inherit system specialArgs;
