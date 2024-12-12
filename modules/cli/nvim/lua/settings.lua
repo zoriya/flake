@@ -79,7 +79,7 @@ vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
 -- for all modes except terminal
-vim.keymap.set({"i", "n", "o", "x", "v", "s", "l", "c"}, "<C-c>", "<esc>")
+vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
 
 vim.keymap.set("i", "<C-BS>", "<C-w>")
 vim.keymap.set("c", "<C-BS>", "<C-w>")
@@ -142,3 +142,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.g.zig_fmt_autosave = 0
 vim.g.omni_sql_no_default_maps = 1
+
+
+vim.g.clipboard = {
+	name = 'OSC 52',
+	copy = {
+		['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+		['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+	},
+	paste = {
+		['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+		['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+	},
+}

@@ -227,7 +227,7 @@ in {
           {
             criteria = "*";
             position = "500,0";
-            scale = 1.5;
+            scale = 1.4;
           }
         ];
       }
