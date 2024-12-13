@@ -15,7 +15,8 @@
     name = "screenshot-freeze";
     runtimeInputs = [pkgs.slurp pkgs.grim pkgs.wayfreeze];
     text = ''
-      wayfreeze --after-freeze-cmd 'grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy; killall wayfreeze'
+      # shellcheck disable=SC2016
+      wayfreeze --after-freeze-cmd ''\'grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy; killall wayfreeze''\'
     '';
   };
   record = pkgs.writeShellApplication {
