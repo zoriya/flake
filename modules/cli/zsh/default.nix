@@ -237,7 +237,7 @@
       # Create a new tmux session (with a random name) and attach.
       if [[ -z "$TMUX" ]]; then
       	exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
-      else
+      else if [[ $SHLVL -eq 1 ]]
         session=$(tmux display-message -p "#S")
         # kill current sesion if we are quiting the only pane
         function __onExit {
