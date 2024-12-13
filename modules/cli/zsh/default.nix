@@ -68,6 +68,7 @@
         "$line_break"
         "$directory"
         "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
+        "$shlvl"
         "$character"
       ];
 
@@ -150,6 +151,15 @@
 
       hostname = {
         format = "[ $ssh_symbol$hostname]($style)";
+      };
+
+      shlvl = {
+        disabled = false;
+        format = "[$symbol]($style)";
+        repeat = true;
+        symbol = "❯";
+        repeat_offset = 1;
+        threshold = 0;
       };
     };
   };
