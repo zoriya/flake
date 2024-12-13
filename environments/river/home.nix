@@ -11,6 +11,13 @@
       grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy
     '';
   };
+  screenshot-freeze = pkgs.writeShellApplication {
+    name = "screenshot-freeze";
+    runtimeInputs = [pkgs.slurp pkgs.grim pkgs.wayfreeze];
+    text = ''
+      wayfreeze --after-freeze-cmd 'grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy; killall wayfreeze'
+    '';
+  };
   record = pkgs.writeShellApplication {
     name = "record";
     runtimeInputs = [pkgs.slurp pkgs.wf-recorder];
@@ -136,6 +143,7 @@ in {
             "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}";
             "Super P" = "spawn 'rofi -show drun -show-icons'";
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
+            "Super+Control X" = "spawn '${screenshot-freeze}/bin/screenshot-freeze'";
             "Super+Shift X" = "spawn '${record}/bin/record'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
