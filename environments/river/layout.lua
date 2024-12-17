@@ -5,19 +5,17 @@ local smart_gaps = true
 
 local outputs = {}
 
-local default_output = {
-	mfact = 0.65,
-	mcount = 1,
-	layout = "tiling",
-	alayout = "monocle"
-}
-
 function _get_output(name)
 	local output = outputs[name]
 	if output ~= nil then
 		return output
 	end
-	outputs[name] = default_output
+	outputs[name] = {
+		mfact = 0.65,
+		mcount = 1,
+		layout = "tiling",
+		alayout = "monocle"
+	}
 	return outputs[name]
 end
 
