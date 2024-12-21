@@ -138,4 +138,14 @@ in {
     "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
     "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
   ];
+
+  xdg.configFile."autostart/vesktop.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Vesktop
+    Comment=Vesktop autostart script
+    Exec="${pkgs.vesktop}/bin/vesktop"
+    StartupNotify=false
+    Terminal=false
+  '';
 }
