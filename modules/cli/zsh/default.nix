@@ -190,6 +190,8 @@
       gu = "git pull";
       gcam = "git commit --amend";
       gcamn = "git commit --amend --no-edit";
+      gcpf = "gaa && gcamn && gpf";
+      gcpfn = "gcamn && gpf";
 
       # Misc
       dc = "docker-compose";
