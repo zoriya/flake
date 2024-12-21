@@ -62,8 +62,6 @@ in {
         "${pkgs.river-luatile}/bin/river-luatile"
         "wallpaper"
         "ags"
-        "vesktop"
-        # "youtube-music"
       ];
 
       default-attach-mode = "top";
@@ -140,12 +138,12 @@ in {
             "Super F" = "toggle-fullscreen";
             "Super+Shift F" = "toggle-float";
 
-            "Super R" = "spawn ${config.home.sessionVariables.BROWSER}";
-            "Super E" = "spawn ${config.home.sessionVariables.TERMINAL}";
-            "Super P" = "spawn 'rofi -show drun -show-icons'";
+            "Super R" = "spawn 'uwsm app -- ${config.home.sessionVariables.BROWSER}'";
+            "Super E" = "spawn 'uwsm app -- ${config.home.sessionVariables.TERMINAL}'";
+            "Super P" = ''spawn 'rofi -show drun -show-icons -run-command "uwsm app -- {cmd}"' '';
             "Super X" = "spawn '${screenshot}/bin/screenshot'";
             "Super+Control X" = "spawn '${screenshot-freeze}/bin/screenshot-freeze'";
-            "Super+Shift X" = "spawn '${record}/bin/record'";
+            "Super+Shift X" = "spawn 'uwsm app -- ${record}/bin/record'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
             "Super+Shift L" = "spawn 'loginctl lock-session'";
@@ -180,23 +178,16 @@ in {
       riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
 
       # Focus second screen by default (also spawn apps there)
-      riverctl focus-output DP-2
+      riverctl focus-output DP-1
       riverctl set-focused-tags $((1 << 3))
 
+      ${pkgs.uwsm}/bin/uwsm finalize DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE
       hyprlock --immediate
     '';
 
-    systemd = {
-      enable = true;
-      runInService = true;
-      extraCommands = [
-        "${pkgs.systemd}/bin/systemctl --user start xdg-autostart-if-no-desktop-manager.target"
-      ];
-    };
+    # we use uwsm instead.
+    systemd.enable = false;
   };
-
-  # Run river in systemd directly and not by hand. Failing to do so will make graphical-session.target never stop.
-  # So a big wait time when shutting down & graphical services are not restarted when starting river again.
 
   home.packages = with pkgs; [
     gnome-control-center

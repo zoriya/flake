@@ -1,10 +1,23 @@
-{pkgs, user, ...}: {
+{
+  pkgs,
+  user,
+  lib,
+  ...
+}: {
   imports = [
     ../../modules/wm
   ];
 
-  # this is called manually in the river init script.
-  services.xserver.desktopManager.runXdgAutostartIfNone = true;
+  programs.uwsm = {
+    enable = true;
+    waylandCompositors = {
+      river = {
+        prettyName = "river";
+        comment = "river compositor managed by UWSM";
+        binPath = "${pkgs.river}/bin/river";
+      };
+    };
+  };
 
   services.greetd = {
     enable = true;
@@ -14,11 +27,20 @@
         user = "greeter";
       };
       initial_session = {
-        command = "${pkgs.systemd}/bin/systemctl --wait --user start river.service";
+        command = "uwsm start -S river-uwsm.desktop";
         user = user;
       };
     };
   };
+
+  # Without this, greetd would depend on graphical.target & would get activated before
+  # uwsm. This leads to a race that can:
+  #  - fail startup & retry it (leading to a ~10s delay)
+  #  - make graphical services start before river.
+  # To prevent those issue, simply target the default tty & greetd's inital_session will
+  # start uwsm & end up reaching graphical.target
+  systemd.defaultUnit = lib.mkForce "multi-user.target";
+
 
   xdg.portal = {
     enable = true;
