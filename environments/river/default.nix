@@ -39,7 +39,7 @@
   #  - make graphical services start before river.
   # To prevent those issue, simply target the default tty & greetd's inital_session will
   # start uwsm & end up reaching graphical.target
-  systemd.defaultUnit = lib.mkForce "multi-user.target";
+  # systemd.defaultUnit = lib.mkForce "multi-user.target";
 
 
   xdg.portal = {
