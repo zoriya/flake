@@ -1,4 +1,8 @@
-{pkgs, user, ...}: let
+{
+  pkgs,
+  user,
+  ...
+}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
     WALLPAPERS=~/wallpapers/
 
@@ -111,6 +115,8 @@ in {
       ];
     };
   };
+  # Default target is graphical-session-pre.target which comes too early to work.
+  systemd.user.services.hypridle.Unit.After = ["graphical-session.target"];
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
