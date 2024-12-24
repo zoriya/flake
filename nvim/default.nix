@@ -21,11 +21,12 @@ in
       }
 
       # TODO: make grammars optional
-      nvim-treesitter.withAllGrammars
+      # nvim-treesitter.withAllGrammars
       catppuccin-nvim
     ];
 
-    lsp = with pkgs; [
+    extraPackages = with pkgs; [
+      # lsp
       # see for helpers https://github.com/dundalek/lazy-lsp.nvim/blob/master/lua/lazy-lsp/servers.lua
       haskell-language-server
       rust-analyzer
@@ -43,9 +44,7 @@ in
       helm-ls
       zls
       lua-language-server
-    ];
 
-    extraPackages = with pkgs; [
       # Give access to gdbus for color-scheme detection (vim-lumen).
       glib
     ];
