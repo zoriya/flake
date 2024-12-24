@@ -205,6 +205,10 @@
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
       icat = "kitty +kitten icat";
+      n = "$EDITOR";
+      vim = "$EDITOR";
+      vi = "$EDITOR";
+      v = "$EDITOR";
     };
     shellGlobalAliases = {
       "..." = "../..";
@@ -289,5 +293,10 @@
       DIRENV_LOG_FORMAT = "";
       WORDCHARS = "_-*";
     };
+  };
+
+  home.sessionVariables = rec {
+    EDITOR = "nvim";
+    VISUAL = EDITOR;
   };
 }
