@@ -60,6 +60,7 @@
     };
 
     mkSystem = import ./lib/mksystem.nix (inputs // {inherit overlays inputs;});
+    eachSystem = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
   in {
     nixosConfigurations.fuhen = mkSystem "fuhen" {
       env = "river";
@@ -100,5 +101,12 @@
         ./modules/gui/ghostty.nix
       ];
     };
+
+    packages = eachSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in rec {
+      default = nvim;
+      nvim = import ./nvim (inputs // { inherit pkgs; });
+    });
   };
 }
