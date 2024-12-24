@@ -78,10 +78,9 @@ bindkey ^Z foreground
 
 eval "$(nix-your-shell zsh)"
 
-# * empty is not an error
 setopt rm_star_silent
-# allow comments in interactive sessions
 setopt interactivecomments
+setopt autopushd
 
 (whence -w run-help | grep -q alias) && unalias run-help
 autoload run-help
