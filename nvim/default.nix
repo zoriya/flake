@@ -14,16 +14,15 @@ in
 
     config = ./.;
 
-    plugins = with pkgs.vimPlugins; [
-      {
-        plugin = lz-n;
-        optional = false;
-      }
-
-      # TODO: make grammars optional
-      # nvim-treesitter.withAllGrammars
-      catppuccin-nvim
-    ];
+    plugins = with pkgs.vimPlugins; {
+      start = [
+        lz-n
+        catppuccin-nvim
+        nvim-treesitter.withAllGrammars
+      ];
+      opts = [
+      ];
+    };
 
     extraPackages = with pkgs; [
       # lsp

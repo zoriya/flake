@@ -5,7 +5,10 @@
 }: {
   package ? pkgs.neovim,
   config,
-  plugins ? [],
+  plugins ? {
+    start = [];
+    opts = [];
+  },
   extraPackages ? [],
   extraLuaPackages ? p: [],
   extraPython3Packages ? p: [],
@@ -15,22 +18,19 @@
   withNodeJs ? false,
   withSqlite ? false,
 }: let
-  # Stolen from pkgs.neovimUtils.normalizePlugins but this changes defaultPlugin.optional to true.
-  normalizePlugins = plugins: let
+  normalize = optional: p: let
     defaultPlugin = {
       plugin = null;
       config = null;
-      optional = true;
+      inherit optional;
     };
   in
-    map (x:
-      defaultPlugin
-      // (
-        if (x ? plugin)
-        then x
-        else {plugin = x;}
-      ))
-    plugins;
+    defaultPlugin
+    // (
+      if (p ? plugin)
+      then p
+      else {plugin = p;}
+    );
 
   initLua =
     # lua
@@ -38,17 +38,22 @@
       vim.opt.rtp:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
       vim.opt.rtp:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
       vim.opt.rtp:prepend('${config}')
-      vim.opt.rtp:prepend('${config}/after')
+      vim.opt.rtp:append('${config}/after')
 
       ${builtins.readFile (config + "/init.lua")}
     '';
 
   builder = (import ./bytecompile.nix) {inherit pkgs lib;};
+  pack = (import ./pack.nix) {inherit pkgs lib;};
 
   nvim = builder.byteCompileVim package;
+
+  start = map (p: lib.pipe p [(normalize false) builder.byteCompile]) plugins.start;
+  opts = map (p: lib.pipe p [(normalize true) builder.byteCompile]) plugins.opts;
+  startPacked = pack.packPlugins start;
 in
   pkgs.wrapNeovimUnstable nvim {
-    plugins = builder.byteCompile (normalizePlugins plugins);
+    plugins = [startPacked] ++ opts;
 
     wrapRc = false;
     wrapperArgs = builtins.concatStringsSep " " [

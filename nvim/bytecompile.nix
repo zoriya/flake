@@ -58,13 +58,12 @@
         }
     );
 
-  byteCompile = plugins: let
-    byteCompile = p:
-      (byteCompileLuaDrv p).overrideAttrs (
-        prev: lib.optionalAttrs (prev ? dependencies) {dependencies = map byteCompile prev.dependencies;}
-      );
+  byteCompile = p: let
+    drv = (byteCompileLuaDrv p.plugin).overrideAttrs (
+      prev: lib.optionalAttrs (prev ? dependencies) {dependencies = map byteCompile prev.dependencies;}
+    );
   in
-    map (p: p // {plugin = byteCompile p.plugin;}) plugins;
+    p // {plugin = drv;};
 
   byteCompileVim = package:
     pkgs.symlinkJoin {
