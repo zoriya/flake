@@ -55,8 +55,11 @@
     plugs = (map (normalize false) plugins.start) ++ (map (normalize true) plugins.opts);
     allPlugs = lib.unique (builtins.concatMap withDeps plugs);
     partitioned = builtins.partition (p: p.optional) (preparePlugins allPlugs);
-    start = [(pack.packPlugins partitioned.wrong).plugin];
     opt = map (p: p.plugin) partitioned.right;
+    start = let
+      # remove plugins marked as "optional" from the start pack
+      startPlugs = builtins.filter (p: !(builtins.elem p.plugin opt)) partitioned.wrong;
+    in [(pack.packPlugins startPlugs).plugin];
   in
     pkgs.neovimUtils.packDir {packages = {inherit start opt;};};
 
