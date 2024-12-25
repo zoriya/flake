@@ -71,7 +71,7 @@
         "${config}/after",
       }
       vim.opt.packpath = {
-        "${pluginPack}/pack/packages/opt",
+        "${pluginPack}",
         vim.env.VIMRUNTIME,
       }
 
