@@ -32,17 +32,6 @@
       else {plugin = p;}
     );
 
-  initLua =
-    # lua
-    ''
-      vim.opt.rtp:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
-      vim.opt.rtp:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
-      vim.opt.rtp:prepend('${config}')
-      vim.opt.rtp:append('${config}/after')
-
-      ${builtins.readFile (config + "/init.lua")}
-    '';
-
   builder = (import ./bytecompile.nix) {inherit pkgs lib;};
   pack = (import ./pack.nix) {inherit pkgs lib;};
 
@@ -50,13 +39,34 @@
 
   removeDependencies = p: p // {plugin = p.plugin.overrideAttrs (prev: prev // {dependencies = [];});};
 
-  start = map (p: lib.pipe p [(normalize false) builder.byteCompile]) plugins.start;
+  start = map (p: lib.pipe p [(normalize false) removeDependencies builder.byteCompile]) plugins.start;
   opts = map (p: lib.pipe p [(normalize true) removeDependencies builder.byteCompile]) plugins.opts;
   startPacked = pack.packPlugins start;
+
+  pluginPack = lib.pipe ([startPacked] ++ opts) [
+    pkgs.neovimUtils.normalizedPluginsToVimPackage
+    (p: {packages = p;})
+    pkgs.neovimUtils.packDir
+  ];
+
+  initLua =
+    # lua
+    ''
+      vim.opt.rtp = {
+        "${config}",
+        "${pluginPack}",
+        vim.env.VIMRUNTIME,
+        "${config}/after",
+      }
+      vim.opt.packpath = {
+        "${pluginPack}",
+        vim.env.VIMRUNTIME,
+      }
+
+      ${builtins.readFile (config + "/init.lua")}
+    '';
 in
   pkgs.wrapNeovimUnstable nvim {
-    plugins = [startPacked] ++ opts;
-
     wrapRc = false;
     wrapperArgs = builtins.concatStringsSep " " [
       (lib.optionals (extraPackages != []) ''--prefix PATH : "${lib.makeBinPath extraPackages}"'')
