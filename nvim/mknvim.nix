@@ -48,8 +48,10 @@
 
   nvim = builder.byteCompileVim package;
 
+  removeDependencies = p: p // {plugin = p.plugin.overrideAttrs (prev: prev // {dependencies = [];});};
+
   start = map (p: lib.pipe p [(normalize false) builder.byteCompile]) plugins.start;
-  opts = map (p: lib.pipe p [(normalize true) builder.byteCompile]) plugins.opts;
+  opts = map (p: lib.pipe p [(normalize true) removeDependencies builder.byteCompile]) plugins.opts;
   startPacked = pack.packPlugins start;
 in
   pkgs.wrapNeovimUnstable nvim {

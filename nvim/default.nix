@@ -19,12 +19,19 @@ in
         lz-n
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
+        plenary-nvim
       ];
       opts = [
+        telescope-nvim
+        telescope-fzf-native-nvim
       ];
     };
 
     extraPackages = with pkgs; [
+      # telescope helpers
+      fd
+      ripgrep
+
       # lsp
       # see for helpers https://github.com/dundalek/lazy-lsp.nvim/blob/master/lua/lazy-lsp/servers.lua
       haskell-language-server
