@@ -40,30 +40,30 @@
 
     removeDependencies = p: p // {plugin = removeAttrs p.plugin ["dependencies"];};
 
-    preparePlugin = p:
-      lib.pipe p [
-        removeDependencies
-        builder.byteCompile
-      ];
+    preparePlugins = ps:
+      map (p:
+        lib.pipe p [
+          builder.byteCompile
+          # we removeDependencies after byteCompiling because byteCompile resets the derivation to it's inital state
+          # (with dependencies and idk why)
+          removeDependencies
+        ])
+      ps;
 
     withDeps = p: [p] ++ builtins.concatMap withDeps (map (normalize false) (p.plugin.dependencies or []));
 
-    preparePlugins = ps: map preparePlugin (lib.unique (builtins.concatMap withDeps ps));
-
-    allPlugs = (map (normalize false) plugins.start) ++ (map (normalize true) plugins.opts);
+    plugs = (map (normalize false) plugins.start) ++ (map (normalize true) plugins.opts);
+    allPlugs = lib.unique (builtins.concatMap withDeps plugs);
     partitioned = builtins.partition (p: p.optional) (preparePlugins allPlugs);
-    start = [(pack.packPlugins partitioned.wrong)];
-    opts = partitioned.right;
+    start = [(pack.packPlugins partitioned.wrong).plugin];
+    opt = map (p: p.plugin) partitioned.right;
   in
-    lib.pipe (start ++ opts) [
-      pkgs.neovimUtils.normalizedPluginsToVimPackage
-      (p: {packages = p;})
-      pkgs.neovimUtils.packDir
-    ];
+    pkgs.neovimUtils.packDir {packages = {inherit start opt;};};
 
   initLua =
     # lua
     ''
+      -- TODO: binary compile the config
       vim.opt.rtp = {
         "${config}",
         "${pluginPack}/pack/packages/start/vimplugin-plugin-pack",
@@ -71,7 +71,7 @@
         "${config}/after",
       }
       vim.opt.packpath = {
-        "${pluginPack}/pack/packages/opts",
+        "${pluginPack}/pack/packages/opt",
         vim.env.VIMRUNTIME,
       }
 
