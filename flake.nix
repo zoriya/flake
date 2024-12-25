@@ -111,7 +111,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in rec {
       default = nvim;
-      nvim = import ./nvim (inputs // { inherit pkgs; });
+      nvim = import ./nvim (inputs // { inherit pkgs; lib = nixpkgs.lib; });
     });
   };
 }
