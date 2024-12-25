@@ -42,7 +42,6 @@ return {
 				},
 			})
 
-			vim.cmd.packadd("telescope-fzf-native.nvim")
 			telescope.load_extension("fzf")
 		end
 	},

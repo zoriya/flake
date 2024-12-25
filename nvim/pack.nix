@@ -28,6 +28,8 @@
       "/ftdetect"
       # plenary.nvim
       "/data/plenary/filetypes"
+      # telescope fzf
+      "/build"
     ];
 
     # Every plugin has its own generated help tags (doc/tags)

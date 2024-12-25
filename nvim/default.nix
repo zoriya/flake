@@ -27,12 +27,11 @@ in
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
         oil-nvim
-        plenary-nvim
         mini-nvim
+        telescope-fzf-native-nvim
       ];
       opts = [
         telescope-nvim
-        telescope-fzf-native-nvim
       ];
     };
 
