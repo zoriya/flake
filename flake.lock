@@ -292,6 +292,22 @@
         "type": "github"
       }
     },
+    "lz-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1735151625,
+        "narHash": "sha256-XROyv0DgH+1ZWA7Z+OdNd41ufqtl8PoAfwZtSjPFem0=",
+        "owner": "zoriya",
+        "repo": "lz.n",
+        "rev": "e9ee565439706d86b4dd63e20aef1fc231e0570b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zoriya",
+        "repo": "lz.n",
+        "type": "github"
+      }
+    },
     "neovim-nightly": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -451,6 +467,7 @@
         "ghostty": "ghostty",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "lz-nvim": "lz-nvim",
         "neovim-nightly": "neovim-nightly",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",

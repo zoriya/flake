@@ -44,6 +44,11 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    lz-nvim = {
+      url = "github:zoriya/lz.n";
+      flake = false;
+    };
   };
 
   outputs = {

@@ -1,9 +1,16 @@
 {
   pkgs,
   neovim-nightly,
+  lz-nvim,
   ...
 }: let
   mkNvim = pkgs.callPackage ./mknvim.nix {inherit pkgs;};
+
+  mkPlugin = src: pname:
+    pkgs.vimUtils.buildVimPlugin {
+      inherit pname src;
+      version = src.lastModifiedDate;
+    };
 in
   mkNvim {
     withNodeJs = false;
@@ -16,10 +23,12 @@ in
 
     plugins = with pkgs.vimPlugins; {
       start = [
-        lz-n
+        (mkPlugin lz-nvim "lz-n")
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
+        oil-nvim
         plenary-nvim
+        mini-nvim
       ];
       opts = [
         telescope-nvim

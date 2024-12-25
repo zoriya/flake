@@ -1,9 +1,10 @@
 return {
 	{
 		"catppuccin-nvim",
-		-- colorscheme = "catppuccin",
-		load = function() end,
+		colorscheme = "catppuccin",
+		lazy = false,
 		priority = 1000,
+		load = function() end,
 		opt = {
 			integrations = {
 				telescope = {
@@ -14,7 +15,7 @@ return {
 		},
 		after = function(plug)
 			require("catppuccin").setup(plug.opt)
-			vim.cmd.colorscheme "catppuccin"
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
 }
