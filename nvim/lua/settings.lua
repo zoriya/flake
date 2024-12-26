@@ -18,6 +18,7 @@ vim.opt.splitbelow = true
 vim.opt.inccommand = 'split'
 
 vim.opt.wrap = false
+vim.opt.foldlevelstart = 99
 vim.opt.linebreak = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
