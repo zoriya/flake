@@ -24,11 +24,15 @@ in
     plugins = with pkgs.vimPlugins; {
       start = [
         (mkPlugin lz-nvim "lz-n")
+        # TODO: use catppuccin's compile feature. see: https://github.com/stasjok/dotfiles/blob/36037f523185ba1409dd953999fda0f0db0dbd4f/nvim/default.nix#L136C8-L148C12
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
         oil-nvim
         mini-nvim
+        nvim-surround
         telescope-fzf-native-nvim
+        vim-sleuth
+        auto-save-nvim
       ];
       opts = [
         telescope-nvim
