@@ -42,4 +42,27 @@ return {
 			require("ts-comments").setup({})
 		end,
 	},
+
+	{
+		"vim-illuminate",
+		lazy = false,
+		load = function() end,
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+		opts = {
+			providers = {
+				"lsp",
+				"treesitter",
+			},
+			under_cursor = false,
+			min_count_to_highlight = 2,
+			delay = 200,
+			large_file_cutoff = 2000,
+			large_file_overrides = {
+				providers = { "lsp" },
+			},
+		},
+		after = function(plug)
+			require("illuminate").configure(plug.opts)
+		end,
+	},
 }
