@@ -475,6 +475,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "river-src": "river-src",
+        "vim-lumen": "vim-lumen",
         "zen-browser": "zen-browser"
       }
     },
@@ -529,6 +530,22 @@
         "type": "github"
       }
     },
+    "vim-lumen": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726782166,
+        "narHash": "sha256-rsDUDI9lh4CEX1upMBjeyBOm99GAXWGPQ9vSCN8cmFo=",
+        "owner": "vimpostor",
+        "repo": "vim-lumen",
+        "rev": "ac13c32c3e309f6c6a84ff6cad8dbb135e75f0e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vimpostor",
+        "repo": "vim-lumen",
+        "type": "github"
+      }
+    },
     "zen-browser": {
       "inputs": {
         "nixpkgs": [
@@ -538,11 +555,11 @@
         "zen-browser-x86_64": "zen-browser-x86_64"
       },
       "locked": {
-        "lastModified": 1735027011,
-        "narHash": "sha256-8cmNRIwQgniSCaEiYV2KAIrzRjuRxQQtb1L+zoQT4Vc=",
+        "lastModified": 1735099614,
+        "narHash": "sha256-FCQFeOhVg/SNOCdryvxVd/5eLqwXwVr6/48Xyh7wpwU=",
         "owner": "youwen5",
         "repo": "zen-browser-flake",
-        "rev": "4266f2a7b58d53dbd646c80013e9bfcc656e85f0",
+        "rev": "3e4af3607e303a88169782471a082857a3e80162",
         "type": "github"
       },
       "original": {
@@ -554,27 +571,27 @@
     "zen-browser-aarch64": {
       "flake": false,
       "locked": {
-        "lastModified": 1734985825,
-        "narHash": "sha256-EL/54KHAQkUEzWlIlMMfYFQ2QncOcyXmScNwmmEiv+8=",
+        "lastModified": 1735043335,
+        "narHash": "sha256-nuGSRzwBloFwgNCIbc5xv3vGkiHQxzOQr4FUX4Cip7Y=",
         "type": "tarball",
-        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.4/zen.linux-aarch64.tar.bz2"
+        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.5/zen.linux-aarch64.tar.bz2"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.4/zen.linux-aarch64.tar.bz2"
+        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.5/zen.linux-aarch64.tar.bz2"
       }
     },
     "zen-browser-x86_64": {
       "flake": false,
       "locked": {
-        "lastModified": 1734992091,
-        "narHash": "sha256-ZVGyOtB2oL6qDzAfZeyVjUy/wwFYfuqjNb2TV7SNH28=",
+        "lastModified": 1735049411,
+        "narHash": "sha256-sS9phyr97WawxB2AZAwcXkvO3xAmv8k4C8b8Qw364PY=",
         "type": "tarball",
-        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.4/zen.linux-x86_64.tar.bz2"
+        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.5/zen.linux-x86_64.tar.bz2"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.4/zen.linux-x86_64.tar.bz2"
+        "url": "https://github.com/zen-browser/desktop/releases/download/1.0.2-b.5/zen.linux-x86_64.tar.bz2"
       }
     },
     "zig": {

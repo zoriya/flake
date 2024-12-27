@@ -2,6 +2,7 @@
   pkgs,
   neovim-nightly,
   lz-nvim,
+  vim-lumen,
   ...
 }: let
   mkNvim = pkgs.callPackage ./nix/mknvim.nix {inherit pkgs;};
@@ -71,6 +72,7 @@ in
           postPatch = "rm doc/recipes.md";
         })
         vim-helm
+        (mkPlugin vim-lumen "vim-lumen")
       ];
       opt = [
         telescope-nvim

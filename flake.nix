@@ -49,6 +49,10 @@
       url = "github:zoriya/lz.n";
       flake = false;
     };
+    vim-lumen = {
+      url = "github:vimpostor/vim-lumen";
+      flake = false;
+    };
   };
 
   outputs = {
