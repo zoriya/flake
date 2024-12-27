@@ -10,7 +10,10 @@ return {
 				telescope = {
 					enabled = true,
 					style = "nvchad"
-				}
+				},
+				blink_cmp = true,
+				harpoon = true,
+				nvim_surround = true,
 			},
 		},
 		after = function(plug)
