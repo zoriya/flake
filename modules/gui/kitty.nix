@@ -19,14 +19,15 @@
     shellIntegration.enableZshIntegration = false;
 
     extraConfig = ''
+      font_size 12
       clear_all_shortcuts yes
       kitty_mod alt
       map ctrl+shift+c copy_to_clipboard
       map ctrl+shift+v paste_from_clipboard
 
-      map ctrl+equal change_font_size current +2.0
-      map ctrl+plus change_font_size current +2.0
-      map ctrl+minus change_font_size current -2.0
+      map ctrl+equal change_font_size current +1.0
+      map ctrl+plus change_font_size current +1.0
+      map ctrl+minus change_font_size current -1.0
       map ctrl+backspace change_font_size current 0
 
       map kitty_mod+e scroll_line_up
