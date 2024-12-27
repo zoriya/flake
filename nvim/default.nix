@@ -4,7 +4,7 @@
   lz-nvim,
   ...
 }: let
-  mkNvim = pkgs.callPackage ./mknvim.nix {inherit pkgs;};
+  mkNvim = pkgs.callPackage ./nix/mknvim.nix {inherit pkgs;};
 
   mkPlugin = src: pname:
     pkgs.vimUtils.buildVimPlugin {
@@ -13,6 +13,8 @@
     };
 in
   mkNvim {
+    name = "nvim";
+
     withNodeJs = false;
     withRuby = false;
     withPython3 = false;
@@ -27,18 +29,39 @@ in
         # TODO: use catppuccin's compile feature. see: https://github.com/stasjok/dotfiles/blob/36037f523185ba1409dd953999fda0f0db0dbd4f/nvim/default.nix#L136C8-L148C12
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
+        nvim-treesitter-textobjects
         nvim-lspconfig
         oil-nvim
-        mini-nvim
         nvim-surround
         telescope-fzf-native-nvim
         vim-sleuth
         auto-save-nvim
 
+        mini-icons
+        mini-operators
+        mini-splitjoin
+        vim-wordmotion
+        increment-activator
+
+        which-key-nvim
+        nvim-colorizer-lua
+        nvim-pqf
+        lualine-nvim
+        nvim-navic
+
         SchemaStore-nvim
+        blink-cmp
+        ts-comments-nvim
+        undotree
+        nvim-lint
+        (conform-nvim.overrideAttrs {
+          # clashes with oil
+          postPatch = "rm doc/recipes.md";
+        })
       ];
-      opts = [
+      opt = [
         telescope-nvim
+        harpoon2
       ];
     };
 
