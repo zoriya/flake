@@ -6,6 +6,7 @@ return {
 		opts = {
 			presets = {
 				command_palette = true,
+				inc_rename = true,
 			},
 			signature = {
 				auto_open = {

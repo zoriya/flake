@@ -90,11 +90,11 @@ return {
 					},
 				},
 				lualine_x = {
-					-- {
-					-- 	require("noice").api.status.mode.get,
-					-- 	cond = require("noice").api.status.mode.has,
-					-- 	color = { fg = "#ff9e64" },
-					-- },
+					{
+						require("noice").api.status.mode.get,
+						cond = require("noice").api.status.mode.has,
+						color = { fg = "#ff9e64" },
+					},
 					'fileformat',
 				},
 				lualine_y = { 'branch', 'progress' },
