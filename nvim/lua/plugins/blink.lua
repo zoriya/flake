@@ -4,6 +4,13 @@ return {
 		lazy = false,
 		load = function() end,
 		opts = {
+			keymap = {
+				preset = "default",
+				['<C-space>'] = { 'show', },
+				['<C-h>'] = { 'select_and_accept' },
+				['<Tab>'] = {},
+				['<S-Tab>'] = {},
+			},
 			completion = {
 				trigger = {
 					show_in_snippet = false,
@@ -17,11 +24,15 @@ return {
 					auto_show_delay_ms = 0,
 				},
 			},
+			fuzzy = {
+				prebuilt_binaries = {
+					download = false,
+				},
+			},
 		},
 		after = function(plug)
 			require("blink-cmp").setup(plug.opts)
-
-			-- config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+			vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 		end,
 	},
 }

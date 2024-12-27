@@ -31,6 +31,8 @@
       "/data/plenary/filetypes"
       # telescope fzf
       "/build"
+      # blink
+      "/target"
     ];
 
     # Every plugin has its own generated help tags (doc/tags)
