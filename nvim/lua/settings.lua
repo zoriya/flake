@@ -27,6 +27,7 @@ vim.opt.breakindent = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+vim.opt.colorcolumn = { 80, 120 }
 vim.opt.list = true
 vim.opt.listchars = {
 	space = "·",

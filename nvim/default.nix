@@ -30,6 +30,7 @@ in
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
         nvim-treesitter-textobjects
+        vim-illuminate
         nvim-lspconfig
         oil-nvim
         nvim-surround
@@ -37,17 +38,25 @@ in
         vim-sleuth
         auto-save-nvim
 
+        gitsigns-nvim
+        git-conflict-nvim
+
         mini-icons
         mini-operators
         mini-splitjoin
         vim-wordmotion
         increment-activator
 
+        leap-nvim
+        flit-nvim
+
         which-key-nvim
         nvim-colorizer-lua
         nvim-pqf
         lualine-nvim
         nvim-navic
+        virt-column-nvim
+        indent-blankline-nvim
 
         SchemaStore-nvim
         blink-cmp
@@ -58,6 +67,7 @@ in
           # clashes with oil
           postPatch = "rm doc/recipes.md";
         })
+        vim-helm
       ];
       opt = [
         telescope-nvim
