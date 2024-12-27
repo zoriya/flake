@@ -4,11 +4,12 @@
   stdenv,
   ...
 }: {
+  name ? "nvim",
   package ? pkgs.neovim,
   config,
   plugins ? {
     start = [];
-    opts = [];
+    opt = [];
   },
   extraPackages ? [],
   extraLuaPackages ? p: [],
@@ -17,21 +18,19 @@
   withPerl ? false,
   withRuby ? false,
   withNodeJs ? false,
-  withSqlite ? false,
 }: let
   builder = (import ./bytecompile.nix) {inherit pkgs lib;};
   pack = (import ./pack.nix) {inherit pkgs lib;};
+  mkLuarc = (import ./luarc.nix) {inherit pkgs lib;};
 
   nvim = builder.byteCompileVim package;
 
   # TODO: only the (unused) init.lua seems to be byte compiled, idk why
-  conf = builder.byteCompileLuaDrv (
-    (pkgs.runCommandLocal "nvim-config" {} ''
-      mkdir $out
-      cp -r ${config}/* $out
-      ls $out
-    '')
-  );
+  conf = builder.byteCompileLuaDrv (pkgs.runCommandLocal "nvim-config" {} ''
+    mkdir $out
+    cp -r ${config}/* $out
+    ls $out
+  '');
 
   pluginPack = let
     normalize = optional: p: let
@@ -62,7 +61,7 @@
 
     withDeps = p: [p] ++ builtins.concatMap withDeps (map (normalize false) (p.plugin.dependencies or []));
 
-    plugs = (map (normalize false) plugins.start) ++ (map (normalize true) plugins.opts);
+    plugs = (map (normalize false) plugins.start) ++ (map (normalize true) plugins.opt);
     allPlugs = lib.unique (builtins.concatMap withDeps plugs);
     partitioned = builtins.partition (p: p.optional) (preparePlugins allPlugs);
     opt = map (p: p.plugin) partitioned.right;
@@ -90,8 +89,8 @@
 
       ${builtins.readFile (config + "/init.lua")}
     '';
-in
-  pkgs.wrapNeovimUnstable nvim {
+in {
+  ${name} = pkgs.wrapNeovimUnstable nvim {
     wrapRc = false;
     wrapperArgs = builtins.concatStringsSep " " [
       (lib.optionals (extraPackages != []) ''--prefix PATH : "${lib.makeBinPath extraPackages}"'')
@@ -99,4 +98,7 @@ in
     ];
 
     inherit withPython3 withNodeJs withPerl withRuby extraPython3Packages extraLuaPackages;
-  }
+  };
+
+  luarc = mkLuarc { nvim = package; inherit plugins; };
+}

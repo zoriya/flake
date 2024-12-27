@@ -16,6 +16,7 @@
       "/keymap"
       "/lang"
       "/lua"
+      "/lsp"
       "/pack"
       "/parser"
       "/plugin"

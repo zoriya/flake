@@ -109,9 +109,31 @@
 
     packages = eachSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      vim = import ./nvim (inputs
+        // {
+          inherit pkgs;
+          lib = nixpkgs.lib;
+        });
     in rec {
       default = nvim;
-      nvim = import ./nvim (inputs // { inherit pkgs; lib = nixpkgs.lib; });
+      nvim = vim.nvim;
+    });
+
+    devShells = eachSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+      vim = import ./nvim (inputs
+        // {
+          inherit pkgs;
+          lib = nixpkgs.lib;
+        });
+    in rec {
+      default = nvim-lua;
+      nvim-lua = pkgs.mkShell {
+        name = "nvim-lua";
+        shellHook = ''
+          ln -fs ${vim.luarc} .luarc.json
+        '';
+      };
     });
   };
 }
