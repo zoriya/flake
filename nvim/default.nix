@@ -50,6 +50,9 @@ in
         leap-nvim
         flit-nvim
 
+        noice-nvim
+        statuscol-nvim
+
         which-key-nvim
         nvim-colorizer-lua
         nvim-pqf

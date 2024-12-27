@@ -27,6 +27,7 @@ vim.opt.breakindent = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+vim.opt.cmdheight = 0
 vim.opt.colorcolumn = { 80, 120 }
 vim.opt.list = true
 vim.opt.listchars = {
@@ -72,6 +73,11 @@ vim.keymap.set("n", "<C-l>", function()
 	end
 	vim.cmd.nohlsearch()
 	vim.cmd.diffupdate()
+
+	local ok, noice = pcall(require, "noice")
+	if ok then
+		noice.cmd("dismiss")
+	end
 end)
 vim.keymap.set({ "i", "s" }, "<C-n>", function()
 	if vim.snippet.active({ direction = 1 }) then
