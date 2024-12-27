@@ -27,12 +27,15 @@ in
         # TODO: use catppuccin's compile feature. see: https://github.com/stasjok/dotfiles/blob/36037f523185ba1409dd953999fda0f0db0dbd4f/nvim/default.nix#L136C8-L148C12
         catppuccin-nvim
         nvim-treesitter.withAllGrammars
+        nvim-lspconfig
         oil-nvim
         mini-nvim
         nvim-surround
         telescope-fzf-native-nvim
         vim-sleuth
         auto-save-nvim
+
+        SchemaStore-nvim
       ];
       opts = [
         telescope-nvim
