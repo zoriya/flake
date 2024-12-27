@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  stdenv,
   ...
 }: {
   package ? pkgs.neovim,
@@ -22,6 +23,15 @@
   pack = (import ./pack.nix) {inherit pkgs lib;};
 
   nvim = builder.byteCompileVim package;
+
+  # TODO: only the (unused) init.lua seems to be byte compiled, idk why
+  conf = builder.byteCompileLuaDrv (
+    (pkgs.runCommandLocal "nvim-config" {} ''
+      mkdir $out
+      cp -r ${config}/* $out
+      ls $out
+    '')
+  );
 
   pluginPack = let
     normalize = optional: p: let
@@ -66,12 +76,12 @@
   initLua =
     # lua
     ''
-      -- TODO: binary compile the config
+      print("${conf}")
       vim.opt.rtp = {
-        "${config}",
+        "${conf}",
         "${pluginPack}/pack/packages/start/vimplugin-plugin-pack",
         vim.env.VIMRUNTIME,
-        "${config}/after",
+        "${conf}/after",
       }
       vim.opt.packpath = {
         "${pluginPack}",
