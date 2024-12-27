@@ -94,15 +94,38 @@ end)
 
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = 'Highlight when yanking (copying) text',
-	group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank({
-			higroup = 'Visual',
+			higroup = "Visual",
 		})
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	desc = "Disable comment continuation (enter or o/O)",
+	group = vim.api.nvim_create_augroup("comment-ro", { clear = true }),
+	callback = function()
+		vim.opt.formatoptions:remove("ro")
 	end,
 })
 
 vim.cmd.colorscheme("catppuccin")
 
-require("./lsp")
+if vim.g.have_nerd_font then
+	vim.diagnostic.config({
+		signs = {
+			text = {
+				[vim.diagnostic.severity.ERROR] = "󰅚",
+				[vim.diagnostic.severity.WARN] = "",
+				[vim.diagnostic.severity.HINT] = "󰌶",
+				[vim.diagnostic.severity.INFO] = "",
+			},
+		},
+	})
+end
+vim.diagnostic.config({
+	virtual_text = false,
+	update_in_insert = true,
+})

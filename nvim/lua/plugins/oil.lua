@@ -2,7 +2,6 @@ return {
 	{
 		"oil.nvim",
 		lazy = false,
-		load = function() end,
 		keys = {
 			{ "-",    "<CMD>Oil<CR>", desc = "Open parent directory" },
 			{ "<BS>", "<CMD>Oil<CR>", desc = "Open parent directory" },

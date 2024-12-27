@@ -1,16 +1,16 @@
 return {
 	{
 		"noice.nvim",
-		lazy = false,
-		load = function() end,
 		opts = {
 			presets = {
 				command_palette = true,
 				inc_rename = true,
 			},
-			signature = {
-				auto_open = {
-					enabled = false,
+			lsp = {
+				signature = {
+					auto_open = {
+						enabled = false,
+					},
 				},
 			},
 			views = {

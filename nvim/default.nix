@@ -57,32 +57,45 @@ in
       with pkgs.vimPlugins; {
         start = [
           (mkPlugin lz-nvim "lz-n")
+
           catppuccin-nvim
+          (mkPlugin vim-lumen "vim-lumen")
+
           nvim-treesitter.withAllGrammars
-          nvim-treesitter-textobjects
-          vim-illuminate
+          ts-comments-nvim
+
           nvim-lspconfig
+          blink-cmp
+          SchemaStore-nvim
+          nvim-lint
+          (conform-nvim.overrideAttrs {
+            # clashes with oil
+            postPatch = "rm doc/recipes.md";
+          })
+
           oil-nvim
-          nvim-surround
           telescope-fzf-native-nvim
-          vim-sleuth
-          auto-save-nvim
+          harpoon2
 
           gitsigns-nvim
           git-conflict-nvim
 
-          mini-icons
+          nvim-surround
           mini-operators
           mini-splitjoin
           vim-wordmotion
           increment-activator
-
           leap-nvim
           flit-nvim
 
+          vim-helm
+          vim-sleuth
+          auto-save-nvim
+          undotree
+
           noice-nvim
           statuscol-nvim
-
+          mini-icons
           which-key-nvim
           nvim-colorizer-lua
           nvim-pqf
@@ -90,22 +103,11 @@ in
           nvim-navic
           virt-column-nvim
           indent-blankline-nvim
-
-          SchemaStore-nvim
-          blink-cmp
-          ts-comments-nvim
-          undotree
-          nvim-lint
-          (conform-nvim.overrideAttrs {
-            # clashes with oil
-            postPatch = "rm doc/recipes.md";
-          })
-          vim-helm
-          (mkPlugin vim-lumen "vim-lumen")
         ];
         opt = [
           telescope-nvim
-          harpoon2
+          vim-illuminate
+          nvim-treesitter-textobjects
         ];
       };
 

@@ -1,8 +1,9 @@
 return {
 	{
 		"nvim-treesitter",
-		lazy = false,
-		load = function() end,
+		load = function()
+			vim.cmd.packadd("nvim-treesitter-textobjects")
+		end,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			highlight = {
@@ -36,8 +37,6 @@ return {
 
 	{
 		"ts-comments.nvim",
-		lazy = false,
-		load = function() end,
 		after = function()
 			require("ts-comments").setup({})
 		end,
@@ -45,8 +44,7 @@ return {
 
 	{
 		"vim-illuminate",
-		lazy = false,
-		load = function() end,
+		load = vim.cmd.packadd,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			providers = {

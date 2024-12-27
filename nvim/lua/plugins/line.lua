@@ -1,8 +1,6 @@
 return {
 	{
 		"nvim-navic",
-		lazy = false,
-		load = function() end,
 		opts = {
 			highlight = true,
 			lsp = {
@@ -16,8 +14,6 @@ return {
 
 	{
 		"lualine.nvim",
-		lazy = false,
-		load = function() end,
 		opts = {
 			options = {
 				theme = "auto",

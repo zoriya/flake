@@ -1,8 +1,6 @@
 return {
 	{
 		"nvim-lint",
-		lazy = false,
-		load = function() end,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			javascript = { "biomejs", "eslint_d" },

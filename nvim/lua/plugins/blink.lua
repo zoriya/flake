@@ -1,8 +1,7 @@
 return {
 	{
 		"blink-cmp",
-		lazy = false,
-		load = function() end,
+		event = "InsertEnter",
 		opts = {
 			keymap = {
 				preset = "default",

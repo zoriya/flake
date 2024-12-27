@@ -1,8 +1,6 @@
 return {
 	{
 		"nvim-surround",
-		lazy = false,
-		load = function() end,
 		after = function()
 			require("nvim-surround").setup({})
 		end,
@@ -10,8 +8,6 @@ return {
 
 	{
 		"vim-wordmotion",
-		lazy = false,
-		load = function() end,
 		keys = {
 			-- This overrides the default ge & gw but i never used them.
 			{ "gw",  "<plug>WordMotion_w",  desc = "Next small world",                mode = { "n", "x", "o" } },
@@ -20,15 +16,13 @@ return {
 			{ "igw", "<plug>WordMotion_iw", desc = "inner small word",                mode = { "x", "o" } },
 			{ "agw", "<plug>WordMotion_aw", desc = "a small word (with white-space)", mode = { "x", "o" } },
 		},
-		after = function()
+		before = function()
 			vim.g.wordmotion_nomap = true
 		end,
 	},
 
 	{
 		"increment-activator",
-		lazy = false,
-		load = function() end,
 		keys = {
 			{ "<C-A>", desc = "Increment" },
 			{ "<C-X>", desc = "Decrement" },
@@ -37,8 +31,6 @@ return {
 
 	{
 		"leap.nvim",
-		load = function() end,
-		lazy = false,
 		keys = {
 			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
 			{ "S", "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
@@ -49,8 +41,6 @@ return {
 
 	{
 		"flit.nvim",
-		load = function() end,
-		lazy = false,
 		keys = { "f", "F", "t", "T" },
 		after = function()
 			require("flit").setup()

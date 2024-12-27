@@ -1,8 +1,6 @@
 return {
 	{
 		"gitsigns.nvim",
-		lazy = false,
-		load = function() end,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			signs = {
@@ -23,8 +21,8 @@ return {
 					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 				end
 
-				map("n", "]h", gs.next_hunk, "Next Hunk")
-				map("n", "[h", gs.prev_hunk, "Prev Hunk")
+				map('n', ']h', function() gs.nav_hunk('next') end, "Next Hunk")
+				map('n', '[h', function() gs.nav_hunk('prev') end, "Prev Hunk")
 				map({ "n", "v" }, "<leader>ga", ":Gitsigns stage_hunk<CR>", "Add Hunk")
 				map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
 				map("n", "<leader>gu", gs.undo_stage_hunk, "Unstage Hunk")
@@ -43,7 +41,6 @@ return {
 	{
 		"git-conflict.nvim",
 		lazy = false,
-		load = function() end,
 		keys = {
 			{ "<leader>gxo", "<Plug>(git-conflict-ours)",          desc = "Accept ours" },
 			{ "<leader>gxt", "<Plug>(git-conflict-theirs)",        desc = "Accept theirs" },

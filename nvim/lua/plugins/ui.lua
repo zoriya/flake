@@ -1,8 +1,6 @@
 return {
 	{
 		"undotree",
-		load = function() end,
-		lazy = false,
 		keys = {
 			{ "<leader>u", vim.cmd.UndotreeToggle, desc = "Show undotree" },
 		},
@@ -10,8 +8,6 @@ return {
 
 	{
 		"which-key.nvim",
-		load = function() end,
-		lazy = false,
 		opts = {
 			plugins = { spelling = true },
 		},
@@ -23,8 +19,6 @@ return {
 
 	{
 		"nvim-colorizer.lua",
-		load = function() end,
-		lazy = false,
 		event = "BufReadPre",
 		opts = {
 			filetypes = {
@@ -51,8 +45,6 @@ return {
 
 	{
 		"nvim-pqf",
-		load = function() end,
-		lazy = false,
 		ft = "qf",
 		after = function()
 			require("pqf").setup()
@@ -61,8 +53,6 @@ return {
 
 	{
 		"virt-column.nvim",
-		lazy = false,
-		load = function() end,
 		opts = {
 			char = "▕",
 		},
@@ -73,8 +63,6 @@ return {
 
 	{
 		"indent-blankline.nvim",
-		lazy = false,
-		load = function() end,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			indent = {

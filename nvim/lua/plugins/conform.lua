@@ -1,8 +1,6 @@
 return {
 	{
 		"conform.nvim",
-		lazy = false,
-		load = function() end,
 		cmd = "ConformInfo",
 		keys = {
 			{

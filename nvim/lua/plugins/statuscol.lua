@@ -1,8 +1,6 @@
 return {
 	{
 		"statuscol.nvim",
-		lazy = false,
-		load = function() end,
 		after = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({

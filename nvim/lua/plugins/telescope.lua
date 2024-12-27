@@ -1,6 +1,7 @@
 return {
 	{
 		"telescope.nvim",
+		load = vim.cmd.packadd,
 		cmd = "Telescope",
 		keys = {
 			{ "<leader>f",  "<cmd>Telescope find_files<cr>",          desc = "Find Files" },

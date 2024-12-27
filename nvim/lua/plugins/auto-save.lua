@@ -1,8 +1,7 @@
 return {
 	{
 		"auto-save.nvim",
-		lazy = false,
-		load = function() end,
+		event = { "InsertLeave", "TextChanged", },
 		keys = {
 			{
 				"<leader>w",
@@ -12,7 +11,6 @@ return {
 				desc = "Toggle autosave"
 			},
 		},
-		event = { "InsertLeave", "TextChanged", },
 		opts = {
 			write_all_buffers = true,
 			condition = function(buf)
@@ -23,9 +21,11 @@ return {
 				return ft ~= "oil" and ft ~= "harpoon"
 			end,
 		},
-		after = function(plug)
+		beforeAll = function()
 			vim.g.auto_save_state = true
-			require("auto-save").setup(plug.opt)
+		end,
+		after = function(plug)
+			require("auto-save").setup(plug.opts)
 		end,
 	},
 }
