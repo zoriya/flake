@@ -24,61 +24,90 @@ in
 
     config = ./.;
 
-    plugins = with pkgs.vimPlugins; {
-      start = [
-        (mkPlugin lz-nvim "lz-n")
-        # TODO: use catppuccin's compile feature. see: https://github.com/stasjok/dotfiles/blob/36037f523185ba1409dd953999fda0f0db0dbd4f/nvim/default.nix#L136C8-L148C12
-        catppuccin-nvim
-        nvim-treesitter.withAllGrammars
-        nvim-treesitter-textobjects
-        vim-illuminate
-        nvim-lspconfig
-        oil-nvim
-        nvim-surround
-        telescope-fzf-native-nvim
-        vim-sleuth
-        auto-save-nvim
+    plugins = let
+      catppuccin-nvim = let
+        neovim = pkgs.neovim.override {
+          configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
+        };
+      in
+        pkgs.runCommand "catppuccin-nvim" {} ''
+          mkdir -p $out
+          cp -r --no-preserve=mode,ownership ${pkgs.vimPlugins.catppuccin-nvim}/* $out
+          rm -rf $out/doc $out/colors/*
 
-        gitsigns-nvim
-        git-conflict-nvim
+          ${neovim}/bin/nvim -l ${./catppuccin.lua}
+          rm $out/lua/colors/cached
+          cd $out/lua/colors
+          for flavor in *; do
+            mv "$out/lua/colors/$flavor" "catppuccin-$flavor.lua"
+            cat <<-eof > $out/colors/catppuccin-''${flavor}.lua
+            if vim.g.colors_name == "catppuccin-$flavor" and vim.o.background ~= (vim.g.colors_name == "catppuccin-latte" and "light" or "dark") then
+              dofile("$out/lua/colors/catppuccin-" .. (vim.o.background == "light" and "latte" or "mocha") .. ".lua")
+            else
+              dofile("$out/lua/colors/catppuccin-$flavor.lua")
+            end
+          eof
+          done
 
-        mini-icons
-        mini-operators
-        mini-splitjoin
-        vim-wordmotion
-        increment-activator
+          cat <<-eof > $out/colors/catppuccin.lua
+          dofile("$out/lua/colors/catppuccin-" .. (vim.o.background == "light" and "latte" or "mocha") .. ".lua")
+          eof
+        '';
+    in
+      with pkgs.vimPlugins; {
+        start = [
+          (mkPlugin lz-nvim "lz-n")
+          catppuccin-nvim
+          nvim-treesitter.withAllGrammars
+          nvim-treesitter-textobjects
+          vim-illuminate
+          nvim-lspconfig
+          oil-nvim
+          nvim-surround
+          telescope-fzf-native-nvim
+          vim-sleuth
+          auto-save-nvim
 
-        leap-nvim
-        flit-nvim
+          gitsigns-nvim
+          git-conflict-nvim
 
-        noice-nvim
-        statuscol-nvim
+          mini-icons
+          mini-operators
+          mini-splitjoin
+          vim-wordmotion
+          increment-activator
 
-        which-key-nvim
-        nvim-colorizer-lua
-        nvim-pqf
-        lualine-nvim
-        nvim-navic
-        virt-column-nvim
-        indent-blankline-nvim
+          leap-nvim
+          flit-nvim
 
-        SchemaStore-nvim
-        blink-cmp
-        ts-comments-nvim
-        undotree
-        nvim-lint
-        (conform-nvim.overrideAttrs {
-          # clashes with oil
-          postPatch = "rm doc/recipes.md";
-        })
-        vim-helm
-        (mkPlugin vim-lumen "vim-lumen")
-      ];
-      opt = [
-        telescope-nvim
-        harpoon2
-      ];
-    };
+          noice-nvim
+          statuscol-nvim
+
+          which-key-nvim
+          nvim-colorizer-lua
+          nvim-pqf
+          lualine-nvim
+          nvim-navic
+          virt-column-nvim
+          indent-blankline-nvim
+
+          SchemaStore-nvim
+          blink-cmp
+          ts-comments-nvim
+          undotree
+          nvim-lint
+          (conform-nvim.overrideAttrs {
+            # clashes with oil
+            postPatch = "rm doc/recipes.md";
+          })
+          vim-helm
+          (mkPlugin vim-lumen "vim-lumen")
+        ];
+        opt = [
+          telescope-nvim
+          harpoon2
+        ];
+      };
 
     extraPackages = with pkgs; [
       # telescope helpers

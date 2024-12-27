@@ -37,6 +37,8 @@ vim.opt.listchars = {
 	precedes = "◢",
 	nbsp = "○",
 }
+vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
+vim.opt.pumheight = 15
 
 -- for all modes except terminal
 vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
@@ -100,5 +102,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		})
 	end,
 })
+
+vim.cmd.colorscheme("catppuccin")
 
 require("./lsp")
