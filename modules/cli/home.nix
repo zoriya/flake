@@ -62,6 +62,7 @@
     set -g mouse on
     set -g status off
     set -g set-clipboard on
+    set -g focus-events on
 
     set-window-option -g mode-keys vi
     bind-key v copy-mode
