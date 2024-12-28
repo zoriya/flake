@@ -11,6 +11,15 @@
 - Lots of cli tools
 - Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot), `/` is a tmpfs.
 
+## Nvim
+
+ - Is configured through lua
+ - Plugins & LSP are configured in nix
+ - Everything is binary compiled at build time
+ - Everything is packed in a single plugin to optimize the runtimepath length
+ - A `.luarc.json` can be generated using `nix develop`
+ - The config can be used from anywhere using `nix run github:zoriya/flake#nvim`
+
 
 ## Notes for myself
 

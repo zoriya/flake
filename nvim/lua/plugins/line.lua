@@ -75,7 +75,7 @@ return {
 						separator = '>',
 						path = 0,
 						symbols = {
-							modified = '[+]',
+							modified = '',
 							readonly = '[-]',
 							unnamed = '[No Name]',
 						},
