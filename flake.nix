@@ -64,12 +64,19 @@
     overlays = {
       nixpkgs.overlays = [
         (import ./overlays inputs)
-        neovim-nightly.overlays.default
+        nvim-overlay
       ];
     };
 
     mkSystem = import ./lib/mksystem.nix (inputs // {inherit overlays inputs;});
     eachSystem = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
+
+    nvim-overlay = final: prev:
+      import ./nvim (inputs
+        // {
+          pkgs = prev.pkgs;
+          lib = nixpkgs.lib;
+        });
   in {
     nixosConfigurations.fuhen = mkSystem "fuhen" {
       env = "river";
@@ -112,32 +119,33 @@
     };
 
     packages = eachSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      vim = import ./nvim (inputs
-        // {
-          inherit pkgs;
-          lib = nixpkgs.lib;
-        });
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [nvim-overlay];
+      };
     in rec {
       default = nvim;
-      nvim = vim.nvim;
+      nvim = pkgs.nvim;
     });
 
     devShells = eachSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      vim = import ./nvim (inputs
-        // {
-          inherit pkgs;
-          lib = nixpkgs.lib;
-        });
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [nvim-overlay];
+      };
     in rec {
       default = nvim-lua;
       nvim-lua = pkgs.mkShell {
         name = "nvim-lua";
         shellHook = ''
-          ln -fs ${vim.luarc} .luarc.json
+          ln -fs ${pkgs.nvim-luarc} .luarc.json
         '';
       };
     });
+
+    overlays = rec {
+      default = nvim;
+      nvim = nvim-overlay;
+    };
   };
 }

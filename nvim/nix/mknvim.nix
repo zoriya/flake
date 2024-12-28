@@ -1,10 +1,8 @@
 {
   pkgs,
   lib,
-  stdenv,
   ...
 }: {
-  name ? "nvim",
   package ? pkgs.neovim,
   config,
   plugins ? {
@@ -90,7 +88,7 @@
       ${builtins.readFile (config + "/init.lua")}
     '';
 in {
-  ${name} = pkgs.wrapNeovimUnstable nvim {
+  nvim = pkgs.wrapNeovimUnstable nvim {
     wrapRc = false;
     wrapperArgs = builtins.concatStringsSep " " [
       (lib.optionals (extraPackages != []) ''--prefix PATH : "${lib.makeBinPath extraPackages}"'')
@@ -100,5 +98,5 @@ in {
     inherit withPython3 withNodeJs withPerl withRuby extraPython3Packages extraLuaPackages;
   };
 
-  luarc = mkLuarc { nvim = package; inherit plugins; };
+  nvim-luarc = mkLuarc { nvim = package; inherit plugins; };
 }

@@ -23,9 +23,9 @@
       glow
       gh
       yq
-      alejandra
       nodePackages.http-server
       nodePackages.live-server
+      nvim
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils

@@ -1,11 +1,12 @@
 {
   pkgs,
+  lib,
   neovim-nightly,
   lz-nvim,
   vim-lumen,
   ...
 }: let
-  mkNvim = pkgs.callPackage ./nix/mknvim.nix {inherit pkgs;};
+  mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
 
   mkPlugin = src: pname:
     pkgs.vimUtils.buildVimPlugin {
@@ -14,8 +15,6 @@
     };
 in
   mkNvim {
-    name = "nvim";
-
     withNodeJs = false;
     withRuby = false;
     withPython3 = false;
@@ -134,6 +133,9 @@ in
       helm-ls
       zls
       lua-language-server
+
+      # nix formatter
+      alejandra
 
       # Give access to gdbus for color-scheme detection (vim-lumen).
       glib
