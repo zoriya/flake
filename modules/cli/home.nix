@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   imports = [
     ./zsh
-    ./nvim
   ];
   programs.direnv = {
     enable = true;
