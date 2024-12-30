@@ -23,11 +23,9 @@
 
   nvim = builder.byteCompileVim package;
 
-  # TODO: only the (unused) init.lua seems to be byte compiled, idk why
   conf = builder.byteCompileLuaDrv (pkgs.runCommandLocal "nvim-config" {} ''
     mkdir $out
     cp -r ${config}/* $out
-    ls $out
   '');
 
   pluginPack = let
@@ -73,7 +71,6 @@
   initLua =
     # lua
     ''
-      print("${conf}")
       vim.opt.rtp = {
         "${conf}",
         "${pluginPack}/pack/packages/start/vimplugin-plugin-pack",

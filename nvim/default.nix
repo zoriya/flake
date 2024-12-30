@@ -4,6 +4,7 @@
   neovim-nightly,
   lz-nvim,
   vim-lumen,
+  ltex-extra,
   ...
 }: let
   mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
@@ -66,6 +67,7 @@ in
           nvim-lspconfig
           blink-cmp
           SchemaStore-nvim
+          ((mkPlugin ltex-extra "ltex-extra").overrideAttrs {doCheck = false;})
           nvim-lint
           (conform-nvim.overrideAttrs {
             # clashes with oil
@@ -94,6 +96,7 @@ in
 
           noice-nvim
           statuscol-nvim
+          dressing-nvim
           mini-icons
           which-key-nvim
           nvim-colorizer-lua
@@ -102,6 +105,7 @@ in
           nvim-navic
           virt-column-nvim
           indent-blankline-nvim
+          zen-mode-nvim
         ];
         opt = [
           telescope-nvim

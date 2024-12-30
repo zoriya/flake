@@ -53,6 +53,10 @@
       url = "github:vimpostor/vim-lumen";
       flake = false;
     };
+    ltex-extra = {
+      url = "github:barreiroleo/ltex_extra.nvim/dev";
+      flake = false;
+    };
   };
 
   outputs = {

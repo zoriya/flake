@@ -64,4 +64,16 @@ return {
 			})
 		end,
 	},
+
+	{
+		"ltex_extra.nvim",
+		ft = { "markdown", "tex" },
+		opts = {
+			-- See https://valentjn.github.io/ltex/supported-languages.html#natural-languages
+			load_langs = { 'en-US' },
+		},
+		after = function(plug)
+			require("ltex_extra").setup(plug.opts)
+		end,
+	},
 }

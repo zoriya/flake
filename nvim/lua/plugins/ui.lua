@@ -91,4 +91,15 @@ return {
 			require("ibl").setup(plug.opts)
 		end,
 	},
+
+	{
+		"zen-mode.nvim",
+		keys = {
+			{ "<leader>zz", "<cmd>ZenMode<cr>", desc = "Toogle zen mode" },
+		},
+		cmd = "ZenMode",
+		after = function()
+			require("zen-mode").setup()
+		end,
+	},
 }
