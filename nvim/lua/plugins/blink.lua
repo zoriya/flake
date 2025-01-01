@@ -7,6 +7,8 @@ return {
 				preset = "default",
 				['<C-space>'] = { 'show', },
 				['<C-h>'] = { 'select_and_accept' },
+				['<Up>'] = { 'select_prev', 'fallback' },
+				['<Down>'] = { 'select_next', 'fallback' },
 				['<Tab>'] = {},
 				['<S-Tab>'] = {},
 			},
@@ -21,6 +23,9 @@ return {
 				documentation = {
 					auto_show = true,
 					auto_show_delay_ms = 0,
+				},
+				menu = {
+					max_height = 15,
 				},
 			},
 			fuzzy = {
