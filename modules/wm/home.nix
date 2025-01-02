@@ -29,10 +29,6 @@ in {
           then ""
           else "-dark";
       in "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3${suffix}";
-      kit = ''
-        ${pkgs.coreutils}/bin/ln -sf $XDG_CONFIG_HOME/kitty/${theme}.conf $XDG_CONFIG_HOME/kitty/theme.conf
-        ${pkgs.procps}/bin/pkill -USR1 kitty
-      '';
     };
   in {
     enable = true;
