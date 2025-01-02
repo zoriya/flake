@@ -100,7 +100,7 @@ in
           mini-icons
           which-key-nvim
           nvim-colorizer-lua
-          nvim-pqf
+          quicker-nvim
           lualine-nvim
           nvim-navic
           virt-column-nvim

@@ -1,6 +1,7 @@
 return {
 	{
 		"mini.icons",
+		enabled = vim.g.have_nerd_font,
 		after = function()
 			require("mini.icons").setup();
 			MiniIcons.mock_nvim_web_devicons()

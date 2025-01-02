@@ -97,7 +97,7 @@ end)
 -- Lsp mapping that should become defaults
 vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, { desc = "Go to definition" })
 vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, { desc = "Go to declaration" })
-vim.keymap.set("n", "gs", function() vim.lsp.buf.type_definition() end, { desc = "Go to type definition" })
+vim.keymap.set("n", "grs", function() vim.lsp.buf.type_definition() end, { desc = "Go to type definition" })
 
 
 vim.api.nvim_create_autocmd("TextYankPost", {

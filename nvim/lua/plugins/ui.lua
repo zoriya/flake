@@ -10,6 +10,9 @@ return {
 		"which-key.nvim",
 		opts = {
 			plugins = { spelling = true },
+			icons = {
+				mappings = vim.g.have_nerd_font,
+			},
 		},
 		after = function(plug)
 			require("which-key").setup(plug.opts)
@@ -44,19 +47,29 @@ return {
 	},
 
 	{
-		"nvim-pqf",
-		after = function()
-			require("pqf").setup()
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = { "qf" },
-				desc = "Set nolist on quickfix",
-				group = vim.api.nvim_create_augroup("qf-nolist", { clear = true }),
-				callback = function()
-					-- or setl nolist
-					vim.opt_local.list = false
-				end,
-			})
-			vim.cmd("autocmd FileType qf setl nolist")
+		"quicker.nvim",
+		ft = "qf",
+		opts = {
+			opts = {
+				list = false
+			},
+			highlight = {
+				load_buffers = false,
+			},
+			max_filename_width = function()
+				return math.floor(math.min(50, vim.o.columns / 2))
+			end
+		},
+		after = function(plug)
+			local signs = vim.diagnostic.config().signs.text
+			plug.opts.type_icons = {
+				E = signs[vim.diagnostic.severity.ERROR],
+				W = signs[vim.diagnostic.severity.WARN],
+				I = signs[vim.diagnostic.severity.INFO],
+				N = signs[vim.diagnostic.severity.INFO],
+				H = signs[vim.diagnostic.severity.HINT],
+			}
+			require("quicker").setup(plug.opts)
 		end,
 	},
 
