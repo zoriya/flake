@@ -45,9 +45,18 @@ return {
 
 	{
 		"nvim-pqf",
-		ft = "qf",
 		after = function()
 			require("pqf").setup()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "qf" },
+				desc = "Set nolist on quickfix",
+				group = vim.api.nvim_create_augroup("qf-nolist", { clear = true }),
+				callback = function()
+					-- or setl nolist
+					vim.opt_local.list = false
+				end,
+			})
+			vim.cmd("autocmd FileType qf setl nolist")
 		end,
 	},
 

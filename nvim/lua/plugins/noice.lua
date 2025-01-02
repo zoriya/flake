@@ -1,6 +1,10 @@
 return {
 	{
 		"noice.nvim",
+		lazy = false,
+		keys = {
+			{ "<leader>zl", "<cmd>Noice<cr>", desc = "List messages" },
+		},
 		opts = {
 			presets = {
 				command_palette = true,

@@ -17,6 +17,8 @@ return {
 			{ "agw", "<plug>WordMotion_aw", desc = "a small word (with white-space)", mode = { "x", "o" } },
 		},
 		before = function()
+			-- This never gets applied (ordering issue with wordmotion's autoload)
+			-- This is also set in `settings.lua` but kept here for documentation purposes
 			vim.g.wordmotion_nomap = true
 		end,
 	},

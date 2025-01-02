@@ -39,6 +39,9 @@ vim.opt.listchars = {
 vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
 vim.opt.pumheight = 15
 
+-- Can't specify this in wordmotion's config due to race conditions
+vim.g.wordmotion_nomap = true
+
 -- for all modes except terminal
 vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
 -- i don't use terminal that much so not having esc is okay
@@ -49,10 +52,6 @@ vim.g.omni_sql_no_default_maps = 1
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
-
--- Center screen when navigating search results
-vim.keymap.set("n", "n", "nzzzv", { desc = "Next result" })
-vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous result" })
 
 -- Copy to/from system clipboard
 vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
@@ -66,6 +65,9 @@ vim.keymap.set("n", "[q", "<cmd>cprev<cr>zvzz", { desc = "Previous quickfix item
 vim.keymap.set("n", "]q", "<cmd>cnext<cr>zvzz", { desc = "Next quickfix item" })
 vim.keymap.set("n", "[l", "<cmd>lprev<cr>zvzz", { desc = "Previous loclist item" })
 vim.keymap.set("n", "]l", "<cmd>lnext<cr>zvzz", { desc = "Next loclist item" })
+-- Center screen when navigating search results
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next result" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous result" })
 
 -- Clear snippets with C-l and go to next/prev with C-n & C-p
 vim.keymap.set("n", "<C-l>", function()
@@ -92,6 +94,12 @@ vim.keymap.set({ "i", "s" }, "<C-p>", function()
 end)
 
 
+-- Lsp mapping that should become defaults
+vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, { desc = "Go to definition" })
+vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, { desc = "Go to declaration" })
+vim.keymap.set("n", "gs", function() vim.lsp.buf.type_definition() end, { desc = "Go to type definition" })
+
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
@@ -107,6 +115,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	group = vim.api.nvim_create_augroup("comment-ro", { clear = true }),
 	callback = function()
 		vim.opt.formatoptions:remove("ro")
+		vim.opt_local.formatoptions:remove("ro")
 	end,
 })
 
