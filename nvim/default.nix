@@ -80,6 +80,7 @@ in
           harpoon2
 
           gitsigns-nvim
+          vim-fugitive
           git-conflict-nvim
 
           nvim-surround

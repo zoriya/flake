@@ -86,6 +86,11 @@
       env = "river";
       custom = [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
+        {
+          nixpkgs.config.permittedInsecurePackages = [
+            "dotnet-sdk-6.0.428"
+          ];
+        }
       ];
     };
 
