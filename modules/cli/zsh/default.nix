@@ -249,35 +249,39 @@
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
     ];
-    initExtraFirst = ''
-      # Create a new tmux session (with a random name) and attach.
-      if [[ -z "$TMUX" ]]; then
-      	exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
-      elif [[ $SHLVL -eq 1 ]]; then
-        session=$(tmux display-message -p "#S")
-        # kill current sesion if we are quiting the only pane
-        function __onExit {
-          if [[ $(tmux list-panes -s -t $session | wc -l) == 1 ]]; then
-            tmux kill-session -t $session
-          fi
-        }
-        trap __onExit EXIT
-      fi
-    '';
+    initExtraFirst =
+      #bash
+      ''
+        # Create a new tmux session (with a random name) and attach.
+        if [[ -z "$TMUX" ]]; then
+        	exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+        elif [[ $SHLVL -eq 1 ]]; then
+          session=$(tmux display-message -p "#S")
+          # kill current sesion if we are quiting the only pane
+          function __onExit {
+            if [[ $(tmux list-panes -s -t $session | wc -l) == 1 ]]; then
+              tmux kill-session -t $session
+            fi
+          }
+          trap __onExit EXIT
+        fi
+      '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
-    completionInit = ''
-      # The globbing is a little complicated here:
-      # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
-      # - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
-      # - '.' matches "regular files"
-      # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.autoload -Uz compinit
-      autoload -Uz compinit
-      if [[ -n $ZSH_CACHE_DIR/.zcompdump(#qN.mh+24) ]]; then
-      	compinit;
-      else
-      	compinit -C;
-      fi;
-    '';
+    completionInit =
+      #bash
+      ''
+        # The globbing is a little complicated here:
+        # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+        # - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+        # - '.' matches "regular files"
+        # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.autoload -Uz compinit
+        autoload -Uz compinit
+        if [[ -n $ZSH_CACHE_DIR/.zcompdump(#qN.mh+24) ]]; then
+        	compinit;
+        else
+        	compinit -C;
+        fi;
+      '';
     initExtra = builtins.readFile ./init.zsh;
 
     envExtra = ''
