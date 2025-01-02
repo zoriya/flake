@@ -115,12 +115,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("FileType", {
 	desc = "Disable comment continuation (enter or o/O)",
 	group = vim.api.nvim_create_augroup("comment-ro", { clear = true }),
 	callback = function()
-		vim.opt.formatoptions:remove("ro")
-		vim.opt_local.formatoptions:remove("ro")
+		vim.opt.formatoptions:remove({"r", "o"})
+		vim.opt_local.formatoptions:remove({"r", "o"})
 	end,
 })
 

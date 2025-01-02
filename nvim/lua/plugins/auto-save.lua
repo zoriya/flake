@@ -18,7 +18,7 @@ return {
 					return false
 				end
 				local ft = vim.fn.getbufvar(buf, "&filetype")
-				return ft ~= "oil" and ft ~= "harpoon"
+				return ft ~= "oil" and ft ~= "harpoon" and ft ~= "qf"
 			end,
 		},
 		beforeAll = function()
