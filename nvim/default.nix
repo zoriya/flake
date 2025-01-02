@@ -67,6 +67,7 @@ in
           nvim-lspconfig
           blink-cmp
           SchemaStore-nvim
+          roslyn-nvim
           ((mkPlugin ltex-extra "ltex-extra").overrideAttrs {doCheck = false;})
           nvim-lint
           (conform-nvim.overrideAttrs {
@@ -124,7 +125,7 @@ in
       haskell-language-server
       rust-analyzer
       clang-tools
-      omnisharp-roslyn
+      roslyn-ls
       pyright
       typescript-language-server
       nil

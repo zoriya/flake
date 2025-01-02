@@ -61,6 +61,11 @@ vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Past line from system
 
 -- Quickfix list
 vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>", { desc = "Close quickfix" })
+vim.keymap.set("n", "grd", function()
+	vim.diagnostics.setqflist({ severity = { min = vim.diagnostics.severity.WARN } })
+end, { desc = "Open diagnostics" })
+
+-- Center screen after navigating (those are builtin shortcuts)
 vim.keymap.set("n", "[q", "<cmd>cprev<cr>zvzz", { desc = "Previous quickfix item" })
 vim.keymap.set("n", "]q", "<cmd>cnext<cr>zvzz", { desc = "Next quickfix item" })
 vim.keymap.set("n", "[l", "<cmd>lprev<cr>zvzz", { desc = "Previous loclist item" })

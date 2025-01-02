@@ -9,7 +9,6 @@ return {
 			require("lspconfig").hls.setup({})
 			require("lspconfig").rust_analyzer.setup({})
 			require("lspconfig").clangd.setup({})
-			require("lspconfig").omnisharp.setup({})
 			require("lspconfig").pyright.setup({})
 			require("lspconfig").nil_ls.setup({})
 			require("lspconfig").ts_ls.setup({})
@@ -74,6 +73,18 @@ return {
 		},
 		after = function(plug)
 			require("ltex_extra").setup(plug.opts)
+		end,
+	},
+
+	{
+		"roslyn.nvim",
+		ft = { "cs", "vb" },
+		opts = {
+			exe = "Microsoft.CodeAnalysis.LanguageServer",
+			broad_search = true,
+		},
+		after = function(plug)
+			require("roslyn").setup(plug.opts)
 		end,
 	},
 }

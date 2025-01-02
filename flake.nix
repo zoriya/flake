@@ -120,6 +120,13 @@
       customHome = [
         ./modules/gui/ghostty.nix
       ];
+      custom = [
+        {
+          nixpkgs.config.permittedInsecurePackages = [
+            "dotnet-sdk-6.0.428"
+          ];
+        }
+      ];
     };
 
     packages = eachSystem (system: let
