@@ -1,7 +1,6 @@
 return {
 	{
 		"conform.nvim",
-		cmd = "ConformInfo",
 		keys = {
 			{
 				"<leader>e",

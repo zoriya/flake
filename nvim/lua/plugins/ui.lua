@@ -119,7 +119,6 @@ return {
 		keys = {
 			{ "<leader>zz", "<cmd>ZenMode<cr>", desc = "Toogle zen mode" },
 		},
-		cmd = "ZenMode",
 		after = function()
 			require("zen-mode").setup()
 		end,
