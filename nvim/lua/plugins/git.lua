@@ -42,12 +42,12 @@ return {
 		"git-conflict.nvim",
 		lazy = false,
 		keys = {
-			{ "<leader>gxo", "<Plug>(git-conflict-ours)",          desc = "Accept ours" },
-			{ "<leader>gxt", "<Plug>(git-conflict-theirs)",        desc = "Accept theirs" },
-			{ "<leader>gxb", "<Plug>(git-conflict-both)",          desc = "Accept both" },
-			{ "<leader>gx0", "<Plug>(git-conflict-none)",          desc = "Accept none" },
-			{ "[x",          "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
-			{ "]x",          "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
+			{ "c<", "<Plug>(git-conflict-our)",           desc = "Accept ours (top one)" },
+			{ "c>", "<Plug>(git-conflict-theirs)",        desc = "Accept their (bottom one)" },
+			{ "c=", "<Plug>(git-conflict-both)",          desc = "Accept both" },
+			{ "cd", "<Plug>(git-conflict-none)",          desc = "Accept none" },
+			{ "[x", "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
+			{ "]x", "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
 		},
 		opts = {
 			default_mappings = false,
