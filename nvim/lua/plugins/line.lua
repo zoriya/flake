@@ -1,19 +1,7 @@
 return {
 	{
-		"nvim-navic",
-		opts = {
-			highlight = true,
-			lsp = {
-				auto_attach = true,
-			},
-		},
-		after = function(plug)
-			require("nvim-navic").setup(plug.opts)
-		end,
-	},
-
-	{
 		"lualine.nvim",
+		event = "DeferredUIEnter",
 		opts = {
 			options = {
 				theme = "auto",
@@ -111,6 +99,20 @@ return {
 		after = function(plug)
 			vim.opt.showmode = false
 			require("lualine").setup(plug.opts)
+		end,
+	},
+
+	{
+		"nvim-navic",
+		event = "DeferredUIEnter",
+		opts = {
+			highlight = true,
+			lsp = {
+				auto_attach = true,
+			},
+		},
+		after = function(plug)
+			require("nvim-navic").setup(plug.opts)
 		end,
 	},
 }

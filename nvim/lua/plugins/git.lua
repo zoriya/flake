@@ -40,7 +40,8 @@ return {
 
 	{
 		"git-conflict.nvim",
-		lazy = false,
+		-- load on enter to detect + highlight conflicts
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		keys = {
 			{ "c<", "<Plug>(git-conflict-our)",           desc = "Accept ours (top one)" },
 			{ "c>", "<Plug>(git-conflict-theirs)",        desc = "Accept their (bottom one)" },

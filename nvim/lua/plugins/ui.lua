@@ -8,6 +8,7 @@ return {
 
 	{
 		"which-key.nvim",
+		event = "DeferredUIEnter",
 		opts = {
 			plugins = { spelling = true },
 			icons = {
@@ -75,6 +76,7 @@ return {
 
 	{
 		"virt-column.nvim",
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
 			char = "▕",
 		},

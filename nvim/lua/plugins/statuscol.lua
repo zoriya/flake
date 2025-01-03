@@ -1,6 +1,7 @@
 return {
 	{
 		"statuscol.nvim",
+		event = "DeferredUIEnter",
 		after = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({

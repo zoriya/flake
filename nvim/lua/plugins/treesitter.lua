@@ -37,7 +37,7 @@ return {
 
 	{
 		"ts-comments.nvim",
-		event = { "VimEnter" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		after = function()
 			require("ts-comments").setup({})
 		end,

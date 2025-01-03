@@ -1,7 +1,7 @@
 return {
 	{
 		"noice.nvim",
-		lazy = false,
+		event = "DeferredUIEnter",
 		keys = {
 			{ "<leader>zl", "<cmd>Noice<cr>", desc = "List messages" },
 		},
