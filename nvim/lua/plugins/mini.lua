@@ -1,7 +1,6 @@
 return {
 	{
 		"mini.icons",
-		event = "DeferredUIEnter",
 		enabled = vim.g.have_nerd_font,
 		after = function()
 			require("mini.icons").setup();
