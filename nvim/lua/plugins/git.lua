@@ -41,17 +41,17 @@ return {
 	{
 		"git-conflict.nvim",
 		-- load on enter to detect + highlight conflicts
-		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		keys = {
-			{ "c<", "<Plug>(git-conflict-our)",           desc = "Accept ours (top one)" },
-			{ "c>", "<Plug>(git-conflict-theirs)",        desc = "Accept their (bottom one)" },
-			{ "c=", "<Plug>(git-conflict-both)",          desc = "Accept both" },
-			{ "cd", "<Plug>(git-conflict-none)",          desc = "Accept none" },
-			{ "[x", "<Plug>(git-conflict-prev-conflict)", desc = "Previous conflict" },
-			{ "]x", "<Plug>(git-conflict-next-conflict)", desc = "Next conflict" },
-		},
+		-- lazy loading make it not work, idk why
+		-- event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
-			default_mappings = false,
+			default_mappings = {
+				ours = 'c<',
+				theirs = 'c>',
+				none = 'cd',
+				both = 'c=',
+				next = ']x',
+				prev = '[x',
+			},
 		},
 		after = function(plug)
 			require("git-conflict").setup(plug.opts)
