@@ -5,12 +5,12 @@ return {
 		opts = {
 			keymap = {
 				preset = "default",
-				['<C-space>'] = { 'show', },
-				['<C-h>'] = { 'select_and_accept' },
-				['<Up>'] = { 'select_prev', 'fallback' },
-				['<Down>'] = { 'select_next', 'fallback' },
-				['<Tab>'] = {},
-				['<S-Tab>'] = {},
+				["<C-space>"] = { "show", },
+				["<C-h>"] = { "select_and_accept" },
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
+				["<Tab>"] = {},
+				["S-Tab"] = {},
 			},
 			completion = {
 				trigger = {
@@ -32,6 +32,16 @@ return {
 				prebuilt_binaries = {
 					download = false,
 				},
+			},
+			sources = {
+				default = function()
+					local success, node = pcall(vim.treesitter.get_node)
+					if success and node and (string.find(node:type(), "comment") or string.find(node:type(), "string")) then
+						return { "lsp", "path", "buffer" }
+					end
+
+					return { "lsp" }
+				end,
 			},
 		},
 		after = function(plug)
