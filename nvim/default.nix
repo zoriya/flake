@@ -2,7 +2,6 @@
   pkgs,
   lib,
   neovim-nightly,
-  lz-nvim,
   vim-lumen,
   ltex-extra,
   ...
@@ -56,7 +55,7 @@ in
     in
       with pkgs.vimPlugins; {
         start = [
-          (mkPlugin lz-nvim "lz-n")
+          lz-n
 
           catppuccin-nvim
           (mkPlugin vim-lumen "vim-lumen")

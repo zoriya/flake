@@ -96,16 +96,10 @@ return {
 			exclude = {
 				filetypes = {
 					"help",
-					"alpha",
-					"dashboard",
-					"neo-tree",
-					"Trouble",
-					"lazy",
-					"lspinfo",
-					"packer",
 					"checkhealth",
 					"help",
 					"man",
+					"qf",
 					"",
 				}
 			},

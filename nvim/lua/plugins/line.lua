@@ -91,8 +91,6 @@ return {
 			tabline = {},
 			extensions = {
 				"quickfix",
-				"lazy",
-				"trouble",
 				"oil",
 			},
 		},

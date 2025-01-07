@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   networking.networkmanager.enable = true;
-  hardware.pulseaudio.enable = false;
   hardware.bluetooth = {
     enable = true;
     settings = {

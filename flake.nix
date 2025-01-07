@@ -45,10 +45,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    lz-nvim = {
-      url = "github:zoriya/lz.n";
-      flake = false;
-    };
     vim-lumen = {
       url = "github:vimpostor/vim-lumen";
       flake = false;
