@@ -39,5 +39,8 @@ return {
 				join = 'gJ',
 			},
 		},
+		after = function(plug)
+			require("mini.splitjoin").setup(plug.opts)
+		end
 	},
 }
