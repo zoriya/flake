@@ -39,6 +39,8 @@
     settings = {
       update_check = false;
       show_preview = true;
+      style = "full";
+      inline_height = 0;
     };
   };
 
