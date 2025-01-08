@@ -23,6 +23,13 @@ return {
 				vim.cmd("Telescope git_show ref=" .. entry.value)
 			end
 
+			local function git_show_split(bufr)
+				actions.close(bufr)
+				local entry = action_state.get_selected_entry()
+				vim.cmd("Gedit " .. entry.value)
+			end
+
+
 			local telescope = require("telescope")
 			telescope.setup({
 				defaults = {
@@ -47,11 +54,28 @@ return {
 						-- remove .git directory
 						find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-E", ".git" },
 					},
+					git_commits = {
+						mappings = {
+							i = {
+								["<CR>"] = git_show,
+								["<C-g>"] = git_show_split
+							},
+						},
+					},
+					git_bcommits = {
+						mappings = {
+							i = {
+								["<CR>"] = git_show,
+								["<C-g>"] = git_show_split
+							},
+						},
+					},
 				},
 			})
 
 			telescope.load_extension("fzf")
 			telescope.load_extension("ripgrep")
+			telescope.load_extension("git_show")
 		end
 	},
 }
