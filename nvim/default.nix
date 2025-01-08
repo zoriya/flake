@@ -138,6 +138,7 @@ in
       helm-ls
       zls
       lua-language-server
+      bash-language-server
 
       # nix formatter
       alejandra
