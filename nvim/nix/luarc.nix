@@ -64,6 +64,13 @@
       globals = ["vim"];
       disable = disabled-diagnostics;
     };
+    format.defaultConfig = {
+      # see https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/docs/format_config_EN.md
+      align_array_table = "false";
+      align_function_params = "false";
+      align_continuous_rect_table_field = "false";
+      align_continuous_assign_statement = "false";
+    };
   };
 in
   (pkgs.formats.json {}).generate ".luarc.json" luarc

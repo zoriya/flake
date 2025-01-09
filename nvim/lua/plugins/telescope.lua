@@ -4,15 +4,19 @@ return {
 		load = vim.cmd.packadd,
 		cmd = "Telescope",
 		keys = {
-			{ "<leader>f",  "<cmd>Telescope find_files<cr>",        desc = "Find Files" },
-			{ "<leader>F",  "<cmd>Telescope ripgrep theme=ivy<cr>", desc = "Grep" },
-			{ "<leader>gl", "<cmd>Telescope git_commits<CR>",       desc = "Git log" },
-			{ "<leader>gc", "<cmd>Git commit<CR>",                  desc = "Git commit" },
-			{ "<leader>gC", "<cmd>Git commit --amend<CR>",         desc = "Git commit amend" },
-			{ "<leader>gh", "<cmd>Telescope git_bcommits<CR>",      desc = "Git history" },
-			{ "<leader>gB", "<cmd>Telescope git_branches<CR>",      desc = "Git branches" },
-			{ "<leader>gs", "<cmd>Telescope git_status<CR>",        desc = "Git status" },
-			{ "<leader>zh", "<cmd>Telescope help_tags<CR>",         desc = "Read help" },
+			{ "<leader>f", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+			{ "<leader>F", "<cmd>Telescope ripgrep theme=ivy<cr>", desc = "Grep" },
+			{ "<leader>gl", "<cmd>Telescope git_commits<CR>", desc = "Git log" },
+			{ "<leader>gh", "<cmd>Telescope git_bcommits<CR>", desc = "Git history" },
+			{ "<leader>gB", "<cmd>Telescope git_branches<CR>", desc = "Git branches" },
+			{ "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "Git status" },
+			{ "<leader>zh", "<cmd>Telescope help_tags<CR>", desc = "Read help" },
+
+			-- maybe i should move those elsewhere
+			{ "<leader>gc", "<cmd>Git commit<CR>", desc = "Git commit" },
+			{ "<leader>gC", "<cmd>Git commit --amend<CR>", desc = "Git commit amend" },
+			{ "<leader>gp", "<cmd>Git! push<CR>", desc = "Git push" },
+			{ "<leader>gP", "<cmd>Git! push --force-with-lease --force-if-includes<CR>", desc = "Git push force" },
 		},
 		after = function()
 			local actions = require("telescope.actions")

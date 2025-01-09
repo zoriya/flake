@@ -129,7 +129,6 @@ in
       pyright
       typescript-language-server
       nil
-      gopls
       vscode-langservers-extracted # html, jsonls
       yaml-language-server
       marksman
@@ -139,6 +138,10 @@ in
       zls
       lua-language-server
       bash-language-server
+
+      # gopls also needs go /shame
+      gopls
+      go
 
       # nix formatter
       alejandra
