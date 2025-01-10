@@ -11,13 +11,6 @@ return {
 			{ "<leader>gB", "<cmd>Telescope git_branches<CR>", desc = "Git branches" },
 			{ "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "Git status" },
 			{ "<leader>zh", "<cmd>Telescope help_tags<CR>", desc = "Read help" },
-
-			-- maybe i should move those elsewhere
-			{ "<leader>g.", "<cmd>Git add -A<CR>", desc = "Git add all" },
-			{ "<leader>gc", "<cmd>Git commit<CR>", desc = "Git commit" },
-			{ "<leader>gC", "<cmd>Git commit --amend<CR>", desc = "Git commit amend" },
-			{ "<leader>gp", "<cmd>Git! push<CR>", desc = "Git push" },
-			{ "<leader>gP", "<cmd>Git! push --force-with-lease --force-if-includes<CR>", desc = "Git push force" },
 		},
 		after = function()
 			local actions = require("telescope.actions")
