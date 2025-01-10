@@ -88,6 +88,7 @@
       directory = {
         truncate_to_repo = false;
         fish_style_pwd_dir_length = 1;
+        read_only = ":ro";
         style = "bold fg:#00AFFF";
       };
 

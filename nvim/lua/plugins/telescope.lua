@@ -13,6 +13,7 @@ return {
 			{ "<leader>zh", "<cmd>Telescope help_tags<CR>", desc = "Read help" },
 
 			-- maybe i should move those elsewhere
+			{ "<leader>g.", "<cmd>Git add -A<CR>", desc = "Git add all" },
 			{ "<leader>gc", "<cmd>Git commit<CR>", desc = "Git commit" },
 			{ "<leader>gC", "<cmd>Git commit --amend<CR>", desc = "Git commit amend" },
 			{ "<leader>gp", "<cmd>Git! push<CR>", desc = "Git push" },
