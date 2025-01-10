@@ -3,169 +3,9 @@
   lib,
   ...
 }: {
-  home.packages = with pkgs;
-    [
-      eza
-      viu
-      htop-vim
-      tldr
-      fd
-      duf
-      ncdu
-      ripgrep
-      fzf
-      nix-your-shell
-      unzip
-      sshfs-fuse
-      zip
-      scc
-      bc
-      glow
-      gh
-      yq
-      nodePackages.http-server
-      nodePackages.live-server
-      nvim
-    ]
-    ++ lib.optionals pkgs.stdenv.isLinux [
-      usbutils
-      pciutils
-      psmisc
-    ];
-
-  programs.atuin = {
-    enable = true;
-    flags = ["--disable-up-arrow"];
-    settings = {
-      update_check = false;
-      show_preview = true;
-      style = "full";
-      inline_height = 0;
-    };
-  };
-
-  programs.bat = {
-    enable = true;
-    config.theme = "base16";
-  };
-
-  programs.command-not-found.enable = false;
-  programs.nix-index = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.less.enable = true;
-
-  programs.starship = {
-    enable = true;
-    settings = {
-      add_newline = false;
-
-      format = lib.concatStrings [
-        "$fill"
-        "$hostname"
-        "$python"
-        "$nix_shell"
-        "$line_break"
-        "$directory"
-        "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
-        "$shlvl"
-        "$character"
-      ];
-
-      right_format = lib.concatStrings [
-        "$cmd_duration"
-        "$status"
-        "$jobs"
-      ];
-
-      fill = {
-        symbol = "·";
-        style = "fg:#808080";
-      };
-
-      directory = {
-        truncate_to_repo = false;
-        fish_style_pwd_dir_length = 1;
-        read_only = ":ro";
-        style = "bold fg:#00AFFF";
-      };
-
-      git_branch = {
-        format = "([($branch(: $remote_branch))]($style))";
-        only_attached = true;
-        style = "green";
-      };
-
-      git_commit = {
-        format = "[($hash$tag)]($style)";
-        style = "green";
-        only_detached = true;
-        tag_disabled = false;
-      };
-
-      git_status = {
-        format = "([$all_status$ahead_behind]($style))";
-        style = "yellow";
-        ahead = " ⇡$count";
-        behind = " ⇣$count";
-        diverged = "";
-        conflicted = " =$count";
-        untracked = " ?$count";
-        stashed = " *$count";
-        modified = " !$count";
-        staged = " +$count";
-        deleted = "";
-        renamed = "";
-      };
-
-      git_state = {
-        format = "( [$state( $progress_current/$progress_total)]($style))";
-      };
-
-      status = {
-        format = " [($symbol$status(-$signal_name))]($style)";
-        pipestatus_format = "[$symbol$pipestatus]($style)";
-        pipestatus_segment_format = "[($signal_name )$status]($style)";
-        symbol = "x";
-        pipestatus = true;
-        disabled = false;
-      };
-
-      cmd_duration = {
-        format = " [$duration]($style)";
-      };
-
-      jobs = {
-        symbol = "&";
-        format = " [$symbol$number]($style)";
-      };
-
-      python = {
-        format = "[( \($virtualenv\))]($style)";
-      };
-
-      nix_shell = {
-        format = "[\( $name\) nix]($style)";
-        style = "cyan";
-        heuristic = true;
-      };
-
-      hostname = {
-        format = "[ $ssh_symbol$hostname]($style)";
-      };
-
-      shlvl = {
-        disabled = false;
-        format = "[$symbol]($style)";
-        repeat = true;
-        symbol = "❯";
-        repeat_offset = 1;
-        threshold = 0;
-      };
-    };
-  };
+  imports = [
+    ./starship.nix
+  ];
 
   programs.zsh = {
     enable = true;
@@ -268,6 +108,12 @@
           }
           trap __onExit EXIT
         fi
+
+        # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
+        if [[ -n CMD ]]; then
+          eval $CMD
+          unset CMD
+        fi
       '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
     completionInit =
@@ -306,4 +152,78 @@
     EDITOR = "nvim";
     VISUAL = EDITOR;
   };
+
+  programs.atuin = {
+    enable = true;
+    flags = ["--disable-up-arrow"];
+    settings = {
+      update_check = false;
+      show_preview = true;
+      style = "full";
+      inline_height = 0;
+    };
+  };
+
+  programs.bat = {
+    enable = true;
+    config.theme = "base16";
+  };
+
+  programs.command-not-found.enable = false;
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.less.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    stdlib =
+      #bash
+      ''
+        : "''${XDG_CACHE_HOME:=$HOME/.cache}"
+
+        declare -A direnv_layout_dirs
+        direnv_layout_dir() {
+            echo "''${direnv_layout_dirs[$PWD]:=$(
+                local hash="$(sha1sum - <<<"$PWD" | cut -c-7)"
+                local path="''${PWD//[^a-zA-Z0-9]/-}"
+                echo "$XDG_CACHE_HOME/direnv/layouts/$hash$path"
+            )}"
+        }
+      '';
+    nix-direnv.enable = true;
+    config = {warn_timeout = "500h";};
+  };
+
+  home.packages = with pkgs;
+    [
+      eza
+      viu
+      htop-vim
+      tldr
+      fd
+      duf
+      ncdu
+      ripgrep
+      fzf
+      nix-your-shell
+      unzip
+      sshfs-fuse
+      zip
+      scc
+      bc
+      glow
+      gh
+      yq
+      nodePackages.http-server
+      nodePackages.live-server
+      nvim
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      usbutils
+      pciutils
+      psmisc
+    ];
 }

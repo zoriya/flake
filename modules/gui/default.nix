@@ -39,8 +39,6 @@ in {
     TERMINAL = "ghostty";
     BROWSER = "zen";
     DEFAULT_BROWSER = BROWSER;
-    # For rider
-    FLATPAK_ENABLE_SDK_EXT = "*";
   };
   xdg = {
     enable = true;

@@ -1,8 +1,7 @@
 {pkgs, ...}: {
   imports = [
-    ./fonts.nix
-    ./nix.nix
-    ./impermanence.nix
+    ./nix/nix.nix
+    ./nix/impermanence.nix
   ];
 
   security.sudo.wheelNeedsPassword = true;
