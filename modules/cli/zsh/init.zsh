@@ -163,3 +163,9 @@ proxy() {
 
 # disable space between right prompt and end of line
 ZLE_RPROMPT_INDENT=0
+
+# execute arbitrary commands on startup since `zsh -sc` is not a real option :c
+if [[ -n CMD ]]; then
+	eval $CMD
+	unset CMD
+fi

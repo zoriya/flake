@@ -21,7 +21,7 @@ fi
 current_session=$(tmux display-message -p "#S")
 
 if ! tmux has-session "-t=$selected_name" 2> /dev/null; then
-	tmux new-session -ds "$selected_name" -c "$selected" "CMD='nvim .' $SHELL"
+	tmux new-session -ds "$selected_name" -c "$selected" -e "CMD=$EDITOR ."
 fi
 
 tmux switch-client -t "$selected_name"

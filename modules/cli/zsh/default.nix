@@ -108,12 +108,6 @@
           }
           trap __onExit EXIT
         fi
-
-        # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
-        if [[ -n CMD ]]; then
-          eval $CMD
-          unset CMD
-        fi
       '';
     initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
     completionInit =
