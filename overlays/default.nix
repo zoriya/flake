@@ -1,7 +1,7 @@
 {
   flood,
   river-src,
-...
+  ...
 }: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
@@ -63,6 +63,12 @@ in {
 
   river = super.river.overrideAttrs {
     src = river-src;
+  };
+
+  wbg = super.wbg.overrideAttrs {
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=maybe-uninitialized"
+    ];
   };
 
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.

@@ -160,7 +160,10 @@
 
   programs.bat = {
     enable = true;
-    config.theme = "base16";
+    config = {
+      # theme-light = "GitHub";
+      # theme-dark = "base16";
+    };
   };
 
   programs.command-not-found.enable = false;
