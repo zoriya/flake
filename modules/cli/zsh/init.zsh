@@ -166,6 +166,11 @@ ZLE_RPROMPT_INDENT=0
 
 # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
 if [[ -n CMD ]]; then
-	eval $CMD
+	# unset the cmd before executing it (for long processes)
+	cmd=$CMD
 	unset CMD
+	if [[ -n $TMUX ]]; then
+		tmux set-environment -r CMD
+	fi
+	eval $cmd
 fi
