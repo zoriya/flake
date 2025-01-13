@@ -1,7 +1,7 @@
 # Common file for both nixos and nix-darwin
 {pkgs, ...}: {
   imports = [
-    ./nix.nix
+    ./nix/nix.nix
   ];
   nix.package = pkgs.nix;
   services.nix-daemon.enable = true;
