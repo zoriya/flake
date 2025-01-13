@@ -6,7 +6,6 @@
       signByDefault = true;
       key = "~/.ssh/id_rsa.pub";
     };
-    # TODO: unstable feature not in my fork yet
     # maintenance = {
     #   enable = false;
     #   # TODO: figure out a way to specify all repositories in ~/projects & ~/work at run time

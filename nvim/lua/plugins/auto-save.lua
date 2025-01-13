@@ -20,10 +20,6 @@ return {
 				local ft = vim.fn.getbufvar(buf, "&filetype")
 				return ft ~= "oil" and ft ~= "harpoon" and ft ~= "qf"
 			end,
-			trigger_events = {
-				-- TODO: upstream this
-				immediate_save = { "BufLeave", "FocusLost", "QuitPre", "VimSuspend" },
-			}
 		},
 		beforeAll = function()
 			vim.g.auto_save_state = true

@@ -161,8 +161,8 @@
   programs.bat = {
     enable = true;
     config = {
-      # theme-light = "GitHub";
-      # theme-dark = "base16";
+      theme-light = "GitHub";
+      theme-dark = "base16";
     };
   };
 
