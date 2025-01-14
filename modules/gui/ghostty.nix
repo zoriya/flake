@@ -24,8 +24,8 @@
       window-padding-balance = true;
 
       window-decoration = false;
+      adw-toast = false;
       confirm-close-surface = false;
-      quit-after-last-window-closed = true;
       resize-overlay = "never";
       # avoid dreadfully long startup times
       gtk-single-instance = true;

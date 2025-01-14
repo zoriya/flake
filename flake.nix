@@ -82,11 +82,6 @@
       env = "river";
       custom = [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
-        {
-          nixpkgs.config.permittedInsecurePackages = [
-            "dotnet-sdk-6.0.428"
-          ];
-        }
       ];
     };
 
@@ -120,13 +115,6 @@
       darwin = true;
       customHome = [
         ./modules/gui/ghostty.nix
-      ];
-      custom = [
-        {
-          nixpkgs.config.permittedInsecurePackages = [
-            "dotnet-sdk-6.0.428"
-          ];
-        }
       ];
     };
 
