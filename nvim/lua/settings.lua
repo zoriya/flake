@@ -16,7 +16,7 @@ vim.opt.cursorline = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
 vim.opt.foldlevelstart = 99
 vim.opt.linebreak = true
 vim.opt.shiftwidth = 4
