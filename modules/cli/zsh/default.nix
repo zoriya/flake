@@ -31,6 +31,8 @@
       gs = "git status";
       gl = "git log";
       gu = "git pull";
+      gswm = "git switch $(git master)";
+      grbm = "git rebase origin/$(git master)";
       gcam = "git commit --amend";
       gcamn = "git commit --amend --no-edit";
       gcpf = "gaa && gcamn && gpf";
