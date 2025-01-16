@@ -46,7 +46,8 @@ local ripgrep = function(opts)
 			end
 
 			return vim.iter({
-				{ "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case", },
+				{ "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", },
+				{ "--no-hidden", "--smart-case", },
 				glob,
 				{ "--", search },
 			}):flatten():totable()
