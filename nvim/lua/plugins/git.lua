@@ -5,6 +5,7 @@ vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Git commit" }
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Git commit amend" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git! push<CR>", { desc = "Git push" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git! push --force-with-lease --force-if-includes<CR>", { desc = "Git push force" })
+vim.keymap.set("n", "<leader>gg", vim.cmd.Git, { desc = "Git fugitive status" })
 
 return {
 	{
