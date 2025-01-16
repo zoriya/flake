@@ -67,6 +67,8 @@ return {
 						i = {
 							["<esc>"] = actions.close,
 							["<C-c>"] = actions.close,
+							["<C-a>"] = function() vim.cmd "normal! I" end,
+							["<C-e>"] = function() vim.cmd "startinsert!" end,
 						},
 					}
 				},
