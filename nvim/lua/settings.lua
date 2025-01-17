@@ -39,6 +39,10 @@ vim.opt.listchars = {
 vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
 vim.opt.pumheight = 15
 
+vim.opt.spelloptions = { "camel", "noplainbuffer" }
+vim.opt.spelllang = { "en", "cjk", }
+vim.opt.spell = true
+
 -- Can't specify this in wordmotion's config due to race conditions
 vim.g.wordmotion_nomap = true
 
