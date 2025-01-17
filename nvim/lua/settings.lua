@@ -40,7 +40,7 @@ vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
 vim.opt.pumheight = 15
 
 vim.opt.spelloptions = { "camel", "noplainbuffer" }
-vim.opt.spelllang = { "en", "cjk", }
+vim.opt.spelllang = { "en", "programming", "cjk", }
 vim.opt.spell = true
 
 -- Can't specify this in wordmotion's config due to race conditions
@@ -62,18 +62,25 @@ vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipbo
 vim.keymap.set({ "n", "x" }, "<leader>Y", '"+y$', { desc = "Yank line to system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Past from system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Past line from system clipboard" })
+
 -- use osc52 so it works in ssh sessions
-vim.g.clipboard = {
-	name = "OSC 52",
-	copy = {
-		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-	},
-	paste = {
-		["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-		["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-	},
-}
+-- see https://github.com/tmux/tmux/issues/4048 for more info
+
+if vim.env.TMUX ~= nil then
+	-- tmux osc52 is lame, we need to run `tmux refresh-client -l` before copying
+	-- vim.g.clipboard = {
+	-- 	name = "tmux",
+	-- 	copy = {
+	-- 		["+"] = { "tmux", "load-buffer", "-w", "-" },
+	-- 		["*"] = { "tmux", "load-buffer", "-w", "-" },
+	-- 	},
+	-- 	paste = {
+	-- 		["+"] = { "bash", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
+	-- 		["*"] = { "bash", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
+	-- 	},
+	-- 	cache_enabled = 0,
+	-- }
+end
 
 
 -- Quickfix list
