@@ -49,7 +49,7 @@
       map (p:
         lib.pipe p [
           builder.byteCompile
-          # we removeDependencies after byteCompiling because byteCompile resets the derivation to it's inital state
+          # we removeDependencies after byteCompiling because byteCompile resets the derivation to it's initial state
           # (with dependencies and idk why)
           removeDependencies
         ])
@@ -75,6 +75,7 @@
         "${conf}",
         "${pluginPack}/pack/packages/start/vimplugin-plugin-pack",
         vim.env.VIMRUNTIME,
+        vim.fn.stdpath('data') .. "/site",
         "${conf}/after",
       }
       vim.opt.packpath = {
@@ -95,5 +96,8 @@ in {
     inherit withPython3 withNodeJs withPerl withRuby extraPython3Packages extraLuaPackages;
   };
 
-  nvim-luarc = mkLuarc { nvim = package; inherit plugins; };
+  nvim-luarc = mkLuarc {
+    nvim = package;
+    inherit plugins;
+  };
 }
