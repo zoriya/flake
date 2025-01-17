@@ -40,7 +40,7 @@ vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
 vim.opt.pumheight = 15
 
 vim.opt.spelloptions = { "camel", "noplainbuffer" }
-vim.opt.spelllang = { "en", "programming", "cjk", }
+vim.opt.spelllang = { "en", "cjk", }
 vim.opt.spell = true
 
 -- Can't specify this in wordmotion's config due to race conditions
@@ -91,6 +91,14 @@ end, { desc = "Open diagnostics" })
 vim.keymap.set("n", "gre", function()
 	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
 end, { desc = "List errors" })
+
+-- Next error
+vim.keymap.set("n", "[e", function()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Previous error" })
+vim.keymap.set("n", "]e", function()
+	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Next error" })
 
 -- Center screen after navigating (those are builtin shortcuts)
 vim.keymap.set("n", "[q", "<cmd>cprev<cr>zvzz", { desc = "Previous quickfix item" })
