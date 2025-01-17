@@ -87,9 +87,13 @@ end
 vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>", { desc = "Close quickfix" })
 vim.keymap.set("n", "grd", function()
 	vim.diagnostic.setqflist({ severity = { min = vim.diagnostic.severity.WARN } })
+	local ok, quicker = pcall(require, "quicker")
+	if ok then quicker.refresh() end
 end, { desc = "Open diagnostics" })
 vim.keymap.set("n", "gre", function()
 	vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
+	local ok, quicker = pcall(require, "quicker")
+	if ok then quicker.refresh() end
 end, { desc = "List errors" })
 
 -- Next error
