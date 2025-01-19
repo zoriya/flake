@@ -50,7 +50,7 @@
         bind-key C-n run-shell "tmux-sessionizer ~/projects/blog"
 
         # suspend inner tmux (to allow nested sessions)
-        bind -T root @ { set prefix None; set key-table off }
+        bind @ { set prefix None; set key-table off }
         bind -T off C-@ { set -u prefix; set -u key-table }
       '';
   };
