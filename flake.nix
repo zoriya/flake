@@ -115,6 +115,28 @@
       darwin = true;
       customHome = [
         ./modules/gui/ghostty.nix
+        ({pkgs, ...}: let
+          dotnet = with pkgs.dotnetCorePackages;
+            combinePackages [
+              sdk_9_0
+              sdk_8_0
+              aspnetcore_9_0
+              aspnetcore_8_0
+            ];
+        in {
+          home.packages = with pkgs; [
+            nodejs
+            dotnet
+            csharpier
+            kubernetes-helm
+            colima
+            kubectl
+            kustomize
+            docker
+            pgformatter
+            sqlcmd
+          ];
+        })
       ];
     };
 
