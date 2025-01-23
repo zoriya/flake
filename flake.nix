@@ -53,10 +53,6 @@
       url = "github:barreiroleo/ltex_extra.nvim/dev";
       flake = false;
     };
-    dirtytalk = {
-      url = "github:psliwka/vim-dirtytalk";
-      flake = false;
-    };
   };
 
   outputs = {

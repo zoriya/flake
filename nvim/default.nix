@@ -4,7 +4,6 @@
   neovim-nightly,
   vim-lumen,
   ltex-extra,
-  dirtytalk,
   ...
 }: let
   mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
@@ -93,7 +92,6 @@ in
 
           vim-helm
           vim-sleuth
-          (mkPlugin dirtytalk "dirtytalk")
           auto-save-nvim
           undotree
 

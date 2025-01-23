@@ -33,8 +33,6 @@
       "/build"
       # blink
       "/target"
-      # dirtytalk
-      "/wordlists"
     ];
 
     # Every plugin has its own generated help tags (doc/tags)
