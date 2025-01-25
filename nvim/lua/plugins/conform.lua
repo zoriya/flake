@@ -41,6 +41,7 @@ return {
 				},
 				csharpier = function()
 					return {
+						--- @diagnostic disable: param-type-mismatch
 						cwd = require("conform.util").root_file(function(name)
 							return name:match('.*%.sln$') or name:match('.*%.csproj$')
 						end),

@@ -6,6 +6,10 @@ return {
 		keys = {
 			{ "<leader>f", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
 			{ "<leader>F", "<cmd>Telescope ripgrep theme=ivy<cr>", desc = "Grep" },
+			-- { "<leader>gl", "<cmd>Telescope git_commits<cr>", desc = "Git log" },
+			-- { "<leader>gh", "<cmd>Telescope git_bcommits<cr>", desc = "Git history" },
+			-- { "<leader>gB", "<cmd>Telescope git_branches<cr>", desc = "Git branches" },
+			-- { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git status" },
 			{
 				"<leader>gl",
 				function()
@@ -79,6 +83,7 @@ return {
 						find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-E", ".git" },
 					},
 					git_commits = {
+						-- use_file_path = true,
 						mappings = {
 							i = {
 								["<CR>"] = git_show,
@@ -87,12 +92,25 @@ return {
 						},
 					},
 					git_bcommits = {
+						-- use_file_path = true,
 						mappings = {
 							i = {
 								["<CR>"] = git_show,
 								["<C-g>"] = git_show_split
 							},
 						},
+					},
+					git_branches = {
+						-- use_file_path = true,
+						show_remote_tracking_branches = false,
+						mappings = {
+							mappings = {
+								i = { ["<cr>"] = actions.git_switch_branch },
+							},
+						}
+					},
+					git_status = {
+						-- use_file_path = true,
 					},
 				},
 			})

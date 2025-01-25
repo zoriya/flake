@@ -26,7 +26,7 @@ local ripgrep = function(opts)
 				local g = split[2]
 
 				local glob_flag = "--iglob"
-				-- switch to case sensitive glob if there's an upercase letter.
+				-- switch to case sensitive glob if there's an uppercase letter.
 				if g:match("%u") then
 					glob_flag = "--glob"
 				end

@@ -52,7 +52,8 @@ return {
 		ft = "qf",
 		opts = {
 			opts = {
-				list = false
+				list = false,
+				spell = false,
 			},
 			highlight = {
 				load_buffers = false,
