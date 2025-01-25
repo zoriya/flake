@@ -21,13 +21,13 @@ return {
 						return { "isort", "black" }
 					end
 				end,
-				javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
-				typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-				json = { "biome", "prettierd", "prettier", stop_after_first = true },
-				css = { "biome", "prettierd", "prettier", stop_after_first = true },
-				html = { "biome", "prettierd", "prettier", stop_after_first = true },
+				javascript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				typescript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				json = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				css = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				html = { "biome-check", "prettierd", "prettier", stop_after_first = true },
 				sql = { "pg_format" },
 				cs = { "csharpier" },
 				nix = { "alejandra" },
@@ -35,7 +35,7 @@ return {
 				["*"] = { "injected" }
 			},
 			formatters = {
-				biome = {
+				["biome-check"] = {
 					-- disable node module search since native binaries can't be run from nix
 					command = "biome",
 				},
