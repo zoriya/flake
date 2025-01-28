@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   programs.kitty = {
     enable = true;
     settings = {
@@ -23,6 +23,7 @@
       map ctrl+equal change_font_size current +1.0
       map ctrl+plus change_font_size current +1.0
       map ctrl+minus change_font_size current -1.0
+      map ctrl+0 change_font_size current 0
       map ctrl+backspace change_font_size current 0
     '';
   };
@@ -31,4 +32,3 @@
   xdg.configFile."kitty/dark-theme.auto.conf".source = "${pkgs.kitty-themes}/share/kitty-themes/themes/Catppuccin-Mocha.conf";
   xdg.configFile."kitty/no-preference-theme.auto.conf".source = "${pkgs.kitty-themes}/share/kitty-themes/themes/Catppuccin-Mocha.conf";
 }
-
