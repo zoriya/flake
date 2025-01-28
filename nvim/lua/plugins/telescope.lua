@@ -104,8 +104,8 @@ return {
 						-- use_file_path = true,
 						show_remote_tracking_branches = false,
 						mappings = {
-							mappings = {
-								i = { ["<cr>"] = actions.git_switch_branch },
+							i = {
+								["<CR>"] = actions.git_switch_branch
 							},
 						}
 					},
