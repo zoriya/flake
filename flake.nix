@@ -136,6 +136,10 @@
             pgformatter
             sqlcmd
           ];
+          home.sessionVariables = {
+            DOTNET_ROOT = "${dotnet}/share/dotnet";
+            DOTNET_HOST_ROOT = "${dotnet}/share/dotnet";
+          };
         })
       ];
     };
