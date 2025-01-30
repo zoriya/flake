@@ -45,13 +45,15 @@ vim.opt.spell = true
 
 -- Can't specify this in wordmotion's config due to race conditions
 vim.g.wordmotion_nomap = true
+-- Disable builtin sql completions which are bound to <C-c>
+vim.g.omni_sql_no_default_maps = 1
 
 -- for all modes except terminal
 vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
 -- i don't use terminal that much so not having esc is okay
 vim.keymap.set("t", "<esc>", "<C-\\><C-N>", { desc = "Normal mode" })
--- Disable builtin sql completions which are bound to <C-c>
-vim.g.omni_sql_no_default_maps = 1
+-- Why is this not the default?
+vim.keymap.set("c", "<c-a>", "<home>", { desc = "Begining" })
 
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv")
@@ -62,25 +64,6 @@ vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipbo
 vim.keymap.set({ "n", "x" }, "<leader>Y", '"+y$', { desc = "Yank line to system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Past from system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Past line from system clipboard" })
-
--- use osc52 so it works in ssh sessions
--- see https://github.com/tmux/tmux/issues/4048 for more info
-
-if vim.env.TMUX ~= nil then
-	-- tmux osc52 is lame, we need to run `tmux refresh-client -l` before copying
-	-- vim.g.clipboard = {
-	-- 	name = "tmux",
-	-- 	copy = {
-	-- 		["+"] = { "tmux", "load-buffer", "-w", "-" },
-	-- 		["*"] = { "tmux", "load-buffer", "-w", "-" },
-	-- 	},
-	-- 	paste = {
-	-- 		["+"] = { "bash", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
-	-- 		["*"] = { "bash", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
-	-- 	},
-	-- 	cache_enabled = 0,
-	-- }
-end
 
 
 -- Quickfix list

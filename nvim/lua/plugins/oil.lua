@@ -3,7 +3,7 @@ return {
 		"oil.nvim",
 		lazy = false,
 		keys = {
-			{ "-",    "<CMD>Oil<CR>", desc = "Open parent directory" },
+			{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
 			{ "<BS>", "<CMD>Oil<CR>", desc = "Open parent directory" },
 		},
 		opts = {
@@ -17,6 +17,7 @@ return {
 		},
 		after = function(plug)
 			require("oil").setup(plug.opts)
+			vim.cmd.cabbr({ args = { "<expr>", "%", "&filetype == 'oil' ? bufname('%')[6:] : '%'" } })
 		end
 	}
 }
