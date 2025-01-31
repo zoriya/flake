@@ -12,8 +12,6 @@
       disable_ligatures = "always";
       placement_strategy = "bottom";
     };
-    # Use ghostty one instead
-    shellIntegration.enableZshIntegration = false;
 
     extraConfig = ''
       clear_all_shortcuts yes
