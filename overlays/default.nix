@@ -20,46 +20,16 @@
       --add-flags "--ozone-platform=wayland"'';
 in {
   # Use my fork of flood to enable smart scripts.
-  flood = self.stdenv.mkDerivation (finalAttrs: {
-    pname = "flood";
-    version = "4.8.4-dirty";
-
+  flood = super.flood.overrideAttrs rec {
     src = flood;
-
-    nativeBuildInputs = with self.pkgs; [
-      nodejs
-      pnpm.configHook
-      super.makeWrapper
-    ];
-
-    pnpmDeps = self.pkgs.pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      hash = "sha256-as/ZVgR+yf9tkz+HG1U66oKGvpTGMW23dQ9M7QHnV4U=";
+    npmDeps = pnpmDeps;
+    pnpmDeps = super.pnpm_9.fetchDeps {
+      pname = "flood";
+      version = "4.9.4-dirty";
+      src = flood;
+      hash = "sha256-E2VxRcOMLvvCQb9gCAGcBTsly571zh/HWM6Q1Zd2eVw=";
     };
-
-    buildPhase = ''
-      runHook preBuild
-      pnpm build
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/{lib,bin}
-      cp -r {dist,node_modules} $out/lib
-      makeWrapper ${self.pkgs.nodejs}/bin/node $out/bin/flood --add-flags $out/lib/dist/index.js
-      runHook postInstall
-    '';
-
-    dontStrip = true;
-
-    meta = with self.lib; {
-      description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
-      homepage = "https://flood.js.org";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [winter];
-    };
-  });
+  };
 
   river = super.river.overrideAttrs {
     src = river-src;
