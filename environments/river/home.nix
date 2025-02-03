@@ -90,6 +90,9 @@ in {
         "'*Mouse'" = {
           natural-scroll = "disabled";
         };
+        "'*Vertical'" = {
+          natural-scroll = "disabled";
+        };
       };
 
       # border-color-focused = "0x94e2d5";
