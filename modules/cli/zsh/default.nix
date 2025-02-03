@@ -33,6 +33,7 @@
       gu = "git pull";
       gswm = "git switch $(git master)";
       grbm = "git rebase origin/$(git master)";
+      grhhm = "grhh origin/$(git master)";
       gcam = "git commit --amend";
       gcamn = "git commit --amend --no-edit";
       gcpf = "gaa && gcamn && gpf";
