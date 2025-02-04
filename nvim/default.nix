@@ -80,6 +80,7 @@ in
 
           gitsigns-nvim
           vim-fugitive
+          vim-rhubarb
           git-conflict-nvim
 
           nvim-surround
