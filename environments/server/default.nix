@@ -165,7 +165,7 @@ in {
       script-torrent-added-filename = "${guesspath}/bin/guesspath";
     };
   };
-  # Also allows transmission to reach thoses files
+  # Also allows transmission to reach theses files
   systemd.services.transmission.serviceConfig.BindPaths = [
     "/mnt/kyoo/downloads"
     "/mnt/kyoo/shows"
