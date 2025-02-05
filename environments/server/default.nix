@@ -151,7 +151,7 @@ in {
   services.transmission = {
     enable = true;
     package = pkgs.transmission_4;
-    # Make downloaded items readable/writtable by users
+    # Make downloaded items readable/writable by users
     group = "users";
     settings = {
       incomplete-dir-enabled = false;

@@ -55,6 +55,12 @@ return {
 				vim.cmd("Gedit " .. entry.value)
 			end
 
+			local function git_fixup(bufr)
+				actions.close(bufr)
+				local entry = action_state.get_selected_entry()
+				vim.cmd("G commit --fixup=" .. entry.value)
+			end
+
 
 			local telescope = require("telescope")
 			telescope.setup({
@@ -87,7 +93,8 @@ return {
 						mappings = {
 							i = {
 								["<CR>"] = git_show,
-								["<C-g>"] = git_show_split
+								["<C-g>"] = git_show_split,
+								["<C-f>"] = git_fixup,
 							},
 						},
 					},
@@ -96,7 +103,8 @@ return {
 						mappings = {
 							i = {
 								["<CR>"] = git_show,
-								["<C-g>"] = git_show_split
+								["<C-g>"] = git_show_split,
+								["<C-f>"] = git_fixup,
 							},
 						},
 					},
