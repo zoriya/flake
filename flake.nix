@@ -128,6 +128,7 @@
             nodejs
             dotnet
             csharpier
+            csharprepl
             kubernetes-helm
             colima
             kubectl

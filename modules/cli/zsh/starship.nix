@@ -45,6 +45,7 @@
         style = "green";
         only_detached = true;
         tag_disabled = false;
+        tag_symbol = " ";
       };
 
       git_status = {
