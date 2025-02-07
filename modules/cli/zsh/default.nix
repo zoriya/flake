@@ -49,6 +49,7 @@
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
       mi = "mediainfo";
+      prename = "rename";
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
       icat = "kitty +kitten icat";
@@ -221,6 +222,7 @@
       nodePackages.http-server
       nodePackages.live-server
       nvim
+      rename # this is perl-rename
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils
