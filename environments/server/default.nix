@@ -154,6 +154,7 @@ in {
     # Make downloaded items readable/writable by users
     group = "users";
     settings = {
+      umask = "002";
       incomplete-dir-enabled = false;
       download-dir = "/mnt/kyoo/downloads";
       download-queue-enabled = false;
