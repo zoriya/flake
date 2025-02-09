@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./fonts.nix
   ];
@@ -65,4 +69,10 @@
   ];
 
   security.pam.services.hyprlock = {};
+
+  # Allow gsettings to work
+  environment.sessionVariables.XDG_DATA_DIRS = [
+    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+  ];
 }

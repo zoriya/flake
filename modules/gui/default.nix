@@ -132,12 +132,6 @@ in {
   };
   home.file.".face".source = ../../face.png;
 
-  # Allow gsettings to work
-  xdg.systemDirs.data = [
-    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
-  ];
-
   xdg.configFile."autostart/vesktop.desktop".text = ''
     [Desktop Entry]
     Type=Application
