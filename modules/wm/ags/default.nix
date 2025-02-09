@@ -16,7 +16,7 @@
     installPhase = "install -Dm755 ${./covercolors.py} $out/bin/covercolors";
   };
   # systemdTarget = "graphical-session.target";
-  ags = pkgs.ags.overrideAttrs (_: prev: {
+  ags = pkgs.ags_1.overrideAttrs (_: prev: {
     buildInputs =
       prev.buildInputs
       ++ [
