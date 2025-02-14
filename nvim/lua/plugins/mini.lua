@@ -18,8 +18,8 @@ return {
 		},
 		keys = {
 			{ "gx" },
-			{ "cr",         desc = "Replace with register" },
-			{ "<leader>cr", '"+cr',                        remap = true, desc = "Replace with system clipboard" },
+			{ "cr", desc = "Replace with register" },
+			{ "<leader>cr", '"+cr', remap = true, desc = "Replace with system clipboard" },
 		},
 		after = function(plug)
 			require("mini.operators").setup(plug.opts)

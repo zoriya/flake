@@ -34,14 +34,16 @@ return {
 
 				map('n', ']h', function() gs.nav_hunk('next') end, "Next Hunk")
 				map('n', '[h', function() gs.nav_hunk('prev') end, "Prev Hunk")
-				map({ "n", "v" }, "<leader>ha", ":Gitsigns stage_hunk<CR>", "Add Hunk")
-				map({ "n", "v" }, "<leader>hr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
-				map("n", "<leader>hu", gs.undo_stage_hunk, "Unstage Hunk")
+
+				map({ "n", "v" }, "<leader>ha", gs.stage_hunk, "Add Hunk")
+				map({ "n", "v" }, "<leader>hr", gs.reset_hunk, "Reset Hunk")
+				map("n", "<leader>hp", gs.preview_hunk, "Preview Hunk")
+
 				map("n", "<leader>ga", gs.stage_buffer, "Add buffer")
 				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
-				map("n", "<leader>hp", gs.preview_hunk, "Preview Hunk")
-				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Git Select Hunk")
-				map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "Git Select Hunk")
+
+				map({ "o", "x" }, "ih", gs.select_hunk, "Git Select Hunk")
+				map({ "o", "x" }, "ah", gs.select_hunk, "Git Select Hunk")
 			end,
 		},
 		after = function(plug)
