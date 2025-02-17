@@ -37,15 +37,15 @@
   };
 
   fileSystems."/mnt/a" = {
-    device = "/dev/disk/by-label/sda";
+    device = "/dev/disk/by-label/a";
+    fsType = "ext4";
+  };
+  fileSystems."/mnt/b" = {
+    device = "/dev/disk/by-label/b";
     fsType = "ext4";
   };
   fileSystems."/mnt/c" = {
-    device = "/dev/disk/by-label/sdc";
-    fsType = "ext4";
-  };
-  fileSystems."/mnt/d" = {
-    device = "/dev/disk/by-label/sdd";
+    device = "/dev/disk/by-label/c";
     fsType = "ext4";
   };
   fileSystems."/mnt/parity" = {
@@ -63,8 +63,8 @@
 
   environment.systemPackages = with pkgs; [mergerfs];
   fileSystems."/mnt/kyoo" = {
-    device = "/mnt/a:/mnt/c:/mnt/d";
-    depends = ["/mnt/a" "/mnt/c" "/mnt/d"];
+    device = "/mnt/a:/mnt/b:/mnt/c";
+    depends = ["/mnt/a" "/mnt/b" "/mnt/c"];
     fsType = "fuse.mergerfs";
     options = [
       "func.getattr=newest" # For kyoo's scanner
@@ -83,14 +83,14 @@
     ];
     dataDisks = {
       a = "/mnt/a/";
+      b = "/mnt/b/";
       c = "/mnt/c/";
-      d = "/mnt/d/";
     };
     contentFiles = [
       "/var/snapraid.content"
       "/mnt/a/snapraid.content"
+      "/mnt/b/snapraid.content"
       "/mnt/c/snapraid.content"
-      "/mnt/d/snapraid.content"
     ];
     parityFiles = [
       "/mnt/parity/snapraid.parity"
