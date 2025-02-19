@@ -4,7 +4,6 @@
     ./nix/nix.nix
   ];
   nix.package = pkgs.nix;
-  services.nix-daemon.enable = true;
 
   programs.gnupg.agent = {
     enable = true;
