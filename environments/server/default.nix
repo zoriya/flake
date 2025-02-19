@@ -161,7 +161,7 @@ in {
       rename-partial-files = false;
       trash-can-enabled = false;
       ratio-limit-enabled = true;
-      ratio-limit = 1;
+      ratio-limit = 10;
       script-torrent-added-enabled = true;
       script-torrent-added-filename = "${guesspath}/bin/guesspath";
     };
