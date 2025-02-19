@@ -13,6 +13,7 @@ return {
 			},
 			keymaps = {
 				["<BS>"] = "actions.parent",
+				["~"] = false,
 			},
 		},
 		after = function(plug)
