@@ -136,6 +136,7 @@
             docker
             pgformatter
             sqlcmd
+            kubebuilder
           ];
           home.sessionVariables = {
             DOTNET_ROOT = "${dotnet}/share/dotnet";
