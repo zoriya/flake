@@ -49,10 +49,15 @@
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
       mi = "mediainfo";
+      # habits & prevent conflicts with gnu-rename
       prename = "rename";
+      # add labels, replace type by fstype, use a single mountpoint
+      lsblk = "lsblk -o name,label,size,rm,ro,fstype,uuid,mountpoint";
+
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
       icat = "kitty +kitten icat";
+
       n = "$EDITOR";
       vim = "$EDITOR";
       vi = "$EDITOR";
