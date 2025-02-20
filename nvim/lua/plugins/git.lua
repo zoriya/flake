@@ -32,8 +32,8 @@ return {
 					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 				end
 
-				map('n', ']h', function() gs.nav_hunk('next') end, "Next Hunk")
-				map('n', '[h', function() gs.nav_hunk('prev') end, "Prev Hunk")
+				map('n', ']h', function() gs.nav_hunk("next", { target = "all" }) end, "Next Hunk")
+				map('n', '[h', function() gs.nav_hunk("prev", { target = "all" }) end, "Prev Hunk")
 
 				map({ "n", "v" }, "<leader>ha", gs.stage_hunk, "Add Hunk")
 				map({ "n", "v" }, "<leader>hr", gs.reset_hunk, "Reset Hunk")
