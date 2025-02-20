@@ -160,8 +160,6 @@ in {
       download-queue-enabled = false;
       rename-partial-files = false;
       trash-can-enabled = false;
-      ratio-limit-enabled = true;
-      ratio-limit = 10;
       script-torrent-added-enabled = true;
       script-torrent-added-filename = "${guesspath}/bin/guesspath";
     };
