@@ -8,7 +8,7 @@ if [[ -n "$TR_TORRENT_LABELS" ]]; then
 	echo "Ignoring $TR_TORRENT_NAME since it has labels $TR_TORRENT_LABELS"
 	exit
 fi
-if [[ "$TR_TORRENT_DIR" != "/mnt/kyoo/download" ]]; then
+if [[ "$TR_TORRENT_DIR" != "/mnt/kyoo/downloads" ]]; then
 	echo "Ignoring $TR_TORRENT_NAME since it already has a dir set: $TR_TORRENT_DIR"
 	exit
 fi
