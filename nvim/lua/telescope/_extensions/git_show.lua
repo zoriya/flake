@@ -9,7 +9,7 @@ local conf = require("telescope.config").values
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 
-local function map(t, f)
+local function tmap(t, f)
 	local t1 = {}
 	for i = 1, #t do
 		t1[i] = f(t[i])
@@ -57,10 +57,10 @@ local git_show = function(opts)
 
 	local gen_new_finder = function()
 		local git_cmd = { "git", "show", "--name-status", '--pretty=tformat:', opts.ref }
-		local output  = utils.get_os_command_output(git_cmd, opts.cwd)
+		local output = utils.get_os_command_output(git_cmd, opts.cwd)
 		-- We convert {StatusInOneChar}\t{Path} to {StatusInOneChar}{NoStatusInOneChar} {Path} where NoStatusInOneChar is a space.
 		-- This is to conform to git status --porcelaine=v1
-		output        = map(output, function(x) return string.gsub(x, "\t", "  ", 1) end)
+		output = tmap(output, function(x) return string.gsub(x, "\t", "  ", 1) end)
 
 		return finders.new_table {
 			results = output,
@@ -78,11 +78,21 @@ local git_show = function(opts)
 			prompt_title = "Git show " .. opts.ref,
 			finder = initial_finder,
 			previewer = git_file_show(opts),
-			attach_mappings = function(prompt_bufnr, _)
+			attach_mappings = function(prompt_bufnr, map)
 				actions.select_default:replace(function()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					vim.cmd("Gedit " .. opts.ref .. ":" .. selection.value)
+				end)
+				map({ "i", "n" }, "<c-v>", function(bufr)
+					actions.close(bufr)
+					local entry = action_state.get_selected_entry()
+					vim.cmd("Gvsplit " .. entry.value .. ":" .. entry.current_file)
+				end)
+				map({ "i", "n" }, "<c-s>", function(bufr)
+					actions.close(bufr)
+					local entry = action_state.get_selected_entry()
+					vim.cmd("Gsplit " .. entry.value .. ":" .. entry.current_file)
 				end)
 				return true
 			end,

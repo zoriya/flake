@@ -105,6 +105,16 @@ return {
 								["<CR>"] = git_show,
 								["<C-g>"] = git_show_split,
 								["<C-f>"] = git_fixup,
+								["<C-v>"] = function(bufr)
+									actions.close(bufr)
+									local entry = action_state.get_selected_entry()
+									vim.cmd("Gvsplit " .. entry.value .. ":" .. entry.current_file)
+								end,
+								["<C-s>"] = function(bufr)
+									actions.close(bufr)
+									local entry = action_state.get_selected_entry()
+									vim.cmd("Gsplit " .. entry.value .. ":" .. entry.current_file)
+								end,
 							},
 						},
 					},
