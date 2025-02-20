@@ -137,7 +137,6 @@ in
       typescript-language-server
       nil
       vscode-langservers-extracted # html, jsonls
-      yaml-language-server
       marksman
       ltex-ls
       texlab
@@ -149,6 +148,9 @@ in
       # gopls also needs go /shame
       gopls
       go
+      # yaml-ls needs node /shame
+      yaml-language-server
+      nodejs
 
       # formatter
       alejandra
