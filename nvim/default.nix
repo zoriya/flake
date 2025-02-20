@@ -9,10 +9,12 @@
   mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
 
   mkPlugin = src: pname:
-    pkgs.vimUtils.buildVimPlugin {
-      inherit pname src;
-      version = src.lastModifiedDate;
-    };
+    (pkgs.vimUtils.buildVimPlugin
+      {
+        inherit pname src;
+        version = src.lastModifiedDate;
+      })
+    .overrideAttrs {doCheck = false;};
 in
   mkNvim {
     withNodeJs = false;
@@ -64,10 +66,13 @@ in
           ts-comments-nvim
 
           nvim-lspconfig
-          blink-cmp
+          (blink-cmp.overrideAttrs {
+            # clashes with oil
+            postPatch = "rm doc/recipes.md";
+          })
           SchemaStore-nvim
           roslyn-nvim
-          ((mkPlugin ltex-extra "ltex-extra").overrideAttrs {doCheck = false;})
+          (mkPlugin ltex-extra "ltex-extra")
           nvim-lint
           (conform-nvim.overrideAttrs {
             # clashes with oil
@@ -111,6 +116,7 @@ in
         ];
         opt = [
           telescope-nvim
+          # (mkPlugin telescope "telescope.nvim")
           vim-illuminate
           nvim-treesitter-textobjects
         ];

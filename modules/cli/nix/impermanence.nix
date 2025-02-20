@@ -43,6 +43,7 @@
         "downloads"
         "stuff"
         "projects"
+        "work"
         {
           directory = ".gnupg";
           mode = "0700";
