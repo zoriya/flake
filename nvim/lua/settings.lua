@@ -42,6 +42,16 @@ vim.opt.pumheight = 15
 vim.opt.spelloptions = { "camel", "noplainbuffer" }
 vim.opt.spelllang = { "en", "cjk", }
 vim.opt.spell = true
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "Disable spellcapcheck",
+	group = vim.api.nvim_create_augroup("spell-cap-check", { clear = true }),
+	callback = function(evt)
+		if evt.file:match(".*%.md") or evt.file:match(".*%.ltex") then
+			return
+		end
+		vim.opt_local.spellcapcheck = ""
+	end,
+})
 
 -- Can't specify this in wordmotion's config due to race conditions
 vim.g.wordmotion_nomap = true
