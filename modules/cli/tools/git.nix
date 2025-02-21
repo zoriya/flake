@@ -22,6 +22,11 @@
         ''
           !git branch --merged | grep -vE "^([+*]|\s*($(git master))\s*$)" | xargs git branch --delete 2>/dev/null
         '';
+      nuke =
+        #bash
+        ''
+          !git reset --hard HEAD && git clean -df .
+        '';
     };
     extraConfig = {
       gpg.format = "ssh";

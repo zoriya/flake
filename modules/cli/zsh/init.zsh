@@ -92,11 +92,6 @@ push() {
 	git add -A && git commit -m "$*" && git push
 }
 
-git-branch-clear() {
-	git fetch --prune origin
-	git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
-}
-
 nixify() {
 	if [ ! -e ./.envrc ]; then
 		echo "use nix" > .envrc
@@ -105,9 +100,9 @@ nixify() {
 		cat > shell.nix <<'EOF'
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
-	packages = with pkgs; [
-
-	];
+  packages = with pkgs; [
+    
+  ];
 }
 EOF
 	fi
