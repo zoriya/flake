@@ -9,6 +9,19 @@ vim.keymap.set("n", "<leader>gP", "<cmd>Git! push --force-with-lease --force-if-
 vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Git fugitive status" })
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git, { desc = "Git fugitive status" })
 
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "Fix fold method",
+	group = vim.api.nvim_create_augroup("git-fold-method", { clear = true }),
+	callback = function(evt)
+		-- this seems to trigger a bit late & we need to :e to make it work. idk why
+		if evt.match == "git" then
+			vim.wo.foldmethod = "syntax"
+		else
+			vim.wo.foldmethod = "expr"
+		end
+	end,
+})
+
 return {
 	{
 		"gitsigns.nvim",
