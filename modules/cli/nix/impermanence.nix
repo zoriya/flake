@@ -77,6 +77,11 @@
         # Games directory for lutris
         ".local/lutris"
         ".local/games"
+        # Huge cache & long download i want to stay cache
+        ".cache/nix"
+        ".cache/.bun"
+        ".cache/yarn"
+        ".cache/go-build"
       ];
       files = [
         ".config/zsh/custom.zsh"
