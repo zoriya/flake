@@ -204,6 +204,10 @@
     config = {warn_timeout = "500h";};
   };
 
+  xdg.configFile."gfold.toml".text = ''
+    display_mode = "Classic"
+  '';
+
   home.packages = with pkgs;
     [
       eza
@@ -228,6 +232,7 @@
       nodePackages.live-server
       nvim
       rename # this is perl-rename
+      gfold
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils
