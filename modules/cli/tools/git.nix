@@ -29,20 +29,49 @@
         '';
     };
     extraConfig = {
-      gpg.format = "ssh";
-      gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
-      push.autoSetupRemote = true;
-      push.default = "upstream";
+      gpg = {
+        format = "ssh";
+        ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+      };
+      fetch = {
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
+      push = {
+        default = "upstream";
+        autoSetupRemote = true;
+      };
       pull.ff = "only";
       init.defaultBranch = "master";
-      advice.diverging = false;
-      rerere.enabled = true;
-      rebase.updateRefs = true;
-      rebase.autoStash = true;
-      rebase.autoSquash = true;
       branch.sort = "-committerdate";
-      # Disable hooks
-      core.hookspath = "/dev/null";
+      tag.sort = "version:refname";
+      advice.diverging = false;
+      rerere = {
+        enabled = true;
+        autoupdate = true;
+      };
+      rebase = {
+        updateRefs = true;
+        autoStash = true;
+        autoSquash = true;
+      };
+      diff = {
+        # newer & better diff algo, why is this not the default?
+        algorithm = "histogram";
+        colorMoved = "plain";
+        renames = true;
+        # use actually understandable prefixes (c/, i/ & w/) instead of a/ b/
+        mnemonicPrefix = true;
+      };
+      # show diff in commit window
+      commit.verbose = true;
+      core = {
+        # Disable hooks (i think i need to run it on each repo too, idk)
+        hookspath = "/dev/null";
+        fsmonitor = true;
+        untrackedCache = true;
+      };
       # Break compat with older versions of git (and systems that doesn't support mtime) to have better performances
       feature.manyFiles = true;
     };
