@@ -14,7 +14,6 @@ return {
 			require("lspconfig").ts_ls.setup({})
 			require("lspconfig").yamlls.setup({})
 			require("lspconfig").marksman.setup({})
-			require("lspconfig").ltex.setup({})
 			require("lspconfig").texlab.setup({})
 			require("lspconfig").html.setup({})
 			require("lspconfig").helm_ls.setup({})
@@ -22,6 +21,9 @@ return {
 
 			require("lspconfig").bashls.setup({
 				filetypes = { "sh", "zsh", "make" },
+			})
+			require("lspconfig").ltex.setup({
+				filetypes = { "markdown", "org", "plaintex", "rst", "tex", "pandoc", "rmd", "mail", "text" }
 			})
 
 			require("lspconfig").jsonls.setup({
