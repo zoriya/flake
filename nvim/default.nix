@@ -2,7 +2,6 @@
   pkgs,
   lib,
   neovim-nightly,
-  vim-lumen,
   ltex-extra,
   ...
 }: let
@@ -58,9 +57,7 @@ in
       with pkgs.vimPlugins; {
         start = [
           lz-n
-
           catppuccin-nvim
-          (mkPlugin vim-lumen "vim-lumen")
 
           nvim-treesitter.withAllGrammars
           ts-comments-nvim

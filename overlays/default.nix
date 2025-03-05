@@ -1,6 +1,7 @@
 {
   flood,
   river-src,
+  tmux,
   ...
 }: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
@@ -33,6 +34,10 @@ in {
 
   river = super.river.overrideAttrs {
     src = river-src;
+  };
+
+  tmux = super.tmux.overrideAttrs {
+    src = tmux;
   };
 
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.

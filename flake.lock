@@ -472,7 +472,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "river-src": "river-src",
-        "vim-lumen": "vim-lumen",
+        "tmux": "tmux",
         "zen-browser": "zen-browser"
       }
     },
@@ -488,6 +488,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tmux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1741082475,
+        "narHash": "sha256-xZTwrCjo4JZg8SXQmomgTKqK+nOvXgvKjZ+0RtPXaHM=",
+        "owner": "tmux",
+        "repo": "tmux",
+        "rev": "882fb4d295deb3e4b803eb444915763305114e4f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tmux",
+        "repo": "tmux",
         "type": "github"
       }
     },
@@ -509,22 +525,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "vim-lumen": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1726782166,
-        "narHash": "sha256-rsDUDI9lh4CEX1upMBjeyBOm99GAXWGPQ9vSCN8cmFo=",
-        "owner": "vimpostor",
-        "repo": "vim-lumen",
-        "rev": "ac13c32c3e309f6c6a84ff6cad8dbb135e75f0e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vimpostor",
-        "repo": "vim-lumen",
         "type": "github"
       }
     },

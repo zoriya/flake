@@ -44,11 +44,12 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    vim-lumen = {
-      url = "github:vimpostor/vim-lumen";
+    # use tmux's master for mode 2031
+    tmux = {
+      url = "github:tmux/tmux";
       flake = false;
     };
+
     ltex-extra = {
       url = "github:barreiroleo/ltex_extra.nvim/dev";
       flake = false;
