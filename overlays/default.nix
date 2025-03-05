@@ -18,7 +18,8 @@
   enableWayland = drv: bins:
     wrapProgram drv bins ''
       --add-flags "--enable-features=UseOzonePlatform" \
-      --add-flags "--ozone-platform=wayland"'';
+      --add-flags "--ozone-platform=wayland" \
+      --add-flags "--disable-smooth-scrolling"'';
 in {
   # Use my fork of flood to enable smart scripts.
   flood = super.flood.overrideAttrs rec {
