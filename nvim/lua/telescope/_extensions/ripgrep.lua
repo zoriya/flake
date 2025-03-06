@@ -48,6 +48,8 @@ local ripgrep = function(opts)
 			return vim.iter({
 				{ "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", },
 				{ "--hidden", "--smart-case", },
+				-- always ignore files in the .git dir
+				{ "--iglob", "!.git" },
 				glob,
 				{ "--", search },
 			}):flatten():totable()
