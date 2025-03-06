@@ -35,8 +35,9 @@
         bind-key -T copy-mode-vi i send -X cancel
         bind-key -T copy-mode-vi v send -X begin-selection
         bind-key -T copy-mode-vi V send -X select-line
-        bind-key -T copy-mode-vi y send -X copy-selection -x
-        bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection -x
+        bind-key -T copy-mode-vi y send -X copy-selection -- -x
+        bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection -- -x
+        bind-key -T copy-mode-vi Y send -X copy-end-of-line -- -x
         bind-key -T copy-mode-vi p { refresh-client -l; run -d0.05; paste-buffer; send -X cancel }
 
         bind-key [ copy-mode \; send-keys -X previous-prompt
