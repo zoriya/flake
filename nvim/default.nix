@@ -151,6 +151,8 @@ in
 
       # formatter
       alejandra
+      pgformatter
+      csharpier
       # might need to find a way to disable it for projects that use prettier but it's just more convenient to have it always on
       # (for json or to allow use without an outer shell)
       biome

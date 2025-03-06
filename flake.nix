@@ -128,14 +128,12 @@
           home.packages = with pkgs; [
             nodejs
             dotnet
-            csharpier
             csharprepl
             kubernetes-helm
             colima
             kubectl
             kustomize
             docker
-            pgformatter
             sqlcmd
             kubebuilder
             go
