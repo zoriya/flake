@@ -31,6 +31,7 @@
       gs = "git status";
       gl = "git log";
       gu = "git pull";
+      gur = "git pull --rebase";
       gswm = "git switch $(git master)";
       grbm = "git rebase origin/$(git master)";
       grhhm = "grhh origin/$(git master)";
