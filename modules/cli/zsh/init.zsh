@@ -158,14 +158,3 @@ proxy() {
 
 # disable space between right prompt and end of line
 ZLE_RPROMPT_INDENT=0
-
-# execute arbitrary commands on startup since `zsh -sc` is not a real option :c
-if [[ -n CMD ]]; then
-	# unset the cmd before executing it (for long processes)
-	cmd=$CMD
-	unset CMD
-	if [[ -n $TMUX ]]; then
-		tmux set-environment -r CMD
-	fi
-	eval $cmd
-fi
