@@ -36,7 +36,8 @@ vim.opt.listchars = {
 	precedes = "◢",
 	nbsp = "○",
 }
-vim.opt.completeopt = { "menuone", "popup", "noinsert", "fuzzy" }
+vim.opt.completeopt = { "menu", "menuone", "popup", "noinsert", "fuzzy" }
+vim.opt.completeitemalign = { "kind", "abbr", "menu" }
 vim.opt.pumheight = 15
 
 vim.opt.spelloptions = { "camel", "noplainbuffer" }
@@ -135,6 +136,10 @@ end)
 vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, { desc = "Go to definition" })
 vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, { desc = "Go to declaration" })
 vim.keymap.set("n", "grs", function() vim.lsp.buf.type_definition() end, { desc = "Go to type definition" })
+
+-- vim.keymap.set({ 'i' }, '<C-Space>', function()
+-- 	vim.lsp.completion.trigger()
+-- end, { desc = "Trigger completion" })
 
 
 vim.api.nvim_create_autocmd("TextYankPost", {

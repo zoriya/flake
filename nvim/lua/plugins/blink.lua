@@ -6,6 +6,7 @@ return {
 			keymap = {
 				preset = "default",
 				["<C-space>"] = { "show", },
+				["<C-e>"] = { "cancel" },
 				["<C-h>"] = { "select_and_accept" },
 				["<Up>"] = { "select_prev", "fallback" },
 				["<Down>"] = { "select_next", "fallback" },
@@ -26,6 +27,12 @@ return {
 				},
 				menu = {
 					max_height = 15,
+					auto_show = false,
+				},
+				accept = {
+					auto_brackets = {
+						enabled = false,
+					},
 				},
 			},
 			fuzzy = {
