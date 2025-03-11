@@ -35,7 +35,7 @@ in {
   ];
 
   home.sessionVariables = rec {
-    # TODO: add an `uwsm app run --` or something here (for example clicking on a link on discord opens the browser on discord's slice intsead of the browser's slice.
+    # TODO: add an `uwsm app run --` or something here (for example clicking on a link on discord opens the browser on discord's slice instead of the browser's slice.
     TERMINAL = "kitty";
     BROWSER = "zen";
     DEFAULT_BROWSER = BROWSER;

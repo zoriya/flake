@@ -204,7 +204,7 @@ in {
     settings = [
       {
         output.criteria = "eDP-1";
-        output.scale = 1.75;
+        output.scale = 1.6;
       }
       {
         profile.name = "undocked";
