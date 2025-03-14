@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./fonts.nix
   ];
@@ -23,17 +19,6 @@
     alsa.support32Bit = true;
     jack.enable = true;
     pulse.enable = true;
-  };
-
-  # See https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2669
-  services.pipewire.wireplumber.extraConfig = {
-    "10-disable-camera" = {
-      "wireplumber.profiles" = {
-        main = {
-          "monitor.libcamera" = "disabled";
-        };
-      };
-    };
   };
 
   powerManagement = {
