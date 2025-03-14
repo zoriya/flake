@@ -49,4 +49,6 @@ in {
   vesktop = enableWayland super.vesktop ["vesktop"];
   youtube-music = enableWayland super.youtube-music ["youtube-music"];
   vscode = enableWayland super.vscode ["code"];
+
+  htop-vim = super.callPackage ./htop-vim.nix {};
 }
