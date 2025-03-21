@@ -39,6 +39,9 @@
       clipboard-read = "allow";
       copy-on-select = false;
 
+      # make alt-d work
+      macos-option-as-alt = true;
+
       keybind = [
         "ctrl+shift+c=copy_to_clipboard"
         "ctrl+shift+v=paste_from_clipboard"
