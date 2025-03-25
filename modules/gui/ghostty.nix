@@ -28,7 +28,7 @@
       window-padding-color = "extend";
 
       window-decoration = false;
-      adw-toast = false;
+      app-notifications = false;
       confirm-close-surface = false;
       resize-overlay = "never";
       # avoid dreadfully long startup times
