@@ -1,14 +1,6 @@
-{
-  ghostty,
-  pkgs,
-  ...
-}: {
+{...}: {
   programs.ghostty = {
     enable = true;
-    package =
-      if pkgs.stdenv.isLinux
-      then ghostty.packages.${pkgs.system}.default
-      else null;
     enableZshIntegration = true;
     clearDefaultKeybinds = true;
     settings = {

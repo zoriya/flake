@@ -176,6 +176,5 @@ if vim.g.have_nerd_font then
 	})
 end
 vim.diagnostic.config({
-	virtual_text = false,
 	update_in_insert = true,
 })
