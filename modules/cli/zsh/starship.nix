@@ -1,6 +1,8 @@
 {lib, ...}: {
   programs.starship = {
     enable = true;
+    # integrate manually
+    enableZshIntegration = false;
     settings = {
       add_newline = false;
 
