@@ -74,6 +74,12 @@
       };
       # Break compat with older versions of git (and systems that doesn't support mtime) to have better performances
       feature.manyFiles = true;
+
+      url = {
+        "ssh://git@github.com" = {
+          insteadOf = "https://github.com";
+        };
+      };
     };
 
     userEmail = "zoe.roux@zoriya.dev";
