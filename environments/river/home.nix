@@ -46,8 +46,6 @@ in {
     ../../modules/wm/home.nix
   ];
   services.cliphist.enable = true;
-  systemd.user.services.cliphist.Unit.After = "graphical-session.target";
-  systemd.user.services.cliphist-images.Unit.After = "graphical-session.target";
 
   xdg.configFile."river-luatile/layout.lua".source = ./layout.lua;
 
