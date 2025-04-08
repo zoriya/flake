@@ -11,6 +11,8 @@
       confirm_os_window_close = 0;
       disable_ligatures = "always";
       placement_strategy = "bottom";
+
+      paste_actions = "quote-urls-at-prompt,replace-dangerous-control-codes";
     };
 
     extraConfig = ''

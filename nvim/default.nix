@@ -148,6 +148,8 @@ in
       # yaml-ls needs node /shame
       yaml-language-server
       nodejs
+      # haskell-language-server needs ghc /shame
+      ghc
 
       # formatter
       alejandra
