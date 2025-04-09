@@ -3,6 +3,7 @@
   lib,
   neovim-nightly,
   ltex-extra,
+  areyoulockedin,
   ...
 }: let
   mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
@@ -58,6 +59,8 @@ in
         start = [
           lz-n
           catppuccin-nvim
+
+          (mkPlugin areyoulockedin "areyoulockedin")
 
           nvim-treesitter.withAllGrammars
           ts-comments-nvim

@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "areyoulockedin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1744183163,
+        "narHash": "sha256-VOqR7yF2y3XYHxJSR2AFL+6P8TzjBXrKl1rKXE+3rgs=",
+        "owner": "voltycodes",
+        "repo": "areyoulockedin.nvim",
+        "rev": "6711ece08b9d51ea409a792054c54a3ef576adab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "voltycodes",
+        "repo": "areyoulockedin.nvim",
+        "type": "github"
+      }
+    },
     "astal": {
       "inputs": {
         "nixpkgs": [
@@ -398,6 +414,7 @@
     },
     "root": {
       "inputs": {
+        "areyoulockedin": "areyoulockedin",
         "astal": "astal",
         "flood": "flood",
         "home-manager": "home-manager",

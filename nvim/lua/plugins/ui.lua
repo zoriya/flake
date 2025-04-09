@@ -120,4 +120,15 @@ return {
 			require("zen-mode").setup()
 		end,
 	},
+
+
+	{
+		"areyoulockedin",
+		event = "DeferredUIEnter",
+		after = function()
+			require("areyoulockedin").setup({
+				session_key = "076af1c5-767f-4d5b-8a33-ea559d513f0e",
+			})
+		end,
+	}
 }
