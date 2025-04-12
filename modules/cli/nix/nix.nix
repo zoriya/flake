@@ -14,8 +14,6 @@
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
-    channel.enable = false;
-
     optimise.automatic = true;
     settings = {
       warn-dirty = false;

@@ -41,6 +41,10 @@ in {
     src = tmux;
   };
 
+  mpv = super.mpv.override {
+    scripts = [super.mpvScripts.mpris];
+  };
+
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.
   gnome-control-center = wrapProgram super.gnome-control-center ["gnome-control-center"] "--set XDG_CURRENT_DESKTOP GNOME";
 
