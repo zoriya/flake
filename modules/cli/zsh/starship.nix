@@ -11,6 +11,7 @@
         "$hostname"
         "$python"
         "$nix_shell"
+        "$kubernetes"
         "$line_break"
         "$directory"
         "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
@@ -95,6 +96,13 @@
         format = "[\( $name\) nix]($style)";
         style = "cyan";
         heuristic = true;
+      };
+
+      kubernetes = {
+        format = "[$symbol$context( \($namespace\))]($style)";
+        # only show it if using a custom config
+        detect_env_vars = ["KUBECONFIG"];
+        disabled = false;
       };
 
       hostname = {
