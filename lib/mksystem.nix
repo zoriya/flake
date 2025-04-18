@@ -37,6 +37,8 @@ in
 
         ({pkgs, ...}: {
           networking.hostName = hostname;
+          networking.nameservers = ["1.1.1.1" "9.9.9.9"];
+          networking.resolvconf.extraConfig = "name_servers=\"1.1.1.1 9.9.9.9\"";
 
           users.users.${user} = {
             home =
