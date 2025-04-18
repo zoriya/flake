@@ -222,7 +222,8 @@ in {
           }
           {
             criteria = "Dell Inc. DELL S2722QC 2HHZH24";
-            position = "1500,0";
+            # position = "1500,0";
+            position = "0,900";
             scale = 1.7;
           }
           {
