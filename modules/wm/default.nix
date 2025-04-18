@@ -34,7 +34,6 @@
   };
 
   services.printing.enable = true;
-  services.power-profiles-daemon.enable = true;
   security.polkit.enable = true;
   security.rtkit.enable = true;
   services.upower.enable = true;

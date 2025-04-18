@@ -12,7 +12,22 @@
   boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-intel"];
-  boot.extraModulePackages = [];
+
+  # powersave settings
+  boot = {
+    kernelParams = [
+      "pcie_aspm.policy=powersave"
+      # enable hardware accel (not powersave settings)
+      "i915.enable_guc=2"
+    ];
+    extraModprobeConfig = ''
+      options snd_hda_intel power_save=1
+    '';
+    kernel.sysctl = {
+      "kernel.nmi_watchdog" = 0;
+      "vm.dirty_writeback_centisecs" = 6000;
+    };
+  };
 
   fileSystems."/" = {
     device = "none";
@@ -53,10 +68,6 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  boot.kernelParams = [
-    "i915.enable_guc=2"
-  ];
 
   hardware.graphics = {
     enable = true;
