@@ -222,6 +222,20 @@
     };
   };
 
+  programs.k9s = {
+    enable = true;
+    settings = {
+      k9s = {
+        ui = {
+          skin = "transparent";
+        };
+      };
+    };
+    skins = {
+      transparent = ./k9s-transparent.yaml;
+    };
+  };
+
   programs.command-not-found.enable = false;
   programs.nix-index = {
     enable = true;
