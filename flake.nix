@@ -49,10 +49,6 @@
       url = "github:barreiroleo/ltex_extra.nvim/dev";
       flake = false;
     };
-    areyoulockedin = {
-      url = "github:voltycodes/areyoulockedin.nvim";
-      flake = false;
-    };
   };
 
   outputs = {

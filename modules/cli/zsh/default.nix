@@ -105,37 +105,6 @@
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
     ];
-    initExtraFirst =
-      #bash
-      ''
-        if command -v tmux > /dev/null; then
-          # Create a new tmux session (with a random name) and attach.
-          if [[ -z "$TMUX" ]]; then
-            exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
-          elif [[ $SHLVL -eq 1 ]]; then
-            session=$(tmux display-message -p "#S")
-            # kill current session if we are quitting the only pane
-            function __onExit {
-              if [[ $(tmux list-panes -s -t $session | wc -l) == 1 ]]; then
-                tmux kill-session -t $session
-              fi
-            }
-            trap __onExit EXIT
-          fi
-
-          # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
-          if [[ -n CMD ]]; then
-              # unset the cmd before executing it (for long processes)
-              cmd=$CMD
-              unset CMD
-              if [[ -n $TMUX ]]; then
-                  tmux set-environment -r CMD
-              fi
-              eval $cmd
-          fi
-        fi
-      '';
-    initExtraBeforeCompInit = builtins.readFile ./comp.zsh;
     completionInit =
       #bash
       ''
@@ -151,34 +120,68 @@
           compinit -C;
         fi;
       '';
-    initExtra = builtins.readFile ./init.zsh;
 
-    initContent = lib.mkMerge [
-      (lib.mkOrder 535 (builtins.readFile ./keymap.zsh))
-      (lib.mkOrder 570
+    initContent = let
+      tmuxInit =
         #bash
         ''
-          # used by kubectl plugin & maybe some other oh-my-zsh plugins
-          export ZSH_CACHE_DIR="$HOME/.cache/zsh";
-          mkdir -p "$ZSH_CACHE_DIR/completions"
-          fpath+="$ZSH_CACHE_DIR/completions"
-        '')
-      (lib.mkOrder 901
-        #bash
-        ''
-          unset HISTFILE
-          setopt rm_star_silent
-          setopt interactivecomments
-          setopt autopushd
+          if command -v tmux > /dev/null; then
+            # Create a new tmux session (with a random name) and attach.
+            if [[ -z "$TMUX" ]]; then
+              exec tmux -u new-session -s "#$(hexdump -n 4 -v -e '/1 "%02X"' /dev/urandom)"
+            elif [[ $SHLVL -eq 1 ]]; then
+              session=$(tmux display-message -p "#S")
+              # kill current session if we are quitting the only pane
+              function __onExit {
+                if [[ $(tmux list-panes -s -t $session | wc -l) == 1 ]]; then
+                  tmux kill-session -t $session
+                fi
+              }
+              trap __onExit EXIT
+            fi
 
-          # disable space between right prompt and end of line
-          ZLE_RPROMPT_INDENT=0
+            # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
+            if [[ -n CMD ]]; then
+                # unset the cmd before executing it (for long processes)
+                cmd=$CMD
+                unset CMD
+                if [[ -n $TMUX ]]; then
+                    tmux set-environment -r CMD
+                fi
+                eval $cmd
+            fi
+          fi
+        '';
+    in
+      lib.mkMerge [
+        (lib.mkBefore tmuxInit)
+        (lib.mkOrder 535 (builtins.readFile ./keymap.zsh))
+        (lib.mkOrder 550 (builtins.readFile ./comp.zsh))
+        (lib.mkOrder 570
+          #bash
+          ''
+            # used by kubectl plugin & maybe some other oh-my-zsh plugins
+            export ZSH_CACHE_DIR="$HOME/.cache/zsh";
+            mkdir -p "$ZSH_CACHE_DIR/completions"
+            fpath+="$ZSH_CACHE_DIR/completions"
+          '')
+        (lib.mkOrder 901
+          #bash
+          ''
+            unset HISTFILE
+            setopt rm_star_silent
+            setopt interactivecomments
+            setopt autopushd
+
+            # disable space between right prompt and end of line
+            ZLE_RPROMPT_INDENT=0
+          '')
+        (lib.mkOrder 1000 (builtins.readFile ./init.zsh))
+        (lib.mkOrder 1400 "${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin")
+        (lib.mkOrder 1410 ''
+          ${lib.getExe pkgs.starship} init zsh | source /dev/stdin
         '')
-      (lib.mkOrder 1400 "${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin")
-      (lib.mkOrder 1410 ''
-        ${lib.getExe pkgs.starship} init zsh | source /dev/stdin
-      '')
-    ];
+      ];
 
     envExtra = ''
       # disable /etc/zshrc & co (nixos one is really bad)
