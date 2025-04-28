@@ -34,6 +34,7 @@
       gur = "git pull --rebase";
       gswm = "git switch $(git master)";
       grbm = "git rebase origin/$(git master)";
+      grbmi = "git rebase origin/$(git master) -i";
       grhhm = "grhh origin/$(git master)";
       grhsm = "grhs origin/$(git master)";
       grhho = "grhh @{u}";
