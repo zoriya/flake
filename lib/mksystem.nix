@@ -70,6 +70,8 @@ in
         )
         ../hosts/${hostname}/hardware-configuration.nix
 
+        inputs.nix-index-database.nixosModules.nix-index
+
         home-manager.home-manager
         {
           home-manager = {
@@ -81,7 +83,6 @@ in
                 [
                   ../modules/cli/home.nix
                   (../environments + "/${env}/home.nix")
-                  inputs.nix-index-database.hmModules.nix-index
                 ]
                 ++ customHome;
             };
@@ -105,6 +106,9 @@ in
             config.common.default = "*";
           };
         })
+      ]
+      ++ nixpkgs.lib.optionals darwin [
+        inputs.nix-index-database.darwinModules.nix-index
       ]
       ++ custom;
   }

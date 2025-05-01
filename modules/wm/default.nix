@@ -21,31 +21,19 @@
     pulse.enable = true;
   };
 
-  powerManagement = {
-    powerDownCommands = ''
-      for device_wu in /sys/bus/usb/devices/*/power/wakeup; do
-        echo enabled > $device_wu
-      done
-      ${pkgs.util-linux}/bin/rfkill block bluetooth
-    '';
-    powerUpCommands = ''
-      ${pkgs.util-linux}/bin/rfkill unblock bluetooth
-    '';
-  };
+  # allow keyboard to wakeup from suspend
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615e", ATTR{power/wakeup}="enabled"
+  '';
 
   services.printing.enable = true;
   security.polkit.enable = true;
   security.rtkit.enable = true;
   services.upower.enable = true;
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
   services.libinput.enable = true;
-  services.colord.enable = true;
   services.system-config-printer.enable = true;
   services.gnome.glib-networking.enable = true;
   services.gnome.gnome-settings-daemon.enable = true;
-
-  services.avahi.enable = true;
 
   environment.systemPackages = with pkgs; [
     gnome-bluetooth

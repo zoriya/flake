@@ -47,7 +47,7 @@
 
   programs.zsh.enable = true;
   environment.shells = with pkgs; [zsh];
-  programs.command-not-found.enable = false;
+  programs.nix-index-database.comma.enable = true;
 
   services.locate = {
     enable = true;
