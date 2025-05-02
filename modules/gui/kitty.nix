@@ -13,6 +13,7 @@
       placement_strategy = "bottom";
 
       paste_actions = "quote-urls-at-prompt,replace-dangerous-control-codes";
+      clipboard_control = "write-clipboard read-clipboard write-primary read-primary";
     };
 
     extraConfig = ''
