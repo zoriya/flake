@@ -54,23 +54,7 @@ in
             ];
           };
         })
-        (
-          if (!darwin)
-          then {
-            users.users.root.hashedPassword = builtins.readFile ../password/root;
-            users.users.${user} = {
-              isNormalUser = true;
-              hashedPassword = builtins.readFile ../password/${user};
-              extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
-            };
-            networking.nameservers = ["1.1.1.1" "9.9.9.9"];
-            networking.resolvconf.extraConfig = "name_servers=\"1.1.1.1 9.9.9.9\"";
-          }
-          else {}
-        )
         ../hosts/${hostname}/hardware-configuration.nix
-
-        inputs.nix-index-database.nixosModules.nix-index
 
         home-manager.home-manager
         {
@@ -87,6 +71,20 @@ in
                 ++ customHome;
             };
           };
+        }
+      ]
+      ++ nixpkgs.lib.optionals (!darwin)
+      [
+        inputs.nix-index-database.nixosModules.nix-index
+        {
+          users.users.root.hashedPassword = builtins.readFile ../password/root;
+          users.users.${user} = {
+            isNormalUser = true;
+            hashedPassword = builtins.readFile ../password/${user};
+            extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
+          };
+          networking.nameservers = ["1.1.1.1" "9.9.9.9"];
+          networking.resolvconf.extraConfig = "name_servers=\"1.1.1.1 9.9.9.9\"";
         }
       ]
       ++ nixpkgs.lib.optionals wsl [
