@@ -46,7 +46,7 @@
 
       # Misc
       dc = "docker-compose";
-      dcd = "docker-compose -f docker-compose.dev.yml";
+      dcd = "docker-compose -f (../)#docker-compose.dev.yml";
       k = "kubectl";
       op = "xdg-open";
       py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
@@ -173,6 +173,7 @@
             setopt rm_star_silent
             setopt interactivecomments
             setopt autopushd
+            setopt extendedglob
 
             # disable space between right prompt and end of line
             ZLE_RPROMPT_INDENT=0
