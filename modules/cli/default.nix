@@ -20,8 +20,6 @@
     };
     efi.canTouchEfiVariables = true;
   };
-  # Using arch's google api key. Waiting for https://github.com/NixOS/nixpkgs/issues/321121 to be fixed.
-  services.geoclue2.geoProviderUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM";
   # needed for geoclue, see https://github.com/NixOS/nixpkgs/issues/329522
   services.avahi.enable = true;
   services.automatic-timezoned.enable = true;
