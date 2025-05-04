@@ -228,23 +228,6 @@
         "type": "github"
       }
     },
-    "ltex-extra": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1737936194,
-        "narHash": "sha256-b92tQ9ouf9ikizEalOrVvRDaumttz2ENR7E1rc8N4Bw=",
-        "owner": "barreiroleo",
-        "repo": "ltex_extra.nvim",
-        "rev": "09dc879b1873001f855bca5ad1f024ca15b9bbaf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "barreiroleo",
-        "ref": "dev",
-        "repo": "ltex_extra.nvim",
-        "type": "github"
-      }
-    },
     "neovim-nightly": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -402,7 +385,6 @@
         "flood": "flood",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
-        "ltex-extra": "ltex-extra",
         "neovim-nightly": "neovim-nightly",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",

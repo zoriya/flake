@@ -44,11 +44,6 @@
       url = "github:tmux/tmux";
       flake = false;
     };
-
-    ltex-extra = {
-      url = "github:barreiroleo/ltex_extra.nvim/dev";
-      flake = false;
-    };
   };
 
   outputs = {
