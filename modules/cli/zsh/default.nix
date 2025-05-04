@@ -238,11 +238,6 @@
     };
   };
 
-  programs.nix-index = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
   programs.less.enable = true;
 
   programs.direnv = {
