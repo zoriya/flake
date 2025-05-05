@@ -1,7 +1,8 @@
-{pkgs, ...}: {
+{pkgs, inputs, ...}: {
   nix = {
     optimise.automatic = true;
     channel.enable = false;
+    registry = { nixpkgs.flake = inputs.nixpkgs; };
     settings = {
       warn-dirty = false;
       experimental-features = ["nix-command" "flakes"];
