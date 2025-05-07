@@ -127,7 +127,7 @@ in
       rust-analyzer
       clang-tools
       roslyn-ls
-      pyright
+      basedpyright
       typescript-language-server
       nil
       vscode-langservers-extracted # html, jsonls
