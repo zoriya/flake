@@ -53,7 +53,6 @@ return {
 		},
 		after = function(plug)
 			require("blink-cmp").setup(plug.opts)
-			vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 		end,
 	},
 }
