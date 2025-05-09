@@ -25,14 +25,6 @@ return {
 	},
 
 	{
-		"increment-activator",
-		keys = {
-			{ "<C-A>", desc = "Increment" },
-			{ "<C-X>", desc = "Decrement" },
-		},
-	},
-
-	{
 		"leap.nvim",
 		keys = {
 			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },

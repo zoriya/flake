@@ -14,13 +14,7 @@ return {
 		opts = {
 			default_format_opts = { async = true },
 			formatters_by_ft = {
-				python = function(bufnr)
-					if require("conform").get_formatter_info("ruff_format", bufnr).available then
-						return { "ruff_format", "ruff_organize_imports" }
-					else
-						return { "isort", "black" }
-					end
-				end,
+				python = { "ruff_format", "ruff_organize_imports" },
 				javascript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
 				typescript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
 				javascriptreact = { "biome-check", "prettierd", "prettier", stop_after_first = true },
