@@ -35,13 +35,13 @@ return {
 		end
 	},
 
-	{
-		"ts-comments.nvim",
-		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		after = function()
-			require("ts-comments").setup({})
-		end,
-	},
+	-- {
+	-- 	"ts-comments.nvim",
+	-- 	event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+	-- 	after = function()
+	-- 		require("ts-comments").setup({})
+	-- 	end,
+	-- },
 
 	{
 		"vim-illuminate",

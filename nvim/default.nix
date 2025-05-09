@@ -58,7 +58,7 @@ in
           catppuccin-nvim
 
           nvim-treesitter.withAllGrammars
-          ts-comments-nvim
+          # ts-comments-nvim
 
           nvim-lspconfig
           (blink-cmp.overrideAttrs {
