@@ -22,32 +22,6 @@ return {
 	},
 
 	{
-		"nvim-colorizer.lua",
-		event = "BufReadPre",
-		opts = {
-			filetypes = {
-				'*',
-				html = { names = true },
-				css = { names = true },
-			},
-			user_default_options = {
-				mode = "virtualtext",
-				RGB = false,
-				RRGGBB = true,
-				names = false,
-				RRGGBBAA = true,
-				AARRGGBB = true,
-				rgb_fn = true,
-				hsl_fn = true,
-				tailwind = true,
-			},
-		},
-		after = function(plug)
-			require("colorizer").setup(plug.opts)
-		end
-	},
-
-	{
 		"quicker.nvim",
 		ft = "qf",
 		opts = {

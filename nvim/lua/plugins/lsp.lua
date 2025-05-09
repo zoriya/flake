@@ -9,11 +9,20 @@ vim.lsp.enable("yamlls")
 vim.lsp.enable("marksman")
 vim.lsp.enable("texlab")
 vim.lsp.enable("html")
+vim.lsp.enable("cssls")
 vim.lsp.enable("helm_ls")
 vim.lsp.enable("zls")
 vim.lsp.enable("gopls")
 vim.lsp.enable("bashls")
 vim.lsp.enable("jsonls")
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	desc = "Custom lsp attach",
+	group = vim.api.nvim_create_augroup("lsp-setup", { clear = true }),
+	callback = function(args)
+		vim.lsp.document_color.enable(true, args.buf, { style = "virtual" })
+	end,
+})
 
 return {
 	-- see https://github.com/seblyng/roslyn.nvim/pull/178

@@ -100,7 +100,6 @@ in
           dressing-nvim
           mini-icons
           which-key-nvim
-          nvim-colorizer-lua
           quicker-nvim
           lualine-nvim
           nvim-navic
