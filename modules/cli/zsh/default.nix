@@ -49,7 +49,7 @@
       dcd = "docker-compose -f (../)#docker-compose.dev.yml";
       k = "kubectl";
       op = "xdg-open";
-      py = "python3 2> /dev/null || nix shell nixpkgs#python3 -c python3";
+      py = "python3 2> /dev/null || , python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
       mi = "mediainfo";
@@ -57,6 +57,7 @@
       prename = "rename";
       # add labels, replace type by fstype, use a single mountpoint
       lsblk = "lsblk -o name,label,size,rm,ro,fstype,uuid,mountpoint";
+      dr = "direnv reload";
 
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
