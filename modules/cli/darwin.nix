@@ -21,6 +21,7 @@
   ];
 
   programs.zsh.enable = true;
+  programs.nix-index-database.comma.enable = true;
   environment.shells = with pkgs; [zsh];
 
   documentation = {
