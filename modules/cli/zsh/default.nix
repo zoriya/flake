@@ -32,6 +32,8 @@
       gl = "git log";
       gu = "git pull";
       gur = "git pull --rebase";
+      gum = "git pull origin $(git master)";
+      gurm = "git pull --rebase origin $(git master)";
       gswm = "git switch $(git master)";
       grbm = "git rebase origin/$(git master)";
       grbmi = "git rebase origin/$(git master) -i";
