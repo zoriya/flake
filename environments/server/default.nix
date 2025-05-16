@@ -31,7 +31,6 @@
        wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
      ";
   };
-
 in {
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
@@ -110,16 +109,6 @@ in {
       };
     };
 
-    # virtualHosts."suwayomi.sdg.moe" = {
-    #   enableACME = true;
-    #   forceSSL = true;
-    #   locations."/" = {
-    #     proxyPass = "http://localhost:4677";
-    #     proxyWebsockets = true;
-    #     extraConfig = "proxy_pass_header Authorization;";
-    #   };
-    # };
-
     virtualHosts."reader.sdg.moe" = {
       enableACME = true;
       forceSSL = true;
@@ -140,6 +129,16 @@ in {
           proxy_pass_header Authorization;
           add_header Access-Control-Allow-Origin *;
         '';
+      };
+    };
+
+    virtualHosts."grafana.sdg.moe" = {
+      enableACME = true;
+      addSSL = true;
+      location."/" = {
+        proxyPass = "http://localhost:1892";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
       };
     };
   };
@@ -194,16 +193,18 @@ in {
     };
   };
 
-  # services.suwayomi-server = {
-  #   enable = true;
-  #   settings.server = {
-  #     port = 4677;
-  #     # basicAuthEnabled = true;
-  #     # basicAuthUsername = "zoriya";
-  #     # basicAuthPasswordFile = ../../password/zoriya;
-  #     extensionRepos = ["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"];
-  #     downloadAsCbz = true;
-  #   };
-  #   dataDir = "/mnt/kyoo/manga";
-  # };
+  services.opentelemetry-collector = {
+    enable = true;
+  };
+
+  services.grafana = {
+    enable = true;
+    settings = {
+      server = {
+        http_addr = "localhost";
+        http_port = 1892;
+        domain = "grafana.sdg.moe";
+      };
+    };
+  };
 }
