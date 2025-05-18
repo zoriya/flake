@@ -43,6 +43,25 @@ export const Tags = ({ monitor, labels, ...props }) => {
 	});
 };
 
+/** @param {{monitor: number } & import("types/widgets/label").LabelProps} props */
+export const Layout = ({ monitor, ...props }) => {
+	const monName = getMonitorName(monitor);
+	return Widget.Label({
+		className: "module",
+		...props,
+	}).hook(
+		hyprland,
+		(self) => {
+			const mon = hyprland.monitors.find((x) => x.name === monName);
+			const ws = hyprland.workspaces.find(
+				(x) => x.id === mon?.activeWorkspace?.id,
+			);
+			self.label = ws?.windows ? `[${ws?.windows}]` : "";
+		},
+		"changed",
+	);
+}
+
 /** @param {{monitor: number, fallback?: string} & import("types/widgets/label").LabelProps} props */
 export const ClientLabel = ({ monitor, fallback = "", ...props }) => {
 	const monName = getMonitorName(monitor);
