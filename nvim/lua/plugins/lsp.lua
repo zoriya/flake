@@ -15,6 +15,7 @@ vim.lsp.enable("zls")
 vim.lsp.enable("gopls")
 vim.lsp.enable("bashls")
 vim.lsp.enable("jsonls")
+vim.lsp.enable("hyprls")
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	desc = "Custom lsp attach",

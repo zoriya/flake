@@ -136,6 +136,7 @@ in
       zls
       lua-language-server
       bash-language-server
+      hyprls
 
       # gopls also needs go /shame
       gopls

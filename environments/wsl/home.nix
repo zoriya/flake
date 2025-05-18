@@ -1,7 +1,7 @@
 {lib, ...}: {
   imports = [
     # Install apps that I open with wslg (and tools like wl-clipboard which works)
-    ../../modules/gui
+    ../../modules/gui/home.nix
   ];
 
   gtk.enable = lib.mkForce false;

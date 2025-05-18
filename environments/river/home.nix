@@ -228,15 +228,4 @@ in {
       }
     ];
   };
-
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      cursor-blink = false;
-    };
-    # Disable close/resize buttons on GTK windows that really want CSD.
-    # gsettings set org.gnome.desktop.wm.preferences button-layout ""
-    "org/gnome/desktop/wm/preferences" = {
-      button-layout = "";
-    };
-  };
 }
