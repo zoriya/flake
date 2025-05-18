@@ -4,30 +4,6 @@
   ...
 }: let
   cliphist = "${pkgs.cliphist}/bin/cliphist";
-  screenshot = pkgs.writeShellApplication {
-    name = "screenshot";
-    runtimeInputs = [pkgs.slurp pkgs.grim];
-    text = ''
-      grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy
-    '';
-  };
-  screenshot-freeze = pkgs.writeShellApplication {
-    name = "screenshot-freeze";
-    runtimeInputs = [pkgs.slurp pkgs.grim pkgs.wayfreeze];
-    text = ''
-      # shellcheck disable=SC2016
-      wayfreeze --after-freeze-cmd ''\'grim -g "$(slurp -b 00000000 -s 61616140)" - | wl-copy; killall wayfreeze''\'
-    '';
-  };
-  record = pkgs.writeShellApplication {
-    name = "record";
-    runtimeInputs = [pkgs.slurp pkgs.wf-recorder];
-    text = ''
-      pkill wf-recorder && exit
-      wf-recorder -g "$(slurp -b 00000000 -s 61616140)" -f "$HOME/rec-$(date +%Y-%m-%d_%H:%M:%S).mp4"
-    '';
-  };
-
   common_binds = {
     "None XF86AudioRaiseVolume" = "spawn '${pkgs.pamixer}/bin/pamixer -i 5'";
     "None XF86AudioLowerVolume" = "spawn '${pkgs.pamixer}/bin/pamixer  -d 5'";
@@ -42,10 +18,27 @@
   };
 in {
   imports = [
-    ../../modules/gui
+    ../../modules/gui/home.nix
     ../../modules/wm/home.nix
   ];
-  services.cliphist.enable = true;
+
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      Wants = ["graphical-session.target"];
+      After = ["graphical-session.target"];
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
 
   xdg.configFile."river-luatile/layout.lua".source = ./layout.lua;
 
@@ -142,9 +135,9 @@ in {
             "Super R" = "spawn 'uwsm app -- ${config.home.sessionVariables.BROWSER}'";
             "Super E" = "spawn 'uwsm app -- ${config.home.sessionVariables.TERMINAL}'";
             "Super P" = ''spawn 'rofi -show drun -show-icons -run-command "uwsm app -- {cmd}"' '';
-            "Super X" = "spawn '${screenshot}/bin/screenshot'";
-            "Super+Control X" = "spawn '${screenshot-freeze}/bin/screenshot-freeze'";
-            "Super+Shift X" = "spawn 'uwsm app -- ${record}/bin/record'";
+            "Super X" = "spawn 'screenshot'";
+            "Super+Control X" = "spawn 'screenshot-freeze'";
+            "Super+Shift X" = "spawn 'uwsm app -- record'";
             "Super B" = "spawn '${pkgs.hyprpicker}/bin/hyprpicker | wl-copy'";
             "Super V" = "spawn '${cliphist} list | rofi -dmenu -display-columns 2 | ${cliphist} decode | wl-copy'";
             "Super+Shift L" = "spawn 'loginctl lock-session'";
