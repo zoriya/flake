@@ -23,10 +23,6 @@
       url = "github:zoriya/flood";
       flake = false;
     };
-    astal = {
-      url = "github:aylur/astal";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     river-src = {
       url = "github:zoriya/river/0.3.x";
       flake = false;

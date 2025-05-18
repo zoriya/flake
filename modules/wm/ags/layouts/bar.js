@@ -25,7 +25,6 @@ export const Bar = (monitor) =>
 						monitor,
 						labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
 					}),
-					wm.Layout({ monitor }),
 					wm.ClientLabel({ monitor }),
 				],
 			}),
