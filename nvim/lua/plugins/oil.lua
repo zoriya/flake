@@ -14,6 +14,7 @@ return {
 			keymaps = {
 				["<BS>"] = "actions.parent",
 				["~"] = false,
+				["yy"] = "actions.yank_entry",
 			},
 		},
 		after = function(plug)
