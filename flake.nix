@@ -100,6 +100,12 @@
       user = "zroux";
       system = "aarch64-darwin";
       darwin = true;
+      custom = [
+        {
+          # waiting for gnupg agents to be ported
+          system.primaryUser = "zroux";
+        }
+      ];
       customHome = [
         ./modules/gui/ghostty.nix
         ({pkgs, ...}: let
