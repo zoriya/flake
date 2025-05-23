@@ -32,6 +32,10 @@
      ";
   };
 in {
+  imports = [
+    ./otel.nix
+  ];
+
   # Make it use predictable interface names starting with eth0
   boot.kernelParams = ["net.ifnames=0"];
 
@@ -52,18 +56,6 @@ in {
     ];
     maxretry = 5;
   };
-
-  # virtualisation.oci-containers.containers."watchtower" = {
-  #   autoStart = true;
-  #   image = "containrrr/watchtower";
-  #   volumes = [
-  #     "/var/run/docker.sock:/var/run/docker.sock"
-  #   ];
-  #   environment = {
-  #     WATCHTOWER_CLEANUP = "true";
-  #     WATCHTOWER_POLL_INTERVAL = "86400";
-  #   };
-  # };
 
   networking.firewall.allowedTCPPorts = [80 443];
   services.nginx = {
@@ -132,10 +124,27 @@ in {
       };
     };
 
+    virtualHosts."otel.sdg.moe" = {
+      enableACME = true;
+      addSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:4318";
+        proxyWebsockets = true;
+        extraConfig = "proxy_pass_header Authorization;";
+      };
+    };
+    # virtualHosts."otel-groc.sdg.moe" = {
+    #   enableACME = true;
+    #   addSSL = true;
+    #   locations."/" = {
+    #     grpcPass = "http://localhost:4317";
+    #   };
+    # };
+
     virtualHosts."grafana.sdg.moe" = {
       enableACME = true;
       addSSL = true;
-      location."/" = {
+      locations."/" = {
         proxyPass = "http://localhost:1892";
         proxyWebsockets = true;
         recommendedProxySettings = true;
@@ -190,21 +199,6 @@ in {
       ROOT_URL = "https://git.${DOMAIN}/";
       HTTP_PORT = 4789;
       DISABLE_SSH = true;
-    };
-  };
-
-  services.opentelemetry-collector = {
-    enable = true;
-  };
-
-  services.grafana = {
-    enable = true;
-    settings = {
-      server = {
-        http_addr = "localhost";
-        http_port = 1892;
-        domain = "grafana.sdg.moe";
-      };
     };
   };
 }

@@ -23,6 +23,7 @@
       "/var/lib/flatpak"
       "/var/lib/tcc"
       "/var/lib/flood"
+      "/var/lib/loki"
       "/var/lib/transmission"
       "/var/lib/gitea"
       "/var/lib/acme"
