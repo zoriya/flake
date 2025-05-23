@@ -8,6 +8,9 @@ const getMonitorName = (monitor) => {
 	return display.get_default_screen().get_monitor_plug_name(monitor);
 };
 
+/** @type {Record<number, boolean>} */
+const urgents = {}
+
 /** @param {{monitor: number, labels: string[]} & import("types/widgets/box").BoxProps} props */
 export const Tags = ({ monitor, labels, ...props }) => {
 	const monName = getMonitorName(monitor);
@@ -23,7 +26,14 @@ export const Tags = ({ monitor, labels, ...props }) => {
 				},
 			}),
 		),
-		setup: (self) =>
+		setup: (self) => {
+			self.hook(hyprland, (_, address) => {
+				const client = hyprland.getClient(address);
+				if (!client) return;
+				const ws = client.workspace.id;
+				urgents[ws] = true;
+			}, "urgent-window");
+
 			self.hook(hyprland, () =>
 				self.children.forEach((btn) => {
 					const mon = hyprland.monitors.find((x) => x.name === monName);
@@ -31,7 +41,8 @@ export const Tags = ({ monitor, labels, ...props }) => {
 
 					const occupied = (ws?.windows ?? 0) > 0;
 					const selected = mon?.activeWorkspace?.id === btn.attribute;
-					const urgent = false;
+					if (selected) urgents[btn.attribute] = false;
+					const urgent = urgents[btn.attribute];
 
 					btn.visible = occupied || selected;
 					btn.class_names = [
@@ -39,7 +50,8 @@ export const Tags = ({ monitor, labels, ...props }) => {
 						urgent ? "secondary" : "",
 					];
 				}),
-			),
+			);
+		},
 	});
 };
 
