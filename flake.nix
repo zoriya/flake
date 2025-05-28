@@ -119,6 +119,7 @@
         in {
           home.packages = with pkgs; [
             nodejs
+            volta
             dotnet
             csharprepl
             kubernetes-helm
