@@ -1,5 +1,4 @@
 {pkgs, ...}: {
-
   services.opentelemetry-collector = {
     enable = true;
     package = pkgs.opentelemetry-collector-contrib;
@@ -11,6 +10,7 @@
     configuration = {
       server = {
         http_listen_port = 1880;
+        grpc_listen_port = 9095;
       };
     };
   };
@@ -20,6 +20,7 @@
     configuration = {
       server = {
         http_listen_port = 1881;
+        grpc_listen_port = 9096;
       };
       storage_config = {
         filesystem = {
@@ -35,7 +36,7 @@
             from = "2020-05-15";
             store = "tsdb";
             object_store = "filesystem";
-            schema= "v13";
+            schema = "v13";
             index = {
               prefix = "index_";
               period = "24h";
@@ -51,6 +52,18 @@
     settings = {
       server = {
         http_listen_port = 1882;
+        grpc_listen_port = 9097;
+      };
+      storage = {
+        trace = {
+          backend = "local";
+          local = {
+            path = "/var/lib/tempo";
+          };
+          wal = {
+            path = "/var/lib/tempo/wal";
+          };
+        };
       };
     };
   };
