@@ -133,7 +133,7 @@ in {
         extraConfig = "proxy_pass_header Authorization;";
       };
     };
-    # virtualHosts."otel-groc.sdg.moe" = {
+    # virtualHosts."otel-grpc.sdg.moe" = {
     #   enableACME = true;
     #   addSSL = true;
     #   locations."/" = {

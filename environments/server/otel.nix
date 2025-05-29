@@ -29,6 +29,11 @@
       };
       common = {
         path_prefix = "/var/lib/loki";
+        ring = {
+          kvstore = {
+            store = "inmemory";
+          };
+        };
       };
       schema_config = {
         configs = [
