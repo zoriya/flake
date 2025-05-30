@@ -291,6 +291,7 @@
       nvim
       rename # this is perl-rename
       gfold
+      lsof
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils
