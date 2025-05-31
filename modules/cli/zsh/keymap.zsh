@@ -48,3 +48,7 @@ zle -N down-line-or-beginning-search
 bindkey "${key[Up]}"   up-line-or-beginning-search
 bindkey "${key[Down]}" down-line-or-beginning-search
 
+# sometimes, terminfo is not well maintained so we still need to use ansi sequences
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+
