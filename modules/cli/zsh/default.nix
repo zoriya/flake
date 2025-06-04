@@ -292,6 +292,7 @@
       rename # this is perl-rename
       gfold
       lsof
+      jujutsu
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils
