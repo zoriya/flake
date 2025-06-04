@@ -10,10 +10,12 @@ return {
 			}
 		},
 		opts = {
+			model = "gemini-2.5-pro",
+			chat_autocomplete = false,
 			auto_insert_mode = true,
 			mappings = {
 				complete = {
-					insert = "<C-space>",
+					insert = "<Tab>",
 				},
 				close = {
 					normal = "q",
@@ -22,10 +24,6 @@ return {
 			}
 		},
 		after = function(plug)
-			local select = require("CopilotChat.select")
-			plug.opts.selection = function(source)
-				return select.visual(source) or select.buffer(source)
-			end
 			require("CopilotChat").setup(plug.opts)
 		end,
 	},

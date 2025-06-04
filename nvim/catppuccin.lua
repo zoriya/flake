@@ -12,5 +12,8 @@ require("catppuccin").setup({
 		navic = true,
 		leap = true,
 		noice = true,
+		snacks = {
+			enabled = true,
+		},
 	},
 })

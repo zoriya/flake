@@ -136,6 +136,7 @@ return {
 			telescope.load_extension("fzf")
 			telescope.load_extension("ripgrep")
 			telescope.load_extension("git_show")
+			telescope.load_extension("ui-select")
 		end
 	},
 }

@@ -97,15 +97,16 @@ in
 
           noice-nvim
           statuscol-nvim
-          dressing-nvim
+          telescope-ui-select-nvim
+          (snacks-nvim.overrideAttrs {
+            postPatch = "rm -rf queries";
+          })
           mini-icons
           which-key-nvim
           quicker-nvim
           lualine-nvim
           nvim-navic
           virt-column-nvim
-          indent-blankline-nvim
-          zen-mode-nvim
 
           CopilotChat-nvim
           # enable this just to signin (used by the chat plugin above)

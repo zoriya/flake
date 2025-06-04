@@ -61,37 +61,59 @@ return {
 	},
 
 	{
-		"indent-blankline.nvim",
-		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+		"snacks-nvim",
+		event = "DeferredUIEnter",
 		opts = {
+			input = {
+				enabled = true,
+			},
 			indent = {
-				char = "▏",
-				tab_char = "▏",
+				enabled = true,
+				indent = {
+					char = "▏",
+				},
+				animate = {
+					enabled = false,
+				},
+				scope = {
+					char = "▏",
+				},
+				chunk = {
+					char = {
+						vertical = "▏",
+					},
+				},
 			},
-			exclude = {
-				filetypes = {
-					"help",
-					"checkhealth",
-					"help",
-					"man",
-					"qf",
-					"",
-				}
+			zen = {
+				toggles = {
+					dim = false,
+				},
+				show = {
+					statusline = true,
+				},
 			},
-			scope = { show_start = false, show_end = false, },
+			styles = {
+				input = {
+					relative = "cursor",
+					row = -3,
+					col = 0,
+					keys = {
+						i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i", expr = true },
+					},
+				},
+				zen = {
+					width = 200,
+					backdrop = {
+						transparent = false,
+						blend = 0,
+					},
+				},
+			},
 		},
 		after = function(plug)
-			require("ibl").setup(plug.opts)
-		end,
-	},
+			require("snacks").setup(plug.opts)
 
-	{
-		"zen-mode.nvim",
-		keys = {
-			{ "<leader>zz", "<cmd>ZenMode<cr>", desc = "Toogle zen mode" },
-		},
-		after = function()
-			require("zen-mode").setup()
+			vim.keymap.set("n", "<leader>zz", function() require("snacks").zen() end, { desc = "Toggle zen mode" })
 		end,
 	},
 }
