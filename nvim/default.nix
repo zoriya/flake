@@ -106,6 +106,12 @@ in
           virt-column-nvim
           indent-blankline-nvim
           zen-mode-nvim
+
+          CopilotChat-nvim
+          # enable this just to signin (used by the chat plugin above)
+          # (copilot-vim.overrideAttrs {
+          #   postPatch = "rm doc/copilot.txt";
+          # })
         ];
         opt = [
           telescope-nvim
