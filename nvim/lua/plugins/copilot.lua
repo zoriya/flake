@@ -1,34 +1,4 @@
 return {
-	-- {
-	-- 	"avante.nvim",
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>l",
-	-- 			"<cmd>AvanteToggle<cr>",
-	-- 			desc = "Copilot",
-	-- 			mode = { "n", "v" },
-	-- 		}
-	-- 	},
-	-- 	opts = {
-	-- 		provider = "copilot",
-	-- 		dual_boost = {
-	-- 			enabled = false,
-	-- 		},
-	-- 		behaviour = {
-	-- 			auto_suggestions = false,
-	-- 		},
-	-- 		mappings = {
-	-- 			diff = false,
-	-- 		},
-	-- 		hints = {
-	-- 			enabled = false,
-	-- 		},
-	-- 	},
-	-- 	after = function(plug)
-	-- 		require("avante").setup(plug.opts)
-	-- 	end,
-	-- },
-
 	{
 		"CopilotChat.nvim",
 		keys = {
