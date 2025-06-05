@@ -2,6 +2,7 @@
   imports = [
     ./zsh
     ./tools/git.nix
+    ./tools/jujutsu.nix
     ./tools/tmux.nix
   ];
 
