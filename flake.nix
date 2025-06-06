@@ -125,6 +125,7 @@
             kubernetes-helm
             colima
             kubectl
+            kubelogin-oidc
             kustomize
             docker_28
             sqlcmd

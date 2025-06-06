@@ -32,10 +32,19 @@ return {
 		"roslyn.nvim",
 		ft = { "cs", "vb" },
 		opts = {
-			exe = "Microsoft.CodeAnalysis.LanguageServer",
 			broad_search = true,
 		},
 		after = function(plug)
+			vim.lsp.config("roslyn", {
+				cmd = {
+					'Microsoft.CodeAnalysis.LanguageServer',
+					'--logLevel',
+					'Information',
+					'--extensionLogDirectory',
+					vim.fs.joinpath(vim.uv.os_tmpdir(), 'roslyn_ls/logs'),
+					'--stdio',
+				},
+			})
 			require("roslyn").setup(plug.opts)
 		end,
 	},
