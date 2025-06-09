@@ -26,6 +26,7 @@
       ''
         set -g status off
         set -s set-clipboard on
+        set -g extended-keys on
 
         # from tmux-sensible
         set -g display-time 4000
@@ -52,6 +53,7 @@
 
         # suspend inner tmux (to allow nested sessions)
         bind @ { set prefix None; set key-table off }
+        # NOTE: C-@ doesn't work since v3.5a
         bind -T off C-@ { set -u prefix; set -u key-table }
       '';
   };

@@ -63,7 +63,7 @@ in
           nvim-lspconfig
           (blink-cmp.overrideAttrs {
             # clashes with oil
-            postPatch = "rm doc/recipes.md";
+            postPatch = "rm -rf doc/";
           })
           SchemaStore-nvim
           roslyn-nvim
@@ -108,7 +108,8 @@ in
           nvim-navic
           virt-column-nvim
 
-          CopilotChat-nvim
+          render-markdown-nvim
+          codecompanion-nvim
           # enable this just to signin (used by the chat plugin above)
           # (copilot-vim.overrideAttrs {
           #   postPatch = "rm doc/copilot.txt";

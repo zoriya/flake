@@ -49,6 +49,9 @@ return {
 
 					return { "lsp" }
 				end,
+				per_filetype = {
+					codecompanion = { "codecompanion" },
+				}
 			},
 		},
 		after = function(plug)

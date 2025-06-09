@@ -1,30 +1,46 @@
 return {
 	{
-		"CopilotChat.nvim",
+		"codecompanion",
 		keys = {
 			{
 				"<leader>l",
-				"<cmd>CopilotChatToggle<cr>",
+				"<cmd>CodeCompanionChat Toggle<cr>",
 				desc = "Copilot",
 				mode = { "n", "v" },
 			}
 		},
 		opts = {
-			model = "gemini-2.5-pro",
-			chat_autocomplete = false,
-			auto_insert_mode = true,
-			mappings = {
-				complete = {
-					insert = "<Tab>",
+			strategies = {
+				chat = {
+					adapter = "copilot",
+					model = "claude-3-7-sonnet",
+					start_in_insert_mode = true,
+					keymaps = {
+						send = {
+							modes = { n = "<C-s>", i = "<C-s>" },
+						},
+						close = {
+							modes = { n = "q", i = "<C-d>" },
+						},
+					},
 				},
-				close = {
-					normal = "q",
-					insert = "",
+				inline = {
+					adapter = "copilot",
+					model = "claude-3-7-sonnet",
 				},
-			}
+			},
 		},
 		after = function(plug)
-			require("CopilotChat").setup(plug.opts)
+			require("codecompanion").setup(plug.opts)
+		end,
+	},
+
+	{
+		"render-markdown",
+		ft = { "markdown", "codecompanion" },
+		opts = {},
+		after = function(plug)
+			require("render-markdown").setup(plug.opts)
 		end,
 	},
 }
