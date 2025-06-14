@@ -11,6 +11,11 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-avf.url = "github:nix-community/nixos-avf";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,10 +31,6 @@
     river-src = {
       url = "github:zoriya/river/0.3.x";
       flake = false;
-    };
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
@@ -93,6 +94,12 @@
     nixosConfigurations.lucca = mkSystem "lucca" {
       env = "wsl";
       wsl = true;
+    };
+
+    nixosConfigurations.kujima = mkSystem "kujima" {
+      env = "none";
+      system = "aarch64-linux";
+      avf = true;
     };
 
     darwinConfigurations."zroux-mac" = mkSystem "zroux-mac" {

@@ -1,10 +1,14 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./nix/nix.nix
     ./nix/impermanence.nix
   ];
 
-  security.sudo.wheelNeedsPassword = true;
+  security.sudo.wheelNeedsPassword = lib.mkForce true;
   security.sudo.extraConfig = ''
     Defaults  lecture="never"
   '';

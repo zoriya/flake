@@ -24,5 +24,5 @@
 ## Notes for myself
 
 `mkdir -p /nix/persist/home` (else persisted seems to be bugged)
-`nix-shell --run 'mkpasswd -m SHA-512' -p mkpasswd` to generate a password
+`nix-shell --run 'mkpasswd -p mkpasswd -m SHA-512  | tr -d \\n'` to generate a password
 `NIX_CONFIG="extra-access-tokens = github.com=$(gh auth token)" nix flake update`
