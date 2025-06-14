@@ -71,6 +71,7 @@
         ".config/vesktop"
         ".config/YouTube\ Music"
         ".config/gh"
+        ".config/github-copilot"
         # Don't reinstall plugins on reboot
         ".local/share/nvim"
         ".local/state/nvim"

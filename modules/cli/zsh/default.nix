@@ -304,7 +304,6 @@
       gh
       yq
       nodePackages.http-server
-      nodePackages.live-server
       nvim
       rename # this is perl-rename
       gfold
