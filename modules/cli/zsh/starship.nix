@@ -9,9 +9,10 @@
       format = lib.concatStrings [
         "$fill"
         "$hostname"
+        "$kubernetes"
         "$python"
         "$nix_shell"
-        "$kubernetes"
+        "$container"
         "$line_break"
         "$directory"
         "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
@@ -96,6 +97,10 @@
         format = "[\( $name\) nix]($style)";
         style = "cyan";
         heuristic = true;
+      };
+
+      container = {
+        format = "[ $name]($style)";
       };
 
       kubernetes = {

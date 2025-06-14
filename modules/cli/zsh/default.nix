@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   lib,
   ...
 }: {
@@ -182,8 +183,14 @@
             ZLE_RPROMPT_INDENT=0
           '')
         (lib.mkOrder 1000 (builtins.readFile ./init.zsh))
-        (lib.mkOrder 1400 "${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin")
-        (lib.mkOrder 1410 ''
+        (lib.mkOrder 1400 ''
+          # only start atuin if it's in the path (fix distrox or other temp fs issues)
+          if command -v atuin > /dev/null && [[ $options[zle] = on ]]; then
+            eval "$(atuin init zsh ${lib.escapeShellArgs config.programs.atuin.flags})"
+          fi
+        '')
+        (lib.mkOrder 1410 "${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin")
+        (lib.mkOrder 1420 ''
           ${lib.getExe pkgs.starship} init zsh | source /dev/stdin
         '')
       ];
@@ -210,6 +217,7 @@
 
   programs.atuin = {
     enable = true;
+    enableZshIntegration = false;
     flags = ["--disable-up-arrow"];
     settings = {
       update_check = false;
@@ -218,6 +226,15 @@
       inline_height = 0;
     };
   };
+
+  programs.distrobox = {
+    enable = true;
+  };
+  xdg.configFile."distrobox/distrobox.conf".text = ''
+    container_name_default="archlinux"
+    container_image_default="quay.io/toolbx/arch-toolbox:latest"
+    container_additional_volumes="/nix/store:/nix/store:ro /etc/profiles/per-user/zoriya:/etc/profiles/per-user/zoriya:ro"
+  '';
 
   programs.bat = {
     enable = true;
