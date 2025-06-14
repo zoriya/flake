@@ -81,7 +81,15 @@ in
           users.users.${user} = {
             isNormalUser = true;
             hashedPassword = builtins.readFile ../password/${user};
-            extraGroups = ["wheel" "input" "docker" "audio" "mlocate" "libvirtd"];
+            extraGroups = [
+              "wheel"
+              "input"
+              "docker"
+              "audio"
+              "mlocate"
+              "libvirtd"
+              "networkmanager"
+            ];
           };
           networking.nameservers = ["1.1.1.1" "9.9.9.9"];
           networking.resolvconf.extraConfig = "name_servers=\"1.1.1.1 9.9.9.9\"";

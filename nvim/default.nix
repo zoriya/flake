@@ -58,8 +58,6 @@ in
           catppuccin-nvim
 
           nvim-treesitter.withAllGrammars
-          # ts-comments-nvim
-
           nvim-lspconfig
           (blink-cmp.overrideAttrs {
             # clashes with oil
