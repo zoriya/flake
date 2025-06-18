@@ -228,7 +228,7 @@
   };
 
   programs.distrobox = {
-    enable = true;
+    enable = pkgs.stdenv.isLinux; # this is not supported on macos
   };
   xdg.configFile."distrobox/distrobox.conf".text = ''
     container_name_default="archlinux"
@@ -308,7 +308,7 @@
       rename # this is perl-rename
       gfold
       lsof
-      bitwarden-cli
+      # bitwarden-cli
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       usbutils

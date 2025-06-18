@@ -10,6 +10,11 @@ return {
 			}
 		},
 		opts = {
+			display = {
+				diff = {
+					enabled = false,
+				},
+			},
 			strategies = {
 				chat = {
 					adapter = "copilot",
