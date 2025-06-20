@@ -34,6 +34,7 @@
       gu = "git pull";
       gur = "git pull --rebase";
       gum = "git pull origin $(git master)";
+      gdm = "git diff origin/$(git master)";
       gurm = "git pull --rebase origin $(git master)";
       gswm = "git switch $(git master)";
       grbm = "git rebase origin/$(git master)";
