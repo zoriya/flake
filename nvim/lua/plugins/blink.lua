@@ -43,7 +43,7 @@ return {
 			sources = {
 				default = function()
 					local success, node = pcall(vim.treesitter.get_node)
-					if success and node and (string.find(node:type(), "comment") or string.find(node:type(), "string")) then
+					if success and node and string.find(node:type(), "comment") then
 						return { "lsp", "path", "buffer" }
 					end
 
