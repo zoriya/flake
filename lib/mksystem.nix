@@ -123,13 +123,16 @@ in
       ]
       ++ nixpkgs.lib.optionals darwin [
         inputs.nix-index-database.darwinModules.nix-index
-        {
+        ({pkgs, ...}: {
+          environment.systemPackages = with pkgs; [
+            coreutils
+          ];
           # auth sudo via fingerprint
           security.pam.services.sudo_local = {
             reattach = true;
             touchIdAuth = true;
           };
-        }
+        })
       ]
       ++ custom;
   }
