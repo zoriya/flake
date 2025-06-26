@@ -91,6 +91,10 @@
       ];
     };
 
+    nixosConfigurations.virtual = mkSystem "virtual" {
+      env = "hyprland";
+    };
+
     nixosConfigurations.lucca = mkSystem "lucca" {
       env = "wsl";
       wsl = true;
