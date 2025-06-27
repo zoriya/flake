@@ -1,10 +1,16 @@
-{
-  programs.git = {
+{config, lib, ...}: {
+  options.git = {
+    useRsa = lib.mkEnableOption "Use rsa instead of ed25519";
+  };
+  config.programs.git = {
     enable = true;
     ignores = [".envrc"];
     signing = {
       signByDefault = true;
-      key = "~/.ssh/id_rsa.pub";
+      key =
+        if config.git.useRsa
+        then "~/.ssh/id_rsa.pub"
+        else "~/.ssh/id_ed25519.pub";
     };
     # maintenance = {
     #   enable = false;

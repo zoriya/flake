@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   zen-browser,
   ...
@@ -16,23 +17,24 @@ in {
     ./gtk.nix
   ];
 
-  home.packages = with pkgs; [
-    google-chrome
-    firefox
-    zen-browser.packages.${pkgs.system}.default
-    vesktop
-    mpv
-    xdg-utils
-    zathura
-    libreoffice
-    qbittorrent
-    youtube-music
-    wl-clipboard
-    wlr-randr
-    alsa-utils
-    playerctl
-    postman
-  ];
+  home.packages = with pkgs;
+    [
+      firefox
+      zen-browser.packages.${pkgs.system}.default
+      vesktop
+      mpv
+      xdg-utils
+      zathura
+      libreoffice
+      qbittorrent
+      youtube-music
+      wl-clipboard
+      wlr-randr
+      alsa-utils
+      playerctl
+      postman
+    ]
+    ++ lib.optionals pkgs.stdenv.isx86_64 [google-chrome];
 
   home.sessionVariables = rec {
     # TODO: add an `uwsm app run --` or something here (for example clicking on a link on discord opens the browser on discord's slice instead of the browser's slice.
