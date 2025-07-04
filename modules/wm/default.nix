@@ -47,4 +47,9 @@
     "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
     "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
   ];
+
+  services.sunshine = {
+    enable = true;
+    capSysAdmin = true;
+  };
 }

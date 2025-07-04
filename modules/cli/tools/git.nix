@@ -8,7 +8,7 @@
     signing = {
       signByDefault = true;
       key =
-        if config.git.useRsa
+        if true #config.git.useRsa
         then "~/.ssh/id_rsa.pub"
         else "~/.ssh/id_ed25519.pub";
     };

@@ -62,6 +62,9 @@
       # add labels, replace type by fstype, use a single mountpoint
       lsblk = "lsblk -o name,label,size,rm,ro,fstype,uuid,mountpoint";
       dr = "direnv reload";
+      nixos-option = "nixos-option --flake ~/projects/flake";
+      # i will never remember those flags
+      ss = "ss -tlpun";
 
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";

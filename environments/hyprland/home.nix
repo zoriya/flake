@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   imports = [
     ../../modules/gui/home.nix
     ../../modules/wm/home.nix
