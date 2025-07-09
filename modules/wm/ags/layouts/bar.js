@@ -19,16 +19,16 @@ export const Bar = (monitor) =>
 		anchor: ["top", "left", "right"],
 		layer: "bottom",
 		child: Widget.CenterBox({
-			startWidget: Widget.Box({
-				children: [
-					wm.Tags({
-						monitor,
-						labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
-					}),
-					wm.Layout({ monitor }),
-					wm.ClientLabel({ monitor }),
-				],
-			}),
+			// startWidget: Widget.Box({
+			// 	children: [
+			// 		wm.Tags({
+			// 			monitor,
+			// 			labels: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
+			// 		}),
+			// 		wm.Layout({ monitor }),
+			// 		wm.ClientLabel({ monitor }),
+			// 	],
+			// }),
 			centerWidget: Widget.Box({
 				hpack: "center",
 				children: [

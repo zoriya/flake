@@ -67,7 +67,7 @@
         });
   in {
     nixosConfigurations.fuhen = mkSystem "fuhen" {
-      env = "hyprland";
+      env = "niri";
       custom = [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
       ];
