@@ -52,6 +52,7 @@
       dc = "docker-compose";
       dcd = "docker-compose -f (../)#docker-compose.dev.yml";
       k = "kubectl";
+      kctx = "kubectl config get-contexts -o name | fzf --height=10 | xargs kubectl config use-context";
       op = "xdg-open";
       py = "python3 2> /dev/null || , python3";
       jctl = "sudo journalctl -n 1000 -fu";
