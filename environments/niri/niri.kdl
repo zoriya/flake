@@ -35,6 +35,19 @@ hotkey-overlay {
 	skip-at-startup
 }
 
+layout {
+	gaps 16
+	struts {
+		left -16
+		right -16
+		top -16
+		bottom -16
+	}
+	focus-ring {
+		width 2
+	}
+}
+
 binds {
 	XF86AudioPlay         allow-when-locked=true { spawn "playerctl" "play-pause"; }
 	XF86AudioPause        allow-when-locked=true { spawn "playerctl" "play-pause"; }

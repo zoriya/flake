@@ -126,7 +126,7 @@
       #bash
       ''
         # disable zsh-autocomplete plugin compatibility (from zsh-completion-sync)
-        zstyle ':completion-sync:compinit:compat:zsh-autocomplete' enabled true
+        zstyle ':completion-sync:compinit:compat:zsh-autocomplete' enabled false
 
         # The globbing is a little complicated here:
         # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
@@ -177,14 +177,6 @@
         (lib.mkBefore tmuxInit)
         (lib.mkOrder 535 (builtins.readFile ./keymap.zsh))
         (lib.mkOrder 550 (builtins.readFile ./comp.zsh))
-        (lib.mkOrder 570
-          #bash
-          ''
-            # used by kubectl plugin & maybe some other oh-my-zsh plugins
-            export ZSH_CACHE_DIR="$HOME/.cache/zsh";
-            mkdir -p "$ZSH_CACHE_DIR/completions"
-            fpath+="$ZSH_CACHE_DIR/completions"
-          '')
         (lib.mkOrder 901
           #bash
           ''
