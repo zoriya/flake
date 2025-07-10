@@ -55,6 +55,7 @@ in {
           then ""
           else "-dark";
       in "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3${suffix}";
+      kubecolor = "echo 'preset: ${theme}' > ~/.kube/color.yaml";
     };
   in {
     enable = true;

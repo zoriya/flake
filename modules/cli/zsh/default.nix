@@ -52,7 +52,9 @@
       dc = "docker-compose";
       dcd = "docker-compose -f (../)#docker-compose.dev.yml";
       k = "kubectl";
-      kctx = "kubectl config get-contexts -o name | fzf --height=10 | xargs kubectl config use-context";
+      kubectl = "kubecolor";
+      kctx = "kubectl config use-context $(kubectl config get-contexts -o name | fzf --height=10)";
+      kns = "kubectl config set-context --current --namespace=$(kubectl get ns -o custom-columns=':metadata.name' --no-headers | fzf --height=10)";
       op = "xdg-open";
       py = "python3 2> /dev/null || , python3";
       jctl = "sudo journalctl -n 1000 -fu";
@@ -114,10 +116,18 @@
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
+      {
+        name = "completion-sync";
+        src = ./.;
+        file = "./zsh-completion-sync.plugin.zsh";
+      }
     ];
     completionInit =
       #bash
       ''
+        # disable zsh-autocomplete plugin compatibility (from zsh-completion-sync)
+        zstyle ':completion-sync:compinit:compat:zsh-autocomplete' enabled true
+
         # The globbing is a little complicated here:
         # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
         # - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
@@ -313,6 +323,8 @@
       rename # this is perl-rename
       gfold
       lsof
+      kubectl
+      kubecolor
       # bitwarden-cli
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [

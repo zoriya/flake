@@ -34,9 +34,6 @@ clipboard {
 hotkey-overlay {
 	skip-at-startup
 }
-// animations {
-// 	off
-// }
 
 binds {
 	XF86AudioPlay         allow-when-locked=true { spawn "playerctl" "play-pause"; }

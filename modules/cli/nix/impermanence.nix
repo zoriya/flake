@@ -61,11 +61,12 @@
         ".local/share/waydroid"
         ".local/share/bottles"
         ".var"
-        ".zen"
+        ".kube"
         ".cache/flatpak"
         ".local/share/atuin"
         # Cache for sessions (keep website logged in, plugin downloaded...)
         ".mozilla"
+        ".zen"
         ".config/google-chrome"
         ".config/discord"
         ".config/vesktop"
