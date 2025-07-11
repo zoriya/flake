@@ -139,6 +139,11 @@
         else
           compinit -C;
         fi;
+
+        # fix kubecolors completions
+        # this needs to be executed BEFORE completions, contrary to what is done on nix's package:
+        # https://github.com/NixOS/nixpkgs/blob/20fd9f95cede54a97eef269c80616a86dec213c9/pkgs/by-name/ku/kubecolor/package.nix#L50
+        compdef kubecolor=kubectl
       '';
 
     initContent = let
