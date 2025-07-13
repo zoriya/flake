@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, lib, ...}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
     WALLPAPERS=~/wallpapers/
 
@@ -48,6 +48,7 @@ in {
 
   services.darkman = let
     genTheme = theme: {
+      "0-transition" = "${lib.getExe pkgs.niri} msg action do-screen-transition";
       color-scheme = "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface color-scheme prefer-${theme}";
       gtk3 = let
         suffix =

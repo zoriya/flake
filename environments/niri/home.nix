@@ -33,6 +33,7 @@
     gnome-control-center
     gnome-weather
     wdisplays
+    niri
   ];
 
   xdg.configFile."niri/config.kdl".source = ./niri.kdl;

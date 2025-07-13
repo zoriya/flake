@@ -15,6 +15,10 @@ input {
 		scroll-method "two-finger"
 	}
 
+	mouse {
+		accel-speed 0.5
+	}
+
 	disable-power-key-handling
 	warp-mouse-to-focus
 	focus-follows-mouse max-scroll-amount="0%"
@@ -180,5 +184,5 @@ binds {
 
 spawn-at-startup "wallpaper"
 spawn-at-startup "ags"
-spawn-at-startup "uwsm" "finalize" "DISPLAY" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "NIXOS_OZONE_WL" "XCURSOR_THEME" "XCURSOR_SIZE"
+spawn-at-startup "uwsm" "finalize" "DISPLAY" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "NIXOS_OZONE_WL" "XCURSOR_THEME" "XCURSOR_SIZE" "NIRI_SOCKET"
 spawn-at-startup "hyprlock" "--immediate"
