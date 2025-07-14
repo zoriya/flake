@@ -80,8 +80,8 @@ binds {
 	Mod+J     { focus-window-up-or-column-left; }
 	Mod+K     { focus-window-down-or-column-right; }
 	// TODO: add move window down or column right (need to implement those)
-	Mod+Shift+J     { move-window-up; }
-	Mod+Shift+K     { move-window-down; }
+	Mod+Shift+J     { move-column-left; }
+	Mod+Shift+K     { move-column-right; }
 
 	Mod+Home { focus-column-first; }
 	Mod+End  { focus-column-last; }
