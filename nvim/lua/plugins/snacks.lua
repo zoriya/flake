@@ -1,3 +1,43 @@
+local function git_show(ref)
+	local git_root = Snacks.git.get_root()
+	local function finder(opts, ctx)
+		return require("snacks.picker.source.proc").proc({
+			opts,
+			{
+				cmd = "git",
+				args = { "show", "--name-status", "--pretty=tformat:", ref },
+				transform = function(item)
+					item.cwd = git_root
+					item.file = string.sub(item.text, 3)
+					item.commit = ref
+				end,
+			},
+		}, ctx)
+	end
+
+	Snacks.picker.pick({
+		title = "Git show " .. ref,
+		finder = finder,
+		preview = "git_show",
+		name = "git_show",
+		confirm = function(picker, item)
+			picker:close()
+			vim.cmd("Gedit " .. ref .. ":" .. item.file)
+		end,
+		actions = {
+			edit_split = function(picker, item)
+				picker:close()
+				vim.cmd("Gsplit " .. ref .. ":" .. item.file)
+			end,
+			edit_vsplit = function(picker, item)
+				picker:close()
+				vim.cmd("Gvsplit " .. ref .. ":" .. item.file)
+			end,
+		}
+
+	})
+end
+
 return {
 	{
 		"snacks-nvim",
@@ -82,7 +122,7 @@ return {
 				actions = {
 					git_show = function(picker, item)
 						picker:close()
-						Snacks.picker.git_show({ ref = item.commit })
+						git_show(item.commit)
 					end,
 				},
 				layouts = {
@@ -172,6 +212,8 @@ return {
 		},
 		after = function(plug)
 			require("snacks").setup(plug.opts)
+
+			Snacks.picker.git_show = git_show
 
 			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
 
