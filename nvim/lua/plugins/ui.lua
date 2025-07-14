@@ -29,6 +29,9 @@ return {
 				list = false,
 				spell = false,
 			},
+			edit = {
+				autosave = true,
+			},
 			highlight = {
 				load_buffers = false,
 			},
