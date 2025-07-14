@@ -207,6 +207,25 @@ return {
 							},
 						},
 					},
+					select = {
+						preview = false,
+						layout = {
+							backdrop = false,
+							width = 0.5,
+							min_width = 80,
+							height = 0.4,
+							min_height = 3,
+							box = "vertical",
+							border = "none",
+							{
+								win = "input",
+								height = 1,
+								border = "solid",
+								title = " {title} ",
+							},
+							{ win = "list", border = "solid" },
+						},
+					}
 				},
 			},
 		},
