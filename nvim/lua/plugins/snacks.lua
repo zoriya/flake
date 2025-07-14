@@ -116,6 +116,30 @@ return {
 							},
 						},
 					},
+					vertical = {
+						layout = {
+							backdrop = false,
+							width = 0.5,
+							min_width = 80,
+							height = 0.8,
+							min_height = 30,
+							box = "vertical",
+							border = "none",
+							{
+								win = "input",
+								height = 1,
+								border = "solid",
+								title = " {title} {live} ",
+							},
+							{ win = "list", border = "solid" },
+							{
+								win = "preview",
+								title = "{preview}",
+								height = 0.4,
+								border = "top"
+							},
+						},
+					},
 					ivy = {
 						layout = {
 							box = "horizontal",
