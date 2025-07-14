@@ -9,13 +9,13 @@
       format = lib.concatStrings [
         "$fill"
         "$hostname"
-        "$kubernetes"
         "$python"
         "$nix_shell"
         "$container"
         "$line_break"
         "$directory"
         "[(\\($git_branch$git_commit$git_status$git_state\\) )](green)"
+        "$kubernetes"
         "$shlvl"
         "$character"
       ];
@@ -80,6 +80,17 @@
         disabled = false;
       };
 
+      kubernetes = {
+        format = "[$context(/$namespace) ]($style)";
+        disabled = false;
+        contexts = [
+          {
+            context_pattern = "colima-lucca-apps";
+            context_alias = "lucca";
+          }
+        ];
+      };
+
       cmd_duration = {
         format = " [$duration]($style)";
       };
@@ -101,13 +112,6 @@
 
       container = {
         format = "[ $name]($style)";
-      };
-
-      kubernetes = {
-        format = "[$symbol$context( \($namespace\))]($style)";
-        # only show it if using a custom config
-        detect_env_vars = ["KUBECONFIG"];
-        disabled = false;
       };
 
       hostname = {
