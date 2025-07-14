@@ -1,0 +1,179 @@
+return {
+	{
+		"snacks-nvim",
+		event = "DeferredUIEnter",
+		opts = {
+			input = {
+				enabled = true,
+			},
+			indent = {
+				enabled = true,
+				indent = {
+					char = "▏",
+				},
+				animate = {
+					enabled = false,
+				},
+				scope = {
+					char = "▏",
+				},
+				chunk = {
+					char = {
+						vertical = "▏",
+					},
+				},
+			},
+			zen = {
+				toggles = {
+					dim = false,
+				},
+				show = {
+					statusline = true,
+				},
+			},
+			styles = {
+				input = {
+					relative = "cursor",
+					row = -3,
+					col = 0,
+					keys = {
+						i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i", expr = true },
+					},
+				},
+				zen = {
+					width = 200,
+					backdrop = {
+						transparent = false,
+						blend = 0,
+					},
+				},
+			},
+			picker = {
+				win = {
+					input = {
+						keys = {
+							["<Esc>"] = { "close", mode = { "n", "i" } },
+							["<c-c>"] = { "close", mode = { "n", "i" } },
+							["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+							["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+							["<C-a>"] = function() vim.cmd "normal! I" end,
+							["<C-e>"] = function() vim.cmd "startinsert!" end,
+						},
+					},
+				},
+				sources = {
+					files = {
+						hidden = true,
+					},
+					grep = {
+						layout = "ivy",
+						hidden = true,
+					},
+					git_branches = {
+						all = true,
+					},
+					git_log = {
+						confirm = "git_show",
+					},
+					git_log_file = {
+						confirm = "git_show",
+					},
+				},
+				actions = {
+					git_show = function(picker, item)
+						picker:close()
+						Snacks.picker.git_show({ ref = item.commit })
+					end,
+				},
+				layouts = {
+					default = {
+						layout = {
+							box = 'horizontal',
+							backdrop = false,
+							width = 0.8,
+							height = 0.9,
+							border = 'none',
+							{
+								box = 'vertical',
+								{
+									win = 'input',
+									title = ' {source} {live} ',
+									title_pos = 'center',
+									border = 'solid',
+									height = 1,
+								},
+								{
+									win = 'list',
+									border = 'solid',
+								},
+							},
+							{
+								win = 'preview',
+								width = 0.5,
+								title = '  {preview}  ',
+								title_pos = 'center',
+								border = "top",
+							},
+						},
+					},
+					ivy = {
+						layout = {
+							box = "horizontal",
+							backdrop = false,
+							width = 0,
+							height = 0.5,
+							border = "none",
+							position = "bottom",
+							{
+								box = "vertical",
+								border = "none",
+								{
+									win = "input",
+									title = " {title} {live} ",
+									height = 1,
+									border = "solid"
+								},
+								{ win = "list", border = "solid" },
+							},
+							{
+								win = "preview",
+								title = "  {preview}  ",
+								border = "top",
+								width = vim.o.columns <= 125 and 0.7 or 0.55,
+							},
+						},
+					},
+				},
+			},
+		},
+		after = function(plug)
+			require("snacks").setup(plug.opts)
+
+			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
+
+			vim.keymap.set("n", "<leader>f", function()
+				Snacks.picker.files()
+			end, { desc = "Find files" })
+
+			vim.keymap.set("n", "<leader>F", function()
+				Snacks.picker.grep()
+			end, { desc = "Grep" })
+
+			vim.keymap.set("n", "<leader>gl", function()
+				Snacks.picker.git_log()
+			end, { desc = "Git log" })
+
+			vim.keymap.set("n", "<leader>gh", function()
+				Snacks.picker.git_log_file()
+			end, { desc = "Git logs buffer" })
+
+			vim.keymap.set("n", "<leader>gB", function()
+				Snacks.picker.git_branches()
+			end, { desc = "Git branches" })
+
+			vim.keymap.set("n", "<leader>gs", function()
+				Snacks.picker.git_status()
+			end, { desc = "Git status" })
+		end,
+	},
+}
