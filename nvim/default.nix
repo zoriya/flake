@@ -71,7 +71,6 @@ in
           })
 
           oil-nvim
-          telescope-fzf-native-nvim
           harpoon2
 
           gitsigns-nvim
@@ -94,7 +93,7 @@ in
 
           noice-nvim
           statuscol-nvim
-          telescope-ui-select-nvim
+          # telescope-ui-select-nvim
           (snacks-nvim.overrideAttrs {
             postPatch = "rm -rf queries";
           })
@@ -113,8 +112,6 @@ in
           # })
         ];
         opt = [
-          telescope-nvim
-          # (mkPlugin telescope "telescope.nvim")
           vim-illuminate
           nvim-treesitter-textobjects
         ];
@@ -156,8 +153,6 @@ in
       alejandra
       pgformatter
       csharpier
-      # might need to find a way to disable it for projects that use prettier but it's just more convenient to have it always on
-      # (for json or to allow use without an outer shell)
       biome
       ruff
     ];
