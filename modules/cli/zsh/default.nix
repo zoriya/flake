@@ -315,6 +315,8 @@
       glow
       gh
       yq
+      # also for ncat
+      nmap
       nodePackages.http-server
       nvim
       rename # this is perl-rename
