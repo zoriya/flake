@@ -83,12 +83,6 @@
       kubernetes = {
         format = "[$context(/$namespace) ]($style)";
         disabled = false;
-        contexts = [
-          {
-            context_pattern = "colima-lucca-apps";
-            context_alias = "lucca";
-          }
-        ];
       };
 
       cmd_duration = {

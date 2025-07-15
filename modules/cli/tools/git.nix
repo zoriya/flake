@@ -1,4 +1,8 @@
-{config, lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.git = {
     useRsa = lib.mkEnableOption "Use rsa instead of ed25519";
   };
@@ -52,7 +56,10 @@
       init.defaultBranch = "master";
       branch.sort = "-committerdate";
       tag.sort = "version:refname";
-      advice.diverging = false;
+      advice = {
+        diverging = false;
+        skippedCherryPicks = false;
+      };
       rerere = {
         enabled = true;
         autoupdate = true;
