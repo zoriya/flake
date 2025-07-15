@@ -96,8 +96,8 @@ return {
 							["<c-c>"] = { "close", mode = { "n", "i" } },
 							["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
 							["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-							["<C-a>"] = function() vim.cmd "normal! I" end,
-							["<C-e>"] = function() vim.cmd "startinsert!" end,
+							["<c-a>"] = function() vim.cmd "normal! I" end,
+							["<c-e>"] = function() vim.cmd "startinsert!" end,
 						},
 					},
 				},
@@ -106,7 +106,7 @@ return {
 						hidden = true,
 					},
 					grep = {
-						layout = "ivy",
+						layout = "bottom",
 						hidden = true,
 					},
 					git_branches = {
@@ -114,9 +114,23 @@ return {
 					},
 					git_log = {
 						confirm = "git_show",
+						win = {
+							input = {
+								keys = {
+									["<c-f>"] = { "git_fixup", mode = { "i", "n" } },
+								},
+							},
+						},
 					},
 					git_log_file = {
 						confirm = "git_show",
+						win = {
+							input = {
+								keys = {
+									["<c-f>"] = { "git_fixup", mode = { "i", "n" } },
+								},
+							},
+						},
 					},
 				},
 				actions = {
@@ -124,6 +138,10 @@ return {
 						picker:close()
 						git_show(item.commit)
 					end,
+					git_fixup = function(picker, item)
+						picker:close()
+						vim.cmd("G commit --fixup=" .. item.commit)
+					end
 				},
 				layouts = {
 					default = {
@@ -187,7 +205,6 @@ return {
 							width = 0,
 							height = 0.5,
 							border = "none",
-							position = "bottom",
 							{
 								box = "vertical",
 								border = "none",
