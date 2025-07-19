@@ -39,13 +39,4 @@ return {
 			require("codecompanion").setup(plug.opts)
 		end,
 	},
-
-	{
-		"render-markdown",
-		ft = { "markdown", "codecompanion" },
-		opts = {},
-		after = function(plug)
-			require("render-markdown").setup(plug.opts)
-		end,
-	},
 }

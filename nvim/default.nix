@@ -93,7 +93,6 @@ in
 
           noice-nvim
           statuscol-nvim
-          # telescope-ui-select-nvim
           (snacks-nvim.overrideAttrs {
             postPatch = "rm -rf queries";
           })
@@ -104,7 +103,6 @@ in
           nvim-navic
           virt-column-nvim
 
-          render-markdown-nvim
           codecompanion-nvim
           # enable this just to signin (used by the chat plugin above)
           # (copilot-vim.overrideAttrs {
