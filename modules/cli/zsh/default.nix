@@ -48,14 +48,26 @@
       gcpf = "gaa && gcamn && gpf";
       gcpfn = "gcamn && gpf";
 
-      # Misc
-      dc = "docker-compose";
-      dcd = "docker-compose -f (../)#docker-compose.dev.yml";
+      # k8s
       k = "kubectl";
       kubectl = "kubecolor";
       kctx = "kubectl config use-context $(kubectl config get-contexts -o name | fzf --height=10)";
       kns = "kubectl config set-context --current --namespace=$(kubectl get ns -o custom-columns=':metadata.name' --no-headers | fzf --height=10)";
-      op = "xdg-open";
+      kg = "k get";
+      kgy = "k get -o yaml";
+      kgw = "k get -w";
+      kd = "k describe";
+      ka = "k describe";
+      ke = "k edit";
+      kl = "k logs";
+      kp = "k patch";
+      kpf = "k port-forward";
+      kdel = "k delete";
+
+      # Misc
+      dc = "docker-compose";
+      dcd = "docker-compose -f (../)#docker-compose.dev.yml";
+      op = if pkgs.stdenv.isLinux then "xdg-open" else "open";
       py = "python3 2> /dev/null || , python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
