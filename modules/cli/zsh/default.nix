@@ -61,6 +61,7 @@
       ke = "k edit";
       kl = "k logs";
       kp = "k patch";
+      kr = "k rollout";
       kpf = "k port-forward";
       kdel = "k delete";
 
@@ -128,11 +129,6 @@
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
-      {
-        name = "completion-sync";
-        src = ./.;
-        file = "./zsh-completion-sync.plugin.zsh";
-      }
     ];
     completionInit =
       #bash
@@ -146,6 +142,9 @@
         # - '.' matches "regular files"
         # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.autoload -Uz compinit
         autoload -Uz compinit
+
+        source ${./zsh-completion-sync.plugin.zsh}
+
         if [[ -n $ZSH_CACHE_DIR/.zcompdump(#qN.mh+24) ]]; then
           compinit;
         else
