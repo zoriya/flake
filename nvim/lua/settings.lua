@@ -161,6 +161,14 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+vim.filetype.add({
+	extension = {
+		-- appsettings.json.model at work
+		model = 'json',
+	},
+})
+
+
 vim.cmd.colorscheme("catppuccin")
 
 if vim.g.have_nerd_font then
