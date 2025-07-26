@@ -139,7 +139,6 @@
             kubelogin-oidc
             kustomize
             docker_28
-            sqlcmd
             kubebuilder
             go
           ];

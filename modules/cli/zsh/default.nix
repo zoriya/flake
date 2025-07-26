@@ -338,6 +338,8 @@
       lsof
       kubectl
       kubecolor
+      usql
+      rsync
       # bitwarden-cli
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
