@@ -22,6 +22,10 @@ bindkey '^Z' foreground
 (whence -w run-help | grep -q alias) && unalias run-help
 autoload run-help
 
+autoload edit-command-line
+zle -N edit-command-line
+bindkey '^Xe' edit-command-line
+
 # Allow customization per client.
 [[ -f ~/.config/zsh/custom.zsh ]] && source ~/.config/zsh/custom.zsh
 

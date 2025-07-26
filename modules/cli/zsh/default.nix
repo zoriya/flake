@@ -57,13 +57,16 @@
       kgy = "k get -o yaml";
       kgw = "k get -w";
       kd = "k describe";
-      ka = "k describe";
+      ka = "k apply";
+      kaf = "k apply -f";
       ke = "k edit";
       kl = "k logs";
       kp = "k patch";
       kr = "k rollout";
       kpf = "k port-forward";
       kdel = "k delete";
+      kdelf = "k delete -f";
+      kcleanup = "kdel pod --field-selector status.phase==Failed -A; kdel pod --field-selector status.phase==Succeeded -A";
 
       # Misc
       dc = "docker-compose";
@@ -207,7 +210,7 @@
           '')
         (lib.mkOrder 1000 (builtins.readFile ./init.zsh))
         (lib.mkOrder 1400 ''
-          # only start atuin if it's in the path (fix distrox or other temp fs issues)
+          # only start atuin if it's in the path (fix distrobox or other temp fs issues)
           if command -v atuin > /dev/null && [[ $options[zle] = on ]]; then
             eval "$(atuin init zsh ${lib.escapeShellArgs config.programs.atuin.flags})"
           fi
