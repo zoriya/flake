@@ -58,6 +58,8 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.g.wordmotion_nomap = true
 -- Disable builtin sql completions which are bound to <C-c>
 vim.g.omni_sql_no_default_maps = 1
+-- avoid stupid menu.vim (saves ~100ms) - stolen from justin's config
+vim.g.did_install_default_menus = 1
 
 -- for all modes except terminal
 vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
@@ -118,6 +120,11 @@ vim.keymap.set("n", "<C-l>", function()
 	local ok, noice = pcall(require, "noice")
 	if ok then
 		noice.cmd("dismiss")
+	end
+
+	local sok, sniprun = pcall(require, "sniprun.display")
+	if sok then
+		sniprun.close_all()
 	end
 end)
 vim.keymap.set({ "i", "s" }, "<C-n>", function()

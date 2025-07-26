@@ -86,6 +86,13 @@ in
           leap-nvim
           flit-nvim
 
+          (snacks-nvim.overrideAttrs {
+            postPatch = "rm -rf queries";
+          })
+          quicker-nvim
+
+          sniprun
+
           vim-helm
           vim-sleuth
           auto-save-nvim
@@ -93,12 +100,8 @@ in
 
           noice-nvim
           statuscol-nvim
-          (snacks-nvim.overrideAttrs {
-            postPatch = "rm -rf queries";
-          })
           mini-icons
           which-key-nvim
-          quicker-nvim
           lualine-nvim
           nvim-navic
           virt-column-nvim
