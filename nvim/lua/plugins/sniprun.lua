@@ -7,7 +7,9 @@ return {
 			{ "<leader>rr", "<cmd>SnipRun<cr>", desc = "Run code", mode = { "n" } },
 		},
 		opts = {
-			repl_enable = {},
+			selected_interpreters = {
+				"Lua_nvim",
+			},
 
 			display = { "VirtualLine", },
 			live_display = { "VirtualTextOk" },

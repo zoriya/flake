@@ -159,6 +159,5 @@ in
 
       # repl
       usql
-      lua
     ];
   }
