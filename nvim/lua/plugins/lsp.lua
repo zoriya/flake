@@ -1,23 +1,25 @@
-vim.lsp.enable("lua_ls")
-vim.lsp.enable("hls")
-vim.lsp.enable("rust_analyzer")
-vim.lsp.enable("clangd")
-vim.lsp.enable("basedpyright")
-vim.lsp.enable("nil_ls")
-vim.lsp.enable("ts_ls")
-vim.lsp.enable("yamlls")
-vim.lsp.enable("marksman")
-vim.lsp.enable("texlab")
-vim.lsp.enable("html")
-vim.lsp.enable("cssls")
-vim.lsp.enable("helm_ls")
-vim.lsp.enable("zls")
-vim.lsp.enable("gopls")
-vim.lsp.enable("bashls")
-vim.lsp.enable("jsonls")
-vim.lsp.enable("hyprls")
-vim.lsp.enable("biome")
--- vim.lsp.enable("roslyn_ls")
+vim.lsp.enable({
+	"lua_ls",
+	"hls",
+	"rust_analyzer",
+	"clangd",
+	"basedpyright",
+	"nil_ls",
+	"ts_ls",
+	"yamlls",
+	"marksman",
+	"texlab",
+	"html",
+	"cssls",
+	"helm_ls",
+	"zls",
+	"gopls",
+	"bashls",
+	"jsonls",
+	"biome",
+	"sqls",
+	-- "roslyn_ls"
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	desc = "Custom lsp attach",

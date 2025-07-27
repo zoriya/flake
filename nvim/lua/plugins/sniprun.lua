@@ -2,8 +2,9 @@ return {
 	{
 		"sniprun",
 		keys = {
-			{ "<leader>r", "<cmd>SnipRun<cr>", desc = "Run code", mode = { "n", "v" } },
-			{ "<leader>r", "<Plug>SnipRunOperator", desc = "Run code", mode = { "o" } },
+			{ "<leader>r", "<cmd>SnipRun<cr>", desc = "Run code", mode = { "v" } },
+			{ "<leader>r", "<Plug>SnipRunOperator", desc = "Run code", mode = { "n" } },
+			{ "<leader>rr", "<cmd>SnipRun<cr>", desc = "Run code", mode = { "n" } },
 		},
 		opts = {
 			repl_enable = {},
@@ -11,6 +12,11 @@ return {
 			display = { "VirtualLine", },
 			live_display = { "VirtualTextOk" },
 			show_no_output = { "Classic" },
+
+			snipruncolors = {
+				SniprunVirtualTextOk = { link = "Delimiter" },
+				SniprunVirtualTextErr = { link = "Error" },
+			},
 
 			ansi_escape = true,
 		},

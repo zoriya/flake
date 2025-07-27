@@ -139,7 +139,7 @@ in
       zls
       lua-language-server
       bash-language-server
-      hyprls
+      sqls
 
       # gopls also needs go /shame
       gopls
@@ -156,5 +156,9 @@ in
       csharpier
       biome
       ruff
+
+      # repl
+      usql
+      lua
     ];
   }
