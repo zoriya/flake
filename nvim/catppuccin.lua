@@ -20,6 +20,7 @@ require("catppuccin").setup({
 			SnacksPickerInputBorder = { fg = C.text, bg = C.crust },
 			SnacksPickerList = { bg = C.base },
 			SnacksPickerListCursorLine = { bg = C.crust },
+			SnacksPickerListBorder = { fg = C.base, bg = C.base },
 			SnacksPickerPreview = { bg = C.mantle },
 			SnacksPickerPreviewBorder = { fg = C.mantle, bg = C.mantle },
 			SnacksPickerPreviewTitle = { fg = C.mantle, bg = C.red },

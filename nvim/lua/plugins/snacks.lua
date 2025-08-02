@@ -231,7 +231,7 @@ return {
 							width = 0.5,
 							min_width = 80,
 							height = 0.4,
-							min_height = 3,
+							min_height = 8,
 							box = "vertical",
 							border = "none",
 							{
