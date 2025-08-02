@@ -48,6 +48,7 @@
 
         bind-key f run-shell "tmux neww tmux-sessionizer"
         bind-key C-h run-shell "tmux-sessionizer ~/projects/kyoo"
+        bind-key C-t run-shell "tmux-sessionizer ~/projects/snow"
         bind-key C-s run-shell "tmux-sessionizer ~/projects/flake"
         bind-key C-n run-shell "tmux-sessionizer ~/projects/blog"
 
