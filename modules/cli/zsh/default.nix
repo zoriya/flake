@@ -13,7 +13,7 @@
     autocd = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     shellAliases = {
       # ls/exa stuff
       l = "ls -l";
@@ -63,6 +63,7 @@
       kl = "k logs";
       kp = "k patch";
       kr = "k rollout";
+      krr = "k rollout restart";
       kpf = "k port-forward";
       kdel = "k delete";
       kdelf = "k delete -f";
