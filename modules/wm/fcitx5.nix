@@ -7,6 +7,7 @@
         fcitx5-mozc
         fcitx5-gtk
       ];
+      waylandFrontend = true;
     };
   };
   systemd.user.services.fcitx5-daemon = {
@@ -45,6 +46,14 @@
 
       [GroupOrder]
       0=Default
+    '';
+  };
+
+  xdg.dataFile."fcitx5/themes/catppuccin-latte-pink".source = "${pkgs.catppuccin-fcitx5}/share/fcitx5/themes/catppuccin-latte-pink";
+  xdg.configFile."fcitx5/conf/classicui.conf" = {
+    force = true;
+    text = ''
+      Theme=catppuccin-latte-pink
     '';
   };
 }
