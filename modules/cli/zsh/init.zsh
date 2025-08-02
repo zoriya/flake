@@ -88,3 +88,17 @@ proxy() {
 	echo "Proxying port $1 to http://proxy.sdg.moe"
 	ssh -NR "5000:localhost:$1" zoriya@ssh.sdg.moe
 }
+
+# keep yq's output in yaml & colorizes it
+yq() {
+	command yq -Y "$@" | bat -ppl yaml
+}
+
+kgy() {
+	if [[ $1 == "secret" ]]; then
+		kubectl get -o yaml "$@" | yq '.stringData = (.data | with_entries(.value |= @base64d))'
+	else
+		# we use yq instead of kubecolor to have the same color schema as above
+		kubectl get -o yaml "$@" | yq
+	fi
+}

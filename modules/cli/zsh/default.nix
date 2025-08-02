@@ -54,7 +54,8 @@
       kctx = "kubectl config use-context $(kubectl config get-contexts -o name | fzf --height=10)";
       kns = "kubectl config set-context --current --namespace=$(kubectl get ns -o custom-columns=':metadata.name' --no-headers | fzf --height=10)";
       kg = "k get";
-      kgy = "k get -o yaml";
+      # use custom function to decode secrets data instead of a simple alias for kgy
+      # kgy = "k get -o yaml";
       kgw = "k get -w";
       kd = "k describe";
       ka = "k apply";
