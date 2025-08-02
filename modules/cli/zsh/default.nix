@@ -26,6 +26,7 @@
       ls = "exa";
       lt = "exa --tree";
       tree = "exa --tree";
+      cat = "bat -pp";
 
       # git stuff
       s = "git status";
@@ -73,7 +74,10 @@
       # Misc
       dc = "docker-compose";
       dcd = "docker-compose -f (../)#docker-compose.dev.yml";
-      op = if pkgs.stdenv.isLinux then "xdg-open" else "open";
+      op =
+        if pkgs.stdenv.isLinux
+        then "xdg-open"
+        else "open";
       py = "python3 2> /dev/null || , python3";
       jctl = "sudo journalctl -n 1000 -fu";
       sloc = "scc";
@@ -266,9 +270,25 @@
 
   programs.bat = {
     enable = true;
+    themes = {
+      catppuccin-latte = {
+        src = pkgs.catppuccin.override {
+          variant = "latte";
+          themeList = ["bat"];
+        };
+        file = "bat/Catppuccin Latte.tmTheme";
+      };
+      catppuccin-mocha = {
+        src = pkgs.catppuccin.override {
+          variant = "mocha";
+          themeList = ["bat"];
+        };
+        file = "bat/Catppuccin Mocha.tmTheme";
+      };
+    };
     config = {
-      theme-light = "GitHub";
-      theme-dark = "base16";
+      theme-light = "catppuccin-latte";
+      theme-dark = "catppuccin-mocha";
     };
   };
 
