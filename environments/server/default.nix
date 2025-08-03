@@ -16,21 +16,6 @@
         wrapProgram $out/bin/guesspath --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
       ";
   };
-
-  smartrss = pkgs.stdenv.mkDerivation rec {
-    name = "smartrss";
-    nativeBuildInputs = with pkgs; [makeWrapper];
-    propagatedBuildInputs = with pkgs; [
-      python3Packages.guessit
-      curl
-      jq
-    ];
-    dontUnpack = true;
-    installPhase = "
-       install -Dm755 ${./smartrss.sh} $out/bin/smartrss
-       wrapProgram $out/bin/smartrss --prefix PATH : '${lib.makeBinPath propagatedBuildInputs}'
-     ";
-  };
 in {
   imports = [
     ./otel.nix
@@ -154,42 +139,6 @@ in {
   security.acme = {
     acceptTerms = true;
     defaults.email = "zoe.roux@zoriya.dev";
-  };
-
-  services.transmission = {
-    enable = true;
-    package = pkgs.transmission_4;
-    # Make downloaded items readable/writable by users
-    group = "users";
-    settings = {
-      umask = "002";
-      incomplete-dir-enabled = false;
-      download-dir = "/mnt/kyoo/downloads";
-      download-queue-enabled = false;
-      rename-partial-files = false;
-      trash-can-enabled = false;
-      script-torrent-added-enabled = true;
-      script-torrent-added-filename = "${guesspath}/bin/guesspath";
-    };
-  };
-  # Also allows transmission to reach theses files
-  systemd.services.transmission.serviceConfig.BindPaths = [
-    "/mnt/kyoo/downloads"
-    "/mnt/kyoo/shows"
-    "/mnt/kyoo/lives"
-    "/mnt/kyoo/manga"
-  ];
-  systemd.services.flood = {
-    enable = true;
-    wantedBy = ["multi-user.target"];
-    after = ["transmission.service"];
-    requires = ["transmission.service"];
-    path = with pkgs; [mediainfo smartrss];
-    serviceConfig = {
-      ExecStart = "${pkgs.flood}/bin/flood --rundir=/var/lib/flood --trurl=http://127.0.0.1:9091/transmission/rpc --truser '' --trpass ''";
-      User = "transmission";
-      Restart = "on-failure";
-    };
   };
 
   services.gitea = {

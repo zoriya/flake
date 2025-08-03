@@ -1,9 +1,4 @@
-{
-  flood,
-  river-src,
-  tmux,
-  ...
-}: self: super: let
+{tmux, ...}: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
       name = drv.name;
@@ -21,22 +16,6 @@
       --add-flags "--ozone-platform=wayland" \
       --add-flags "--disable-smooth-scrolling"'';
 in {
-  # Use my fork of flood to enable smart scripts.
-  flood = super.flood.overrideAttrs rec {
-    src = flood;
-    npmDeps = pnpmDeps;
-    pnpmDeps = super.pnpm_9.fetchDeps {
-      pname = "flood";
-      version = "4.9.4-dirty";
-      src = flood;
-      hash = "sha256-E2VxRcOMLvvCQb9gCAGcBTsly571zh/HWM6Q1Zd2eVw=";
-    };
-  };
-
-  river = super.river.overrideAttrs {
-    src = river-src;
-  };
-
   tmux = super.tmux.overrideAttrs {
     src = tmux;
   };

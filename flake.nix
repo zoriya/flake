@@ -24,14 +24,6 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flood = {
-      url = "github:zoriya/flood";
-      flake = false;
-    };
-    river-src = {
-      url = "github:zoriya/river/0.3.x";
-      flake = false;
-    };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
