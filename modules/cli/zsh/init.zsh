@@ -102,3 +102,8 @@ kgy() {
 		kubectl get -o yaml "$@" | yq
 	fi
 }
+_kgy() {
+	words="kubectl get -o yaml ${words[@]:1}"
+	_kubectl
+}
+compdef _kgy kgy

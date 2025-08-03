@@ -26,7 +26,8 @@
       ls = "exa";
       lt = "exa --tree";
       tree = "exa --tree";
-      cat = "bat -pp";
+      cat = "\bat -pp";
+      bat = "bat -p";
 
       # git stuff
       s = "git status";
@@ -55,6 +56,7 @@
       kctx = "kubectl config use-context $(kubectl config get-contexts -o name | fzf --height=10)";
       kns = "kubectl config set-context --current --namespace=$(kubectl get ns -o custom-columns=':metadata.name' --no-headers | fzf --height=10)";
       kg = "k get";
+      kga = "kg $(k api-resources --verbs=list --namespaced -o name | paste -sd ,)";
       # use custom function to decode secrets data instead of a simple alias for kgy
       # kgy = "k get -o yaml";
       kgw = "k get -w";
