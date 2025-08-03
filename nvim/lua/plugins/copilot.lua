@@ -14,6 +14,13 @@ return {
 				diff = {
 					enabled = false,
 				},
+				chat = {
+					window = {
+						opts = {
+							conceallevel = 3,
+						},
+					},
+				},
 			},
 			strategies = {
 				chat = {
