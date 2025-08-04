@@ -25,6 +25,12 @@ input {
 	workspace-auto-back-and-forth
 }
 
+gestures {
+	hot-corners {
+		off
+	}
+}
+
 prefer-no-csd
 
 cursor {
