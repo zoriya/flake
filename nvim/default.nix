@@ -140,6 +140,7 @@ in
       lua-language-server
       bash-language-server
       sqls
+      biome
 
       # gopls also needs go /shame
       gopls
@@ -154,7 +155,6 @@ in
       alejandra
       pgformatter
       csharpier
-      biome
       ruff
 
       # repl
