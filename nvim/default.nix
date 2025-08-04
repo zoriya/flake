@@ -159,5 +159,6 @@ in
 
       # repl
       usql
+      mono
     ];
   }

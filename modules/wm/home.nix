@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
     WALLPAPERS=~/wallpapers/
 
@@ -57,6 +61,12 @@ in {
           else "-dark";
       in "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3${suffix}";
       kubecolor = "echo 'preset: ${theme}' > ~/.kube/color.yaml";
+      usql = let
+        suffix =
+          if theme == "light"
+          then "latte"
+          else "mocha";
+      in "echo 'init: \set SYNTAX_HL_STYLE catppuccin-${suffix}' > ~/.config/usql/config.yaml";
     };
   in {
     enable = true;

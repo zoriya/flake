@@ -132,6 +132,7 @@
             kustomize
             docker_28
             kubebuilder
+            sqlcmd
             go
           ];
           home.sessionVariables = {
