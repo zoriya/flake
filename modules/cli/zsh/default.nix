@@ -258,6 +258,7 @@
       show_preview = true;
       style = "full";
       inline_height = 0;
+      sync_address = "https://atuin.sdg.moe";
     };
   };
 
