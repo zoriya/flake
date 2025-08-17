@@ -5,8 +5,8 @@
 
 ## Tools
 
-- WM: river + luatile
-- Widgets: ags (+ astal for river integration) + rofi (app picker + clipboard history picker)
+- WM: niri
+- Widgets: astal + rofi (app picker + clipboard history picker)
 - Lockscreen: hyprlock (+ hypridle for loginctl/auto suspend when locked)
 - Lots of cli tools
 - Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot), `/` is a tmpfs.
