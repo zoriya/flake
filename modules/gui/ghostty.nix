@@ -43,6 +43,8 @@
         "ctrl+shift+v=paste_from_clipboard"
         "cmd+c=copy_to_clipboard"
         "cmd+v=paste_from_clipboard"
+        # "XF86Copy=copy_to_clipboard"
+        # "XF86Paste=paste_from_clipboard"
 
         "ctrl+plus=increase_font_size:1"
         "ctrl+equal=increase_font_size:1"

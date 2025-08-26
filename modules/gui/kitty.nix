@@ -20,6 +20,8 @@
       clear_all_shortcuts yes
       map ctrl+shift+c copy_to_clipboard
       map ctrl+shift+v paste_from_clipboard
+      map XF86Copy copy_to_clipboard
+      map XF86Paste paste_from_clipboard
 
       map ctrl+equal change_font_size current +1.0
       map ctrl+plus change_font_size current +1.0

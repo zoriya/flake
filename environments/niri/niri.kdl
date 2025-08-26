@@ -73,15 +73,18 @@ binds {
 	Mod+R { spawn "uwsm" "app" "--" "zen"; }
 	Mod+E { spawn "uwsm" "app" "--" "kitty"; }
 	Mod+P { spawn "rofi" "-show" "drun" "-show-icons" "-run-command" "uwsm app -- {cmd}"; }
-	Mod+X { spawn "screenshot"; }
-	Mod+Control+X { spawn "screenshot-freeze"; }
-	Mod+Shift+X { spawn "record"; }
-	Mod+B { spawn "sh" "-c" "hyprpicker | wl-copy"; }
-	Mod+V { spawn "sh" "-c" "cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"; }
+	Mod+S { spawn "screenshot"; }
+	Mod+Control+S { spawn "screenshot-freeze"; }
+	Mod+Shift+S { spawn "record"; }
 	Super+Shift+L { spawn "loginctl" "lock-session"; }
+	Mod+B repeat=false { spawn "sh" "-c" "hyprpicker | wl-copy"; }
+	Mod+X repeat=false { spawn "wtype" "-P" "XF86Cut" ; }
+	Mod+C repeat=false { spawn "wtype" "-P" "XF86Copy" ; }
+	Mod+V repeat=false { spawn "wtype" "-P" "XF86Paste" ; }
+	Mod+Shift+V repeat=false { spawn "sh" "-c" "cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"; }
 
-	Mod+O repeat=false { toggle-overview; }
-	Mod+C repeat=false { close-window; }
+	Mod+Space repeat=false { toggle-overview; }
+	Mod+Q repeat=false { close-window; }
 
 	Mod+J     { focus-window-up-or-column-left; }
 	Mod+K     { focus-window-down-or-column-right; }
@@ -166,16 +169,14 @@ binds {
 	Mod+D { toggle-column-tabbed-display; }
 	Mod+M { maximize-column; }
 	Mod+F { fullscreen-window; }
-	Mod+Ctrl+F { expand-column-to-available-width; }
+	Mod+Shift+F { toggle-window-floating; }
+	Mod+Alt+F   { switch-focus-between-floating-and-tiling; }
 
 	Mod+Z { center-column; }
 	Mod+Ctrl+Z { center-visible-columns; }
 
 	Mod+H { set-column-width "-5%"; }
 	Mod+L { set-column-width "+5%"; }
-
-	Mod+Shift+V { toggle-window-floating; }
-	Mod+Alt+V   { switch-focus-between-floating-and-tiling; }
 
 	// Applications such as remote-desktop clients and software KVM switches may
 	// request that niri stops processing the keyboard shortcuts defined here

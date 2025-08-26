@@ -33,6 +33,7 @@
     gnome-control-center
     gnome-weather
     wdisplays
+    wtype
     niri
   ];
 
