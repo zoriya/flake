@@ -70,9 +70,9 @@ binds {
 	XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "s" "+5%"; }
 	XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "s" "5%-"; }
 
-	Mod+R { spawn "uwsm" "app" "--" "zen"; }
-	Mod+E { spawn "uwsm" "app" "--" "kitty"; }
-	Mod+P { spawn "rofi" "-show" "drun" "-show-icons" "-run-command" "uwsm app -- {cmd}"; }
+	Mod+R { spawn "zen"; }
+	Mod+E { spawn "kitty"; }
+	Mod+P { spawn "rofi" "-show" "drun" "-show-icons" "-run-command" "{cmd}"; }
 	Mod+S { spawn "screenshot"; }
 	Mod+Control+S { spawn "screenshot-freeze"; }
 	Mod+Shift+S { spawn "record"; }
@@ -81,7 +81,7 @@ binds {
 	Mod+X repeat=false { spawn "wtype" "-k" "XF86Cut"; }
 	Mod+C repeat=false { spawn "wtype" "-k" "XF86Copy" "-s" "200ms"; }
 	Mod+V repeat=false { spawn "wtype" "-k" "XF86Paste"; }
-	Mod+Shift+V repeat=false { spawn-sh "cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"; }
+	Mod+Shift+V repeat=false { spawn "sh" "-c" "cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"; }
 
 	Mod+Space repeat=false { toggle-overview; }
 	Mod+Q repeat=false { close-window; }
@@ -189,13 +189,21 @@ binds {
 	Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
+workspace "emtpy" {
+	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
+}
 workspace "chat" {
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
 }
+workspace "work" {
+	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
+}
+
 
 window-rule {
 	match at-startup=true
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
+	open-on-workspace "work"
 	open-maximized true
 	open-focused false
 }
@@ -203,11 +211,12 @@ window-rule {
 window-rule {
 	match app-id="discord"
 	match app-id="vesktop"
-	match app-id="YouTube Music"
+	match app-id="com.github.th_ch.youtube_music"
 	open-on-workspace "chat"
 }
 
 spawn-at-startup "wallpaper"
 spawn-at-startup "ags"
-spawn-at-startup "uwsm" "finalize" "DISPLAY" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "NIXOS_OZONE_WL" "XCURSOR_THEME" "XCURSOR_SIZE" "NIRI_SOCKET"
+spawn-at-startup "kitty"
+spawn-at-startup "zen"
 spawn-at-startup "hyprlock" "--immediate"

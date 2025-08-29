@@ -23,6 +23,8 @@ in {
       zen-browser.packages.${pkgs.system}.default
       vesktop
       mpv
+      freecad
+      kicad
       xdg-utils
       zathura
       libreoffice

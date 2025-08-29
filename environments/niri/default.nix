@@ -1,7 +1,6 @@
 {
   pkgs,
   user,
-  lib,
   ...
 }: {
   imports = [
@@ -9,17 +8,7 @@
     ../../modules/gui
   ];
 
-  programs.uwsm = {
-    enable = true;
-    waylandCompositors = {
-      niri = {
-        prettyName = "niri";
-        comment = "niri compositor managed by UWSM";
-        binPath = "${pkgs.niri}/bin/niri";
-      };
-    };
-  };
-
+  programs.niri.enable = true;
   services.greetd = {
     enable = true;
     settings = {
@@ -28,18 +17,9 @@
         user = "greeter";
       };
       initial_session = {
-        command = "${lib.getExe pkgs.uwsm} start -S niri-uwsm.desktop";
+        command = ./niri-session.sh; # "${pkgs.niri}/bin/niri-session";
         user = user;
       };
     };
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gnome
-    ];
-    config.common.default = "*";
-    configPackages = with pkgs; [niri];
   };
 }
