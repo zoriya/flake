@@ -4,10 +4,6 @@
   lib,
   ...
 }: {
-  imports = [
-    ./starship.nix
-  ];
-
   programs.zsh = {
     enable = true;
     autocd = true;
@@ -216,6 +212,8 @@
             # disable space between right prompt and end of line
             ZLE_RPROMPT_INDENT=0
           '')
+        (lib.mkOrder 950 "source ${pkgs.gitstatus}/share/gitstatus/gitstatus.prompt.zsh")
+        (lib.mkOrder 951 (builtins.readFile ./prompt.zsh))
         (lib.mkOrder 1000 (builtins.readFile ./init.zsh))
         (lib.mkOrder 1400 ''
           # only start atuin if it's in the path (fix distrobox or other temp fs issues)
@@ -224,9 +222,6 @@
           fi
         '')
         (lib.mkOrder 1410 "${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin")
-        (lib.mkOrder 1420 ''
-          ${lib.getExe pkgs.starship} init zsh | source /dev/stdin
-        '')
       ];
 
     envExtra = ''

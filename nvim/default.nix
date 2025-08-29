@@ -128,7 +128,7 @@ in
       haskell-language-server
       rust-analyzer
       clang-tools
-      roslyn-ls
+      # roslyn-ls
       basedpyright
       typescript-language-server
       nil
