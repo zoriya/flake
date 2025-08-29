@@ -95,7 +95,7 @@ yq() {
 }
 
 kgy() {
-	if [[ $1 == "secret" ]]; then
+	if [[ $1 == "secret" ]] || [[ $1 == "secrets" ]]; then
 		kubectl get -o yaml "$@" | yq '.stringData = (.data | with_entries(.value |= @base64d))'
 	else
 		# we use yq instead of kubecolor to have the same color schema as above
