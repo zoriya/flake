@@ -145,4 +145,29 @@ in {
     StartupNotify=false
     Terminal=false
   '';
+
+  # override to start with gamescope
+  xdg.desktopEntries."com.valvesoftware.Steam.desktop" = let
+    start-steam = pkgs.writeShellScriptBin "start-steam" ''
+      CMD="flatpak run --branch=stable --arch=x86_64 --command=/app/bin/steam --file-forwarding com.valvesoftware.Steam @@u %U @@"
+
+      # gamescope doesn't detect output size
+      # other args are defined in programs.gamescope.args
+      ${lib.getExe pkgs.gamescope} \
+        "-W" "$(niri msg -j focused-output | jq -r '.modes.[.current_mode].width')" \
+        "-w" "$(niri msg -j focused-output | jq -r '.modes.[.current_mode].width')" \
+        "-H" "$(niri msg -j focused-output | jq -r '.modes.[.current_mode].height')" \
+        "-h" "$(niri msg -j focused-output | jq -r '.modes.[.current_mode].height')" \
+        -- $CMD
+    '';
+  in {
+    name = "Steam (gamescope)";
+    comment = "Application for managing and playing games on Steam";
+    exec = lib.getExe start-steam;
+    icon = "com.valvesoftware.Steam";
+    terminal = false;
+    type = "Application";
+    categories = ["Network" "FileTransfer" "Game"];
+    mimeType = ["x-scheme-handler/steam" "x-scheme-handler/steamlink"];
+  };
 }

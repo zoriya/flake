@@ -9,6 +9,17 @@
       wineWowPackages.waylandFull
       winetricks
     ];
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+    args = [
+      "--steam"
+      "--hdr-enabled"
+      "--adaptive-sync"
+      "--fullscreen"
+      "--expose-wayland"
+    ];
+  };
   hardware.steam-hardware.enable = true;
   services.flatpak.enable = true;
 
