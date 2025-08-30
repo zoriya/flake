@@ -39,7 +39,6 @@ in {
     ++ lib.optionals pkgs.stdenv.isx86_64 [google-chrome];
 
   home.sessionVariables = rec {
-    # TODO: add an `uwsm app run --` or something here (for example clicking on a link on discord opens the browser on discord's slice instead of the browser's slice.
     TERMINAL = "kitty";
     BROWSER = "zen";
     DEFAULT_BROWSER = BROWSER;

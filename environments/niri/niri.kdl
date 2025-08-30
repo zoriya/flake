@@ -108,13 +108,8 @@ binds {
 	Mod+Alt+K { focus-workspace-up; }
 	Mod+Alt+Shift+J { move-window-to-workspace-down; }
 	Mod+Alt+Shift+K { move-window-to-workspace-up; }
-	Mod+Alt+Ctrl+Shift+J { move-column-to-workspace-down; }
-	Mod+Alt+Ctrl+Shift+K { move-column-to-workspace-up; }
-
-	Mod+Shift+Page_Down { move-workspace-down; }
-	Mod+Shift+Page_Up   { move-workspace-up; }
-	Mod+Shift+U         { move-workspace-down; }
-	Mod+Shift+I         { move-workspace-up; }
+	Mod+Alt+Ctrl+Shift+J { move-workspace-down; }
+	Mod+Alt+Ctrl+Shift+K { move-workspace-up; }
 
 	Mod+WheelScrollDown       cooldown-ms=150 { focus-workspace-down; }
 	Mod+WheelScrollUp         cooldown-ms=150 { focus-workspace-up; }
@@ -153,12 +148,6 @@ binds {
 	Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
 	Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
 	Mod+Ctrl+Shift+9 { move-column-to-workspace 9; }
-
-	// The following binds move the focused window in and out of a column.
-	// If the window is alone, they will consume it into the nearby column to the side.
-	// If the window is already in a column, they will expel it out.
-	Mod+BracketLeft  { consume-or-expel-window-left; }
-	Mod+BracketRight { consume-or-expel-window-right; }
 
 	Mod+U { consume-window-into-column; }
 	Mod+I { expel-window-from-column; }
