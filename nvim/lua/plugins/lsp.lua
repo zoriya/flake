@@ -18,9 +18,10 @@ vim.lsp.enable({
 	"jsonls",
 	"biome",
 	"sqls",
-	-- "roslyn_ls"
+	"roslyn_ls"
 })
 
+vim.lsp.on_type_formatting.enable()
 vim.api.nvim_create_autocmd("LspAttach", {
 	desc = "Custom lsp attach",
 	group = vim.api.nvim_create_augroup("lsp-setup", { clear = true }),
