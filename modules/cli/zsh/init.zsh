@@ -95,12 +95,7 @@ yq() {
 }
 
 kgy() {
-	if [[ $1 == "secret" ]] || [[ $1 == "secrets" ]]; then
-		kubectl get -o yaml "$@" | yq '.stringData = (.data | with_entries(.value |= @base64d))'
-	else
-		# we use yq instead of kubecolor to have the same color schema as above
-		kubectl get -o yaml "$@" | yq
-	fi
+	kubectl get -o yaml "$@" | yq 'if .kind == "Secret" then .stringData = (.data | with_entries(.value |= @base64d)) else . end'
 }
 _kgy() {
 	words="kubectl get -o yaml ${words[@]:1}"
