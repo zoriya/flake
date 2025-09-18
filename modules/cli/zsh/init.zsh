@@ -91,7 +91,11 @@ proxy() {
 
 # keep yq's output in yaml & colorizes it
 yq() {
-	command yq -Y "$@" | bat -ppl yaml
+	# if `-r` is in the arguments, do not add the -Y flag because it breaks yq.
+	if ! (( $argv[(I)-r] )); then
+		argv+=(-Y)
+	fi
+	command yq "${argv[@]}" | bat -ppl yaml
 }
 
 kgy() {
