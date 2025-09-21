@@ -20,10 +20,6 @@ in {
     src = tmux;
   };
 
-  mpv = super.mpv.override {
-    scripts = [super.mpvScripts.mpris];
-  };
-
   # it doesn't start without this, no clue why.
   freecad = wrapProgram super.freecad ["freecad" "FreeCAD" "freecadcmd" "FreeCADCmd"] ''
     --set QT_QPA_PLATFORM 'wayland;xcb' \

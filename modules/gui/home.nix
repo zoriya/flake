@@ -22,7 +22,6 @@ in {
       firefox
       zen-browser.packages.${pkgs.system}.default
       vesktop
-      mpv
       freecad
       kicad
       xdg-utils
@@ -43,6 +42,17 @@ in {
     BROWSER = "zen";
     DEFAULT_BROWSER = BROWSER;
   };
+
+  programs.mpv = {
+    enable = true;
+    config = {
+      hwdec = "auto";
+    };
+    scripts = with pkgs.mpvScripts; [
+      mpris
+    ];
+  };
+
   xdg = {
     enable = true;
     mime.enable = true;
