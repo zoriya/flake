@@ -48,8 +48,8 @@
       # k8s
       k = "kubectl";
       kubectl = "kubecolor";
-      kctx = "kubectl config use-context $(kubectl config get-contexts -o name | fzf --height=10)";
-      kns = "kubectl config set-context --current --namespace=$(kubectl get ns -o custom-columns=':metadata.name' --no-headers | fzf --height=10)";
+      kctx = "FZF_DEFAULT_OPTS='--height 10' kubectx";
+      kns = "kubens";
       kg = "k get";
       kga = "kg $(k api-resources --verbs=list --namespaced -o name | paste -sd ,)";
       # use custom function to decode secrets data instead of a simple alias for kgy
@@ -356,6 +356,7 @@
       lsof
       kubectl
       kubecolor
+      kubectx
       usql
       rsync
       moreutils
