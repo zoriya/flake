@@ -50,6 +50,7 @@
       kubectl = "kubecolor";
       kctx = "FZF_DEFAULT_OPTS='--height 10' kubectx";
       kns = "kubens";
+      knsc = "kubectl config set-context --current --namespace ''";
       kg = "k get";
       kga = "kg $(k api-resources --verbs=list --namespaced -o name | paste -sd ,)";
       # use custom function to decode secrets data instead of a simple alias for kgy
