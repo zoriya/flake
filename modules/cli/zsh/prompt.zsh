@@ -1,6 +1,7 @@
 setopt promptsubst
 zmodload zsh/datetime
 zmodload zsh/mathfunc
+zmodload zsh/stat
 
 timer_preexec() {
 	timer=$EPOCHREALTIME

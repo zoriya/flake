@@ -359,6 +359,7 @@
       kubecolor
       usql
       rsync
+      moreutils
       # bitwarden-cli
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
