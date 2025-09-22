@@ -70,8 +70,8 @@
       kcleanup = "kdel pod --field-selector status.phase==Failed -A; kdel pod --field-selector status.phase==Succeeded -A";
 
       # Misc
-      dc = "docker-compose";
-      dcd = "docker-compose -f (../)#docker-compose.dev.yml";
+      dc = "docker compose";
+      dcd = "docker compose -f (../)#docker-compose.dev.yml";
       op =
         if pkgs.stdenv.isLinux
         then "xdg-open"
