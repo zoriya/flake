@@ -18,7 +18,7 @@ vim.lsp.enable({
 	"jsonls",
 	"biome",
 	"sqls",
-	"roslyn_ls"
+	-- "roslyn_ls", we use roslyn.nvim plugin instead.
 })
 
 vim.lsp.on_type_formatting.enable()

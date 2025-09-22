@@ -6,6 +6,7 @@ local function git_show(ref)
 			{
 				cmd = "git",
 				args = { "show", "--name-status", "--pretty=tformat:", ref },
+				cwd = Snacks.git.get_root(),
 				transform = function(item)
 					item.cwd = git_root
 					item.file = string.sub(item.text, 3)
@@ -262,19 +263,19 @@ return {
 			end, { desc = "Grep" })
 
 			vim.keymap.set("n", "<leader>gl", function()
-				Snacks.picker.git_log()
+				Snacks.picker.git_log({cwd = Snacks.git.get_root() })
 			end, { desc = "Git log" })
 
 			vim.keymap.set("n", "<leader>gh", function()
-				Snacks.picker.git_log_file()
+				Snacks.picker.git_log_file({cwd = Snacks.git.get_root() })
 			end, { desc = "Git logs buffer" })
 
 			vim.keymap.set("n", "<leader>gB", function()
-				Snacks.picker.git_branches()
+				Snacks.picker.git_branches({cwd = Snacks.git.get_root() })
 			end, { desc = "Git branches" })
 
 			vim.keymap.set("n", "<leader>gs", function()
-				Snacks.picker.git_status()
+				Snacks.picker.git_status({cwd = Snacks.git.get_root() })
 			end, { desc = "Git status" })
 		end,
 	},
