@@ -26,7 +26,6 @@
       bat = "bat -p";
 
       # git stuff
-      s = "git status";
       gs = "git status";
       gl = "git log";
       gu = "git pull";

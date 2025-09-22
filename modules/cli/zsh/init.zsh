@@ -89,6 +89,13 @@ proxy() {
 	ssh -NR "5000:localhost:$1" zoriya@ssh.sdg.moe
 }
 
+s() {
+	git status 2>/dev/null
+	if [[ $? -ne 0 ]]; then
+		gfold
+	fi
+}
+
 # keep yq's output in yaml & colorizes it
 yq() {
 	# if `-r` is in the arguments, do not add the -Y flag because it breaks yq.
