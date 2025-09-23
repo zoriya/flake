@@ -13,7 +13,7 @@
       freetype-load-flags = false;
       font-style = "semibold";
 
-      theme = "light:catppuccin-latte,dark:catppuccin-mocha";
+      theme = "light:Catppuccin Latte,dark:Catppuccin Mocha";
       # disabling cursor because it sets it to blink and i hate that
       shell-integration-features = "no-cursor,sudo,title";
       cursor-style-blink = false;
