@@ -62,6 +62,7 @@
       ke = "k edit";
       kl = "k logs";
       kp = "k patch";
+      kc = "k create";
       kr = "k rollout";
       krr = "k rollout restart";
       kpf = "k port-forward";
