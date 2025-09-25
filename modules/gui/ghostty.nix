@@ -4,7 +4,7 @@
     package =
       if pkgs.stdenv.isLinux
       then pkgs.ghostty
-      else null;
+      else pkgs.ghostty-bin;
     enableZshIntegration = true;
     clearDefaultKeybinds = true;
     settings = {
@@ -18,6 +18,7 @@
       shell-integration-features = "no-cursor,sudo,title";
       cursor-style-blink = false;
 
+      maximize = true;
       window-padding-x = 0;
       window-padding-y = 0;
       window-padding-balance = true;
