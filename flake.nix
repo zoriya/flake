@@ -84,7 +84,7 @@
     };
 
     nixosConfigurations.virtual = mkSystem "virtual" {
-      env = "hyprland";
+      env = "niri";
     };
 
     nixosConfigurations.lucca = mkSystem "lucca" {
