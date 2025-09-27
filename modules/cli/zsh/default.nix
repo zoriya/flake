@@ -63,6 +63,7 @@
       kl = "k logs";
       kp = "k patch";
       kc = "k create";
+      kcy = "kc -o yaml --dry-run=client";
       kr = "k rollout";
       krr = "k rollout restart";
       kpf = "k port-forward";
