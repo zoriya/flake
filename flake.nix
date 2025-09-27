@@ -158,7 +158,10 @@
         overlays = [nvim-overlay];
       };
     in rec {
-      default = nvim-lua;
+      default = pkgs.mkShell {
+          inputsFrom = [nvim-lua];
+          packages = with pkgs; [go-task];
+      };
       nvim-lua = pkgs.mkShell {
         name = "nvim-lua";
         shellHook = ''

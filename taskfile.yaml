@@ -1,0 +1,49 @@
+version: "3"
+
+tasks:
+  switch:
+    desc: switch to new version
+    cmds:
+      - cmd: nixos-rebuild switch --flake path:. --show-trace
+        platforms: [linux]
+      - cmd: darwin-rebuild switch --flake path:. --show-trace
+        platforms: [darwin]
+
+  update:
+    desc: update all deps
+    cmds:
+      - nix flake update
+    env:
+      NIX_CONFIG:
+        sh: echo "extra-access-tokens = github.com=$(gh auth token)"
+
+  # Install stuff
+
+  install:
+    desc: install to disks labeled `nix` and `boot`
+    deps: [password:root, password:zoriya]
+    cmds:
+      - mount /dev/disk/by-label/boot /mnt/boot
+      - mount /dev/disk/by-label/nix /mnt/nix
+      - task: swap
+      - defer: { task: swap-off }
+      - nixos-install --no-channel-copy --no-root-password
+
+  password:*:
+    desc: setup passwords
+    vars:
+      USER: "{{index .MATCH 0}}"
+    cmds:
+      - nix-shell -p mkpasswd --run 'mkpasswd -m SHA-512 | tr -d \\n > password/{{.USER}}'
+    status:
+      - test -f password/{{.USER}}
+
+  swap:
+    desc: setup swap file (for live usb mostly)
+    cmds:
+      - mkswap -U clear --size 20G --file /mnt/nix/swap
+      - swapon /mnt/nix/swap
+  swap-off:
+    cmds:
+      - swapoff /mnt/nix/swap
+      - rm /mnt/nix/swap

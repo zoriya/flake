@@ -20,9 +20,15 @@
  - A `.luarc.json` can be generated using `nix develop`
  - The config can be used from anywhere using `nix run github:zoriya/flake#nvim`
 
+## Install
 
-## Notes for myself
+Format disk with:
+ - 200M efi part -> `mkfs.fat -F 32 -n boot /dev/sda1`
+ - other as linux part (/nix) -> `mkfs.ext4 -n nix /dev/sda2`
 
-`mkdir -p /nix/persist/home` (else persisted seems to be bugged)
-`nix-shell --run 'mkpasswd -p mkpasswd -m SHA-512  | tr -d \\n'` to generate a password
-`NIX_CONFIG="extra-access-tokens = github.com=$(gh auth token)" nix flake update`
+```sh
+nix-shell -p git go-task
+git clone https://github.com/zoriya/flake
+cd flake
+sudo task install
+```
