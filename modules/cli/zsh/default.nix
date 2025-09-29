@@ -90,6 +90,8 @@
       nixos-option = "nixos-option --flake ~/projects/flake";
       # i will never remember those flags
       ss = "ss -tlpun";
+      # habits
+      copyfile = "clipcopy";
 
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
@@ -132,11 +134,6 @@
         name = "copypath";
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/copypath/copypath.plugin.zsh";
-      }
-      {
-        name = "copyfile";
-        src = pkgs.oh-my-zsh;
-        file = "share/oh-my-zsh/plugins/copyfile/copyfile.plugin.zsh";
       }
     ];
     completionInit =
