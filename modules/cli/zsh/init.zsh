@@ -84,11 +84,6 @@ touchp() {
 	mkdir -p "$(dirname "$1")" && touch "$1"
 }
 
-proxy() {
-	echo "Proxying port $1 to http://proxy.sdg.moe"
-	ssh -NR "5000:localhost:$1" zoriya@ssh.sdg.moe
-}
-
 s() {
 	git status 2>/dev/null
 	if [[ $? -ne 0 ]]; then

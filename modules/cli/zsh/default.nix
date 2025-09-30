@@ -73,7 +73,7 @@
 
       # Misc
       dc = "docker compose";
-      dcd = "docker compose -f (../)#docker-compose.dev.yml";
+      dcd = "docker compose -f $(setopt extendedglob; echo (../)#docker-compose.dev.yml)";
       op =
         if pkgs.stdenv.isLinux
         then "xdg-open"
@@ -206,7 +206,6 @@
             setopt rm_star_silent
             setopt interactivecomments
             setopt autopushd
-            setopt extendedglob
 
             # disable space between right prompt and end of line
             ZLE_RPROMPT_INDENT=0
