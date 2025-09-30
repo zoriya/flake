@@ -1,4 +1,3 @@
-# Common file for both nixos and nix-darwin
 {pkgs, ...}: {
   imports = [
     ./nix/nix.nix
@@ -30,5 +29,15 @@
       enable = true;
     };
     info.enable = true;
+  };
+
+  launchd.user.agents.caffeinate = {
+    command = "${pkgs.darwin.PowerManagement}/bin/caffeinate -diu";
+    serviceConfig = {
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/caffeinate.log";
+      StandardErrorPath = "/tmp/caffeinate.err";
+    };
   };
 }
