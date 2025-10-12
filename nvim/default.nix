@@ -96,7 +96,6 @@ in
           vim-helm
           vim-sleuth
           auto-save-nvim
-          undotree
 
           noice-nvim
           statuscol-nvim
