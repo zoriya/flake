@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}: {
+{lib, ...}: {
   options.git = {
     useRsa = lib.mkEnableOption "Use rsa instead of ed25519";
   };
@@ -21,24 +17,28 @@
     #   # TODO: figure out a way to specify all repositories in ~/projects & ~/work at run time
     #   repositories = [];
     # };
-    aliases = {
-      master =
-        #bash
-        ''
-          !git symbolic-ref --short refs/remotes/$(git remote | head -n 1)/HEAD | sed 's@.*/@@'
-        '';
-      cleanup =
-        #bash
-        ''
-          !git branch --merged | grep -vE "^([+*]|\s*($(git master))\s*$)" | xargs git branch --delete 2>/dev/null
-        '';
-      nuke =
-        #bash
-        ''
-          !git reset --hard HEAD && git clean -df .
-        '';
-    };
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Zoe Roux";
+        email = "zoe.roux@zoriya.dev";
+      };
+      alias = {
+        master =
+          #bash
+          ''
+            !git symbolic-ref --short refs/remotes/$(git remote | head -n 1)/HEAD | sed 's@.*/@@'
+          '';
+        cleanup =
+          #bash
+          ''
+            !git branch --merged | grep -vE "^([+*]|\s*($(git master))\s*$)" | xargs git branch --delete 2>/dev/null
+          '';
+        nuke =
+          #bash
+          ''
+            !git reset --hard HEAD && git clean -df .
+          '';
+      };
       gpg = {
         format = "ssh";
         ssh.allowedSignersFile = "~/.ssh/allowed_signers";
@@ -96,8 +96,5 @@
         };
       };
     };
-
-    userEmail = "zoe.roux@zoriya.dev";
-    userName = "Zoe Roux";
   };
 }
