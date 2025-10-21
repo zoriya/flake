@@ -33,7 +33,6 @@ in {
       wlr-randr
       alsa-utils
       playerctl
-      postman
     ]
     ++ lib.optionals pkgs.stdenv.isx86_64 [google-chrome];
 

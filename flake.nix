@@ -124,6 +124,7 @@
             nodejs
             volta
             dotnet
+            dotnet-ef
             csharprepl
             kubernetes-helm
             colima
