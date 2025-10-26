@@ -6,7 +6,7 @@ zmodload zsh/stat
 timer_preexec() {
 	timer=$EPOCHREALTIME
 }
-add-zsh-hook preexec timer_precmd
+add-zsh-hook preexec timer_preexec
 timer_precmd() {
 	if [ -z $timer ]; then
 		EXEC_TIME=""
@@ -39,7 +39,7 @@ kube_precmd() {
 add-zsh-hook precmd kube_precmd
 
 
-FILL="%F{#808080}${(l.$COLUMNS..·.)}%f"
+FILL='%F{#808080}${(l.$COLUMNS..·.)}%f'
 NEWLINE=$'\n'
 
 WORKDIR='%B%F{blue}%~%b%f'
@@ -50,8 +50,8 @@ KUBE='%F{cyan}$KCTX${KNS:+/$KNS}%f'
 PROMPT_SHLVL='%(?.%F{green}.%F{red})$(printf "❯%.0s" {1..$SHLVL})%f'
 
 EXEC_TIME=""
-EXIT_CODE=' %(?..%F{red}x${(j[|])pipestatus}%f)'
-JOBS=' %F{cyan}%(1j.&%j.)%f'
+EXIT_CODE='%(?.. %F{red}x${(j[|])pipestatus}%f)'
+JOBS='%F{cyan}%(1j. &%j.)%f'
 
 export PROMPT="${FILL}${NEWLINE}${WORKDIR}$RO$GIT $KUBE $PROMPT_SHLVL "
 export RPROMPT="\${EXEC_TIME}${EXIT_CODE}${JOBS}"
