@@ -19,15 +19,19 @@ tasks:
 
   # Install stuff
 
-  install:
+  install:*:
     desc: install to disks labeled `nix` and `boot`
     deps: [password:root, password:zoriya]
+    vars:
+      HOST: "{{index .MATCH 0}}"
     cmds:
+      - mkdir -p /mnt/{boot,nix}
       - mount /dev/disk/by-label/boot /mnt/boot
       - mount /dev/disk/by-label/nix /mnt/nix
       - task: swap
       - defer: { task: swap-off }
-      - nixos-install --no-channel-copy --no-root-password
+      - mkdir -p /mnt/nix/persist/tmp
+      - TMPDIR=/mnt/nix/persist/tmp nixos-install --no-channel-copy --no-root-password --flake path:.#{{.HOST}}
 
   password:*:
     desc: setup passwords
