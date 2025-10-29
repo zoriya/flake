@@ -17,7 +17,7 @@
         user = "greeter";
       };
       initial_session = {
-        command = ./niri-session.sh; # "${pkgs.niri}/bin/niri-session";
+        command = ./niri-session.sh;
         user = user;
       };
     };

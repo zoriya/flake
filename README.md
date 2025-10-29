@@ -30,5 +30,5 @@ Format disk with:
 nix-shell -p git go-task
 git clone https://github.com/zoriya/flake
 cd flake
-sudo task install
+sudo task install:host
 ```

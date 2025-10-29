@@ -21,10 +21,11 @@ tasks:
 
   install:*:
     desc: install to disks labeled `nix` and `boot`
-    deps: [password:root, password:zoriya]
     vars:
       HOST: "{{index .MATCH 0}}"
     cmds:
+      - task: password:root
+      - task: password:zoriya
       - mkdir -p /mnt/{boot,nix}
       - mount /dev/disk/by-label/boot /mnt/boot
       - mount /dev/disk/by-label/nix /mnt/nix

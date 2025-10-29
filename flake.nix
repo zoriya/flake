@@ -69,20 +69,6 @@
       env = "server";
     };
 
-    nixosConfigurations.kadan = mkSystem "kadan" {
-      env = "server";
-      custom = [
-        ({pkgs, ...}: {
-          environment.systemPackages = with pkgs; [
-            python3Packages.guessit
-            mediainfo
-            yt-dlp
-            mkvtoolnix-cli
-          ];
-        })
-      ];
-    };
-
     nixosConfigurations.virtual = mkSystem "virtual" {
       env = "niri";
     };
