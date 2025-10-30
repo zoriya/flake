@@ -26,6 +26,8 @@
       ''
         set -g status off
         set -s set-clipboard on
+        # request clipboard from parent terminal instead of using tmux's internal buffer
+        set -s get-clipboard request
         set -g extended-keys on
 
         # from tmux-sensible
