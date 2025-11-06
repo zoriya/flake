@@ -89,7 +89,10 @@
       dr = "direnv reload";
       nixos-option = "nixos-option --flake ~/projects/flake";
       # i will never remember those flags
-      ss = "ss -tlpun";
+      ss =
+        if pkgs.stdenv.isLinux
+        then "ss -tlpun"
+        else "netstat -anvp tcp | awk 'NR<3 || /LISTEN/'";
       # habits
       copyfile = "clipcopy";
 

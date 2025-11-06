@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   imports = [
     ./nix/nix.nix
   ];
@@ -38,6 +38,24 @@
       RunAtLoad = true;
       StandardOutPath = "/tmp/caffeinate.log";
       StandardErrorPath = "/tmp/caffeinate.err";
+    };
+  };
+
+  launchd.user.agents.ssh-tunnel = let 
+    ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
+      while true; do
+        dns-sd -m -Q fuhen.local
+        ssh -NR "2222:localhost:22" zoriya@fuhen.local
+        sleep 5
+      done
+    '';
+  in {
+    command = lib.getExe ssh-tunnel;
+    serviceConfig = {
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/ssh-tunnel.log";
+      StandardErrorPath = "/tmp/ssh-tunnel.err";
     };
   };
 }
