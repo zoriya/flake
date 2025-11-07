@@ -18,6 +18,9 @@
 in {
   tmux = super.tmux.overrideAttrs {
     src = tmux;
+    patches = [
+      ./tmux-get_clipboard.diff
+    ];
   };
 
   # it doesn't start without this, no clue why.

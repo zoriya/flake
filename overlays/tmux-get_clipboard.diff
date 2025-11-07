@@ -1,0 +1,318 @@
+# source: https://github.com/tmux/tmux/issues/4275
+diff --git a/input.c b/input.c
+index 8113f2b3..0571ad0d 100644
+--- a/input.c
++++ b/input.c
+@@ -3056,18 +3056,41 @@ input_osc_133(struct input_ctx *ictx, const char *p)
+ 	}
+ }
+ 
++/* Handle OSC 52 reply. */
++static void
++input_osc_52_reply(struct input_ctx *ictx)
++{
++	struct paste_buffer	*pb;
++	int			 state;
++	const char		*buf;
++	size_t			 len;
++
++	state = options_get_number(global_options, "get-clipboard");
++	if (state == 0)
++		return;
++	if (state == 1) {
++		if ((pb = paste_get_top(NULL)) == NULL)
++			return;
++		buf = paste_buffer_data(pb, &len);
++		if (ictx->input_end == INPUT_END_BEL)
++			input_reply_clipboard(ictx->event, buf, len, "\007");
++		else
++			input_reply_clipboard(ictx->event, buf, len, "\033\\");
++		return;
++	}
++	input_add_request(ictx, INPUT_REQUEST_CLIPBOARD, ictx->input_end);
++}
++
+ /* Handle the OSC 52 sequence for setting the clipboard. */
+ static void
+ input_osc_52(struct input_ctx *ictx, const char *p)
+ {
+ 	struct window_pane	*wp = ictx->wp;
++	size_t			 len;
+ 	char			*end;
+-	const char		*buf = NULL;
+-	size_t			 len = 0;
+ 	u_char			*out;
+ 	int			 outlen, state;
+ 	struct screen_write_ctx	 ctx;
+-	struct paste_buffer	*pb;
+ 	const char*		 allow = "cpqs01234567";
+ 	char			 flags[sizeof "cpqs01234567"] = "";
+ 	u_int			 i, j = 0;
+@@ -3092,12 +3115,7 @@ input_osc_52(struct input_ctx *ictx, const char *p)
+ 	log_debug("%s: %.*s %s", __func__, (int)(end - p - 1), p, flags);
+ 
+ 	if (strcmp(end, "?") == 0) {
+-		if ((pb = paste_get_top(NULL)) != NULL)
+-			buf = paste_buffer_data(pb, &len);
+-		if (ictx->input_end == INPUT_END_BEL)
+-			input_reply_clipboard(ictx->event, buf, len, "\007");
+-		else
+-			input_reply_clipboard(ictx->event, buf, len, "\033\\");
++		input_osc_52_reply(ictx);
+ 		return;
+ 	}
+ 
+@@ -3156,6 +3174,7 @@ input_osc_104(struct input_ctx *ictx, const char *p)
+ 	free(copy);
+ }
+ 
++/* Send a clipboard reply. */
+ void
+ input_reply_clipboard(struct bufferevent *bev, const char *buf, size_t len,
+     const char *end)
+@@ -3273,27 +3292,69 @@ input_add_request(struct input_ctx *ictx, enum input_request_type type, int idx)
+ 		xsnprintf(s, sizeof s, "\033]4;%d;?\033\\", idx);
+ 		tty_puts(&c->tty, s);
+ 		break;
++	case INPUT_REQUEST_CLIPBOARD:
++		tty_putcode_ss(&c->tty, TTYC_MS, "", "?");
++		break;
+ 	}
+ 
+ 	return (0);
+ }
+ 
++/* Handle a palette reply. */
++static int
++input_request_palette_reply(struct input_request *ir, void *data)
++{
++	struct input_request_palette_data	*pd = data;
++
++	if (pd->idx != ir->idx)
++		return (-1);
++	input_osc_colour_reply(ir->ictx, 4, pd->idx, pd->c);
++	return (0);
++}
++
++/* Handle a clipboard reply. */
++static int
++input_request_clipboard_reply(struct input_request *ir, void *data)
++{
++	struct input_ctx			*ictx = ir->ictx;
++	struct input_request_clipboard_data	*cd = data;
++	int					 state;
++	char					*copy;
++
++	state = options_get_number(global_options, "get-clipboard");
++	if (state == 0 || state == 1)
++		return (-1);
++	if (state == 3) {
++		copy = xmalloc(cd->len);
++		memcpy(copy, cd->buf, cd->len);
++		paste_add(NULL, copy, cd->len);
++	}
++
++	if (ir->idx == INPUT_END_BEL)
++		input_reply_clipboard(ictx->event, cd->buf, cd->len, "\007");
++	else
++		input_reply_clipboard(ictx->event, cd->buf, cd->len, "\033\\");
++	return (0);
++}
++
+ /* Handle a reply to a request. */
+ void
+ input_request_reply(struct client *c, enum input_request_type type, void *data)
+ {
+ 	struct input_request_list		*irl = &c->input_requests[type];
+ 	struct input_request			*ir, *ir1;
+-	struct input_request_palette_data	*pd = data;
+ 
+ 	TAILQ_FOREACH_SAFE(ir, &irl->requests, centry, ir1) {
+ 		log_debug("%s: req %p: client %s, pane %%%u, type %d",
+ 		    __func__, ir, c->name, ir->ictx->wp->id, ir->type);
+ 		switch (type) {
+ 		case INPUT_REQUEST_PALETTE:
+-			if (pd->idx != ir->idx)
++			if (input_request_palette_reply(ir, data) != 0)
++				continue;
++			break;
++		case INPUT_REQUEST_CLIPBOARD:
++			if (input_request_clipboard_reply(ir, data) != 0)
+ 				continue;
+-			input_osc_colour_reply(ir->ictx, 4, pd->idx, pd->c);
+ 			break;
+ 		}
+ 		TAILQ_REMOVE(&ir->ictx->requests[type], ir, entry);
+diff --git a/options-table.c b/options-table.c
+index 6946a085..b3ba39cd 100644
+--- a/options-table.c
++++ b/options-table.c
+@@ -84,6 +84,9 @@ static const char *options_table_popup_border_lines_list[] = {
+ static const char *options_table_set_clipboard_list[] = {
+ 	"off", "external", "on", NULL
+ };
++static const char *options_table_get_clipboard_list[] = {
++	"off", "buffer", "request", "both", NULL
++};
+ static const char *options_table_window_size_list[] = {
+ 	"largest", "smallest", "manual", "latest", NULL
+ };
+@@ -405,6 +408,18 @@ const struct options_table_entry options_table[] = {
+ 	  .text = "Whether to send focus events to applications."
+ 	},
+ 
++	{ .name = "get-clipboard",
++	  .type = OPTIONS_TABLE_CHOICE,
++	  .scope = OPTIONS_TABLE_SERVER,
++	  .choices = options_table_get_clipboard_list,
++	  .default_num = 1,
++	  .text = "When an application requests the clipboard, whether to "
++	          "ignore the request ('off'); respond with the newest buffer "
++	          "('buffer'); request the clipboard from the most recently "
++	          "used terminal ('request'); or to request the clipboard, "
++	          "create a buffer, and send it to the application ('both')."
++	},
++
+ 	{ .name = "history-file",
+ 	  .type = OPTIONS_TABLE_STRING,
+ 	  .scope = OPTIONS_TABLE_SERVER,
+diff --git a/tmux.1 b/tmux.1
+index b13b514a..98528217 100644
+--- a/tmux.1
++++ b/tmux.1
+@@ -4236,6 +4236,32 @@ passed through to applications running in
+ .Nm .
+ Attached clients should be detached and attached again after changing this
+ option.
++.It Xo Ic get-clipboard
++.Op Ic both | request | buffer | off
++.Xc
++Controls the behaviour when an application requests the clipboard from
++.Nm .
++.Pp
++If
++.Ic off ,
++the request is ignored;
++if
++.Ic buffer ,
++.Nm
++responds with the newest paste buffer;
++.Ic request
++causes
++.Nm
++to request the clipboard from the most recently used client (if possible) and
++send the reply (if any) back to the application;
++.Ic buffer
++is the same as
++.Ic request
++but also creates a paste buffer.
++.Pp
++See also the
++.Ic set-clipboard
++option.
+ .It Ic history-file Ar path
+ If not empty, a file to which
+ .Nm
+diff --git a/tmux.h b/tmux.h
+index 7be23085..dd279fa3 100644
+--- a/tmux.h
++++ b/tmux.h
+@@ -1127,9 +1127,16 @@ struct window_mode_entry {
+ 
+ /* Type of request to client. */
+ enum input_request_type {
+-	INPUT_REQUEST_PALETTE
++	INPUT_REQUEST_PALETTE,
++	INPUT_REQUEST_CLIPBOARD
++};
++#define INPUT_REQUEST_TYPES (2)
++
++/* Clipboard request reply data. */
++struct input_request_clipboard_data {
++	char	*buf;
++	size_t	 len;
+ };
+-#define INPUT_REQUEST_TYPES (1)
+ 
+ /* Palette request reply data. */
+ struct input_request_palette_data {
+diff --git a/tty-keys.c b/tty-keys.c
+index 77254591..7acee80f 100644
+--- a/tty-keys.c
++++ b/tty-keys.c
+@@ -1301,12 +1301,13 @@ tty_keys_mouse(struct tty *tty, const char *buf, size_t len, size_t *size,
+ static int
+ tty_keys_clipboard(struct tty *tty, const char *buf, size_t len, size_t *size)
+ {
+-	struct client		*c = tty->client;
+-	struct window_pane	*wp;
+-	size_t			 end, terminator = 0, needed;
+-	char			*copy, *out;
+-	int			 outlen;
+-	u_int			 i;
++	struct client				*c = tty->client;
++	struct window_pane			*wp;
++	size_t					 end, terminator = 0, needed;
++	char					*copy, *out;
++	int			 		 outlen;
++	u_int			 		 i;
++	struct input_request_clipboard_data	 cd;
+ 
+ 	*size = 0;
+ 
+@@ -1364,12 +1365,6 @@ tty_keys_clipboard(struct tty *tty, const char *buf, size_t len, size_t *size)
+ 	buf++;
+ 	end--;
+ 
+-	/* If we did not request this, ignore it. */
+-	if (~tty->flags & TTY_OSC52QUERY)
+-		return (0);
+-	tty->flags &= ~TTY_OSC52QUERY;
+-	evtimer_del(&tty->clipboard_timer);
+-
+ 	/* It has to be a string so copy it. */
+ 	copy = xmalloc(end + 1);
+ 	memcpy(copy, buf, end);
+@@ -1384,18 +1379,37 @@ tty_keys_clipboard(struct tty *tty, const char *buf, size_t len, size_t *size)
+ 		return (0);
+ 	}
+ 	free(copy);
+-
+-	/* Create a new paste buffer and forward to panes. */
+ 	log_debug("%s: %.*s", __func__, outlen, out);
+-	if (c->flags & CLIENT_CLIPBOARDBUFFER) {
+-		paste_add(NULL, out, outlen);
+-		c->flags &= ~CLIENT_CLIPBOARDBUFFER;
++
++	/* Set reply if any. */
++	if (c->clipboard_npanes == 0) {
++		cd.buf = out;
++		cd.len = outlen;
++		input_request_reply(c, INPUT_REQUEST_CLIPBOARD, &cd);
++		free(out);
++		return (0);
+ 	}
++
++	/* If we did not request this, ignore it. */
++	if (~tty->flags & TTY_OSC52QUERY) {
++		free(out);
++		return (0);
++	}
++	tty->flags &= ~TTY_OSC52QUERY;
++	evtimer_del(&tty->clipboard_timer);
++
++	/* Create a new paste buffer and forward to panes. */
+ 	for (i = 0; i < c->clipboard_npanes; i++) {
+ 		wp = window_pane_find_by_id(c->clipboard_panes[i]);
+ 		if (wp != NULL)
+ 			input_reply_clipboard(wp->event, out, outlen, "\033\\");
+ 	}
++	if (~c->flags & CLIENT_CLIPBOARDBUFFER)
++		free (out);
++	else {
++		paste_add(NULL, out, outlen);
++		c->flags &= ~CLIENT_CLIPBOARDBUFFER;
++	}
+ 	free(c->clipboard_panes);
+ 	c->clipboard_panes = NULL;
+ 	c->clipboard_npanes = 0;
