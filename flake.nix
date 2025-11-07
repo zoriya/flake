@@ -62,6 +62,14 @@
       env = "niri";
       custom = [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
+        {
+          services.sshd.enable = true;
+        }
+      ];
+      customHome = [
+        ({pkgs, ...}: {
+          home.packages = with pkgs; [slack];
+        })
       ];
     };
 
@@ -146,8 +154,8 @@
       };
     in rec {
       default = pkgs.mkShell {
-          inputsFrom = [nvim-lua];
-          packages = with pkgs; [go-task];
+        inputsFrom = [nvim-lua];
+        packages = with pkgs; [go-task];
       };
       nvim-lua = pkgs.mkShell {
         name = "nvim-lua";

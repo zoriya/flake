@@ -69,6 +69,7 @@
         ".zen"
         ".config/google-chrome"
         ".config/discord"
+        ".config/Slack"
         ".config/vesktop"
         ".config/YouTube\ Music"
         ".config/gh"
