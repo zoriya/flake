@@ -57,8 +57,8 @@
         # suspend inner tmux (to allow nested sessions)
         bind @ { set prefix None; set key-table off }
         # NOTE: C-@ doesn't work since v3.5a (since tmux doesn't support kitty keyboard protocol)
-        # Instead, C-@ and C-Space does the same thing.
-        bind -T off C-Space { set -u prefix; set -u key-table }
+        # Instead, we bind f11 and use kitty to remap C-@ to f11.
+        bind -T off f11 { set -u prefix; set -u key-table }
       '';
   };
 }

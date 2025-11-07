@@ -28,6 +28,9 @@
       map ctrl+minus change_font_size current -1.0
       map ctrl+0 change_font_size current 0
       map ctrl+backspace change_font_size current 0
+
+      # this is used to map 
+      map ctrl+@ send_key f11
     '';
   };
 
