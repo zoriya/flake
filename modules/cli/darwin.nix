@@ -45,7 +45,9 @@
     ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
       while true; do
         dns-sd -m -Q fuhen.local
+        echo "Host found, starting tunnel" | tee /dev/stderr
         ssh -NR "2222:localhost:22" zoriya@fuhen.local
+        echo "Connetion closed" | tee /dev/stderr
         sleep 5
       done
     '';

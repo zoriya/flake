@@ -23,6 +23,11 @@ in {
     ];
   };
 
+  # they try to use passthrough if they detect tmux. we don't want that.
+  osc = wrapProgram super.osc ["osc"] ''
+    --set TMUX ""
+  '';
+
   # it doesn't start without this, no clue why.
   freecad = wrapProgram super.freecad ["freecad" "FreeCAD" "freecadcmd" "FreeCADCmd"] ''
     --set QT_QPA_PLATFORM 'wayland;xcb' \

@@ -108,3 +108,10 @@ _kgy() {
 	_kubectl
 }
 compdef _kgy kgy
+
+alias copyfile="osc copy"
+copypath() {
+	local file="${1:-.}"
+	[[ $file = /* ]] || file="$PWD/$file"
+	print -n "${file:a}" | osc copy || return 1
+}

@@ -93,8 +93,6 @@
         if pkgs.stdenv.isLinux
         then "ss -tlpun"
         else "netstat -anvp tcp | awk 'NR<3 || /LISTEN/'";
-      # habits
-      copyfile = "clipcopy";
 
       # viu doesn't work with tmux, icat does. using that while waiting
       viu = "kitty +kitten icat";
@@ -127,16 +125,6 @@
         name = "git";
         src = pkgs.oh-my-zsh;
         file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
-      }
-      {
-        name = "clipcopy"; # dependency of copypath & copyfile
-        src = pkgs.oh-my-zsh;
-        file = "share/oh-my-zsh/lib/clipboard.zsh";
-      }
-      {
-        name = "copypath";
-        src = pkgs.oh-my-zsh;
-        file = "share/oh-my-zsh/plugins/copypath/copypath.plugin.zsh";
       }
     ];
     completionInit =
@@ -362,6 +350,7 @@
       usql
       rsync
       moreutils
+      osc
       # bitwarden-cli
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
