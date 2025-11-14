@@ -178,7 +178,7 @@ binds {
 	Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
-workspace "emtpy" {
+workspace "music" {
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
 }
 workspace "chat" {
@@ -198,9 +198,14 @@ window-rule {
 }
 
 window-rule {
+	match app-id="com.github.th_ch.youtube_music"
+	open-on-workspace "music"
+}
+
+window-rule {
 	match app-id="discord"
 	match app-id="vesktop"
-	match app-id="com.github.th_ch.youtube_music"
+	match app-id="slack"
 	open-on-workspace "chat"
 }
 

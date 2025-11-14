@@ -37,7 +37,16 @@ in {
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.
   gnome-control-center = wrapProgram super.gnome-control-center ["gnome-control-center"] "--set XDG_CURRENT_DESKTOP GNOME";
 
-  slack = enableWayland super.slack ["slack"];
+  # i can't get this to work /shrug
+  # slack = super.symlinkJoin {
+  #     name = super.slack.name;
+  #     paths = [super.slack];
+  #     buildInputs = [super.makeWrapper];
+  #     postBuild = ''
+  #       wrapProgram $out/bin/slack --add-flags "--disable-smooth-scrolling"
+  #       substituteInPlace ${super.slack}/share/applications/slack.desktop --replace ${super.slack} $out
+  #     '';
+  #   };
   discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];
   youtube-music = enableWayland super.youtube-music ["youtube-music"];
