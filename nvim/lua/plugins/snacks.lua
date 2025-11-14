@@ -1,9 +1,9 @@
 local function git_show(ref)
 	local git_root = Snacks.git.get_root()
-	local function finder(opts, ctx)
-		return require("snacks.picker.source.proc").proc({
-			opts,
-			{
+	---@type snacks.picker.finder
+	local function finder(_opts, ctx)
+		return require("snacks.picker.source.proc").proc(
+			ctx:opts({
 				cmd = "git",
 				args = { "show", "--name-status", "--pretty=tformat:", ref },
 				cwd = Snacks.git.get_root(),
@@ -12,8 +12,9 @@ local function git_show(ref)
 					item.file = string.sub(item.text, 3)
 					item.commit = ref
 				end,
-			},
-		}, ctx)
+			}),
+			ctx
+		)
 	end
 
 	Snacks.picker.pick({
@@ -263,19 +264,19 @@ return {
 			end, { desc = "Grep" })
 
 			vim.keymap.set("n", "<leader>gl", function()
-				Snacks.picker.git_log({cwd = Snacks.git.get_root() })
+				Snacks.picker.git_log({ cwd = Snacks.git.get_root() })
 			end, { desc = "Git log" })
 
 			vim.keymap.set("n", "<leader>gh", function()
-				Snacks.picker.git_log_file({cwd = Snacks.git.get_root() })
+				Snacks.picker.git_log_file({ cwd = Snacks.git.get_root() })
 			end, { desc = "Git logs buffer" })
 
 			vim.keymap.set("n", "<leader>gB", function()
-				Snacks.picker.git_branches({cwd = Snacks.git.get_root() })
+				Snacks.picker.git_branches({ cwd = Snacks.git.get_root() })
 			end, { desc = "Git branches" })
 
 			vim.keymap.set("n", "<leader>gs", function()
-				Snacks.picker.git_status({cwd = Snacks.git.get_root() })
+				Snacks.picker.git_status({ cwd = Snacks.git.get_root() })
 			end, { desc = "Git status" })
 		end,
 	},
