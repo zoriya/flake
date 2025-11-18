@@ -20,7 +20,7 @@ in {
   home.packages = with pkgs;
     [
       firefox
-      zen-browser.packages.${pkgs.system}.default
+      zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
       vesktop
       freecad
       kicad

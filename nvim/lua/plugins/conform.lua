@@ -18,8 +18,9 @@ return {
 				sql = { "pg_format" },
 				cs = { "csharpier" },
 				nix = { "alejandra" },
-				["*"] = { "injected" },
-				["_"] = { "injected", lsp_format = "last" },
+				-- ["*"] = { "injected" },
+				-- ["_"] = { "injected", lsp_format = "last" },
+				["_"] = { lsp_format = "last" },
 			},
 			formatters = {
 				csharpier = function()

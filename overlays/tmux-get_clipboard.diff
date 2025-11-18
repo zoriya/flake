@@ -1,9 +1,9 @@
 # source: https://github.com/tmux/tmux/issues/4275
 diff --git a/input.c b/input.c
-index 8113f2b3..0571ad0d 100644
+index 3a61ec26..58a1b091 100644
 --- a/input.c
 +++ b/input.c
-@@ -3056,18 +3056,41 @@ input_osc_133(struct input_ctx *ictx, const char *p)
+@@ -3069,18 +3069,41 @@ input_osc_133(struct input_ctx *ictx, const char *p)
  	}
  }
  
@@ -48,7 +48,7 @@ index 8113f2b3..0571ad0d 100644
  	const char*		 allow = "cpqs01234567";
  	char			 flags[sizeof "cpqs01234567"] = "";
  	u_int			 i, j = 0;
-@@ -3092,12 +3115,7 @@ input_osc_52(struct input_ctx *ictx, const char *p)
+@@ -3105,12 +3128,7 @@ input_osc_52(struct input_ctx *ictx, const char *p)
  	log_debug("%s: %.*s %s", __func__, (int)(end - p - 1), p, flags);
  
  	if (strcmp(end, "?") == 0) {
@@ -62,7 +62,7 @@ index 8113f2b3..0571ad0d 100644
  		return;
  	}
  
-@@ -3156,6 +3174,7 @@ input_osc_104(struct input_ctx *ictx, const char *p)
+@@ -3169,6 +3187,7 @@ input_osc_104(struct input_ctx *ictx, const char *p)
  	free(copy);
  }
  
@@ -70,32 +70,31 @@ index 8113f2b3..0571ad0d 100644
  void
  input_reply_clipboard(struct bufferevent *bev, const char *buf, size_t len,
      const char *end)
-@@ -3273,27 +3292,69 @@ input_add_request(struct input_ctx *ictx, enum input_request_type type, int idx)
+@@ -3305,6 +3324,9 @@ input_add_request(struct input_ctx *ictx, enum input_request_type type, int idx)
  		xsnprintf(s, sizeof s, "\033]4;%d;?\033\\", idx);
  		tty_puts(&c->tty, s);
  		break;
 +	case INPUT_REQUEST_CLIPBOARD:
 +		tty_putcode_ss(&c->tty, TTYC_MS, "", "?");
 +		break;
+ 	case INPUT_REQUEST_QUEUE:
+ 		break;
  	}
- 
+@@ -3312,6 +3334,39 @@ input_add_request(struct input_ctx *ictx, enum input_request_type type, int idx)
  	return (0);
  }
  
 +/* Handle a palette reply. */
-+static int
++static void
 +input_request_palette_reply(struct input_request *ir, void *data)
 +{
 +	struct input_request_palette_data	*pd = data;
 +
-+	if (pd->idx != ir->idx)
-+		return (-1);
-+	input_osc_colour_reply(ir->ictx, 4, pd->idx, pd->c);
-+	return (0);
++	input_osc_colour_reply(ir->ictx, 0, 4, pd->idx, pd->c, ir->end);
 +}
 +
 +/* Handle a clipboard reply. */
-+static int
++static void
 +input_request_clipboard_reply(struct input_request *ir, void *data)
 +{
 +	struct input_ctx			*ictx = ir->ictx;
@@ -105,7 +104,7 @@ index 8113f2b3..0571ad0d 100644
 +
 +	state = options_get_number(global_options, "get-clipboard");
 +	if (state == 0 || state == 1)
-+		return (-1);
++		return;
 +	if (state == 3) {
 +		copy = xmalloc(cd->len);
 +		memcpy(copy, cd->buf, cd->len);
@@ -116,33 +115,46 @@ index 8113f2b3..0571ad0d 100644
 +		input_reply_clipboard(ictx->event, cd->buf, cd->len, "\007");
 +	else
 +		input_reply_clipboard(ictx->event, cd->buf, cd->len, "\033\\");
-+	return (0);
 +}
 +
  /* Handle a reply to a request. */
  void
  input_request_reply(struct client *c, enum input_request_type type, void *data)
- {
- 	struct input_request_list		*irl = &c->input_requests[type];
- 	struct input_request			*ir, *ir1;
--	struct input_request_palette_data	*pd = data;
+@@ -3321,11 +3376,18 @@ input_request_reply(struct client *c, enum input_request_type type, void *data)
+ 	int					 complete = 0;
  
- 	TAILQ_FOREACH_SAFE(ir, &irl->requests, centry, ir1) {
- 		log_debug("%s: req %p: client %s, pane %%%u, type %d",
- 		    __func__, ir, c->name, ir->ictx->wp->id, ir->type);
- 		switch (type) {
- 		case INPUT_REQUEST_PALETTE:
--			if (pd->idx != ir->idx)
-+			if (input_request_palette_reply(ir, data) != 0)
-+				continue;
+ 	TAILQ_FOREACH_SAFE(ir, &c->input_requests, centry, ir1) {
+-		if (ir->type == type && pd->idx == ir->idx) {
++		if (ir->type != type) {
++			input_free_request(ir);
++			continue;
++		}
++		if (type == INPUT_REQUEST_PALETTE && pd->idx == ir->idx) {
++			found = ir;
 +			break;
-+		case INPUT_REQUEST_CLIPBOARD:
-+			if (input_request_clipboard_reply(ir, data) != 0)
- 				continue;
--			input_osc_colour_reply(ir->ictx, 4, pd->idx, pd->c);
++		}
++		if (type == INPUT_REQUEST_CLIPBOARD) {
+ 			found = ir;
  			break;
  		}
- 		TAILQ_REMOVE(&ir->ictx->requests[type], ir, entry);
+-		input_free_request(ir);
+ 	}
+ 	if (found == NULL)
+ 		return;
+@@ -3335,8 +3397,11 @@ input_request_reply(struct client *c, enum input_request_type type, void *data)
+ 			break;
+ 		if (ir->type == INPUT_REQUEST_QUEUE)
+ 			input_send_reply(ir->ictx, ir->data);
+-		else if (ir == found && ir->type == INPUT_REQUEST_PALETTE) {
+-			input_osc_colour_reply(ir->ictx, 0, 4, pd->idx, pd->c, ir->end);
++		else if (ir == found) {
++			if (ir->type == INPUT_REQUEST_PALETTE)
++				input_request_palette_reply(ir, data);
++			else if (ir->type == INPUT_REQUEST_CLIPBOARD)
++				input_request_clipboard_reply(ir, data);
+ 			complete = 1;
+ 		}
+ 		input_free_request(ir);
 diff --git a/options-table.c b/options-table.c
 index 6946a085..b3ba39cd 100644
 --- a/options-table.c
@@ -177,10 +189,10 @@ index 6946a085..b3ba39cd 100644
  	  .type = OPTIONS_TABLE_STRING,
  	  .scope = OPTIONS_TABLE_SERVER,
 diff --git a/tmux.1 b/tmux.1
-index b13b514a..98528217 100644
+index a25da1fb..2ae1b724 100644
 --- a/tmux.1
 +++ b/tmux.1
-@@ -4236,6 +4236,32 @@ passed through to applications running in
+@@ -4241,6 +4241,32 @@ passed through to applications running in
  .Nm .
  Attached clients should be detached and attached again after changing this
  option.
@@ -214,28 +226,30 @@ index b13b514a..98528217 100644
  If not empty, a file to which
  .Nm
 diff --git a/tmux.h b/tmux.h
-index 7be23085..dd279fa3 100644
+index c3959d2a..3dece217 100644
 --- a/tmux.h
 +++ b/tmux.h
-@@ -1127,9 +1127,16 @@ struct window_mode_entry {
- 
+@@ -1129,6 +1129,7 @@ struct window_mode_entry {
  /* Type of request to client. */
  enum input_request_type {
--	INPUT_REQUEST_PALETTE
-+	INPUT_REQUEST_PALETTE,
-+	INPUT_REQUEST_CLIPBOARD
-+};
-+#define INPUT_REQUEST_TYPES (2)
-+
+ 	INPUT_REQUEST_PALETTE,
++	INPUT_REQUEST_CLIPBOARD,
+ 	INPUT_REQUEST_QUEUE
+ };
+ 
+@@ -1138,6 +1139,12 @@ struct input_request_palette_data {
+ 	int	c;
+ };
+ 
 +/* Clipboard request reply data. */
 +struct input_request_clipboard_data {
 +	char	*buf;
 +	size_t	 len;
- };
--#define INPUT_REQUEST_TYPES (1)
++};
++
+ /* Request sent to client on behalf of pane. */
+ TAILQ_HEAD(input_requests, input_request);
  
- /* Palette request reply data. */
- struct input_request_palette_data {
 diff --git a/tty-keys.c b/tty-keys.c
 index 77254591..7acee80f 100644
 --- a/tty-keys.c
