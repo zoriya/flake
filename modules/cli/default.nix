@@ -45,7 +45,13 @@
     tmux
     jq
     mosh
+
+    # https://github.com/NixOS/nixpkgs/issues/463295 (telepresence needs a system wide iptables)
+    iptables
+    telepresence2
   ];
+  # also needed for telepresence
+  programs.fuse.userAllowOther = true;
 
   programs.zsh.enable = true;
   environment.shells = with pkgs; [zsh];
