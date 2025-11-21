@@ -140,6 +140,7 @@ in
       bash-language-server
       sqls
       biome
+      kdePackages.qtdeclarative # qmlls
 
       # gopls also needs go /shame
       gopls

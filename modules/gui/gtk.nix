@@ -14,10 +14,7 @@
     };
   };
 
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
-  };
+  qt.enable = true;
 
   home.pointerCursor = {
     gtk.enable = true;

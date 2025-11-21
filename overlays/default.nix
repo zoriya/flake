@@ -28,12 +28,6 @@ in {
     --set TMUX ""
   '';
 
-  # it doesn't start without this, no clue why.
-  freecad = wrapProgram super.freecad ["freecad" "FreeCAD" "freecadcmd" "FreeCADCmd"] ''
-    --set QT_QPA_PLATFORM 'wayland;xcb' \
-    --set QT_QPA_PLATFORMTHEME qt5ct
-  '';
-
   # Gnome-control-center can only be launched if XDG_CURRENT_DESKTOP is GNOME.
   gnome-control-center = wrapProgram super.gnome-control-center ["gnome-control-center"] "--set XDG_CURRENT_DESKTOP GNOME";
 

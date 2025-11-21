@@ -35,6 +35,16 @@ return {
 							modes = { n = "q", i = "<C-d>" },
 						},
 					},
+					tools = {
+						opts = {
+							auto_submit_success = true,
+							auto_submit_errors = true,
+							default_tools = {
+								"files",
+							}
+						},
+
+					}
 				},
 				inline = {
 					adapter = "copilot",

@@ -39,7 +39,7 @@
 in {
   imports = [
     ./rofi
-    ./ags
+    ./quickshell
     ./fcitx5.nix
     ./hyprlock.nix
   ];
