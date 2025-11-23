@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  noctalia,
   ...
 }: let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
@@ -39,9 +40,9 @@
 in {
   imports = [
     ./rofi
-    ./quickshell
     ./fcitx5.nix
     ./hyprlock.nix
+    noctalia.homeModules.default
   ];
   home.packages = [
     wallpaper
@@ -87,6 +88,129 @@ in {
     # gsettings set org.gnome.desktop.wm.preferences button-layout ""
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "";
+    };
+  };
+
+  programs.noctalia-shell = {
+    enable = true;
+    systemd.enable = true;
+    settings = {
+      bar = {
+        capsuleOpacity = 0.5;
+        showCapsule = false;
+        outerCorners = false;
+        widgets = {
+          left = [
+            {
+              id = "TaskbarGrouped";
+              hideUnoccupied = true;
+              labelMode = "none";
+            }
+          ];
+          center = [
+            {
+              id = "NotificationHistory";
+            }
+          ];
+          right = [
+            {
+              id = "MediaMini";
+              maxWidth = 250;
+              showArtistFirst = false;
+            }
+            {
+              id = "Spacer";
+            }
+            {
+              id = "Tray";
+            }
+            {
+              id = "Battery";
+              displayMode = "alwaysShow";
+              warningThreshold = 30;
+            }
+            {
+              id = "Volume";
+            }
+            {
+              id = "Bluetooth";
+            }
+            {
+              id = "WiFi";
+            }
+            {
+              id = "Spacer";
+            }
+            {
+              id = "Clock";
+              formatHorizontal = "HH:mm\\nyyyy-MM-dd";
+            }
+          ];
+        };
+      };
+      controlCenter = {
+        position = "top_center";
+      };
+      notifications = {
+        enabled = true;
+        location = "bar";
+        lowUrgencyDuration = 3;
+        normalUrgencyDuration = 3;
+        criticalUrgencyDuration = 3;
+      };
+      osd = {
+        enabled = true;
+        location = "bottom";
+      };
+      sessionMenu = {
+        enableCountdown = true;
+        position = "top_right";
+        powerOptions = [
+          {
+            action = "lock";
+            countdownEnabled = false;
+            enabled = true;
+          }
+          {
+            action = "suspend";
+            countdownEnabled = false;
+            enabled = true;
+          }
+          {
+            action = "hibernate";
+            countdownEnabled = true;
+            enabled = true;
+          }
+          {
+            action = "reboot";
+            countdownEnabled = true;
+            enabled = true;
+          }
+          {
+            action = "logout";
+            countdownEnabled = false;
+            enabled = true;
+          }
+          {
+            action = "shutdown";
+            countdownEnabled = true;
+            enabled = true;
+          }
+        ];
+        showHeader = true;
+      };
+      settingsVersion = 23;
+      setupCompleted = true;
+      general = {
+        lockOnSuspend = false;
+        showScreenCorners = false;
+      };
+      colorSchemes = {
+        predefinedScheme = "Catppuccin";
+      };
+      wallpaper.enabled = false;
+      dock.enabled = false;
+      nightLight.enabled = false;
     };
   };
 }

@@ -28,6 +28,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    noctalia = {
+      url = "github:zoriya/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # use tmux's master for mode 2031
     tmux = {
       url = "github:tmux/tmux";

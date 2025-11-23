@@ -236,6 +236,26 @@
         "type": "indirect"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1763904998,
+        "narHash": "sha256-MMJtTkftqGLSShrPtObN/ZB9eveq6JQDzrdXvQ8UwGY=",
+        "owner": "zoriya",
+        "repo": "noctalia-shell",
+        "rev": "8975e4f979bf7ef2c7a62446761546899c336dd8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zoriya",
+        "repo": "noctalia-shell",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
@@ -247,6 +267,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
+        "noctalia": "noctalia",
         "tmux": "tmux",
         "zen-browser": "zen-browser"
       }
