@@ -103,7 +103,6 @@ in {
           left = [
             {
               id = "TaskbarGrouped";
-              hideUnoccupied = true;
               labelMode = "none";
             }
           ];
@@ -151,6 +150,7 @@ in {
       controlCenter = {
         position = "top_center";
       };
+      audio.visualizerType = "none";
       notifications = {
         enabled = true;
         location = "bar";
@@ -163,42 +163,36 @@ in {
         location = "bottom";
       };
       sessionMenu = {
-        enableCountdown = true;
-        position = "top_right";
+        enableCountdown = false;
         powerOptions = [
           {
             action = "lock";
-            countdownEnabled = false;
             enabled = true;
           }
           {
             action = "suspend";
-            countdownEnabled = false;
             enabled = true;
           }
           {
             action = "hibernate";
-            countdownEnabled = true;
-            enabled = true;
+            enabled = false;
           }
           {
             action = "reboot";
-            countdownEnabled = true;
             enabled = true;
           }
           {
             action = "logout";
-            countdownEnabled = false;
-            enabled = true;
+            enabled = false;
           }
           {
             action = "shutdown";
-            countdownEnabled = true;
             enabled = true;
           }
         ];
         showHeader = true;
       };
+      screenRecorder.directory = "~/stuff";
       settingsVersion = 23;
       setupCompleted = true;
       general = {

@@ -25,7 +25,6 @@ return {
 			strategies = {
 				chat = {
 					adapter = "copilot",
-					model = "claude-3-7-sonnet",
 					start_in_insert_mode = true,
 					keymaps = {
 						send = {
@@ -39,16 +38,12 @@ return {
 						opts = {
 							auto_submit_success = true,
 							auto_submit_errors = true,
-							default_tools = {
-								"files",
-							}
 						},
 
 					}
 				},
 				inline = {
 					adapter = "copilot",
-					model = "claude-3-7-sonnet",
 				},
 			},
 		},
