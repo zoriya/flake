@@ -130,12 +130,15 @@ in {
             }
             {
               id = "Volume";
+              displayMode = "alwaysHide";
             }
             {
               id = "Bluetooth";
+              displayMode = "alwaysHide";
             }
             {
               id = "WiFi";
+              displayMode = "alwaysHide";
             }
             {
               id = "Spacer";
