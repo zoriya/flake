@@ -18,9 +18,6 @@
 in {
   tmux = super.tmux.overrideAttrs {
     src = tmux;
-    patches = [
-      ./tmux-get_clipboard.diff
-    ];
   };
 
   # they try to use passthrough if they detect tmux. we don't want that.

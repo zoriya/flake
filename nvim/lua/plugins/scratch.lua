@@ -6,7 +6,13 @@ local function scratch()
 		if ft == nil then
 			return
 		end
-		local buf = vim.api.nvim_create_buf(false, true)
+
+		if vim.loop.fs_stat("/tmp/scratch") == nil then
+			vim.loop.fs_mkdir("/tmp/scratch", 448) -- 0o700
+		end
+
+		local buf = vim.api.nvim_create_buf(false, false)
+		vim.api.nvim_buf_set_name(buf, "/tmp/scratch/" .. tostring(os.time()) .. "." .. ft)
 		vim.api.nvim_set_option_value("filetype", ft, { buf = buf })
 		vim.api.nvim_set_current_buf(buf)
 	end)

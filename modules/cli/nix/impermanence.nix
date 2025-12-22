@@ -23,14 +23,8 @@
       "/var/lib/flatpak"
       "/var/lib/tcc"
       "/var/lib/flood"
-      "/var/lib/transmission"
-      "/var/lib/gitea"
       "/var/lib/acme"
-      "/var/lib/loki"
-      "/var/lib/mimir"
-      "/var/lib/tempo"
       "/etc/NetworkManager/system-connections"
-      "/etc/tailord/"
     ];
     files = [
       "/etc/machine-id"

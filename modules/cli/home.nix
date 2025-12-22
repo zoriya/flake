@@ -1,4 +1,8 @@
 {
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./zsh
     ./tools/git.nix
@@ -23,6 +27,36 @@
   dconf.settings = {
     "org/gnome/shell/weather" = {
       automatic-location = true;
+    };
+  };
+
+  systemd.user.services.download-clears = let
+    script = pkgs.writeShellScriptBin "download-clears" ''
+      find ~/downloads -mtime +30 -delete
+    '';
+  in {
+    Unit = {
+      Description = "Clean up files older than 30 days in Downloads";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = lib.getExe script;
+    };
+    Install = {
+      WantedBy = ["default.target"];
+    };
+  };
+
+  systemd.user.timers.download-clears = {
+    Unit = {
+      Description = "Clear old downloads";
+    };
+    Timer = {
+      OnCalendar = "daily";
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = ["timers.target"];
     };
   };
 
