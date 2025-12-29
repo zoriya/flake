@@ -22,7 +22,7 @@ return {
 					},
 				},
 			},
-			strategies = {
+			interactions = {
 				chat = {
 					adapter = "copilot",
 					start_in_insert_mode = true,

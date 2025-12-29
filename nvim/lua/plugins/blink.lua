@@ -47,7 +47,7 @@ return {
 						return { "lsp", "path", "buffer" }
 					end
 
-					return { "lsp" }
+					return { "lsp", "snippets" }
 				end,
 				per_filetype = {
 					codecompanion = { "codecompanion" },
