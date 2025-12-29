@@ -12,8 +12,13 @@
         key = "~/.ssh/id_rsa.pub";
         allowed-signers = "~/.ssh/allowed_signers";
       };
-      git = {
-        auto-local-bookmark = true;
+      remotes = {
+        origin = {
+          auto-track-bookmarks = "glob:*";
+        };
+        upstream = {
+          auto-track-bookmarks = "exact:master | exact:main";
+        };
       };
       fsmonitor = {
         backend = "watchman";

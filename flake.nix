@@ -112,8 +112,10 @@
         ({pkgs, ...}: let
           dotnet = with pkgs.dotnetCorePackages;
             combinePackages [
+              sdk_10_0
               sdk_9_0
               sdk_8_0
+              aspnetcore_10_0
               aspnetcore_9_0
               aspnetcore_8_0
             ];
@@ -133,9 +135,12 @@
             sqlcmd
             go
           ];
-          home.sessionVariables = {
+          home.sessionVariables = rec {
             DOTNET_ROOT = "${dotnet}/share/dotnet";
-            DOTNET_HOST_ROOT = "${dotnet}/share/dotnet";
+            DOTNET_ROOT_X64 = DOTNET_ROOT;
+            DOTNET_ROOT_ARM64 = DOTNET_ROOT;
+            DOTNET_HOST_ROOT = DOTNET_ROOT;
+            DOTNET_MULTILEVEL_LOOKUP=0;
           };
         })
       ];
