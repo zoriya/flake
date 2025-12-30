@@ -44,8 +44,6 @@ NEWLINE=$'\n'
 
 WORKDIR='%B%F{blue}%~%b%f'
 RO='%F{red}$([ -w . ] || echo ':ro")%f"
-# from gitstatusd, sourced before this prompt script
-GIT='${GITSTATUS_PROMPT:+ ($GITSTATUS_PROMPT)}'
 KUBE='%F{cyan}$KCTX${KNS:+/$KNS}%f'
 PROMPT_SHLVL='%(?.%F{green}.%F{red})$(printf "❯%.0s" {1..$SHLVL})%f'
 
@@ -53,5 +51,5 @@ EXEC_TIME=""
 EXIT_CODE='%(?.. %F{red}x${(j[|])pipestatus}%f)'
 JOBS='%F{cyan}%(1j. &%j.)%f'
 
-export PROMPT="${FILL}${NEWLINE}${WORKDIR}$RO$GIT $KUBE $PROMPT_SHLVL "
+export PROMPT="${FILL}${NEWLINE}${WORKDIR}$RO $KUBE $PROMPT_SHLVL "
 export RPROMPT="\${EXEC_TIME}${EXIT_CODE}${JOBS}"

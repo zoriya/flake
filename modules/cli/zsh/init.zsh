@@ -48,7 +48,7 @@ nixify() {
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
   packages = with pkgs; [
-    
+
   ];
 }
 EOF
@@ -85,7 +85,10 @@ touchp() {
 }
 
 s() {
-	git status 2>/dev/null
+	jj st 2>/dev/null
+	if [[ $? -ne 0 ]]; then
+		git status 2>/dev/null
+	fi
 	if [[ $? -ne 0 ]]; then
 		gfold
 	fi

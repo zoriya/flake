@@ -74,6 +74,7 @@ in
           harpoon2
 
           gitsigns-nvim
+          # jj-nvim
           vim-fugitive
           vim-rhubarb
           git-conflict-nvim

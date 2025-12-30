@@ -45,6 +45,19 @@
       gcpf = "gaa && gcamn && gpf";
       gcpfn = "gcamn && gpf";
 
+      ## jj
+      js = "jj st";
+      jn = "jj new";
+      jnm = "jj new 'trunk()'";
+      jc = "jj commit";
+      jcm = "jj commit -m";
+      je = "jj edit";
+      jb = "jj bookmark";
+      jp = "jj git push";
+      jf = "jj git fetch";
+      jl = "jj log";
+      jla = "jj log -r 'all()'";
+
       # k8s
       k = "kubectl";
       kubectl = "kubecolor";
@@ -201,7 +214,6 @@
             # disable space between right prompt and end of line
             ZLE_RPROMPT_INDENT=0
           '')
-        (lib.mkOrder 950 "source ${pkgs.gitstatus}/share/gitstatus/gitstatus.prompt.zsh")
         (lib.mkOrder 951 (builtins.readFile ./prompt.zsh))
         (lib.mkOrder 1000 (builtins.readFile ./init.zsh))
         (lib.mkOrder 1400 ''
