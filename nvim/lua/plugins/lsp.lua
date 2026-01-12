@@ -17,6 +17,7 @@ vim.lsp.enable({
 	"bashls",
 	"jsonls",
 	"biome",
+	"tailwindcss",
 	"sqls",
 	"qmlls"
 	-- "roslyn_ls", we use roslyn.nvim plugin instead.

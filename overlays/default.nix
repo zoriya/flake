@@ -40,6 +40,6 @@ in {
   #   };
   discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];
-  youtube-music = enableWayland super.youtube-music ["youtube-music"];
+  pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
   vscode = enableWayland super.vscode ["code"];
 }

@@ -28,7 +28,7 @@ in {
       zathura
       libreoffice
       qbittorrent
-      youtube-music
+      pear-desktop
       wl-clipboard
       wlr-randr
       alsa-utils

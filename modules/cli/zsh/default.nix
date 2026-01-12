@@ -49,7 +49,7 @@
       j = "jj";
       js = "jj st";
       jn = "jj new";
-      jnm = "jj new 'trunk()'";
+      jnt = "jj new 'trunk()'";
       jc = "jj commit";
       jcm = "jj commit -m";
       je = "jj edit";
@@ -58,9 +58,13 @@
       jf = "jj git fetch";
       jl = "jj log";
       jla = "jj log -r 'all()'";
+      jd = "jj diff";
       jcl = "jj git clone --colocate";
       jrb = "jj rebase";
       jrbt = "jj rebase -o 'trunk()'";
+      ja = "jj abandon";
+      jsq = "jj squash";
+      jsqi = "jj squash -i";
 
       # k8s
       k = "kubectl";

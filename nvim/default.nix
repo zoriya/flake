@@ -58,6 +58,8 @@ in
           catppuccin-nvim
 
           nvim-treesitter.withAllGrammars
+          nvim-treesitter-textobjects
+          vim-illuminate
           nvim-lspconfig
           (blink-cmp.overrideAttrs {
             # clashes with oil
@@ -74,7 +76,7 @@ in
           harpoon2
 
           gitsigns-nvim
-          # jj-nvim
+          jj-nvim
           vim-fugitive
           vim-rhubarb
           git-conflict-nvim
@@ -112,10 +114,7 @@ in
           #   postPatch = "rm doc/copilot.txt";
           # })
         ];
-        opt = [
-          vim-illuminate
-          nvim-treesitter-textobjects
-        ];
+        opt = [ ];
       };
 
     extraPackages = with pkgs; [
@@ -141,6 +140,7 @@ in
       bash-language-server
       sqls
       biome
+      tailwindcss-language-server
       kdePackages.qtdeclarative # qmlls
 
       # gopls also needs go /shame
