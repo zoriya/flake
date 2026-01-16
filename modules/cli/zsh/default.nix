@@ -46,6 +46,7 @@
       gcpfn = "gcamn && gpf";
 
       ## jj
+      j = "jj";
       js = "jj st";
       jn = "jj new";
       jnm = "jj new 'trunk()'";
@@ -57,6 +58,9 @@
       jf = "jj git fetch";
       jl = "jj log";
       jla = "jj log -r 'all()'";
+      jcl = "jj git clone --colocate";
+      jrb = "jj rebase";
+      jrbt = "jj rebase -o 'trunk()'";
 
       # k8s
       k = "kubectl";
