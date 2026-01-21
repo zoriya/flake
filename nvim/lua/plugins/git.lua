@@ -83,4 +83,40 @@ return {
 			require("git-conflict").setup(plug.opts)
 		end
 	},
+
+	{
+		"jj",
+		event = "DeferredUIEnter",
+		opts = {},
+		after = function(plug)
+			require("jj").setup(plug.opt)
+
+			local cmd = require("jj.cmd")
+			vim.keymap.set("n", "<leader>jd", cmd.describe, { desc = "JJ describe" })
+			vim.keymap.set("n", "<leader>jl", cmd.log, { desc = "JJ log" })
+			vim.keymap.set("n", "<leader>jL", function()
+				cmd.log({ revisions = "'all()'" })
+			end, { desc = "JJ log all" })
+			vim.keymap.set("n", "<leader>je", cmd.edit, { desc = "JJ edit" })
+			vim.keymap.set("n", "<leader>jn", cmd.new, { desc = "JJ new" })
+			vim.keymap.set("n", "<leader>jsq", cmd.squash, { desc = "JJ squash" })
+			vim.keymap.set("n", "<leader>ju", cmd.undo, { desc = "JJ undo" })
+			vim.keymap.set("n", "<leader>jy", cmd.redo, { desc = "JJ redo" })
+			vim.keymap.set("n", "<leader>jr", cmd.rebase, { desc = "JJ rebase" })
+			vim.keymap.set("n", "<leader>jbc", cmd.bookmark_create, { desc = "JJ bookmark create" })
+			vim.keymap.set("n", "<leader>jbd", cmd.bookmark_delete, { desc = "JJ bookmark delete" })
+			vim.keymap.set("n", "<leader>jbm", cmd.bookmark_move, { desc = "JJ bookmark move" })
+			vim.keymap.set("n", "<leader>ja", cmd.abandon, { desc = "JJ abandon" })
+			vim.keymap.set("n", "<leader>jf", cmd.fetch, { desc = "JJ fetch" })
+			vim.keymap.set("n", "<leader>jp", cmd.push, { desc = "JJ push" })
+			vim.keymap.set("n", "<leader>jpr", cmd.open_pr, { desc = "JJ PR" })
+			vim.keymap.set("n", "<leader>jpl", function()
+				cmd.open_pr({ list_bookmarks = true })
+			end, { desc = "JJ PR list" })
+			vim.keymap.set("n", "<leader>jt", function()
+				cmd.j("tug")
+				cmd.log()
+			end, { desc = "JJ tug" })
+		end
+	},
 }

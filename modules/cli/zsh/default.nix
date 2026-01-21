@@ -65,6 +65,8 @@
       ja = "jj abandon";
       jsq = "jj squash";
       jsqi = "jj squash -i";
+      jsp = "jj split";
+      jspi = "jj split -i";
 
       # k8s
       k = "kubectl";
