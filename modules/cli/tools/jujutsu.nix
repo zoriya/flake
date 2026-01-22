@@ -24,6 +24,7 @@
         };
       };
       aliases = {
+        init = ["git" "init" "--colocate"];
         tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
       };
       revset-aliases = {

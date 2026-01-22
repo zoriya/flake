@@ -93,6 +93,7 @@ return {
 
 			local cmd = require("jj.cmd")
 			vim.keymap.set("n", "<leader>jd", cmd.describe, { desc = "JJ describe" })
+			vim.keymap.set("n", "<leader>jc", cmd.commit, { desc = "JJ commit" })
 			vim.keymap.set("n", "<leader>jl", cmd.log, { desc = "JJ log" })
 			vim.keymap.set("n", "<leader>jL", function()
 				cmd.log({ revisions = "'all()'" })
