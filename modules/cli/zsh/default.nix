@@ -51,6 +51,7 @@
       jn = "jj new";
       jnt = "jj new 'trunk()'";
       jc = "jj commit";
+      jd = "jj desc";
       jcm = "jj commit -m";
       je = "jj edit";
       jb = "jj bookmark";
@@ -58,7 +59,7 @@
       jf = "jj git fetch";
       jl = "jj log";
       jla = "jj log -r 'all()'";
-      jd = "jj diff";
+      jdf = "jj diff";
       jcl = "jj git clone --colocate";
       jrb = "jj rebase";
       jrbt = "jj rebase -o 'trunk()'";

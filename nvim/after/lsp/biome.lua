@@ -8,6 +8,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 	end,
 })
 
+---@type vim.lsp.Config
 return {
 	-- Disable lunching from node_modules (no nix binary)
 	cmd = { "biome", "lsp-proxy" },
