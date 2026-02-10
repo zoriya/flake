@@ -108,11 +108,7 @@ in
           nvim-navic
           virt-column-nvim
 
-          codecompanion-nvim
-          # enable this just to signin (used by the chat plugin above)
-          # (copilot-vim.overrideAttrs {
-          #   postPatch = "rm doc/copilot.txt";
-          # })
+          opencode-nvim
         ];
         opt = [ ];
       };

@@ -10,6 +10,18 @@
     ./tools/tmux.nix
   ];
 
+  programs.opencode = {
+    enable = true;
+    settings = {
+      keybinds = {
+        variant_cycle = "ctrl+n";
+        input_clear = "ctrl+u";
+        session_interrupt = "ctrl+d";
+        app_exit = "none";
+      };
+    };
+  };
+
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
       android_sdk.accept_license = true;

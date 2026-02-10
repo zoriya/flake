@@ -68,6 +68,8 @@ vim.keymap.set("t", "<esc>", "<C-\\><C-N>", { desc = "Normal mode" })
 -- Why is this not the default?
 vim.keymap.set("c", "<c-a>", "<home>", { desc = "Begining" })
 
+vim.keymap.set("i", "<a-d>", "<c-o>de")
+
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
