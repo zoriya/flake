@@ -71,6 +71,10 @@
         # Don't reinstall plugins on reboot
         ".local/share/nvim"
         ".local/state/nvim"
+        # opencode
+        ".config/opencode"
+        ".local/share/opencode"
+        ".local/stateshare/opencode"
         # Gnome accounts
         ".config/goa-1.0"
         ".cache/gnome-control-center-goa-helper"

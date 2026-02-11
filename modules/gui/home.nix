@@ -33,6 +33,7 @@ in {
       wlr-randr
       alsa-utils
       playerctl
+      nautilus
     ]
     ++ lib.optionals pkgs.stdenv.isx86_64 [google-chrome];
 

@@ -17,7 +17,9 @@
         variant_cycle = "ctrl+n";
         input_clear = "ctrl+u";
         session_interrupt = "ctrl+d";
-        app_exit = "none";
+        app_exit = "<leader>q";
+        input_submit = "ctrl+s";
+        input_newline = "return";
       };
     };
   };
