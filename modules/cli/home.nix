@@ -13,6 +13,7 @@
   programs.opencode = {
     enable = true;
     settings = {
+      theme = "catppuccin";
       keybinds = {
         variant_cycle = "ctrl+n";
         input_clear = "ctrl+u";
