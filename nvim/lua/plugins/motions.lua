@@ -1,13 +1,5 @@
 return {
 	{
-		"nvim-surround",
-		event = "DeferredUIEnter",
-		after = function()
-			require("nvim-surround").setup({})
-		end,
-	},
-
-	{
 		"vim-wordmotion",
 		keys = {
 			-- This overrides the default ge & gw but i never used them.

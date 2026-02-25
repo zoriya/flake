@@ -5,8 +5,8 @@
 }: {
   environment.systemPackages = with pkgs;
     lib.optionals pkgs.stdenv.isx86_64 [
-      wineWowPackages.stable
-      wineWowPackages.waylandFull
+      wineWow64Packages.stable
+      wineWow64Packages.waylandFull
       winetricks
     ];
   programs.gamescope = {
