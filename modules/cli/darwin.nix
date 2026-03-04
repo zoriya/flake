@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./nix/nix.nix
   ];
@@ -41,7 +45,7 @@
     };
   };
 
-  launchd.user.agents.ssh-tunnel = let 
+  launchd.user.agents.ssh-tunnel = let
     ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
       while true; do
         dns-sd -m -Q fuhen.local

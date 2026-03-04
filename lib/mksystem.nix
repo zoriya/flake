@@ -69,6 +69,37 @@ in
                   ../modules/cli/home.nix
                   (../environments + "/${env}/home.nix")
                 ]
+                ++ nixpkgs.lib.optionals darwin [
+                  {
+                    # setup home/end keys + ctrl/shift with arrows/delete keys like on linux
+                    home.file."Library/KeyBindings/DefaultKeyBinding.dict".text = ''
+                      {
+                        "\UF729"  = moveToBeginningOfParagraph:; // home
+                        "\UF72B"  = moveToEndOfParagraph:; // end
+                        "$\UF729" = moveToBeginningOfParagraphAndModifySelection:; // shift-home
+                        "$\UF72B" = moveToEndOfParagraphAndModifySelection:; // shift-end
+                        "^\UF729" = moveToBeginningOfDocument:; // ctrl-home
+                        "^\UF72B" = moveToEndOfDocument:; // ctrl-end
+                        "^$\UF729" = moveToBeginningOfDocumentAndModifySelection:; // ctrl-shift-home
+                        "^$\UF72B" = moveToEndOfDocumentAndModifySelection:; // ctrl-shift-end
+
+                        "^\Uf702" = "moveWordBackward:"; // ctrl-left
+                        "^\Uf703" = "moveWordForward:"; // ctrl-right
+                        "^$\Uf702" = "moveWordBackwardAndModifySelection:"; // ctrl-shift-left
+                        "^$\Uf703" = "moveWordRightAndModifySelection:"; // ctrl-shift-right
+                        "^\U007f" = "deleteWordBackward:"; // ctrl-backspace
+                        "^\Uf728" = "deleteWordForward:"; // ctrl-delete
+
+                        "^a" = "selectAll:";
+                        "^x" = "cut:";
+                        "^c" = "copy:";
+                        "^v" = "paste:";
+                        "^z" = "undo:";
+                        "^~z" = "redo:";
+                      }
+                    '';
+                  }
+                ]
                 ++ customHome;
             };
           };
