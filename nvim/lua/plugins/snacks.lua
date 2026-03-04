@@ -98,8 +98,10 @@ return {
 							["<c-c>"] = { "close", mode = { "n", "i" } },
 							["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
 							["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-							["<c-a>"] = function() vim.cmd "normal! I" end,
-							["<c-e>"] = function() vim.cmd "startinsert!" end,
+							["<c-a>"] = { function() vim.cmd "normal! I" end, mode = { "i" } },
+							["<c-e>"] = { function() vim.cmd "startinsert!" end, mode = { "i" } },
+							["<c-/>"] = { "toggle_help_input", mode = { "i" } },
+							["<c-?>"] = { "toggle_help_input", mode = { "i" } },
 						},
 					},
 				},
@@ -250,7 +252,7 @@ return {
 		},
 		after = function(plug)
 			require("snacks").setup(plug.opts)
-
+			require(".jj-snacks")
 			Snacks.picker.git_show = git_show
 
 			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
@@ -278,6 +280,9 @@ return {
 			vim.keymap.set("n", "<leader>gs", function()
 				Snacks.picker.git_status({ cwd = Snacks.git.get_root() })
 			end, { desc = "Git status" })
+
+
+			vim.keymap.set("n", "<leader>jl", Snacks.picker.jj_log, { desc = "jj log" })
 		end,
 	},
 }
