@@ -1,17 +1,22 @@
+local function jj_cwd(opts, ctx)
+	local cwd
+	cwd = opts and opts.cwd or vim.uv.cwd() or '.'
+	cwd = svim.fs.normalize(cwd)
+	cwd = vim.fs.root(cwd or 0, '.jj')
+	if not cwd then
+		Snacks.notify.error 'Cannot find `.jj` folder. To initialize a repository use `jj git init .`'
+		ctx.picker.closed = true
+		return nil
+	end
+	return cwd
+end
+
 Snacks.picker.jj_log = function()
 	Snacks.picker.pick({
 		title = 'jj log',
 		supports_live = false,
 		finder = function(opts, ctx)
-			local cwd
-			cwd = opts and opts.cwd or vim.uv.cwd() or '.'
-			cwd = svim.fs.normalize(cwd)
-			cwd = vim.fs.root(cwd or 0, '.jj')
-			if not cwd then
-				Snacks.notify.error 'Cannot find `.jj` folder. To initialize a repository use `jj git init .`'
-				ctx.picker.closed = true
-				return {}
-			end
+			local cwd = jj_cwd(opts, ctx)
 			local template = [[
 			separate("\0",
 				self.change_id().shortest(),
@@ -104,6 +109,81 @@ Snacks.picker.jj_log = function()
 		end,
 		confirm = function(picker, item)
 			picker:close()
+		end,
+		sort = { fields = { 'score:desc', 'idx' } },
+	})
+end
+
+Snacks.picker.jj_show = function(ref)
+	local title = "jj status"
+	if ref ~= nil and ref ~= "@" then
+		title = "jj show " .. ref
+	end
+	Snacks.picker.pick({
+		title = title,
+		supports_live = false,
+		finder = function(opts, ctx)
+			local cwd = jj_cwd(opts, ctx)
+			local args = { "diff", "--summary" }
+			if ref then
+				table.insert(args, { "-r", ref })
+			end
+			return require("snacks.picker.source.proc").proc(
+				ctx:opts({
+					sep = "\n",
+					cwd = cwd,
+					cmd = "jj",
+					args = args,
+					---@param item snacks.picker.finder.Item
+					transform = function(item)
+						local status, file = item.text:match("^(.) (.+)$")
+						item.cwd = cwd
+						item.status = status
+						item.file = file
+						local base, prev, next, suffix = file:match("^(.*){(.+) => (.+)}(.*)$")
+						if base ~= nil then
+							item.file = base .. prev .. suffix
+							item.rename = base .. next .. suffix
+						end
+					end,
+				}),
+				ctx
+			)
+		end,
+		format = function(item, picker)
+			local ret = {} ---@type snacks.picker.Highlight[]
+
+			local hls = {
+				["A"] = "SnacksPickerGitStatusAdded",
+				["M"] = "SnacksPickerGitStatusModified",
+				["D"] = "SnacksPickerGitStatusDeleted",
+				["R"] = "SnacksPickerGitStatusRenamed",
+				["C"] = "SnacksPickerGitStatusCopied",
+				["?"] = "SnacksPickerGitStatusUntracked",
+			}
+			local hl = hls[item.status] or "SnacksPickerGitStatus"
+			table.insert(ret, { item.status, hl })
+			table.insert(ret, { " " })
+			if item.rename then
+				local file = item.file
+				item.file = item.rename
+				item._path = nil
+				vim.list_extend(ret, Snacks.picker.format.filename(item, picker))
+				item.file = file
+				item._path = nil
+				ret[#ret + 1] = { "-> ", "SnacksPickerDelim" }
+				ret[#ret + 1] = { " " }
+			end
+			vim.list_extend(ret, Snacks.picker.format.filename(item, picker))
+			return ret
+		end,
+		preview = function(ctx)
+			local M = require "snacks.picker.preview"
+			if ctx.item.status == "A" or ctx.item.status == "?" then
+				M.file(ctx)
+			else
+				M.cmd({ "jj", "diff", "--git", "--no-pager", ctx.item.file }, ctx, { ft = "diff" })
+			end
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
 	})

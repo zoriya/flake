@@ -245,7 +245,7 @@
 
     sessionVariables = {
       YSU_MESSAGE_FORMAT = "Alias: %alias - %command";
-      YSU_IGNORED_ALIASES = ''("g" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
+      YSU_IGNORED_ALIASES = ''("g" "j" "-" "~" "/" ".." "..." "...." "....." "md" "rd")'';
       DIRENV_LOG_FORMAT = "";
       WORDCHARS = "_-*";
     };
