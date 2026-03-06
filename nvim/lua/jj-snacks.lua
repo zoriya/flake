@@ -109,6 +109,7 @@ Snacks.picker.jj_log = function()
 		end,
 		confirm = function(picker, item)
 			picker:close()
+			Snacks.picker.jj_show(item.change_id)
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
 	})
