@@ -283,6 +283,7 @@ return {
 
 
 			vim.keymap.set("n", "<leader>jl", Snacks.picker.jj_log, { desc = "jj log" })
+			vim.keymap.set("n", "<leader>jh", Snacks.picker.jj_log_file, { desc = "jj log" })
 			vim.keymap.set("n", "<leader>js", Snacks.picker.jj_show, { desc = "jj status" })
 		end,
 	},

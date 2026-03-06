@@ -11,9 +11,13 @@ local function jj_cwd(opts, ctx)
 	return cwd
 end
 
-Snacks.picker.jj_log = function()
+Snacks.picker.jj_log = function(file)
+	local title = "jj log"
+	if file then
+		title = "jj log file"
+	end
 	Snacks.picker.pick({
-		title = 'jj log',
+		title = title,
 		supports_live = false,
 		finder = function(opts, ctx)
 			local cwd = jj_cwd(opts, ctx)
@@ -44,6 +48,9 @@ Snacks.picker.jj_log = function()
 			}
 			if opts.reversed then
 				table.insert(args, '--reversed')
+			end
+			if file then
+				table.insert(args, file)
 			end
 			vim.list_extend(args, opts.args or {})
 			return require('snacks.picker.source.proc').proc(
@@ -113,6 +120,10 @@ Snacks.picker.jj_log = function()
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
 	})
+end
+
+Snacks.picker.jj_log_file = function()
+	Snacks.picker.jj_log(vim.fn.expand("%:p"))
 end
 
 Snacks.picker.jj_show = function(ref)
