@@ -102,6 +102,7 @@ return {
 							["<c-e>"] = { function() vim.cmd "startinsert!" end, mode = { "i" } },
 							["<c-/>"] = { "toggle_help_input", mode = { "i" } },
 							["<c-?>"] = { "toggle_help_input", mode = { "i" } },
+							["<c-_>"] = { "toggle_help_input", mode = { "i" } },
 						},
 					},
 				},

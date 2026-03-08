@@ -100,7 +100,7 @@ return {
 			end, { desc = "jj log all" })
 			vim.keymap.set("n", "<leader>je", cmd.edit, { desc = "JJ edit" })
 			vim.keymap.set("n", "<leader>jn", cmd.new, { desc = "JJ new" })
-			vim.keymap.set("n", "<leader>jsq", cmd.squash, { desc = "JJ squash" })
+			vim.keymap.set("n", "<leader>jq", cmd.squash, { desc = "JJ squash" })
 			vim.keymap.set("n", "<leader>ju", cmd.undo, { desc = "JJ undo" })
 			vim.keymap.set("n", "<leader>jy", cmd.redo, { desc = "JJ redo" })
 			vim.keymap.set("n", "<leader>jr", cmd.rebase, { desc = "JJ rebase" })

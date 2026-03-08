@@ -50,7 +50,7 @@ Snacks.picker.jj_log = function(file)
 				table.insert(args, '--reversed')
 			end
 			if file then
-				table.insert(args, file)
+				table.insert(args, string.format('file:"%s"', file))
 			end
 			vim.list_extend(args, opts.args or {})
 			return require('snacks.picker.source.proc').proc(
@@ -109,16 +109,28 @@ Snacks.picker.jj_log = function(file)
 			return ret
 		end,
 		preview = function(ctx)
-			local M = require 'snacks.picker.preview'
 			-- local cmd = { 'jj', 'log', '-r=' .. ctx.item.change_id, "--git" }
 			local cmd = { "git", "show", ctx.item.commit }
-			M.cmd(cmd, ctx, { ft = "git" })
+			Snacks.picker.preview.cmd(cmd, ctx, { ft = "git" })
 		end,
 		confirm = function(picker, item)
 			picker:close()
 			Snacks.picker.jj_show(item.change_id)
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
+		win = {
+			input = {
+				keys = {
+					["<a-e>"] = { "jj_edit", mode = { "i" } },
+				},
+			},
+		},
+		actions = {
+			jj_edit = function(picker, item)
+				picker:close()
+				vim.cmd(string.format("J edit %s", item.change_id))
+			end
+		},
 	})
 end
 
@@ -190,13 +202,35 @@ Snacks.picker.jj_show = function(ref)
 			return ret
 		end,
 		preview = function(ctx)
-			local M = require "snacks.picker.preview"
 			if ctx.item.status == "A" or ctx.item.status == "?" then
-				M.file(ctx)
+				Snacks.picker.preview.file(ctx)
 			else
-				M.cmd({ "jj", "diff", "--git", "--no-pager", ctx.item.file }, ctx, { ft = "diff" })
+				Snacks.picker.preview.cmd(
+					{ "jj", "diff", "--git", "--no-pager", ctx.item.file },
+					ctx,
+					{ ft = "diff" }
+				)
 			end
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
+		win = {
+			input = {
+				keys = {
+					["<a-s>"] = { "jj_split", mode = { "i" } },
+				},
+			},
+		},
+		actions = {
+			jj_split = function(picker)
+				local items = vim.iter(picker:selected())
+					:map(function(i) return i.file end)
+					:totable()
+				picker:close()
+				vim.cmd(string.format(
+					'J split "\'%s\'"',
+					table.concat(items, "' | '")
+				))
+			end
+		},
 	})
 end
