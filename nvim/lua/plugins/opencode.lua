@@ -1,10 +1,3 @@
----@type opencode.Opts
-vim.g.opencode_opts = {
-	provider = {
-		enabled = "terminal",
-	}
-}
-
 return {
 	{
 		"opencode-nvim",
