@@ -109,6 +109,14 @@ Snacks.picker.jj_log = function(file)
 			return ret
 		end,
 		preview = function(ctx)
+			if file then
+				Snacks.picker.preview.cmd(
+					{ "jj", "diff", "--git", "--no-pager", "-r", ctx.item.change_id, string.format("file:'%s'", file) },
+					ctx,
+					{ ft = "diff" }
+				)
+				return
+			end
 			-- local cmd = { 'jj', 'log', '-r=' .. ctx.item.change_id, "--git" }
 			local cmd = { "git", "show", ctx.item.commit }
 			Snacks.picker.preview.cmd(cmd, ctx, { ft = "git" })
@@ -122,6 +130,8 @@ Snacks.picker.jj_log = function(file)
 			input = {
 				keys = {
 					["<a-e>"] = { "jj_edit", mode = { "i" } },
+					["<a-s>"] = { "jj_squash", mode = { "i" } },
+					["<a-i>"] = { "jj_squash_interactive", mode = { "i" } },
 				},
 			},
 		},
@@ -129,7 +139,15 @@ Snacks.picker.jj_log = function(file)
 			jj_edit = function(picker, item)
 				picker:close()
 				vim.cmd(string.format("J edit %s", item.change_id))
-			end
+			end,
+			jj_squash = function(picker, item)
+				picker:close()
+				vim.cmd(string.format("J squash -r %s", item.change_id))
+			end,
+			jj_squash_interactive = function(picker, item)
+				picker:close()
+				vim.cmd(string.format("J squash -i -r %s", item.change_id))
+			end,
 		},
 	})
 end
@@ -206,7 +224,7 @@ Snacks.picker.jj_show = function(ref)
 				Snacks.picker.preview.file(ctx)
 			else
 				Snacks.picker.preview.cmd(
-					{ "jj", "diff", "--git", "--no-pager", ctx.item.file },
+					{ "jj", "diff", "--git", "--no-pager", string.format("file:'%s'", ctx.item.file) },
 					ctx,
 					{ ft = "diff" }
 				)
