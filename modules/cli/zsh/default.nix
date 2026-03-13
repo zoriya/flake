@@ -255,6 +255,7 @@
   home.sessionVariables = rec {
     EDITOR = "nvim";
     VISUAL = EDITOR;
+    PAGER = "less -FRX";
   };
 
   programs.atuin = {

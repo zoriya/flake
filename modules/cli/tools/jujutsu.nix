@@ -31,9 +31,6 @@
         "closest_bookmark(to)" = "heads(::to & bookmarks())";
         "closest_pushable(to)" = ''heads(::to & mutable() & ~description(exact:" ") & (~empty() | merges()))'';
       };
-      ui = {
-        paginate = "never";
-      };
     };
   };
 }
