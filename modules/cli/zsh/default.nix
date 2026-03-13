@@ -68,6 +68,7 @@
       jsqi = "jj squash -i";
       jsp = "jj split";
       jspi = "jj split -i";
+      jt = "jj tug";
 
       # k8s
       k = "kubectl";
