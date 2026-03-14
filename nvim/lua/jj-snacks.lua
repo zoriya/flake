@@ -184,8 +184,8 @@ Snacks.picker.jj_show = function(ref)
 						item.file = file
 						local base, prev, next, suffix = file:match("^(.*){(.+) => (.+)}(.*)$")
 						if base ~= nil then
-							item.file = base .. prev .. suffix
-							item.rename = base .. next .. suffix
+							item.rename = base .. prev .. suffix
+							item.file = base .. next .. suffix
 						end
 					end,
 				}),
