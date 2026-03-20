@@ -69,6 +69,7 @@
       jsp = "jj split";
       jspi = "jj split -i";
       jt = "jj tug";
+      ju = "jj undo";
 
       # k8s
       k = "kubectl";

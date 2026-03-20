@@ -79,7 +79,7 @@ in
           jj-nvim
           vim-fugitive
           vim-rhubarb
-          git-conflict-nvim
+          unclash-nvim
 
           nvim-surround
           mini-operators

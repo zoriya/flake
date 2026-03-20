@@ -65,22 +65,20 @@ return {
 	},
 
 	{
-		"git-conflict.nvim",
+		"unclash.nvim",
 		-- load on enter to detect + highlight conflicts
-		-- lazy loading make it not work, idk why
-		-- event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		opts = {
-			default_mappings = {
-				ours = 'c<',
-				theirs = 'c>',
-				none = 'cd',
-				both = 'c=',
-				next = ']x',
-				prev = '[x',
-			},
-		},
+		opts = { },
 		after = function(plug)
-			require("git-conflict").setup(plug.opts)
+			require("unclash").setup(plug.opts)
+
+			local unclash = require("unclash")
+			vim.keymap.set("n", "]x", unclash.next_conflict, { desc = "Next Conflict" })
+			vim.keymap.set("n", "[x", unclash.prev_conflict, { desc = "Prev Conflict" })
+			vim.keymap.set("n", "co", unclash.open_merge_editor, { desc = "Open Merge Editor" })
+			vim.keymap.set("n", "c<", unclash.accept_current, { desc = "Accept Current" })
+			vim.keymap.set("n", "c>", unclash.accept_incoming, { desc = "Accept Incoming" })
+			vim.keymap.set("n", "c=", unclash.accept_both, { desc = "Accept Both" })
+			vim.keymap.set("n", "<leader>x", "<cmd>UnclashQf<cr>", { desc = "Add conflicts in qf" })
 		end
 	},
 
