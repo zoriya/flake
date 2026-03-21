@@ -158,18 +158,18 @@ end
 
 Snacks.picker.jj_show = function(ref)
 	local title = "jj status"
-	if ref ~= nil and ref ~= "@" then
-		title = "jj show " .. ref
+	if ref == nil then
+		ref = "@"
+	end
+	if ref ~= "@" then
+		title = "jj diff " .. ref
 	end
 	Snacks.picker.pick({
 		title = title,
 		supports_live = false,
 		finder = function(opts, ctx)
 			local cwd = jj_cwd(opts, ctx)
-			local args = { "diff", "--summary" }
-			if ref then
-				table.insert(args, { "-r", ref })
-			end
+			local args = { "diff", "--summary", "-r", ref }
 			return require("snacks.picker.source.proc").proc(
 				ctx:opts({
 					sep = "\n",
@@ -220,11 +220,11 @@ Snacks.picker.jj_show = function(ref)
 			return ret
 		end,
 		preview = function(ctx)
-			if ctx.item.status == "A" or ctx.item.status == "?" then
+			if ref == "@" and (ctx.item.status == "A" or ctx.item.status == "?") then
 				Snacks.picker.preview.file(ctx)
 			else
 				Snacks.picker.preview.cmd(
-					{ "jj", "diff", "--git", "--no-pager", string.format("file:'%s'", ctx.item.file) },
+					{ "jj", "diff", "--git", "--no-pager", "-r", ref, string.format("file:'%s'", ctx.item.file) },
 					ctx,
 					{ ft = "diff" }
 				)

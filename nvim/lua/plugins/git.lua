@@ -67,7 +67,7 @@ return {
 	{
 		"unclash.nvim",
 		-- load on enter to detect + highlight conflicts
-		opts = { },
+		opts = {},
 		after = function(plug)
 			require("unclash").setup(plug.opts)
 
@@ -114,7 +114,6 @@ return {
 			end, { desc = "JJ PR list" })
 			vim.keymap.set("n", "<leader>jt", function()
 				cmd.j("tug")
-				cmd.log()
 			end, { desc = "JJ tug" })
 		end
 	},
