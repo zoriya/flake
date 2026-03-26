@@ -24,8 +24,10 @@
     };
     efi.canTouchEfiVariables = true;
   };
-  # needed for geoclue, see https://github.com/NixOS/nixpkgs/issues/329522
-  services.avahi.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
   services.automatic-timezoned.enable = true;
 
   programs.dconf.enable = true;
