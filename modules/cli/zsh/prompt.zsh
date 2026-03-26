@@ -14,7 +14,7 @@ timer_precmd() {
 	fi
 	local d_s=$((EPOCHREALTIME - timer))
 	local s=$((int(rint(d_s % 60))))
-	local m=$((int(rint( (d_s / 60) % 60 ))))
+	local m=$((int((d_s / 60) % 60)))
 	local h=$((int(rint(d_s / 3600))))
 
 	if   ((h > 0)); then EXEC_TIME=${h}h${m}m
