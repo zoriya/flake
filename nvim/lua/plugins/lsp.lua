@@ -24,13 +24,7 @@ vim.lsp.enable({
 })
 
 vim.lsp.on_type_formatting.enable()
-vim.api.nvim_create_autocmd("LspAttach", {
-	desc = "Custom lsp attach",
-	group = vim.api.nvim_create_augroup("lsp-setup", { clear = true }),
-	callback = function(args)
-		vim.lsp.document_color.enable(true, args.buf, { style = "virtual" })
-	end,
-})
+vim.lsp.document_color.enable(true, nil, { style = "virtual" })
 
 return {
 	-- see https://github.com/seblyng/roslyn.nvim/pull/178
