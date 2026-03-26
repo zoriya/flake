@@ -132,6 +132,7 @@ in {
     };
     userDirs = {
       enable = true;
+      setSessionVariables = true;
       download = "${config.home.homeDirectory}/downloads";
       desktop = config.home.homeDirectory;
 

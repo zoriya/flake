@@ -1,6 +1,7 @@
 {pkgs, ...}: rec {
   gtk = {
     enable = true;
+    gtk4.theme = null;
     theme = {
       name = pkgs.adw-gtk3.pname;
       package = pkgs.adw-gtk3;

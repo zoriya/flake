@@ -6,6 +6,7 @@
     enable = true;
     ignores = [".envrc"];
     signing = {
+      format = "openpgp";
       signByDefault = true;
       key =
         if true #config.git.useRsa

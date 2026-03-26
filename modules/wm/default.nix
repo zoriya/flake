@@ -38,7 +38,7 @@
   environment.systemPackages = with pkgs; [
     gnome-bluetooth
     polkit_gnome
-    blueberry
+    blueman
   ];
 
   security.pam.services.hyprlock = {};
