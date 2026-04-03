@@ -14,7 +14,7 @@
     enable = true;
     settings = {
       theme = "catppuccin";
-      small_model = "github-copilot/gpt-5.3-codex";
+      small_model = "github-copilot/gpt-5-mini";
       keybinds = {
         variant_cycle = "ctrl+n";
         input_clear = "ctrl+u";
