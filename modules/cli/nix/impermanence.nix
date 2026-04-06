@@ -73,6 +73,7 @@
         ".local/state/nvim"
         # opencode
         ".config/opencode"
+        ".cache/opencode"
         ".local/share/opencode"
         ".local/stateshare/opencode"
         # Gnome accounts
@@ -86,6 +87,8 @@
         ".cache/.bun"
         ".cache/yarn"
         ".cache/go-build"
+        # android studio
+        ".cache/Google"
       ];
       files = [
         ".config/zsh/custom.zsh"

@@ -132,6 +132,8 @@ Snacks.picker.jj_log = function(file)
 					["<a-e>"] = { "jj_edit", mode = { "i" } },
 					["<a-s>"] = { "jj_squash", mode = { "i" } },
 					["<a-i>"] = { "jj_squash_interactive", mode = { "i" } },
+					["<c-s>"] = { "jj_gsplit", mode = { "i" } },
+					["<c-v>"] = { "jj_gvsplit", mode = { "i" } },
 				},
 			},
 		},
@@ -147,6 +149,14 @@ Snacks.picker.jj_log = function(file)
 			jj_squash_interactive = function(picker, item)
 				picker:close()
 				vim.cmd(string.format("J squash -i -r %s", item.change_id))
+			end,
+			jj_gsplit = function(picker, item)
+				picker:close()
+				vim.cmd('Gsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. file))
+			end,
+			jj_gvsplit = function(picker, item)
+				picker:close()
+				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. file))
 			end,
 		},
 	})
@@ -235,6 +245,8 @@ Snacks.picker.jj_show = function(ref)
 			input = {
 				keys = {
 					["<a-s>"] = { "jj_split", mode = { "i" } },
+					["<c-s>"] = { "jj_gsplit", mode = { "i" } },
+					["<c-v>"] = { "jj_gvsplit", mode = { "i" } },
 				},
 			},
 		},
@@ -248,7 +260,15 @@ Snacks.picker.jj_show = function(ref)
 					'J split "\'%s\'"',
 					table.concat(items, "' | '")
 				))
-			end
+			end,
+			jj_gsplit = function(picker, item)
+				picker:close()
+				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. item.file))
+			end,
+			jj_gvsplit = function(picker, item)
+				picker:close()
+				vim.cmd('Gsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. item.file))
+			end,
 		},
 	})
 end
