@@ -66,7 +66,7 @@ in
             postPatch = "rm -rf doc/";
           })
           SchemaStore-nvim
-          roslyn-nvim
+          # roslyn-nvim
           (conform-nvim.overrideAttrs {
             # clashes with oil
             postPatch = "rm doc/recipes.md";

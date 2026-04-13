@@ -13,8 +13,11 @@
   programs.opencode = {
     enable = true;
     settings = {
-      theme = "catppuccin";
       small_model = "github-copilot/gpt-5-mini";
+      autoupdate = false;
+    };
+    tui = {
+      theme = "catppuccin";
       keybinds = {
         variant_cycle = "ctrl+n";
         input_clear = "ctrl+u";

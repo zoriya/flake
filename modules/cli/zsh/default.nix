@@ -365,7 +365,7 @@
       gh
       yq
       nmap # also for ncat
-      nodePackages.http-server
+      http-server
       nvim
       rename # this is perl-rename
       gfold

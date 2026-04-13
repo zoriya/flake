@@ -148,7 +148,7 @@ vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, { desc = "Go
 vim.keymap.set("n", "grs", function() vim.lsp.buf.type_definition() end, { desc = "Go to type definition" })
 
 -- vim.keymap.set({ 'i' }, '<C-Space>', function()
--- 	vim.lsp.completion.trigger()
+-- 	vim.lsp.completion.get()
 -- end, { desc = "Trigger completion" })
 
 
