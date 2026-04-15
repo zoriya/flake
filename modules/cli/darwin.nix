@@ -21,6 +21,7 @@
     vim
     tmux
     jq
+    telepresence2
   ];
 
   programs.zsh.enable = true;

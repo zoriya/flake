@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -140,7 +140,8 @@
             DOTNET_ROOT_X64 = DOTNET_ROOT;
             DOTNET_ROOT_ARM64 = DOTNET_ROOT;
             DOTNET_HOST_ROOT = DOTNET_ROOT;
-            DOTNET_MULTILEVEL_LOOKUP=0;
+            DOTNET_MULTILEVEL_LOOKUP = 0;
+            SKIP_DEVTOOLS_UPDATE_CHECK = "true";
           };
         })
       ];
