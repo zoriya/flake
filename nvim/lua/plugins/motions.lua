@@ -1,3 +1,38 @@
+vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
+vim.keymap.set('n', 'S', '<Plug>(leap-from-window)')
+
+local function ft(key_specific_args)
+	require('leap').leap(
+		vim.tbl_deep_extend('keep', key_specific_args, {
+			inputlen = 1,
+			inclusive = true,
+			opts = {
+				-- Force autojump.
+				labels = '',
+				-- Match the modes where you don't need labels (`:h mode()`).
+				safe_labels = vim.fn.mode(1):match('o') and '' or nil,
+			},
+		})
+	)
+end
+
+local clever = require('leap.user').with_traversal_keys
+local clever_f, clever_t = clever('f', 'F'), clever('t', 'T')
+
+vim.keymap.set({ 'n', 'x', 'o' }, 'f', function()
+	ft { opts = clever_f }
+end)
+vim.keymap.set({ 'n', 'x', 'o' }, 'F', function()
+	ft { backward = true, opts = clever_f }
+end)
+vim.keymap.set({ 'n', 'x', 'o' }, 't', function()
+	ft { offset = -1, opts = clever_t }
+end)
+vim.keymap.set({ 'n', 'x', 'o' }, 'T', function()
+	ft { backward = true, offset = 1, opts = clever_t }
+end)
+
+
 return {
 	{
 		"vim-wordmotion",
@@ -13,24 +48,6 @@ return {
 			-- This never gets applied (ordering issue with wordmotion's autoload)
 			-- This is also set in `settings.lua` but kept here for documentation purposes
 			vim.g.wordmotion_nomap = true
-		end,
-	},
-
-	{
-		"leap.nvim",
-		keys = {
-			{ "s", "<Plug>(leap-forward-till)", mode = { "n", "x", }, desc = "Leap forward to" },
-			{ "S", "<Plug>(leap-backward)",     mode = { "n", "x", }, desc = "Leap backward to" },
-			{ "z", "<Plug>(leap-forward-till)", mode = "o",           desc = "Leap forward to" },
-			{ "Z", "<Plug>(leap-backward)",     mode = "o",           desc = "Leap backward to" },
-		},
-	},
-
-	{
-		"flit.nvim",
-		keys = { "f", "F", "t", "T" },
-		after = function()
-			require("flit").setup()
 		end,
 	},
 }
