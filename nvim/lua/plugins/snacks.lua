@@ -45,6 +45,7 @@ return {
 		"snacks-nvim",
 		event = "DeferredUIEnter",
 		opts = {
+			terminal = {},
 			input = {
 				enabled = true,
 			},
@@ -89,6 +90,14 @@ return {
 						blend = 0,
 					},
 				},
+				terminal = {
+					keys = {
+						term_normal = false,
+					},
+					wo = {
+						winbar = "",
+					}
+				}
 			},
 			picker = {
 				win = {
@@ -286,6 +295,10 @@ return {
 			vim.keymap.set("n", "<leader>jl", Snacks.picker.jj_log, { desc = "jj log" })
 			vim.keymap.set("n", "<leader>jh", Snacks.picker.jj_log_file, { desc = "jj log" })
 			vim.keymap.set("n", "<leader>js", Snacks.picker.jj_show, { desc = "jj status" })
+
+			vim.keymap.set("n", "<leader>ju", function()
+				Snacks.terminal.toggle("jjui")
+			end, { desc = "jj ui" })
 		end,
 	},
 }
