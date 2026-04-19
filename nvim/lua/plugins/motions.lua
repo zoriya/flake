@@ -1,5 +1,7 @@
-vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
-vim.keymap.set('n', 'S', '<Plug>(leap-from-window)')
+vim.keymap.set({ "n", "x" }, "s", "<Plug>(leap-forward-till)", { desc = "Leap forward to" })
+vim.keymap.set({ "n", "x" }, "S", "<Plug>(leap-backward)", { desc = "Leap backward to" })
+vim.keymap.set("o", "z", "<Plug>(leap-forward-till)", { desc = "Leap forward to" })
+vim.keymap.set("o", "Z", "<Plug>(leap-backward)", { desc = "Leap backward to" })
 
 local function ft(key_specific_args)
 	require('leap').leap(

@@ -192,7 +192,7 @@ Snacks.picker.jj_show = function(ref)
 						item.cwd = cwd
 						item.status = status
 						item.file = file
-						local base, prev, next, suffix = file:match("^(.*){(.+) => (.+)}(.*)$")
+						local base, prev, next, suffix = file:match("^(.*){(.*) => (.*)}(.*)$")
 						if base ~= nil then
 							item.rename = base .. prev .. suffix
 							item.file = base .. next .. suffix
@@ -263,11 +263,13 @@ Snacks.picker.jj_show = function(ref)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. item.file))
+				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
+				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				vim.cmd('Gsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. item.file))
+				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
+				vim.cmd('Gsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 		},
 	})
