@@ -264,12 +264,12 @@ Snacks.picker.jj_show = function(ref)
 			jj_gsplit = function(picker, item)
 				picker:close()
 				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
-				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
+				vim.cmd('Gsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
 				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
-				vim.cmd('Gsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
+				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 		},
 	})

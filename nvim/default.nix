@@ -28,7 +28,10 @@ in
           configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
         };
       in
-        pkgs.runCommand "catppuccin-nvim" {} ''
+        pkgs.runCommand "catppuccin-nvim" {
+          pname = "catppuccin-nvim";
+          version = pkgs.vimPlugins.catppuccin-nvim.version;
+        } ''
           mkdir -p $out
           cp -r --no-preserve=mode,ownership ${pkgs.vimPlugins.catppuccin-nvim}/* $out
           rm -rf $out/doc $out/colors/*
@@ -108,6 +111,7 @@ in
           virt-column-nvim
 
           opencode-nvim
+          nvim-unception
         ];
         opt = [ ];
       };

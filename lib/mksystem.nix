@@ -116,6 +116,8 @@ in
             extraGroups = [
               "wheel"
               "input"
+              "video"
+              "render"
               "docker"
               "audio"
               "mlocate"

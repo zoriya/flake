@@ -100,6 +100,7 @@ return {
 				}
 			},
 			picker = {
+				main = { current = true },
 				win = {
 					input = {
 						keys = {
@@ -264,6 +265,25 @@ return {
 			require("snacks").setup(plug.opts)
 			require(".jj-snacks")
 			Snacks.picker.git_show = git_show
+
+			vim.g.unception_block_while_host_edits = 1
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "UnceptionEditRequestReceived",
+				callback = function()
+					for _, terminal in ipairs(Snacks.terminal.list()) do
+						if terminal.opts.fixbuf ~= false then
+							terminal.opts.fixbuf = false
+							vim.api.nvim_create_autocmd("BufEnter", {
+								buffer = terminal.buf,
+								once = true,
+								callback = function()
+									terminal.opts.fixbuf = true
+								end,
+							})
+						end
+					end
+				end,
+			})
 
 			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
 

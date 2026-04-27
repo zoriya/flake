@@ -25,6 +25,8 @@
         app_exit = "<leader>q";
         input_submit = "ctrl+s";
         input_newline = "return";
+        input_undo = "ctrl+y";
+        input_redo = "ctrl+shift+y";
       };
     };
   };

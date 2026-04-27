@@ -3,6 +3,8 @@
     super.symlinkJoin {
       name = drv.name;
       paths = [drv];
+      meta = drv.meta or {};
+      passthru = drv.passthru or {};
       buildInputs = [super.makeWrapper];
       postBuild = super.lib.concatStrings (map (bin: ''
           wrapProgram $out/bin/${bin} \

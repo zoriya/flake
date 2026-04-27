@@ -112,6 +112,16 @@ _kgy() {
 }
 compdef _kgy kgy
 
+kubectl-top-ephemeral() {
+	(
+		echo "Namespace  Pod  Ephemeral-used"
+		for i in $(kubectl get node -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'); do
+			kubectl get --raw "/api/v1/nodes/$i/proxy/stats/summary" | jq -r '.pods[]| [ .podRef.namespace, .podRef.name, ."ephemeral-storage".usedBytes ]|@tsv'
+		done
+	) | column -t | (read -r; printf "%s\n" "$REPLY"; sort -rn -k3) | head -21
+}
+
+
 alias copyfile="osc copy"
 copypath() {
 	local file="${1:-.}"

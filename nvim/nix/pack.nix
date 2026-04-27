@@ -57,7 +57,7 @@
       ps: builtins.concatMap (f: f ps) deps;
 
     # Combined plugin
-    combinedPlugin = pkgs.vimUtils.toVimPlugin (
+    combinedPlugin = (pkgs.vimUtils.toVimPlugin (
       pkgs.buildEnv {
         name = "plugin-pack";
         paths = overriddenPlugins;
@@ -71,7 +71,9 @@
           inherit python3Dependencies;
         };
       }
-    );
+    )).overrideAttrs (prev: {
+      pname = prev.pname or "vimplugin-plugin-pack";
+    });
 
     # Combined plugin configs
     combinedConfig = builtins.concatStringsSep "\n" (
