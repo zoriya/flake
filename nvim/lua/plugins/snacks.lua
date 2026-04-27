@@ -91,6 +91,7 @@ return {
 					},
 				},
 				terminal = {
+					fixbuf = false,
 					keys = {
 						term_normal = false,
 					},
@@ -270,18 +271,43 @@ return {
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "UnceptionEditRequestReceived",
 				callback = function()
-					for _, terminal in ipairs(Snacks.terminal.list()) do
-						if terminal.opts.fixbuf ~= false then
-							terminal.opts.fixbuf = false
-							vim.api.nvim_create_autocmd("BufEnter", {
-								buffer = terminal.buf,
+					local terminal_buf = vim.api.nvim_get_current_buf()
+					local terminal_win = vim.api.nvim_get_current_win()
+					if vim.bo[terminal_buf].buftype ~= "terminal" then
+						return
+					end
+
+					vim.api.nvim_create_autocmd("BufEnter", {
+						once = true,
+						callback = function()
+							local edited_buf = vim.api.nvim_get_current_buf()
+							if edited_buf == terminal_buf then
+								return
+							end
+
+							vim.api.nvim_create_autocmd({ "BufUnload", "BufDelete", "BufWipeout" }, {
+								buffer = edited_buf,
 								once = true,
 								callback = function()
-									terminal.opts.fixbuf = true
+									vim.schedule(function()
+										if vim.fn.bufwinid(terminal_buf) ~= -1 then
+											return
+										end
+										if not vim.api.nvim_buf_is_valid(terminal_buf) then
+											return
+										end
+
+										if vim.api.nvim_win_is_valid(terminal_win) then
+											vim.api.nvim_win_set_buf(terminal_win, terminal_buf)
+										else
+											vim.cmd("split")
+											vim.api.nvim_win_set_buf(0, terminal_buf)
+										end
+									end)
 								end,
 							})
-						end
-					end
+						end,
+					})
 				end,
 			})
 
