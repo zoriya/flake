@@ -34,6 +34,15 @@
       ui = {
         conflict-marker-style = "git";
       };
+      templates = {
+        draft_commit_description = ''
+          concat(
+            builtin_draft_commit_description,
+            "\nJJ: ignore-rest\n",
+            diff.git(),
+          )
+        '';
+      };
     };
   };
   home.packages = with pkgs; [jjui];
