@@ -5,6 +5,7 @@
 }: {
   package ? pkgs.neovim,
   config,
+  extraConfig ? "",
   plugins ? {
     start = [];
     opt = [];
@@ -84,6 +85,8 @@
       }
 
       ${builtins.readFile (config + "/init.lua")}
+
+      ${extraConfig}
     '';
 in {
   nvim = pkgs.wrapNeovimUnstable nvim {

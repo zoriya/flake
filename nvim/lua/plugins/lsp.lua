@@ -21,6 +21,7 @@ vim.lsp.enable({
 	"sqls",
 	"qmlls",
 	"roslyn_ls",
+	"astro",
 })
 
 -- vim.api.nvim_create_autocmd("LspAttach", {

@@ -5,6 +5,13 @@
   ...
 }: let
   mkNvim = import ./nix/mknvim.nix {inherit pkgs lib;};
+  astro-ls-wrapped = pkgs.runCommand "astro-language-server" {
+    nativeBuildInputs = [pkgs.makeWrapper];
+  } ''
+    mkdir -p $out/bin
+    makeWrapper ${pkgs.astro-language-server}/bin/astro-ls $out/bin/astro-ls \
+      --prefix NODE_PATH : "${pkgs.typescript}/lib/node_modules"
+  '';
   # mkPlugin = src: pname:
   #   (pkgs.vimUtils.buildVimPlugin
   #     {
@@ -113,7 +120,7 @@ in
           opencode-nvim
           nvim-unception
         ];
-        opt = [ ];
+        opt = [];
       };
 
     extraPackages = with pkgs; [
@@ -140,6 +147,8 @@ in
       sqls
       biome
       tailwindcss-language-server
+      astro-ls-wrapped
+      typescript
       kdePackages.qtdeclarative # qmlls
 
       # gopls also needs go /shame
@@ -161,4 +170,16 @@ in
       usql
       mono
     ];
+
+    extraConfig =
+      #lua
+      ''
+        vim.lsp.config['astro'] = {
+          init_options = {
+            typescript = {
+              tsdk = "${pkgs.typescript}/lib/node_modules/typescript/lib",
+            },
+          },
+        }
+      '';
   }
