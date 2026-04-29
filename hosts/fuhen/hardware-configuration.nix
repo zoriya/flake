@@ -53,7 +53,7 @@
 
   swapDevices = [
     {
-      device = "/nix/persist/var/cache/swapfile";
+      device = "/nix/swapfile";
       size = 64 * 1024;
     }
   ];

@@ -36,9 +36,8 @@
   services.gnome.gnome-settings-daemon.enable = true;
 
   environment.systemPackages = with pkgs; [
-    gnome-bluetooth
+    overskride
     polkit_gnome
-    blueman
   ];
 
   security.pam.services.hyprlock = {};
