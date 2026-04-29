@@ -7,7 +7,7 @@
         email = "zoe.roux@zoriya.dev";
       };
       signing = {
-        behavior = "own";
+        behavior = "force";
         backend = "ssh";
         key = "~/.ssh/id_rsa.pub";
         allowed-signers = "~/.ssh/allowed_signers";
