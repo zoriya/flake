@@ -139,6 +139,7 @@ in
       nil
       vscode-langservers-extracted # html, jsonls
       marksman
+      mdx-language-server
       texlab
       helm-ls
       zls
@@ -177,6 +178,14 @@ in
         vim.lsp.config['astro'] = {
           init_options = {
             typescript = {
+              tsdk = "${pkgs.typescript}/lib/node_modules/typescript/lib",
+            },
+          },
+        }
+        vim.lsp.config['mdx_analyzer'] = {
+          init_options = {
+            typescript = {
+              enabled = true,
               tsdk = "${pkgs.typescript}/lib/node_modules/typescript/lib",
             },
           },

@@ -175,8 +175,10 @@ vim.filetype.add({
 	extension = {
 		-- appsettings.json.model at work
 		model = 'json',
+		mdx = "mdx",
 	},
 })
+vim.treesitter.language.register("markdown", "mdx")
 
 
 vim.cmd.colorscheme("catppuccin")

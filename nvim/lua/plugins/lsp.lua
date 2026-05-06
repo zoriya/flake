@@ -22,6 +22,7 @@ vim.lsp.enable({
 	"qmlls",
 	"roslyn_ls",
 	"astro",
+	"mdx_analyzer",
 })
 
 -- vim.api.nvim_create_autocmd("LspAttach", {

@@ -44,11 +44,12 @@ in {
     ./hyprlock.nix
     noctalia.homeModules.default
   ];
-  home.packages = [
+  home.packages = with pkgs; [
     wallpaper
     screenshot
     screenshot-freeze
     record
+    libnotify
   ];
 
   services.darkman = let

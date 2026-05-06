@@ -15,6 +15,7 @@
     settings = {
       small_model = "github-copilot/gpt-5-mini";
       autoupdate = false;
+      plugin = ["@mohak34/opencode-notifier"];
     };
     tui = {
       theme = "catppuccin";
@@ -30,6 +31,12 @@
       };
     };
   };
+
+  xdg.configFile."opencode/opencode-notifier.json".text =
+    builtins.toJSON {
+      sound = false;
+      showSessionTitle = true;
+    };
 
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
