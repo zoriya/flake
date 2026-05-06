@@ -49,7 +49,26 @@
   programs.jjui = {
     enable = true;
     settings = {
+      actions = [
+        {
+          name = "tug";
+          desc = "Tug previous bookmark";
+          lua =
+            #lua
+            ''
+              jj("bookmark", "move", "--from", "closest_bookmark(@)", "--to", context.change_id())
+              revisions.refresh({})
+            '';
+        }
+      ];
       bindings = [
+        {
+          key = "t";
+          action = "tug";
+          scope = "revisions";
+          desc = "Tug";
+        }
+        # bindings bellows are just for ctrl+c as cancel
         {
           key = ["esc" "ctrl+c"];
           action = "ui.cancel";
