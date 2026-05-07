@@ -19,6 +19,7 @@
     };
     tui = {
       theme = "catppuccin";
+      diff_style = "stacked";
       keybinds = {
         variant_cycle = "ctrl+n";
         input_clear = "ctrl+u";

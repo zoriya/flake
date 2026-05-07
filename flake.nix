@@ -132,6 +132,7 @@
             kustomize
             docker_28
             kubebuilder
+            kubeseal
             sqlcmd
             go
           ];
@@ -142,6 +143,7 @@
             DOTNET_HOST_ROOT = DOTNET_ROOT;
             DOTNET_MULTILEVEL_LOOKUP = 0;
             SKIP_DEVTOOLS_UPDATE_CHECK = "true";
+            LUCCA_KUBE_CONTEXT = "lucca";
           };
         })
       ];
