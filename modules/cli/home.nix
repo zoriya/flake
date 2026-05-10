@@ -180,6 +180,7 @@
     - NEVER ever create issues/pr/write on github.
     - When talking about issues, pr or anything give me LINKS not just #123.
     - keep functions/variables inlined, no clean-code here.
+    - If you need a tool, you can use a `nix shell` or comma (`, my-cli`). don't execute diretly from /nix/store
   '';
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
