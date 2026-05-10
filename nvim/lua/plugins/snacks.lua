@@ -267,50 +267,6 @@ return {
 			require(".jj-snacks")
 			Snacks.picker.git_show = git_show
 
-			vim.g.unception_block_while_host_edits = 1
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "UnceptionEditRequestReceived",
-				callback = function()
-					local terminal_buf = vim.api.nvim_get_current_buf()
-					local terminal_win = vim.api.nvim_get_current_win()
-					if vim.bo[terminal_buf].buftype ~= "terminal" then
-						return
-					end
-
-					vim.api.nvim_create_autocmd("BufEnter", {
-						once = true,
-						callback = function()
-							local edited_buf = vim.api.nvim_get_current_buf()
-							if edited_buf == terminal_buf then
-								return
-							end
-
-							vim.api.nvim_create_autocmd({ "BufUnload", "BufDelete", "BufWipeout" }, {
-								buffer = edited_buf,
-								once = true,
-								callback = function()
-									vim.schedule(function()
-										if vim.fn.bufwinid(terminal_buf) ~= -1 then
-											return
-										end
-										if not vim.api.nvim_buf_is_valid(terminal_buf) then
-											return
-										end
-
-										if vim.api.nvim_win_is_valid(terminal_win) then
-											vim.api.nvim_win_set_buf(terminal_win, terminal_buf)
-										else
-											vim.cmd("split")
-											vim.api.nvim_win_set_buf(0, terminal_buf)
-										end
-									end)
-								end,
-							})
-						end,
-					})
-				end,
-			})
-
 			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
 
 			vim.keymap.set("n", "<leader>f", function()
