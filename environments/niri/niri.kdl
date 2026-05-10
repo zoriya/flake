@@ -81,7 +81,7 @@ binds {
 	Mod+X repeat=false { spawn "wtype" "-k" "XF86Cut"; }
 	Mod+C repeat=false { spawn "wtype" "-k" "XF86Copy" "-s" "200ms"; }
 	Mod+V repeat=false { spawn "wtype" "-k" "XF86Paste"; }
-	Mod+Shift+V repeat=false { spawn "sh" "-c" "cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"; }
+	Mod+Shift+V repeat=false { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
 
 	Mod+Space repeat=false { toggle-overview; }
 	Mod+Q repeat=false { close-window; }
@@ -188,6 +188,39 @@ workspace "work" {
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
 }
 
+window-rule {
+	match app-id="dev.noctalia.Noctalia.Settings"
+	open-floating true
+	default-column-width { fixed 1080; }
+	default-window-height { fixed 920; }
+}
+
+layer-rule {
+	match namespace="^noctalia-backdrop"
+	place-within-backdrop true
+}
+
+window-rule {
+	background-effect {
+		blur true
+		xray false
+	}
+}
+
+layer-rule {
+	match namespace="^noctalia-(bar-main|notification|dock|panel)$"
+	background-effect {
+		xray false
+	}
+}
+
+blur {
+	passes 2
+	offset 3.0
+	noise 0.03
+	saturation 1.0
+}
+
 
 window-rule {
 	match at-startup=true
@@ -215,8 +248,7 @@ window-rule {
 	default-floating-position x=10 y=10 relative-to="bottom-right"
 }
 
-spawn-at-startup "wallpaper"
-spawn-at-startup "ags"
+spawn-at-startup "noctalia"
+spawn-at-startup "noctalia" "screen-lock"
 spawn-at-startup "kitty"
 spawn-at-startup "zen"
-spawn-at-startup "hyprlock" "--immediate"

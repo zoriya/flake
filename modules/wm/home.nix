@@ -1,19 +1,8 @@
 {
   pkgs,
   lib,
-  noctalia,
   ...
 }: let
-  wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
-    WALLPAPERS=~/wallpapers/
-
-    WP=$(find $WALLPAPERS -type f | shuf -n 1)
-    ln -fs "$WP" ~/.cache/current-wallpaper
-
-    ${pkgs.wbg}/bin/wbg "$WP" > /dev/null 2> /dev/null & disown
-    echo "$WP"
-  '';
-
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
     runtimeInputs = [pkgs.slurp pkgs.grim];
@@ -37,15 +26,14 @@
       wf-recorder -g "$(slurp -b 00000000 -s 61616140)" -f "$HOME/rec-$(date +%Y-%m-%d_%H:%M:%S).mp4"
     '';
   };
+
+  toml = pkgs.formats.toml {};
 in {
   imports = [
     ./rofi
     ./fcitx5.nix
-    ./hyprlock.nix
-    noctalia.homeModules.default
   ];
   home.packages = with pkgs; [
-    wallpaper
     screenshot
     screenshot-freeze
     record
@@ -79,136 +67,157 @@ in {
     darkModeScripts = genTheme "dark";
   };
 
-  services.cliphist.enable = true;
-
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       cursor-blink = false;
     };
-    # Disable close/resize buttons on GTK windows that really want CSD.
-    # gsettings set org.gnome.desktop.wm.preferences button-layout ""
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "";
     };
   };
 
-  programs.noctalia-shell = {
-    enable = true;
-    systemd.enable = true;
-    settings = {
-      bar = {
-        capsuleOpacity = 0.5;
-        showCapsule = false;
-        outerCorners = false;
-        widgets = {
-          left = [
-            {
-              id = "TaskbarGrouped";
-              labelMode = "none";
-            }
-          ];
-          center = [
-            {
-              id = "NotificationHistory";
-            }
-          ];
-          right = [
-            {
-              id = "MediaMini";
-              maxWidth = 250;
-              showArtistFirst = false;
-            }
-            {
-              id = "Spacer";
-            }
-            {
-              id = "Tray";
-            }
-            {
-              id = "Battery";
-              displayMode = "alwaysShow";
-              warningThreshold = 30;
-            }
-            {
-              id = "Volume";
-              displayMode = "alwaysHide";
-            }
-            {
-              id = "Bluetooth";
-              displayMode = "alwaysHide";
-            }
-            {
-              id = "WiFi";
-              displayMode = "alwaysHide";
-            }
-            {
-              id = "Spacer";
-            }
-            {
-              id = "Clock";
-              formatHorizontal = "HH:mm\\nyyyy-MM-dd";
-            }
-          ];
-        };
+  xdg.configFile."noctalia/config.toml".source = toml.generate "toml" {
+    shell = {
+      show_location = true;
+      avatar_path = "~/.face";
+      clipboard_auto_paste = "off";
+      polkit_agent = true;
+
+      panel = {
+        background_blur = true;
+        attach_control_center = true;
+        attach_wallpaper = true;
       };
-      controlCenter = {
-        position = "top_center";
+
+      screen_corners = {
+        enabled = false;
+        size = 32;
       };
-      audio.visualizerType = "none";
-      notifications = {
-        enabled = true;
-        location = "bar";
-        lowUrgencyDuration = 3;
-        normalUrgencyDuration = 3;
-        criticalUrgencyDuration = 3;
-      };
-      osd = {
-        enabled = true;
-        location = "bottom";
-      };
-      sessionMenu = {
-        enableCountdown = false;
-        powerOptions = [
-          {
-            action = "lock";
-            enabled = true;
-          }
-          {
-            action = "suspend";
-            enabled = true;
-          }
-          {
-            action = "hibernate";
-            enabled = false;
-          }
-          {
-            action = "reboot";
-            enabled = true;
-          }
-          {
-            action = "logout";
-            enabled = false;
-          }
-          {
-            action = "shutdown";
-            enabled = true;
-          }
-        ];
-        showHeader = true;
-      };
-      screenRecorder.directory = "~/stuff";
-      settingsVersion = 23;
-      setupCompleted = true;
-      general = {
-        lockOnSuspend = false;
-        showScreenCorners = false;
-      };
-      colorSchemes = {
-        predefinedScheme = "Catppuccin";
-      };
-      wallpaper.enabled = false;
-      dock.enabled = false;
-      nightLight.enabled = false;
     };
+
+    osd.position = "bottom_center";
+
+    notification = {
+      enable_daemon = true;
+      position = "top_right";
+      layer = "top";
+      background_opacity = 0.97;
+    };
+
+    bar.order = ["main"];
+
+    bar.main = {
+      position = "top";
+      enabled = true;
+      auto_hide = false;
+      reserve_space = true;
+      thickness = 34;
+      background_opacity = 1.0;
+      shadow = true;
+      radius = 0;
+      margin_ends = 0;
+      margin_edge = 0;
+      padding = 14;
+      widget_spacing = 6;
+      capsule = true;
+      capsule_opacity = 0.5;
+      attach_panels = true;
+
+      start = ["taskbar"];
+      center = ["notifications" "clipboard"];
+      end = ["media" "spacer" "battery" "volume" "bluetooth" "network" "spacer" "clock"];
+    };
+
+    widget.taskbar = {
+      type = "taskbar";
+      display = "none";
+      group_by_workspace = true;
+    };
+
+    widget.notifications = {
+      type = "notifications";
+      hide_when_no_unread = true;
+    };
+
+    widget.media = {
+      type = "media";
+      min_length = 80;
+      max_length = 250;
+      art_size = 16;
+      title_scroll = "none";
+    };
+
+    widget.spacer = {
+      type = "spacer";
+      length = 8;
+    };
+
+    widget.tray = {
+      type = "tray";
+      drawer = false;
+    };
+
+    widget.battery = {
+      type = "battery";
+      device = "auto";
+    };
+
+    widget.volume = {
+      type = "volume";
+      device = "output";
+      show_label = true;
+    };
+
+    widget.bluetooth = {
+      type = "bluetooth";
+      show_label = false;
+    };
+
+    widget.network = {
+      type = "network";
+      show_label = false;
+    };
+
+    widget.clock = {
+      type = "clock";
+      format = "{:%H:%M}\n{:%Y-%m-%d}";
+    };
+
+    theme = {
+      mode = "auto";
+      source = "builtin";
+      builtin = "Catppuccin";
+    };
+
+    backdrop = {
+      enabled = true;
+      blur_intensity = 0.5;
+      tint_intensity = 0.3;
+    };
+
+    nightlight.enabled = false;
+
+    audio = {
+      enable_overdrive = true;
+      enable_sounds = false;
+    };
+
+    idle.behavior.lock = {
+      timeout = 660;
+      command = "noctalia:screen-lock";
+      enabled = true;
+    };
+
+    idle.behavior.screen-off = {
+      timeout = 600;
+      command = "noctalia:dpms-off";
+      resume_command = "noctalia:dpms-on";
+    };
+
+    desktop_widgets.enabled = false;
+
+    wallpaper.directory = "~/wallpapers";
+
+    weather.auto_locate = true;
   };
 }

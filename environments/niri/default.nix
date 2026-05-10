@@ -1,6 +1,7 @@
 {
   pkgs,
   user,
+  inputs,
   ...
 }: {
   imports = [
@@ -9,6 +10,13 @@
   ];
 
   programs.niri.enable = true;
+
+  services.power-profiles-daemon.enable = true;
+
+  environment.systemPackages = [
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
   services.greetd = {
     enable = true;
     settings = {
