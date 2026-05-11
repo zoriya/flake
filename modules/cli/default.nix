@@ -28,6 +28,7 @@
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
+    denyInterfaces = [ "docker0" "veth*" ];
     publish = {
       enable = true;
       addresses = true;

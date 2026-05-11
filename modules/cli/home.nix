@@ -26,17 +26,17 @@
         app_exit = "<leader>q";
         input_submit = "ctrl+s";
         input_newline = "return";
-        input_undo = "ctrl+y";
-        input_redo = "ctrl+shift+y";
+        input_undo = "ctrl+y,ctrl+z";
+        input_redo = "ctrl+shift+y,ctrl+shift+z";
+        terminal_suspend = "none";
       };
     };
   };
 
-  xdg.configFile."opencode/opencode-notifier.json".text =
-    builtins.toJSON {
-      sound = false;
-      showSessionTitle = true;
-    };
+  xdg.configFile."opencode/opencode-notifier.json".text = builtins.toJSON {
+    sound = false;
+    showSessionTitle = true;
+  };
 
   xdg.configFile."nixpkgs/config.nix".text = ''    {
       allowUnfree = true;
