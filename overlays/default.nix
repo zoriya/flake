@@ -21,6 +21,7 @@ in {
   tmux = super.tmux.overrideAttrs {
     src = tmux;
     version = "next-3.7";
+    patches = [];
   };
 
   # they try to use passthrough if they detect tmux. we don't want that.

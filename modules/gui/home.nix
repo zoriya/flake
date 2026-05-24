@@ -8,7 +8,6 @@
   # When editing this, don't forget to edit home.sessionVariables.
   browser = "zen.desktop";
   editor = "nvim.desktop";
-  pdf = "org.pwmt.zathura.desktop";
   player = "mpv.desktop";
 in {
   imports = [
@@ -25,7 +24,6 @@ in {
       freecad
       kicad
       xdg-utils
-      zathura
       libreoffice
       qbittorrent
       pear-desktop
@@ -64,10 +62,10 @@ in {
         "x-scheme-handler/about" = browser;
         "x-scheme-handler/unknown" = browser;
         "x-scheme-handler/magnet" = browser;
-        "application/oxps" = pdf;
-        "application/pdf" = pdf;
-        "application/epub+zip" = pdf;
-        "application/x-fictionbook+xml" = pdf;
+        "application/oxps" = browser;
+        "application/pdf" = browser;
+        "application/epub+zip" = browser;
+        "application/x-fictionbook+xml" = browser;
         "text/tcl" = editor;
         "text/html" = editor;
         "text/x-makefile" = editor;

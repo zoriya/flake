@@ -34,6 +34,10 @@
   services.system-config-printer.enable = true;
   services.gnome.glib-networking.enable = true;
   services.gnome.gnome-settings-daemon.enable = true;
+  # those are needed for nautilus to work (without it, at least 30s of loading in each dir)
+  services.gnome.localsearch.enable = true;
+  services.gnome.tinysparql.enable = true;
+  services.gvfs.enable = true;
 
   environment.systemPackages = with pkgs; [
     overskride
