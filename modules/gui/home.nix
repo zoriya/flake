@@ -136,7 +136,8 @@ in {
 
       documents = "${config.home.homeDirectory}/stuff";
       music = "${config.home.homeDirectory}/stuff";
-      templates = "${config.home.homeDirectory}/stuff";
+      # if this is specified, nautilus is SLOW AF. idk why, don't care to debug
+      # templates = "${config.home.homeDirectory}/stuff";
       videos = "${config.home.homeDirectory}/stuff";
       pictures = "${config.home.homeDirectory}/stuff";
       publicShare = "${config.home.homeDirectory}/stuff";
