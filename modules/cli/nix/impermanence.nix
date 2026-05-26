@@ -75,7 +75,7 @@
         ".config/opencode"
         ".cache/opencode"
         ".local/share/opencode"
-        ".local/stateshare/opencode"
+        ".local/state/opencode"
         # Gnome accounts
         ".config/goa-1.0"
         ".cache/gnome-control-center-goa-helper"
