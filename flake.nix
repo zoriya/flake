@@ -37,6 +37,11 @@
       url = "github:tmux/tmux";
       flake = false;
     };
+    # use kitty's master for mode 2031 fix (pinned to commit with fix, before go vendor breakage)
+    kitty = {
+      url = "github:kovidgoyal/kitty/2d9b10413490c6d8e9e029ddeda7b7b379538480";
+      flake = false;
+    };
   };
 
   outputs = {
