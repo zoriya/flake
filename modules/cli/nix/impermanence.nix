@@ -71,6 +71,8 @@
         # Don't reinstall plugins on reboot
         ".local/share/nvim"
         ".local/state/nvim"
+        # claude-code
+        ".claude"
         # opencode
         ".config/opencode"
         ".cache/opencode"

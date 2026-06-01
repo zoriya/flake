@@ -36,15 +36,15 @@
     info.enable = true;
   };
 
-  launchd.user.agents.caffeinate = {
-    command = "${pkgs.darwin.PowerManagement}/bin/caffeinate -diu";
-    serviceConfig = {
-      KeepAlive = true;
-      RunAtLoad = true;
-      StandardOutPath = "/tmp/caffeinate.log";
-      StandardErrorPath = "/tmp/caffeinate.err";
-    };
-  };
+  # launchd.user.agents.caffeinate = {
+  #   command = "${pkgs.darwin.PowerManagement}/bin/caffeinate -diu";
+  #   serviceConfig = {
+  #     KeepAlive = true;
+  #     RunAtLoad = true;
+  #     StandardOutPath = "/tmp/caffeinate.log";
+  #     StandardErrorPath = "/tmp/caffeinate.err";
+  #   };
+  # };
 
   launchd.user.agents.ssh-tunnel = let
     ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''

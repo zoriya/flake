@@ -135,7 +135,7 @@
             colima
             kubelogin-oidc
             kustomize
-            docker_28
+            docker
             kubebuilder
             kubeseal
             sqlcmd
