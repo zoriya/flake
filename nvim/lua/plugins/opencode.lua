@@ -9,6 +9,28 @@ local snacks_terminal_opts = {
 		end,
 	},
 }
+
+local claude_cmd = 'claude'
+---@type snacks.terminal.Opts
+local claude_terminal_opts = {
+	win = {
+		position = 'right',
+		enter = true,
+	},
+}
+
+local state_file = vim.fn.stdpath("data") .. "/leader_l_mode"
+
+local function get_mode()
+	local f = io.open(state_file, "r")
+	if f then
+		local mode = f:read("*l")
+		f:close()
+		if mode == "claude" then return "claude" end
+	end
+	return "opencode"
+end
+
 ---@type opencode.Opts
 vim.g.opencode_opts = {
 	server = {
@@ -31,13 +53,29 @@ return {
 			{
 				"<leader>l",
 				function()
-					require("opencode").toggle()
+					if get_mode() == "claude" then
+						require('snacks.terminal').toggle(claude_cmd, claude_terminal_opts)
+					else
+						require("opencode").toggle()
+					end
 				end,
-				desc = "Opencode",
+				desc = "Toggle AI terminal",
 				mode = { "n", "v" },
 			},
 			{
-
+				"<leader>L",
+				function()
+					local new_mode = get_mode() == "opencode" and "claude" or "opencode"
+					local f = io.open(state_file, "w")
+					if f then
+						f:write(new_mode)
+						f:close()
+					end
+					vim.notify("leader-l → " .. new_mode, vim.log.levels.INFO)
+				end,
+				desc = "Switch AI terminal (opencode/claude)",
+			},
+			{
 				"gl",
 				function()
 					return require("opencode").operator("@this ")
