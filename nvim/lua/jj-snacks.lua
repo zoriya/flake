@@ -1,8 +1,8 @@
-local function jj_cwd(opts, ctx)
+local function jj_cwd(from, opts, ctx)
 	local cwd
-	cwd = opts and opts.cwd or vim.uv.cwd() or '.'
-	cwd = svim.fs.normalize(cwd)
-	cwd = vim.fs.root(cwd or 0, '.jj')
+	cwd = (opts and opts.cwd) or from or vim.uv.cwd() or '.'
+	cwd = vim.fs.normalize(cwd)
+	cwd = vim.fs.root(cwd, '.jj')
 	if not cwd then
 		Snacks.notify.error 'Cannot find `.jj` folder. To initialize a repository use `jj git init .`'
 		ctx.picker.closed = true
@@ -16,11 +16,17 @@ Snacks.picker.jj_log = function(file)
 	if file then
 		title = "jj log file"
 	end
+	-- Capture the open file before the picker takes over the current buffer, so
+	-- we search for the `.jj` root closest to it rather than from nvim's pwd.
+	local from = file or vim.api.nvim_buf_get_name(0)
+	if from == "" then
+		from = nil
+	end
 	Snacks.picker.pick({
 		title = title,
 		supports_live = false,
 		finder = function(opts, ctx)
-			local cwd = jj_cwd(opts, ctx)
+			local cwd = jj_cwd(from, opts, ctx)
 			local template = [[
 			separate("\0",
 				self.change_id().shortest(),
@@ -174,11 +180,17 @@ Snacks.picker.jj_show = function(ref)
 	if ref ~= "@" then
 		title = "jj diff " .. ref
 	end
+	-- Capture the open file before the picker takes over the current buffer, so
+	-- we search for the `.jj` root closest to it rather than from nvim's pwd.
+	local from = vim.api.nvim_buf_get_name(0)
+	if from == "" then
+		from = nil
+	end
 	Snacks.picker.pick({
 		title = title,
 		supports_live = false,
 		finder = function(opts, ctx)
-			local cwd = jj_cwd(opts, ctx)
+			local cwd = jj_cwd(from, opts, ctx)
 			local args = { "diff", "--summary", "-r", ref }
 			return require("snacks.picker.source.proc").proc(
 				ctx:opts({

@@ -55,8 +55,8 @@ in {
   programs.claude-code = {
     enable = true;
     settings = {
-      model = "claude-opus-4-6";
       theme = "auto";
+      awaySummaryEnabled = false;
       permissions.defaultMode = "auto";
       statusLine = {
         type = "command";
@@ -84,6 +84,7 @@ in {
         context = "Chat";
         bindings = {
           "ctrl+s" = "chat:submit";
+          "ctrl+shift+s" = "chat:stash";
           "enter" = "chat:newline";
           "ctrl+d" = "chat:cancel";
           "ctrl+u" = "chat:clearInput";

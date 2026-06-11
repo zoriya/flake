@@ -94,6 +94,25 @@ s() {
 	fi
 }
 
+jpr() {
+	if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
+		cat <<'EOF'
+Usage: jpr <branch> [revision]
+
+Rebase a revision onto trunk and push it as a named bookmark.
+
+Arguments:
+  branch     Name of the bookmark to create/update and push.
+  revision   Revision to rebase and push (default: @-, the parent of @).
+EOF
+		return 1
+	fi
+
+	local rev="${2:-@-}"
+	jj rebase -o 'trunk()' -s "$rev"
+	jj git push --named "$1=$rev"
+}
+
 # keep yq's output in yaml & colorizes it
 yq() {
 	# if `-r` is in the arguments, do not add the -Y flag because it breaks yq.
