@@ -1,50 +1,9 @@
 {
   pkgs,
   lib,
+  config,
   ...
-}: let
-  jq = lib.getExe pkgs.jq;
-
-  claudeStatusLine = pkgs.writeShellScript "claude-statusline" ''
-    cat | ${jq} -r '
-      def fmt_tokens: if . >= 1000 then "\(. / 1000 | round)k" else "\(.)" end;
-      (.model.display_name + (if .effort.level then " " + .effort.level else "" end)) as $model |
-      (.context_window // {}) as $ctx |
-      (.cost // {}) as $cost |
-      [
-        $model,
-        (if $ctx.used_percentage then
-          "\($ctx.used_percentage)% of \($ctx.context_window_size | fmt_tokens)"
-        else empty end),
-        (if $ctx.current_usage then
-          "in \($ctx.current_usage.input_tokens | fmt_tokens) out \($ctx.current_usage.output_tokens | fmt_tokens)" +
-          (if $ctx.current_usage.cache_read_input_tokens > 0 then
-            " cache \($ctx.current_usage.cache_read_input_tokens | fmt_tokens)"
-          else "" end)
-        else empty end),
-        (if .rate_limits.five_hour.used_percentage then "5h \(.rate_limits.five_hour.used_percentage | round)%" else empty end),
-        (if $cost.total_cost_usd then "$\($cost.total_cost_usd * 100 | round / 100)" else empty end)
-      ] | join(" · ")'
-  '';
-
-  claudeNotify = pkgs.writeShellScript "claude-notify" (
-    let
-      parse = ''
-        input=$(cat)
-        name=$(echo "$input" | ${jq} -r 'if .session_name then .session_name else (.cwd | split("/") | last) end')
-      '';
-    in
-      if pkgs.stdenv.isDarwin
-      then ''
-        ${parse}
-        osascript -e "display notification \"Response complete\" with title \"Claude Code · $name\""
-      ''
-      else ''
-        ${parse}
-        ${pkgs.libnotify}/bin/notify-send "Claude Code · $name" "Response complete"
-      ''
-  );
-in {
+}: {
   imports = [
     ./zsh
     ./tools/git.nix
@@ -54,13 +13,36 @@ in {
 
   programs.claude-code = {
     enable = true;
+    configDir = "${config.xdg.configHome}/claude";
     settings = {
       theme = "auto";
       awaySummaryEnabled = false;
       permissions.defaultMode = "auto";
       statusLine = {
         type = "command";
-        command = "${claudeStatusLine}";
+        command = let
+          claudeStatusLine = pkgs.writeShellScript "claude-statusline" ''
+            cat | ${lib.getExe pkgs.jq} -r '
+              def fmt_tokens: if . >= 1000 then "\(. / 1000 | round)k" else "\(.)" end;
+              (.model.display_name + (if .effort.level then " " + .effort.level else "" end)) as $model |
+              (.context_window // {}) as $ctx |
+              (.cost // {}) as $cost |
+              [
+                $model,
+                (if $ctx.used_percentage then
+                  "\($ctx.used_percentage)% of \($ctx.context_window_size | fmt_tokens)"
+                else empty end),
+                (if $ctx.current_usage then
+                  "in \($ctx.current_usage.input_tokens | fmt_tokens) out \($ctx.current_usage.output_tokens | fmt_tokens)" +
+                  (if $ctx.current_usage.cache_read_input_tokens > 0 then
+                    " cache \($ctx.current_usage.cache_read_input_tokens | fmt_tokens)"
+                  else "" end)
+                else empty end),
+                (if .rate_limits.five_hour.used_percentage then "5h \(.rate_limits.five_hour.used_percentage | round)%" else empty end),
+                (if $cost.total_cost_usd then "$\($cost.total_cost_usd * 100 | round / 100)" else empty end)
+              ] | join(" · ")'
+          '';
+        in "${claudeStatusLine}";
         padding = 0;
       };
       hooks.Stop = [
@@ -68,7 +50,25 @@ in {
           hooks = [
             {
               type = "command";
-              command = "${claudeNotify}";
+              command = let
+                claudeNotify = pkgs.writeShellScript "claude-notify" (
+                  let
+                    parse = ''
+                      input=$(cat)
+                      name=$(echo "$input" | ${lib.getExe pkgs.jq} -r 'if .session_name then .session_name else (.cwd | split("/") | last) end')
+                    '';
+                  in
+                    if pkgs.stdenv.isDarwin
+                    then ''
+                      ${parse}
+                      osascript -e "display notification \"Response complete\" with title \"Claude Code · $name\""
+                    ''
+                    else ''
+                      ${parse}
+                      ${pkgs.libnotify}/bin/notify-send "Claude Code · $name" "Response complete"
+                    ''
+                );
+              in "${claudeNotify}";
             }
           ];
         }
@@ -76,7 +76,7 @@ in {
     };
   };
 
-  home.file.".claude/keybindings.json".text = builtins.toJSON {
+  xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
     "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
     "$docs" = "https://code.claude.com/docs/en/keybindings";
     bindings = [

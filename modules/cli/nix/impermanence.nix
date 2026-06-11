@@ -72,7 +72,7 @@
         ".local/share/nvim"
         ".local/state/nvim"
         # claude-code
-        ".claude"
+        ".config/claude"
         # opencode
         ".config/opencode"
         ".cache/opencode"

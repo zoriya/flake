@@ -1,4 +1,4 @@
-{tmux, kitty, ...}: self: super: let
+{tmux, ...}: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
       name = drv.name;
@@ -22,10 +22,6 @@ in {
     src = tmux;
     version = "next-3.7";
     patches = [];
-  };
-
-  kitty = super.kitty.overrideAttrs {
-    src = kitty;
   };
 
   # they try to use passthrough if they detect tmux. we don't want that.
