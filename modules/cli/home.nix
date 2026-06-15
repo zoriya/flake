@@ -14,7 +14,13 @@
   programs.claude-code = {
     enable = true;
     configDir = "${config.xdg.configHome}/claude";
-    settings = {
+    # settings.json is installed as a writable file in the activation below instead
+    # Claude needs to update it at runtime (e.g. model effort via the slash command).
+  };
+
+  home.activation.claudeWritableSettings = ''
+    install -Dm644 ${(pkgs.formats.json {}).generate "claude-code-settings.json" {
+      "$schema" = "https://json.schemastore.org/claude-code-settings.json";
       theme = "auto";
       awaySummaryEnabled = false;
       permissions.defaultMode = "auto";
@@ -73,8 +79,14 @@
           ];
         }
       ];
-    };
-  };
+    }} "${config.xdg.configHome}/claude/settings.json"
+  '';
+
+  home.activation.claudeRemoteControl = ''
+    f="${config.xdg.configHome}/claude/.claude.json"
+    [ -e "$f" ] || echo '{}' >"$f"
+    ${lib.getExe pkgs.jq} '.remoteControlAtStartup = true' "$f" >"$f.tmp" && mv "$f.tmp" "$f"
+  '';
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
     "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
