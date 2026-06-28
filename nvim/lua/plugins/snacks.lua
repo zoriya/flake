@@ -295,8 +295,11 @@ return {
 
 
 			vim.keymap.set("n", "<leader>jl", Snacks.picker.jj_log, { desc = "jj log" })
-			vim.keymap.set("n", "<leader>jh", Snacks.picker.jj_log_file, { desc = "jj log" })
+			vim.keymap.set("n", "<leader>jh", Snacks.picker.jj_log_file, { desc = "jj file log" })
 			vim.keymap.set("n", "<leader>js", Snacks.picker.jj_show, { desc = "jj status" })
+			vim.keymap.set("n", "<leader>jr", function()
+				Snacks.picker.jj_show({ from = "trunk()", to = "@" })
+			end, { desc = "review branch" })
 
 			vim.keymap.set("n", "<leader>ju", function()
 				Snacks.terminal.toggle("jjui")

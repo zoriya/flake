@@ -172,12 +172,37 @@ Snacks.picker.jj_log_file = function()
 	Snacks.picker.jj_log(vim.fn.expand("%:p"))
 end
 
-Snacks.picker.jj_show = function(ref)
-	local title = "jj status"
-	if ref == nil then
+Snacks.picker.jj_show = function(spec)
+	if type(spec) == "string" then
+		spec = { ref = spec }
+	end
+	spec = spec or {}
+	local ref = spec.ref
+	local range = spec.from ~= nil or spec.to ~= nil
+	if not range and ref == nil then
 		ref = "@"
 	end
-	if ref ~= "@" then
+	-- Selector args shared by the finder, preview and `jj show` lookups.
+	local function selector()
+		if range then
+			local sel = {}
+			if spec.from then
+				vim.list_extend(sel, { "--from", spec.from })
+			end
+			if spec.to then
+				vim.list_extend(sel, { "--to", spec.to })
+			end
+			return sel
+		end
+		return { "-r", ref }
+	end
+
+	local show_ref = ref or spec.to or "@"
+
+	local title = "jj status"
+	if range then
+		title = "jj diff " .. (spec.from or "@") .. ".." .. (spec.to or "@")
+	elseif ref ~= "@" then
 		title = "jj diff " .. ref
 	end
 	-- Capture the open file before the picker takes over the current buffer, so
@@ -191,7 +216,8 @@ Snacks.picker.jj_show = function(ref)
 		supports_live = false,
 		finder = function(opts, ctx)
 			local cwd = jj_cwd(from, opts, ctx)
-			local args = { "diff", "--summary", "-r", ref }
+			local args = { "diff", "--summary" }
+			vim.list_extend(args, selector())
 			return require("snacks.picker.source.proc").proc(
 				ctx:opts({
 					sep = "\n",
@@ -245,11 +271,10 @@ Snacks.picker.jj_show = function(ref)
 			if ref == "@" and (ctx.item.status == "A" or ctx.item.status == "?") then
 				Snacks.picker.preview.file(ctx)
 			else
-				Snacks.picker.preview.cmd(
-					{ "jj", "diff", "--git", "--no-pager", "-r", ref, string.format("file:'%s'", ctx.item.file) },
-					ctx,
-					{ ft = "diff" }
-				)
+				local cmd = { "jj", "diff", "--git", "--no-pager" }
+				vim.list_extend(cmd, selector())
+				table.insert(cmd, string.format("file:'%s'", ctx.item.file))
+				Snacks.picker.preview.cmd(cmd, ctx, { ft = "diff" })
 			end
 		end,
 		sort = { fields = { 'score:desc', 'idx' } },
@@ -275,12 +300,12 @@ Snacks.picker.jj_show = function(ref)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
+				local commit = vim.trim(vim.fn.system({ "jj", "show", show_ref, "--template", "commit_id", "--no-patch" }))
 				vim.cmd('Gsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				local commit = vim.trim(vim.fn.system({ "jj", "show", ref, "--template", "commit_id", "--no-patch" }))
+				local commit = vim.trim(vim.fn.system({ "jj", "show", show_ref, "--template", "commit_id", "--no-patch" }))
 				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
 			end,
 		},
