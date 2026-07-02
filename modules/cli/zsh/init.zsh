@@ -109,6 +109,7 @@ EOF
 	fi
 
 	local rev="${2:-@-}"
+	jj git fetch
 	jj rebase -o 'trunk()' -s "$rev"
 	jj git push --named "$1=$rev"
 }

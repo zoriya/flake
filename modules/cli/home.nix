@@ -88,6 +88,12 @@
     ${lib.getExe pkgs.jq} '.remoteControlAtStartup = true' "$f" >"$f.tmp" && mv "$f.tmp" "$f"
   '';
 
+  xdg.configFile."claude/CLAUDE.md".text = ''
+    # Global instructions
+
+    - NEVER EVER commit. Do not run `git commit` (or `jj commit`) and never push changes under any circumstances unless the user explicitly asks you to commit in that message.
+  '';
+
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
     "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
     "$docs" = "https://code.claude.com/docs/en/keybindings";
