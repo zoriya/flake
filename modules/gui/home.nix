@@ -22,6 +22,7 @@ in {
       zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
       vesktop
       freecad
+      orca-slicer
       kicad
       xdg-utils
       libreoffice

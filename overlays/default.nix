@@ -1,4 +1,4 @@
-{tmux, ...}: self: super: let
+{...}: self: super: let
   wrapProgram = drv: bins: wrapProgramFlags:
     super.symlinkJoin {
       name = drv.name;
@@ -18,12 +18,6 @@
       --add-flags "--ozone-platform=wayland" \
       --add-flags "--disable-smooth-scrolling"'';
 in {
-  tmux = super.tmux.overrideAttrs {
-    src = tmux;
-    version = "next-3.7";
-    patches = [];
-  };
-
   # they try to use passthrough if they detect tmux. we don't want that.
   osc = wrapProgram super.osc ["osc"] ''
     --set TMUX ""

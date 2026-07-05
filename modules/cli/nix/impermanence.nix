@@ -68,6 +68,9 @@
         ".config/YouTube\ Music"
         ".config/gh"
         ".config/github-copilot"
+        # orca slicer
+        ".config/OrcaSlicer"
+        ".local/share/orca-slicer"
         # Don't reinstall plugins on reboot
         ".local/share/nvim"
         ".local/state/nvim"

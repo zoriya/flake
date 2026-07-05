@@ -32,11 +32,6 @@
       url = "github:zoriya/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # use tmux's master for mode 2031
-    tmux = {
-      url = "github:tmux/tmux";
-      flake = false;
-    };
   };
 
   outputs = {
