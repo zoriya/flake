@@ -22,6 +22,12 @@
     ];
     extraModprobeConfig = ''
       options snd_hda_intel power_save=1
+      # AX201 firmware (NMI_INTERRUPT_UMAC_FATAL) crashes at boot under the
+      # 6.18.38 kernel when the PCIe link is aggressively power-managed
+      # (pcie_aspm.policy=powersave above). Keep the Wi-Fi radio awake so the
+      # firmware boots reliably; the rest of the bus still saves power.
+      options iwlwifi power_save=0
+      options iwlmvm power_scheme=1
     '';
     kernel.sysctl = {
       "kernel.nmi_watchdog" = 0;
