@@ -25,6 +25,7 @@
       };
       aliases = {
         init = ["git" "init" "--colocate"];
+        clone = ["git" "clone" "--colocate"];
         tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
       };
       revset-aliases = {
