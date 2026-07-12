@@ -28,7 +28,14 @@
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
-    denyInterfaces = [ "docker0" "veth*" ];
+    allowInterfaces = [
+      "wlo1"
+      "eth0"
+      "enp0s1"
+      "wlan0"
+      "eno1"
+      "end0"
+    ];
     publish = {
       enable = true;
       addresses = true;
