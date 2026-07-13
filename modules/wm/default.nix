@@ -26,6 +26,16 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615e", ATTR{power/wakeup}="enabled"
   '';
 
+  # remap the ISO "<>" key (left of Z, right of LShift) to grave/tilde,
+  # so it acts like the `~` key on a macOS ISO keyboard (` unshifted, ~ shifted)
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = ["*"];
+      settings.main."102nd" = "grave";
+    };
+  };
+
   services.printing.enable = true;
   security.polkit.enable = true;
   security.rtkit.enable = true;
