@@ -92,6 +92,7 @@
     # Global instructions
 
     - NEVER EVER commit. Do not run `git commit` (or `jj commit`) and never push changes under any circumstances unless the user explicitly asks you to commit in that message.
+    - when fetching github content/pr/issues/wha, use the `gh` cli.
   '';
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {

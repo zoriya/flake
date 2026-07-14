@@ -147,7 +147,7 @@
     packages = eachSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [nvim-overlay];
+        overlays = [(import ./overlays inputs) nvim-overlay];
       };
     in rec {
       default = nvim;
@@ -157,7 +157,7 @@
     devShells = eachSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [nvim-overlay];
+        overlays = [(import ./overlays inputs) nvim-overlay];
       };
     in rec {
       default = pkgs.mkShell {
