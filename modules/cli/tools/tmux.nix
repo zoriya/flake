@@ -49,10 +49,16 @@
         bind-key -T copy-mode-vi ] send-keys -X next-prompt
 
         bind-key f run-shell "tmux neww tmux-sessionizer"
-        bind-key C-h run-shell "tmux-sessionizer ~/projects/kyoo"
-        bind-key C-t run-shell "tmux-sessionizer ~/projects/snow"
-        bind-key C-s run-shell "tmux-sessionizer ~/projects/flake"
-        bind-key C-n run-shell "tmux-sessionizer ~/projects/blog"
+        # Jump to the project bound to each slot (per-host, stored on disk).
+        bind-key C-h run-shell "tmux-sessionizer --slot h"
+        bind-key C-t run-shell "tmux-sessionizer --slot t"
+        bind-key C-s run-shell "tmux-sessionizer --slot s"
+        bind-key C-n run-shell "tmux-sessionizer --slot n"
+        # Bind a slot: pick a project via fzf, then C-<key> jumps to it.
+        bind-key C-H run-shell "tmux neww tmux-sessionizer --set h"
+        bind-key C-T run-shell "tmux neww tmux-sessionizer --set t"
+        bind-key C-S run-shell "tmux neww tmux-sessionizer --set s"
+        bind-key C-N run-shell "tmux neww tmux-sessionizer --set n"
 
         # suspend inner tmux (to allow nested sessions)
         bind @ { set prefix None; set key-table off }

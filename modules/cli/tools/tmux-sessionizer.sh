@@ -1,10 +1,35 @@
 #!/usr/bin/env bash
 
-if [[ $# -eq 1 ]]; then
-	selected=$1
-else
-	selected=$(find ~/projects ~/work -mindepth 1 -maxdepth 1 -type d | fzf)
-fi
+slots_dir="${XDG_DATA_HOME:-$HOME/.local/share}/tmux-sessionizer/slots"
+
+pick_project() {
+	find ~/projects ~/work -mindepth 1 -maxdepth 1 -type d | fzf
+}
+
+case "$1" in
+	--slot)
+		slot_file="$slots_dir/$2"
+		if [[ -s "$slot_file" ]]; then
+			selected=$(<"$slot_file")
+		else
+			tmux display-message "tmux-sessionizer: slot '$2' is unbound (use prefix + C-${2^^} to set it)"
+			exit 0
+		fi
+		;;
+	--set)
+		selected=$(pick_project)
+		[[ -z $selected ]] && exit 0
+		mkdir -p "$slots_dir"
+		printf '%s\n' "$selected" > "$slots_dir/$2"
+		tmux display-message "tmux-sessionizer: bound slot '$2' -> $selected"
+		;;
+	"")
+		selected=$(pick_project)
+		;;
+	*)
+		selected=$1
+		;;
+esac
 
 if [[ -z $selected ]]; then
 	exit 0
