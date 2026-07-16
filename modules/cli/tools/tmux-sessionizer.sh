@@ -12,7 +12,7 @@ case "$1" in
 		if [[ -s "$slot_file" ]]; then
 			selected=$(<"$slot_file")
 		else
-			tmux display-message "tmux-sessionizer: slot '$2' is unbound (use prefix + C-${2^^} to set it)"
+			tmux display-message "tmux-sessionizer: slot '$2' is unbound (use prefix + C-a then '$2' to set it)"
 			exit 0
 		fi
 		;;

@@ -54,6 +54,7 @@
         ".local/share/flatpak"
         ".local/share/waydroid"
         ".local/share/bottles"
+        ".local/share/tmux-sessionizer"
         ".var"
         ".kube"
         ".cache/flatpak"

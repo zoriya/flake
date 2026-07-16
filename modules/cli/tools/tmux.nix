@@ -54,11 +54,11 @@
         bind-key C-t run-shell "tmux-sessionizer --slot t"
         bind-key C-s run-shell "tmux-sessionizer --slot s"
         bind-key C-n run-shell "tmux-sessionizer --slot n"
-        # Bind a slot: pick a project via fzf, then C-<key> jumps to it.
-        bind-key C-H run-shell "tmux neww tmux-sessionizer --set h"
-        bind-key C-T run-shell "tmux neww tmux-sessionizer --set t"
-        bind-key C-S run-shell "tmux neww tmux-sessionizer --set s"
-        bind-key C-N run-shell "tmux neww tmux-sessionizer --set n"
+        bind-key C-a switch-client -T setslot
+        bind-key -T setslot h run-shell "tmux neww tmux-sessionizer --set h"
+        bind-key -T setslot t run-shell "tmux neww tmux-sessionizer --set t"
+        bind-key -T setslot s run-shell "tmux neww tmux-sessionizer --set s"
+        bind-key -T setslot n run-shell "tmux neww tmux-sessionizer --set n"
 
         # suspend inner tmux (to allow nested sessions)
         bind @ { set prefix None; set key-table off }
