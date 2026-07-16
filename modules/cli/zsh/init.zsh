@@ -142,6 +142,14 @@ kubectl-top-ephemeral() {
 }
 
 
+proxy() {
+	if [[ $# -ne 2 ]]; then
+		echo "usage: proxy <dns> <port>" >&2
+		return 1
+	fi
+	ssh -R "$1:80:localhost:$2" tun.sdg.moe
+}
+
 alias copyfile="osc copy"
 copypath() {
 	local file="${1:-.}"

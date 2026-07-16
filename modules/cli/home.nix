@@ -92,7 +92,7 @@
     # Global instructions
 
     - NEVER EVER commit ; don't talk about commiting we do not care. Do not run `git commit` (or `jj commit`) and never push changes under any circumstances unless the user explicitly asks you to commit in that message.
-    - Do not edit run git commands to write/checkout/whatever. Use jj if you REALLY REALLY need it but you should not touch the git/jj state in most cases.
+    - Do not edit run git commands to write/checkout/fetch/whatever. Use `jj` if you need but you should not touch the git/jj state in most cases.
     - when fetching github content/pr/issues/wha, use the `gh` cli.
   '';
 
