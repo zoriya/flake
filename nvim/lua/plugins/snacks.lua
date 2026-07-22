@@ -302,7 +302,12 @@ return {
 			end, { desc = "review branch" })
 
 			vim.keymap.set("n", "<leader>ju", function()
-				Snacks.terminal.toggle("jjui")
+				local from = vim.api.nvim_buf_get_name(0)
+				local cwd
+				if from ~= "" then
+					cwd = vim.fs.root(vim.fs.normalize(from), ".jj")
+				end
+				Snacks.terminal.toggle("jjui", { cwd = cwd })
 			end, { desc = "jj ui" })
 		end,
 	},
