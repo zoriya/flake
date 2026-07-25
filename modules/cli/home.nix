@@ -23,6 +23,8 @@
       "$schema" = "https://json.schemastore.org/claude-code-settings.json";
       theme = "auto";
       awaySummaryEnabled = false;
+      autoMemoryEnabled = false;
+      env.CLAUDE_CODE_DISABLE_AUTO_MEMORY = "1";
       permissions.defaultMode = "auto";
       statusLine = {
         type = "command";
