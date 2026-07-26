@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   programs.jujutsu = {
     enable = true;
     settings = {
@@ -49,6 +49,18 @@
 
   programs.jjui = {
     enable = true;
+    # while waiting for https://github.com/charmbracelet/bubbles/pull/1020
+    package = pkgs.jjui.overrideAttrs (old: {
+      postPatch =
+        (old.postPatch or "")
+        + ''
+          substituteInPlace internal/ui/operations/describe/describe.go \
+            --replace-fail 'input := textarea.New()' 'input := textarea.New()
+          	input.KeyMap.WordForward.SetKeys("alt+right", "alt+f", "ctrl+right")
+          	input.KeyMap.WordBackward.SetKeys("alt+left", "alt+b", "ctrl+left")
+          	input.KeyMap.DeleteWordBackward.SetKeys("alt+backspace", "ctrl+w", "ctrl+backspace")'
+        '';
+    });
     settings = {
       actions = [
         {

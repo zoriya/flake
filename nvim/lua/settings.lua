@@ -63,8 +63,9 @@ vim.g.did_install_default_menus = 1
 
 -- for all modes except terminal
 vim.keymap.set({ "i", "n", "o", "x", "v", "s", "l", "c" }, "<C-c>", "<esc>")
+-- <esc> leaves terminal mode, <C-q> sends a real <esc> to the terminal app
 vim.keymap.set("t", "<esc>", "<C-\\><C-N>", { desc = "Normal mode" })
-vim.keymap.set("t", "<S-Esc>", "<esc>", { desc = "Send escape to terminal" })
+vim.keymap.set("t", "<C-q>", "<esc>", { desc = "Send escape to terminal" })
 -- Why is this not the default?
 vim.keymap.set("c", "<c-a>", "<home>", { desc = "Begining" })
 
