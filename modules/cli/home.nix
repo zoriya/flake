@@ -94,6 +94,9 @@
       hooks.Notification = [
         {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status questions";}];}
       ];
+      hooks.SessionStart = [
+        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status idle";}];}
+      ];
       hooks.SessionEnd = [
         {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status closed";}];}
       ];

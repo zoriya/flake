@@ -1,0 +1,10 @@
+# Local build output (the binary shares the module name).
+/claude-mux
+
+# Go build/test artifacts.
+*.test
+*.out
+/dist/
+
+# Editor / direnv cruft.
+.direnv/

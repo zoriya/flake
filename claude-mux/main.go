@@ -5,11 +5,13 @@
 //	C-x l   float a picker of every Claude session for the project
 //	C-x r   toggle a persistent `claude rc` (remote-control) server for the project
 //	C-x n   start a fresh Claude session in a new window
+//	C-x u   float the current Claude usage (limits) for the project
 //
 // See README.md for the full picture.
 package main
 
 import (
+	"bufio"
 	"crypto/rand"
 	"encoding/json"
 	"flag"
@@ -20,6 +22,8 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+
+	"github.com/charmbracelet/x/term"
 
 	"claude-mux/internal/manager"
 	"claude-mux/internal/rc"
@@ -46,6 +50,8 @@ func run(args []string) error {
 			return cmdNew(args[1:])
 		case "run":
 			return cmdRun(args[1:])
+		case "usage":
+			return cmdUsage(args[1:])
 		case "kill":
 			return cmdKill(args[1:])
 		case "hook":
@@ -72,6 +78,7 @@ Inside a session:
   C-x l   list every Claude session for this project
   C-x r   toggle a persistent remote-control (claude rc) server for this project
   C-x n   new Claude session in a background window
+  C-x u   show the current Claude usage (limits) in a floating pane
   C-x d   detach (everything keeps running)
 
 In the picker: enter open · n new · x kill selected · ctrl+a all · q cancel
@@ -198,6 +205,26 @@ func cmdHook(args []string) error {
 	if st == "closed" {
 		return state.Clear(payload.SessionID)
 	}
+
+	// Keep the hosting tmux window's session-id tag in sync with the id Claude is
+	// actually reporting. claude-mux tags a window with the id it launched (see
+	// cmdRun), but Claude's live session id diverges from that whenever a new id
+	// is minted in the same window — /clear, in-app /resume, context compaction.
+	// Left alone, the window would point at a dead id (the picker shows it "open"
+	// and its real, running state — keyed to the new id — has no window, so it
+	// reads as closed). Re-tagging on every hook self-heals that: the window now
+	// carries the live id, and the id it used to host is no longer live here, so
+	// its stale state is cleared rather than left to accumulate.
+	if pane := os.Getenv("TMUX_PANE"); pane != "" {
+		srv := tmux.New()
+		if srv.InsideOurServer() {
+			if old := srv.WindowSessionID(pane); old != "" && old != payload.SessionID {
+				_ = state.Clear(old)
+			}
+			_ = srv.TagWindow(pane, payload.SessionID)
+		}
+	}
+
 	return state.Set(payload.SessionID, st)
 }
 
@@ -222,6 +249,76 @@ func cmdNew(args []string) error {
 		return srv.NewWindowFresh(dir)
 	}
 	return execClaude(dir)
+}
+
+// cmdUsage renders the current Claude usage into the floating pane opened by
+// the C-x u chord. It snapshots Claude's interactive `/usage` panel — the one
+// with the coloured progress bars — by rendering it in a throwaway off-screen
+// tmux pane sized to this popup and printing the captured screen verbatim. It
+// then blocks until the user presses q (or Esc / Ctrl-C) so the popup stays up
+// to be read instead of closing the instant the command exits.
+//
+// If the interactive render is unavailable (no tmux, or it times out) it falls
+// back to the plain-text `claude -p /usage` report so something still shows.
+func cmdUsage(args []string) error {
+	fs := flag.NewFlagSet("usage", flag.ContinueOnError)
+	dirFlag := fs.String("dir", "", "project directory (defaults to cwd)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	dir := resolveDir(*dirFlag)
+
+	// Reserve the bottom row for the "press q" hint so it never scrolls the top
+	// of the panel out of view.
+	cols, rows := 80, 24
+	if w, h, err := term.GetSize(os.Stdout.Fd()); err == nil && w > 0 && h > 0 {
+		cols, rows = w, h
+	}
+	renderRows := rows - 1
+	if renderRows < 8 {
+		renderRows = rows
+	}
+
+	if screen, err := tmux.CaptureUsage(dir, cols, renderRows); err == nil && strings.Contains(screen, "% used") {
+		os.Stdout.WriteString(screen)
+	} else {
+		cmd := exec.Command("claude", "-p", "/usage")
+		cmd.Dir = dir
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if runErr := cmd.Run(); runErr != nil {
+			fmt.Fprintln(os.Stderr, "\nfailed to fetch usage:", runErr)
+		}
+	}
+
+	fmt.Print("\n\x1b[2m─── press q to close ───\x1b[0m")
+	waitForQuit()
+	return nil
+}
+
+// waitForQuit blocks until the user presses q/Q, Esc or Ctrl-C. It puts the
+// terminal in raw mode so a single keypress is enough; if raw mode is
+// unavailable (stdin is not a tty) it falls back to reading a line.
+func waitForQuit() {
+	fd := os.Stdin.Fd()
+	old, err := term.MakeRaw(fd)
+	if err != nil {
+		bufio.NewReader(os.Stdin).ReadString('\n')
+		return
+	}
+	defer term.Restore(fd, old)
+
+	buf := make([]byte, 1)
+	for {
+		n, err := os.Stdin.Read(buf)
+		if err != nil || n == 0 {
+			return
+		}
+		switch buf[0] {
+		case 'q', 'Q', 3, 27: // q, Q, Ctrl-C, Esc
+			return
+		}
+	}
 }
 
 // cmdList runs the picker and carries out the chosen action.

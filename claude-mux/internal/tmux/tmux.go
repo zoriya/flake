@@ -10,8 +10,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	"claude-mux/internal/claude"
 	"claude-mux/internal/paths"
@@ -151,9 +153,13 @@ bind -T prefix r display-popup -d "#{@claude_project_dir}" -w 60%% -h 40%% -E "'
 # does not expand formats there, so an embedded --dir '#{@claude_project_dir}'
 # would reach run as a literal path, fail to chdir, and drop the whole session.
 bind -T prefix n new-window -c "#{@claude_project_dir}" -n claude "exec '%s' run"
+# C-x u : float the current Claude usage (limits). The command stays up until
+# the user presses q (claude-mux usage blocks on a keypress), so -E can close
+# the popup on exit without it flashing away the instant claude prints.
+bind -T prefix u display-popup -d "#{@claude_project_dir}" -w 80%% -h 75%% -E "'%s' usage"
 # C-x d : detach and leave everything running in the background.
 bind -T prefix d detach-client
-`, binPath, socket, binPath, socket, binPath)
+`, binPath, socket, binPath, socket, binPath, binPath)
 
 	path := configPath()
 	if err := os.WriteFile(path, []byte(conf), 0o644); err != nil {
@@ -251,6 +257,16 @@ func (s *Server) TagWindow(paneTarget, sessionID string) error {
 	return err
 }
 
+// WindowSessionID returns the Claude session id currently tagged on the window
+// containing paneTarget, or "" when it is untagged or cannot be resolved.
+func (s *Server) WindowSessionID(paneTarget string) string {
+	out, err := s.run("show-options", "-wqv", "-t", paneTarget, sessionIDOption)
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(out)
+}
+
 // hasSession reports whether a session named slug exists.
 func (s *Server) hasSession(slug string) bool {
 	_, err := s.run("has-session", "-t", slug)
@@ -336,6 +352,58 @@ func (s *Server) NewWindowFresh(dir string) error {
 	}
 	_, err := s.run("new-window", "-t", slug, "-c", dir, "-n", "claude", s.launchCmd(dir, ""))
 	return err
+}
+
+// usageSocket is the throwaway tmux socket used to render `claude /usage`
+// headlessly. It is deliberately a *different* socket from the claude-mux
+// server so the render never creates a window, session or picker entry there.
+const usageSocket = "claude-mux-usage"
+
+// CaptureUsage renders Claude's interactive `/usage` panel (the one with the
+// coloured progress bars) in a throwaway, off-screen tmux pane sized cols×rows,
+// then returns the captured screen with its ANSI colours preserved so a popup
+// can print it verbatim. `/usage` draws as a full-screen overlay, so the whole
+// pane is the panel — no composer to strip.
+//
+// The render runs on its own tmux socket (see usageSocket) which is torn down
+// before returning, so it never touches the claude-mux server. It polls until
+// the bars have painted (or times out), because Claude takes a moment to boot.
+func CaptureUsage(dir string, cols, rows int) (string, error) {
+	run := func(args ...string) (string, error) {
+		out, err := exec.Command("tmux", append([]string{"-L", usageSocket}, args...)...).Output()
+		return string(out), err
+	}
+	// Start clean in case a previous render was left behind, and always tear the
+	// scratch server down on the way out.
+	_, _ = run("kill-server")
+	defer func() { _, _ = run("kill-server") }()
+
+	// Pass Claude's config dir through explicitly: a fresh tmux server does not
+	// inherit arbitrary env vars, and the render must read the same transcripts.
+	newArgs := []string{"new-session", "-d", "-s", "u",
+		"-x", strconv.Itoa(cols), "-y", strconv.Itoa(rows), "-c", dir}
+	if cfg := os.Getenv("CLAUDE_CONFIG_DIR"); cfg != "" {
+		newArgs = append(newArgs, "-e", "CLAUDE_CONFIG_DIR="+cfg)
+	}
+	newArgs = append(newArgs, `claude "/usage"`)
+	if _, err := run(newArgs...); err != nil {
+		return "", err
+	}
+
+	var last string
+	for i := 0; i < 60; i++ {
+		out, err := run("capture-pane", "-p", "-e", "-t", "u")
+		if err == nil {
+			last = out
+			// The panel has painted once a progress bar (█) and a "% used"
+			// label are both on screen.
+			if strings.Contains(out, "% used") && strings.Contains(out, "█") {
+				return strings.TrimRight(out, "\n"), nil
+			}
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	return strings.TrimRight(last, "\n"), fmt.Errorf("timed out waiting for usage to render")
 }
 
 // rcSuffix is appended to a project's slug to name its dedicated tmux session

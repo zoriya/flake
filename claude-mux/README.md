@@ -24,6 +24,7 @@ a session there are exactly two chords plus a detach, under the `C-x` prefix:
 | `C-x l` | Float a picker of **every** Claude session for this project       |
 | `C-x r` | Float the remote-control (`claude rc`) toggle for this project     |
 | `C-x n` | Start a fresh Claude session in a new window (current keeps going) |
+| `C-x u` | Float the current Claude usage (limits) for this project          |
 | `C-x d` | Detach — everything keeps running in the background               |
 | `C-x C-x` | Send a literal `C-x` through to Claude                           |
 
@@ -82,6 +83,15 @@ idle one resumes it (`claude --resume`) in a new window. With `ctrl+a` (or
 `claude-mux list --all`) the picker shows sessions from every project, labelled by
 project; resuming one there opens (or switches to) that project's session.
 
+### Usage (`C-x u`)
+
+`C-x u` floats a pane showing your current Claude usage — session and weekly
+limits with their progress bars, plus what is driving them. It renders Claude's
+interactive `/usage` panel (the pretty, coloured one) off-screen in a throwaway
+tmux pane and snapshots it, so you get the real view without a full session
+lingering. Press `q` (or `esc` / `ctrl+c`) to close it. If the interactive
+render is unavailable it falls back to the plain-text `claude -p /usage` report.
+
 ### Remote control (`C-x r`)
 
 [`claude rc`](https://claude.com/claude-code) (remote-control) runs a persistent
@@ -119,7 +129,11 @@ are always available without having to open each project by hand.
 - **Running status** is tracked by launching every window through
   `claude-mux run`, which assigns a known session id (`claude --session-id`) and
   records it as a tmux window option (`@claude_session_id`). That id is what lets
-  the picker tell a live session apart and jump straight to its window.
+  the picker tell a live session apart and jump straight to its window. Claude's
+  live session id can drift from the one baked in at launch — `/clear`, in-app
+  `/resume` and context compaction each mint a fresh id in the same window — so
+  the status hook re-tags its own window with the id it reports, keeping the tag
+  pointed at the session that is actually running there.
 - Each project directory gets its own tmux session on the shared socket, named
   after the directory (basename + a short path hash).
 
@@ -138,6 +152,7 @@ claude-mux list       Interactive session picker (used by the C-x l chord)
 claude-mux list --all   Picker across every project (also toggled with ctrl+a)
 claude-mux list --dump  Print the session listing as plain text (scripting/debug)
 claude-mux rc         Remote-control toggle popup (used by the C-x r chord)
+claude-mux usage      Show the current Claude usage/limits (used by the C-x u chord)
 claude-mux new        Start a fresh Claude session in the current directory
 claude-mux kill       Kill the running sessions for the current directory
 claude-mux kill --all Kill every running session across all projects
