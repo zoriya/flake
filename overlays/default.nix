@@ -41,4 +41,20 @@ in {
   vesktop = enableWayland super.vesktop ["vesktop"];
   pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
   vscode = enableWayland super.vscode ["code"];
+
+  claude-mux = super.buildGoModule {
+    pname = "claude-mux";
+    version = "0.1.0";
+    src = ../claude-mux;
+    vendorHash = "sha256-uwBJAqN4sIepiiJf9lCDumLqfKJEowQO2tOiSWD3Fig=";
+    nativeBuildInputs = [super.makeWrapper];
+    postInstall = ''
+      wrapProgram $out/bin/claude-mux \
+        --prefix PATH : ${super.lib.makeBinPath [super.tmux]}
+    '';
+    meta = {
+      description = "tmux-backed session manager for Claude Code";
+      mainProgram = "claude-mux";
+    };
+  };
 }

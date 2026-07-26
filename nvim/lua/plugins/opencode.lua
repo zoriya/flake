@@ -10,7 +10,6 @@ local snacks_terminal_opts = {
 	},
 }
 
-local claude_cmd = 'claude'
 ---@type snacks.terminal.Opts
 local claude_terminal_opts = {
 	win = {
@@ -54,7 +53,7 @@ return {
 				"<leader>l",
 				function()
 					if get_mode() == "claude" then
-						require('snacks.terminal').toggle(claude_cmd, claude_terminal_opts)
+						require("snacks.terminal").toggle("claude-mux", claude_terminal_opts)
 					else
 						require("opencode").toggle()
 					end

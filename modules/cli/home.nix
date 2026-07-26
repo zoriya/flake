@@ -11,6 +11,8 @@
     ./tools/tmux.nix
   ];
 
+  home.packages = [pkgs.claude-mux];
+
   programs.claude-code = {
     enable = true;
     configDir = "${config.xdg.configHome}/claude";
@@ -78,8 +80,22 @@
                 );
               in "${claudeNotify}";
             }
+            {
+              type = "command";
+              command = "${lib.getExe pkgs.claude-mux} hook --status idle";
+            }
           ];
         }
+      ];
+
+      hooks.UserPromptSubmit = [
+        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status running";}];}
+      ];
+      hooks.Notification = [
+        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status questions";}];}
+      ];
+      hooks.SessionEnd = [
+        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status closed";}];}
       ];
     }} "${config.xdg.configHome}/claude/settings.json"
   '';
@@ -109,7 +125,7 @@
           "ctrl+shift+s" = "chat:stash";
           "enter" = "chat:newline";
           "ctrl+d" = "chat:cancel";
-          "ctrl+u" = "chat:clearInput";
+          "ctrl+u" = "chat:stash";
           "ctrl+z" = "chat:undo";
           "ctrl+y" = "chat:undo";
           "ctrl+shift+z" = "chat:redo";
