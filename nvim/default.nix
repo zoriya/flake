@@ -118,7 +118,6 @@ in
           virt-column-nvim
 
           opencode-nvim
-          nvim-unception
         ];
         opt = [];
       };
