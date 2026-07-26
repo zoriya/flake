@@ -55,6 +55,16 @@ Each session is shown on two lines (title, then status/meta) so it stays readabl
 in narrow popups, and the list and help text scroll/wrap to fit small windows.
 Sessions needing attention float to the top (waiting → running → open → closed).
 
+The session you opened the picker from — the one running in the pane the popup is
+floating over — is marked "you are here": its title is underlined and its meta
+line carries a green `· this pane` tag. This is independent of the cursor, so you
+can always see where you came from even after moving the selection or when the
+list reorders.
+
+While the picker is open it reloads itself once a second, so statuses, titles and
+message counts stay live automatically; the highlighted session is tracked
+by id so the cursor stays on it even when the list reorders.
+
 The live states (running / waiting / open) are reported by Claude Code hooks
 (`claude-mux hook --status …`), wired up in `modules/cli/home.nix`.
 
@@ -65,7 +75,6 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 | `n`            | Start a fresh session                           |
 | `x`            | Kill the selected running session               |
 | `ctrl+a`       | Toggle between this project and **all** projects |
-| `r`            | Refresh                                         |
 | `q` / `esc`    | Cancel                                          |
 
 Selecting a session that is already running just jumps to its window; selecting an

@@ -230,6 +230,20 @@ func (s *Server) RunningSessions() map[string]string {
 	return result
 }
 
+// CurrentSessionID returns the Claude session id tagged on the window the
+// current client is focused on — i.e. the pane the picker popup was floated
+// over. A popup runs on its own throwaway pane (so $TMUX_PANE is useless here)
+// but a no-target display-message resolves against the client's active window,
+// which is the underlying Claude window. Returns "" when it cannot be
+// determined (not inside our server, or the window is untagged).
+func (s *Server) CurrentSessionID() string {
+	out, err := s.run("display-message", "-p", "#{"+sessionIDOption+"}")
+	if err != nil {
+		return ""
+	}
+	return out
+}
+
 // TagWindow records sessionID on the window containing paneTarget (usually
 // $TMUX_PANE), so RunningSessions can find it later.
 func (s *Server) TagWindow(paneTarget, sessionID string) error {

@@ -43,6 +43,9 @@ var (
 	selBar      = lipgloss.NewStyle().Foreground(lipgloss.Color("39"))
 	selRowStyle = lipgloss.NewStyle().Bold(true)
 	emptyStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("244")).Italic(true)
+	// currentTag marks the row whose session is open in the pane the picker was
+	// floated over ("you are here").
+	currentTag = lipgloss.NewStyle().Foreground(lipgloss.Color("42")).Bold(true)
 
 	// Per-status colours.
 	runningStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("42"))  // green
@@ -83,6 +86,7 @@ type model struct {
 	dir     string
 	srv     *tmux.Server
 	all     bool
+	current string // session id open in the pane the picker was floated over
 	entries []manager.Entry
 	cursor  int
 	offset  int // index of the first visible row (scrolling)
@@ -96,6 +100,9 @@ type model struct {
 // When all is true it starts listing sessions across every project.
 func RunPicker(dir string, all bool, srv *tmux.Server) (Result, error) {
 	m := &model{dir: dir, all: all, srv: srv}
+	if srv.InsideOurServer() {
+		m.current = srv.CurrentSessionID()
+	}
 	m.reload()
 	p := tea.NewProgram(m, tea.WithAltScreen())
 	final, err := p.Run()
@@ -106,9 +113,25 @@ func RunPicker(dir string, all bool, srv *tmux.Server) (Result, error) {
 }
 
 func (m *model) reload() {
+	// Remember which session is highlighted so the cursor tracks it even when the
+	// list is reordered by an auto-reload (attention sorting moves rows around).
+	var selectedID string
+	if m.cursor >= 0 && m.cursor < len(m.entries) {
+		selectedID = m.entries[m.cursor].ID
+	}
+
 	entries, err := manager.Load(m.dir, m.all, m.srv)
 	m.err = err
 	m.entries = entries
+
+	if selectedID != "" {
+		for i, e := range entries {
+			if e.ID == selectedID {
+				m.cursor = i
+				break
+			}
+		}
+	}
 	if m.cursor >= len(entries) {
 		m.cursor = len(entries) - 1
 	}
@@ -117,7 +140,18 @@ func (m *model) reload() {
 	}
 }
 
-func (m *model) Init() tea.Cmd { return nil }
+// reloadInterval is how often an open picker re-reads sessions so its statuses,
+// titles and message counts stay live without the user pressing "r".
+const reloadInterval = time.Second
+
+// tickMsg is delivered on every reload tick.
+type tickMsg struct{}
+
+func tick() tea.Cmd {
+	return tea.Tick(reloadInterval, func(time.Time) tea.Msg { return tickMsg{} })
+}
+
+func (m *model) Init() tea.Cmd { return tick() }
 
 // linesPerEntry is the height of one rendered session (two-line layout).
 const linesPerEntry = 2
@@ -174,6 +208,10 @@ func (m *model) clampScroll() {
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tickMsg:
+		m.reload()
+		m.clampScroll()
+		return m, tick()
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 		m.clampScroll()
@@ -194,8 +232,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.cursor = 0
 		case "G", "end":
 			m.cursor = len(m.entries) - 1
-		case "r":
-			m.reload()
 		case "ctrl+a":
 			m.all = !m.all
 			m.cursor = 0
@@ -302,8 +338,11 @@ func (m *model) positionText() string {
 // below. The two-line layout keeps everything readable in narrow popups.
 func (m *model) renderRow(i int, e manager.Entry, width int) string {
 	selected := i == m.cursor
+	isCurrent := e.ID != "" && e.ID == m.current
 
-	// Line 1: selection bar + status dot + title.
+	// Line 1: selection bar + status dot + title. The current session (the one
+	// open in the pane the picker was floated over) is underlined — "you are
+	// here" — independently of the cursor.
 	bar := "  "
 	if selected {
 		bar = selBar.Render("▌ ")
@@ -314,11 +353,14 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 		titleW = 4
 	}
 	title := truncate(e.Title, titleW)
+	ts := titleStyle
 	if selected {
-		title = selRowStyle.Render(title)
-	} else {
-		title = titleStyle.Render(title)
+		ts = selRowStyle
 	}
+	if isCurrent {
+		ts = ts.Underline(true)
+	}
+	title = ts.Render(title)
 	line1 := bar + dot + " " + title
 
 	// Line 2: indented status/meta, continuing the selection bar.
@@ -331,8 +373,21 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 		parts = append(parts, filepath.Base(e.ProjectDir))
 	}
 	parts = append(parts, fmt.Sprintf("%d msg", e.Messages), relTime(e.Updated))
-	meta := truncate(strings.Join(parts, " · "), width-4)
-	line2 := indent + metaStyle.Render(meta)
+
+	// A "this pane" tag flags the current session; reserve room for it so the
+	// meta text truncates around it rather than overflowing the row.
+	const tag = "this pane"
+	metaW := width - 4
+	if isCurrent {
+		if metaW -= len(tag) + 3; metaW < 4 { // 3 = " · "
+			metaW = 4
+		}
+	}
+	meta := metaStyle.Render(truncate(strings.Join(parts, " · "), metaW))
+	if isCurrent {
+		meta += metaStyle.Render(" · ") + currentTag.Render(tag)
+	}
+	line2 := indent + meta
 
 	return line1 + "\n" + line2
 }
@@ -342,7 +397,7 @@ func (m *model) helpText() string {
 	if m.all {
 		scope = "ctrl+a this project"
 	}
-	return "↑/↓ move · enter open · n new · x kill · " + scope + " · r refresh · q cancel"
+	return "↑/↓ move · enter open · n new · x kill · " + scope + " · q cancel"
 }
 
 // pad right-pads s to at least n runes.
