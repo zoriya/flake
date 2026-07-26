@@ -3,6 +3,7 @@
 // tmux) whose only purpose is to host `claude` processes, with two chords:
 //
 //	C-x l   float a picker of every Claude session for the project
+//	C-x r   toggle a persistent `claude rc` (remote-control) server for the project
 //	C-x n   start a fresh Claude session in a new window
 //
 // See README.md for the full picture.
@@ -17,9 +18,11 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"syscall"
 
 	"claude-mux/internal/manager"
+	"claude-mux/internal/rc"
 	"claude-mux/internal/state"
 	"claude-mux/internal/tmux"
 	"claude-mux/internal/ui"
@@ -37,6 +40,8 @@ func run(args []string) error {
 		switch args[0] {
 		case "list":
 			return cmdList(args[1:])
+		case "rc":
+			return cmdRC(args[1:])
 		case "new":
 			return cmdNew(args[1:])
 		case "run":
@@ -65,10 +70,12 @@ Usage:
 
 Inside a session:
   C-x l   list every Claude session for this project
+  C-x r   toggle a persistent remote-control (claude rc) server for this project
   C-x n   new Claude session in a background window
   C-x d   detach (everything keeps running)
 
 In the picker: enter open · n new · x kill selected · ctrl+a all · q cancel
+In the rc popup: t toggle · s switch to it · q close
 
 Environment:
   CLAUDE_MUX_SOCKET   tmux socket name (default "claude-mux")
@@ -86,9 +93,17 @@ func cmdAttach() error {
 	if srv.InsideOurServer() {
 		return fmt.Errorf("already inside a claude-mux session (use C-x n for a new session, C-x d to detach)")
 	}
+	// A cold start (the server was not already running) is when we bring every
+	// rc-enabled project's remote-control server back up in the background.
+	coldStart := !srv.IsRunning()
 	slug, err := srv.EnsureSession(dir)
 	if err != nil {
 		return err
+	}
+	if coldStart {
+		for _, p := range rc.List() {
+			_ = srv.StartRC(p)
+		}
 	}
 	return srv.Attach(slug)
 }
@@ -162,6 +177,7 @@ func cmdHook(args []string) error {
 	}
 	var payload struct {
 		SessionID string `json:"session_id"`
+		Message   string `json:"message"`
 	}
 	if data, err := io.ReadAll(os.Stdin); err == nil && len(data) > 0 {
 		_ = json.Unmarshal(data, &payload)
@@ -169,10 +185,27 @@ func cmdHook(args []string) error {
 	if payload.SessionID == "" {
 		return nil // nothing we can key on; do not fail the hook
 	}
-	if *status == "closed" {
+
+	st := *status
+	// Claude's Notification hook fires both for genuine prompts (permission /
+	// questions) and for the plain "you've been idle" timeout. The latter must
+	// not masquerade as "waiting for you", so treat an idle-waiting notification
+	// as idle rather than questions.
+	if st == "questions" && isIdleNotification(payload.Message) {
+		st = "idle"
+	}
+
+	if st == "closed" {
 		return state.Clear(payload.SessionID)
 	}
-	return state.Set(payload.SessionID, *status)
+	return state.Set(payload.SessionID, st)
+}
+
+// isIdleNotification reports whether a Notification hook message is the idle
+// timeout ("Claude is waiting for your input …") rather than a real prompt for
+// permission or an answer. Only the idle case must not surface as attention.
+func isIdleNotification(msg string) bool {
+	return strings.Contains(strings.ToLower(msg), "waiting for your input")
 }
 
 // cmdNew starts a fresh Claude session: a new window when inside the server,
@@ -237,6 +270,31 @@ func cmdList(args []string) error {
 		return execClaudeResume(pdir, e.ID)
 	}
 	return nil // cancelled
+}
+
+// cmdRC runs the remote-control toggle popup (the C-x r chord) and, when the
+// user asked for it, switches the client to the rc session afterwards.
+func cmdRC(args []string) error {
+	fs := flag.NewFlagSet("rc", flag.ContinueOnError)
+	dirFlag := fs.String("dir", "", "project directory (defaults to cwd)")
+	sockFlag := fs.String("socket", "", "tmux socket name")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *sockFlag != "" {
+		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
+	}
+	dir := resolveDir(*dirFlag)
+	srv := tmux.New()
+
+	res, err := ui.RunRCPopup(dir, srv)
+	if err != nil {
+		return err
+	}
+	if res.Action == ui.RCActionSwitch {
+		return srv.FocusRC(dir)
+	}
+	return nil
 }
 
 // dumpList prints the enriched session listing as plain text (non-interactive).

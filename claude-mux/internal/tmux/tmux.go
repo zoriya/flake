@@ -13,6 +13,7 @@ import (
 	"strings"
 	"syscall"
 
+	"claude-mux/internal/claude"
 	"claude-mux/internal/paths"
 )
 
@@ -103,7 +104,11 @@ func writeConfig(binPath, socket string) (string, error) {
 set -g prefix C-x
 set -g prefix2 None
 set -g status off
-set -g mouse off
+# Claude Code probes these on startup (tmux show -Av mouse / -gv focus-events)
+# and nags with a "tmux detected ..." hint whenever they are not "on": mouse on
+# gives it wheel scrollback, focus-events on lets it see terminal focus changes.
+set -g mouse on
+set -g focus-events on
 set -g escape-time 10
 set -g base-index 1
 setw -g pane-base-index 1
@@ -137,11 +142,18 @@ bind -T prefix C-x send-prefix
 # the shell-command verbatim without expanding #{...}. -d sets the popup's start
 # directory (and does expand) as a belt-and-suspenders.
 bind -T prefix l display-popup -d "#{@claude_project_dir}" -w 90%% -h 85%% -E "'%s' list --socket '%s'"
+# C-x r : floating remote-control (claude rc) toggle for this project.
+bind -T prefix r display-popup -d "#{@claude_project_dir}" -w 60%% -h 40%% -E "'%s' rc --socket '%s'"
 # C-x n : start a fresh Claude session in a new window (current keeps running).
-bind -T prefix n new-window -c "#{@claude_project_dir}" -n claude "exec '%s' run --dir '#{@claude_project_dir}'"
+# Like the l/r bindings, the project is resolved from the session environment
+# ($CLAUDE_MUX_PROJECT_DIR, which the new window inherits) rather than a #{...}
+# format inside the shell-command: tmux passes the shell-command verbatim and
+# does not expand formats there, so an embedded --dir '#{@claude_project_dir}'
+# would reach run as a literal path, fail to chdir, and drop the whole session.
+bind -T prefix n new-window -c "#{@claude_project_dir}" -n claude "exec '%s' run"
 # C-x d : detach and leave everything running in the background.
 bind -T prefix d detach-client
-`, binPath, socket, binPath)
+`, binPath, socket, binPath, socket, binPath)
 
 	path := configPath()
 	if err := os.WriteFile(path, []byte(conf), 0o644); err != nil {
@@ -309,6 +321,79 @@ func (s *Server) NewWindowFresh(dir string) error {
 		return err
 	}
 	_, err := s.run("new-window", "-t", slug, "-c", dir, "-n", "claude", s.launchCmd(dir, ""))
+	return err
+}
+
+// rcSuffix is appended to a project's slug to name its dedicated tmux session
+// hosting the Claude remote-control (`claude rc`) server. Keeping rc in its own
+// session (rather than a window in the project session) means an rc-enabled
+// project can run its server in the background without a stray Claude window,
+// and it never shows up in the session picker.
+const rcSuffix = "-rc"
+
+// rcSlug returns the tmux session name hosting rc for dir.
+func (s *Server) rcSlug(dir string) string { return Slug(dir) + rcSuffix }
+
+// IsRunning reports whether the isolated tmux server is currently up.
+func (s *Server) IsRunning() bool {
+	_, err := s.run("list-sessions")
+	return err == nil
+}
+
+// HasRC reports whether the remote-control server is running for dir.
+func (s *Server) HasRC(dir string) bool {
+	return s.hasSession(s.rcSlug(dir))
+}
+
+// StartRC brings up `claude rc` for dir in its own detached tmux session. It is
+// a no-op when one is already running.
+//
+// `claude rc` is launched fully non-interactively: --spawn=same-dir skips the
+// spawn-mode chooser prompt, and the directory is pre-trusted (see
+// claude.EnsureTrusted) so it does not stall on the workspace trust dialog.
+// Either prompt would otherwise leave the server blocked, so the rc session
+// would look "on" while doing nothing.
+func (s *Server) StartRC(dir string) error {
+	slug := s.rcSlug(dir)
+	if s.hasSession(slug) {
+		return nil
+	}
+	if err := claude.EnsureTrusted(dir); err != nil {
+		return err
+	}
+	conf, err := writeConfig(s.BinPath, s.Socket)
+	if err != nil {
+		return err
+	}
+	if _, err := s.run("-f", conf, "new-session", "-d", "-s", slug, "-c", dir, "exec claude rc --spawn=same-dir"); err != nil {
+		return err
+	}
+	s.tagProject(slug, dir)
+	_, _ = s.run("source-file", conf)
+	return nil
+}
+
+// StopRC tears down the remote-control session for dir. The window-unlinked
+// hook (auto-detach on window close) is suppressed around the kill so stopping
+// rc never drops the current client. It is a no-op when rc is not running.
+func (s *Server) StopRC(dir string) error {
+	slug := s.rcSlug(dir)
+	if !s.hasSession(slug) {
+		return nil
+	}
+	_, _ = s.run("set-hook", "-gu", "window-unlinked")
+	_, err := s.run("kill-session", "-t", slug)
+	_, _ = s.run("set-hook", "-g", "window-unlinked", "detach-client")
+	return err
+}
+
+// FocusRC switches the current client to dir's remote-control session.
+func (s *Server) FocusRC(dir string) error {
+	slug := s.rcSlug(dir)
+	if !s.hasSession(slug) {
+		return fmt.Errorf("remote control is not running for this project")
+	}
+	_, err := s.run("switch-client", "-t", slug)
 	return err
 }
 

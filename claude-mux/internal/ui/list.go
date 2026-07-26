@@ -57,11 +57,11 @@ func statusDot(s session.Status) string {
 	case session.StatusRunning:
 		return runningStyle.Render("●")
 	case session.StatusQuestions:
-		return questionStyle.Render("?")
+		return questionStyle.Render("⬤")
 	case session.StatusIdle:
-		return openStyle.Render("○")
+		return openStyle.Render("⬤")
 	default: // closed
-		return closedStyle.Render("·")
+		return closedStyle.Render("◯")
 	}
 }
 

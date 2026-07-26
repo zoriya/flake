@@ -22,6 +22,7 @@ a session there are exactly two chords plus a detach, under the `C-x` prefix:
 | Key     | Action                                                             |
 | ------- | ----------------------------------------------------------------- |
 | `C-x l` | Float a picker of **every** Claude session for this project       |
+| `C-x r` | Float the remote-control (`claude rc`) toggle for this project     |
 | `C-x n` | Start a fresh Claude session in a new window (current keeps going) |
 | `C-x d` | Detach — everything keeps running in the background               |
 | `C-x C-x` | Send a literal `C-x` through to Claude                           |
@@ -44,9 +45,9 @@ session it shows:
 
 - a status glyph:
   - **●** green — *running* (Claude is working),
-  - **?** amber — *waiting for you* (Claude asked something / needs attention),
-  - **○** blue — *open* (idle in a window, ready for input),
-  - **·** dim — *closed* (transcript only, not open in any window);
+  - **⬤** amber — *waiting for you* (Claude asked something / needs attention),
+  - **⬤** blue — *open* (idle in a window, ready for input),
+  - **◯** dim — *closed* (transcript only, not open in any window);
 - the session title (Claude's AI-generated title, falling back to the last prompt),
 - the message count and how long ago it was last active.
 
@@ -71,6 +72,35 @@ Selecting a session that is already running just jumps to its window; selecting 
 idle one resumes it (`claude --resume`) in a new window. With `ctrl+a` (or
 `claude-mux list --all`) the picker shows sessions from every project, labelled by
 project; resuming one there opens (or switches to) that project's session.
+
+### Remote control (`C-x r`)
+
+[`claude rc`](https://claude.com/claude-code) (remote-control) runs a persistent
+server that lets you drive local sessions from claude.ai/code or the Claude mobile
+app. `C-x r` floats a small popup to manage it **per project**:
+
+| Key         | Action                                            |
+| ----------- | ------------------------------------------------- |
+| `t` / space | Toggle the rc server on/off for this project      |
+| `s` / enter | Switch the client to the running rc session       |
+| `q` / `esc` | Close the popup                                   |
+
+Toggling it on starts `claude rc` in its own dedicated, background tmux session
+(so it never spawns a stray Claude window and never clutters the `C-x l` picker)
+and records the project in an **rc-enabled list**. Toggling it off kills that
+session and removes the project from the list.
+
+`claude rc` is launched non-interactively so it never stalls the background
+session on a prompt: it runs with `--spawn=same-dir` (skipping the spawn-mode
+chooser), and the project is pre-trusted in Claude's `.claude.json`
+(`hasTrustDialogAccepted`) so it does not block on the workspace trust dialog.
+Enabling remote control for a project is itself the decision to trust it — there
+is no global setting to skip that dialog, so claude-mux records it per project.
+
+The enabled list is persisted (under the state dir, `rc-projects`). Whenever the
+isolated tmux server first cold-starts, claude-mux automatically brings the rc
+server back up for **every** rc-enabled project, so your remote-control endpoints
+are always available without having to open each project by hand.
 
 ## How it works
 
@@ -98,6 +128,7 @@ claude-mux            Start or attach the session for the current directory
 claude-mux list       Interactive session picker (used by the C-x l chord)
 claude-mux list --all   Picker across every project (also toggled with ctrl+a)
 claude-mux list --dump  Print the session listing as plain text (scripting/debug)
+claude-mux rc         Remote-control toggle popup (used by the C-x r chord)
 claude-mux new        Start a fresh Claude session in the current directory
 claude-mux kill       Kill the running sessions for the current directory
 claude-mux kill --all Kill every running session across all projects
