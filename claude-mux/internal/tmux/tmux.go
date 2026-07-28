@@ -194,6 +194,26 @@ func (s *Server) EnsureSession(dir string) (string, error) {
 	return slug, nil
 }
 
+// Reload regenerates the isolated config from this binary and re-sources it into
+// the running server, so its bindings (the C-x chords) point at the current
+// claude-mux binary. Running Claude windows are left untouched — they are plain
+// `claude` processes, not claude-mux. It is a no-op (reloaded=false) when the
+// server is not running. This is what lets a Nix rebuild repoint a live server's
+// chords at the new store path without a detach/reattach.
+func (s *Server) Reload() (bool, error) {
+	if !s.IsRunning() {
+		return false, nil
+	}
+	conf, err := writeConfig(s.BinPath, s.Socket)
+	if err != nil {
+		return false, err
+	}
+	if _, err := s.run("source-file", conf); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 // tagProject records the project directory on a session, both as a tmux option
 // (for the -c in bindings) and in the session environment (so the popup and any
 // launched process resolve the same project and Claude config dir).

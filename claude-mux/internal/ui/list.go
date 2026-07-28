@@ -94,6 +94,8 @@ type model struct {
 	height  int
 	err     error
 	result  Result
+	loading bool // a background load is in flight
+	loaded  bool // at least one load has completed
 }
 
 // RunPicker shows the interactive picker for dir and returns the chosen action.
@@ -103,7 +105,6 @@ func RunPicker(dir string, all bool, srv *tmux.Server) (Result, error) {
 	if srv.InsideOurServer() {
 		m.current = srv.CurrentSessionID()
 	}
-	m.reload()
 	p := tea.NewProgram(m, tea.WithAltScreen())
 	final, err := p.Run()
 	if err != nil {
@@ -112,32 +113,57 @@ func RunPicker(dir string, all bool, srv *tmux.Server) (Result, error) {
 	return final.(*model).result, nil
 }
 
-func (m *model) reload() {
-	// Remember which session is highlighted so the cursor tracks it even when the
-	// list is reordered by an auto-reload (attention sorting moves rows around).
+// loadedMsg carries the result of a background session load.
+type loadedMsg struct {
+	entries []manager.Entry
+	err     error
+}
+
+// startLoad kicks off a background load unless one is already running, so the
+// picker paints and stays responsive while sessions are read off the main loop.
+// Returns nil when a load is already in flight (the tick just skips this round).
+func (m *model) startLoad() tea.Cmd {
+	if m.loading {
+		return nil
+	}
+	m.loading = true
+	dir, all, srv := m.dir, m.all, m.srv
+	return func() tea.Msg {
+		entries, err := manager.Load(dir, all, srv)
+		return loadedMsg{entries: entries, err: err}
+	}
+}
+
+// applyLoad folds a completed load into the model, keeping the cursor on the
+// same session even when attention sorting reorders the list.
+func (m *model) applyLoad(msg loadedMsg) {
+	m.loading = false
+	m.loaded = true
+	m.err = msg.err
+	if msg.err != nil {
+		return
+	}
+
 	var selectedID string
 	if m.cursor >= 0 && m.cursor < len(m.entries) {
 		selectedID = m.entries[m.cursor].ID
 	}
-
-	entries, err := manager.Load(m.dir, m.all, m.srv)
-	m.err = err
-	m.entries = entries
-
+	m.entries = msg.entries
 	if selectedID != "" {
-		for i, e := range entries {
+		for i, e := range m.entries {
 			if e.ID == selectedID {
 				m.cursor = i
 				break
 			}
 		}
 	}
-	if m.cursor >= len(entries) {
-		m.cursor = len(entries) - 1
+	if m.cursor >= len(m.entries) {
+		m.cursor = len(m.entries) - 1
 	}
 	if m.cursor < 0 {
 		m.cursor = 0
 	}
+	m.clampScroll()
 }
 
 // reloadInterval is how often an open picker re-reads sessions so its statuses,
@@ -151,7 +177,7 @@ func tick() tea.Cmd {
 	return tea.Tick(reloadInterval, func(time.Time) tea.Msg { return tickMsg{} })
 }
 
-func (m *model) Init() tea.Cmd { return tick() }
+func (m *model) Init() tea.Cmd { return tea.Batch(m.startLoad(), tick()) }
 
 // linesPerEntry is the height of one rendered session (two-line layout).
 const linesPerEntry = 2
@@ -208,14 +234,16 @@ func (m *model) clampScroll() {
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case loadedMsg:
+		m.applyLoad(msg)
+		return m, nil
 	case tickMsg:
-		m.reload()
-		m.clampScroll()
-		return m, tick()
+		return m, tea.Batch(m.startLoad(), tick())
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 		m.clampScroll()
 	case tea.KeyMsg:
+		var cmd tea.Cmd
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
 			m.result = Result{Action: ActionNone}
@@ -235,7 +263,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+a":
 			m.all = !m.all
 			m.cursor = 0
-			m.reload()
+			cmd = m.startLoad()
 		case "n":
 			m.result = Result{Action: ActionNew}
 			return m, tea.Quit
@@ -245,7 +273,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if len(m.entries) > 0 {
 				if e := m.entries[m.cursor]; e.Target != "" {
 					_ = m.srv.KillWindow(e.Target)
-					m.reload()
+					cmd = m.startLoad()
 				}
 			}
 		case "enter":
@@ -255,6 +283,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 		m.clampScroll()
+		return m, cmd
 	}
 	return m, nil
 }
@@ -271,9 +300,14 @@ func (m *model) View() string {
 		return b.String()
 	}
 	if len(m.entries) == 0 {
-		msg := "No sessions yet for this project."
-		if m.all {
+		var msg string
+		switch {
+		case !m.loaded:
+			msg = "Loading sessions…"
+		case m.all:
 			msg = "No sessions found."
+		default:
+			msg = "No sessions yet for this project."
 		}
 		b.WriteString(emptyStyle.Width(width).Render(msg))
 		b.WriteString("\n")

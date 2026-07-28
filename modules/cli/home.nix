@@ -109,6 +109,11 @@
     ${lib.getExe pkgs.jq} '.remoteControlAtStartup = true' "$f" >"$f.tmp" && mv "$f.tmp" "$f"
   '';
 
+  # path is persisted at first launch, reset it to hot-reload.
+  home.activation.claudeMuxReload = ''
+    ${lib.getExe pkgs.claude-mux} reload || true
+  '';
+
   xdg.configFile."claude/CLAUDE.md".text = ''
     # Global instructions
 

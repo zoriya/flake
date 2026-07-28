@@ -8,8 +8,10 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"claude-mux/internal/paths"
@@ -85,10 +87,12 @@ type line struct {
 // List returns every Claude session recorded for projectDir, most recently
 // active first. Status is left as StatusIdle; callers layer that on top.
 func List(projectDir string) ([]Session, error) {
-	sessions, err := listDir(paths.SessionDir(projectDir))
+	c := loadCache()
+	sessions, err := listDir(paths.SessionDir(projectDir), c)
 	if err != nil {
 		return nil, err
 	}
+	c.save()
 	sortByRecent(sessions)
 	return sessions, nil
 }
@@ -104,23 +108,27 @@ func ListAll() ([]Session, error) {
 		}
 		return nil, err
 	}
+	c := loadCache()
 	var all []Session
 	for _, p := range projects {
 		if !p.IsDir() {
 			continue
 		}
-		sessions, err := listDir(filepath.Join(paths.ProjectsDir(), p.Name()))
+		sessions, err := listDir(filepath.Join(paths.ProjectsDir(), p.Name()), c)
 		if err != nil {
 			continue
 		}
 		all = append(all, sessions...)
 	}
+	c.save()
 	sortByRecent(all)
 	return all, nil
 }
 
-// listDir parses every *.jsonl transcript directly inside dir.
-func listDir(dir string) ([]Session, error) {
+// listDir parses every *.jsonl transcript directly inside dir. Unchanged
+// transcripts are served from the cache; the rest are parsed concurrently, so
+// the cost scales with what actually changed rather than the whole history.
+func listDir(dir string, c *cache) ([]Session, error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -128,16 +136,52 @@ func listDir(dir string) ([]Session, error) {
 		}
 		return nil, err
 	}
-	var sessions []Session
+
+	var (
+		files []string
+		infos []os.FileInfo
+	)
 	for _, e := range entries {
 		if e.IsDir() || !strings.HasSuffix(e.Name(), ".jsonl") {
 			continue
 		}
-		s, err := parse(filepath.Join(dir, e.Name()))
+		info, err := e.Info()
 		if err != nil {
-			continue // skip unreadable/corrupt transcripts rather than fail the whole list
+			continue
 		}
-		sessions = append(sessions, s)
+		files = append(files, filepath.Join(dir, e.Name()))
+		infos = append(infos, info)
+	}
+
+	results := make([]Session, len(files))
+	ok := make([]bool, len(files))
+	sem := make(chan struct{}, runtime.NumCPU())
+	var wg sync.WaitGroup
+	for i := range files {
+		if s, hit := c.get(files[i], infos[i]); hit {
+			results[i], ok[i] = s, true
+			continue
+		}
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int) {
+			defer wg.Done()
+			defer func() { <-sem }()
+			s, err := parse(files[i])
+			if err != nil {
+				return // skip unreadable/corrupt transcripts rather than fail the whole list
+			}
+			c.put(files[i], infos[i], s)
+			results[i], ok[i] = s, true
+		}(i)
+	}
+	wg.Wait()
+
+	sessions := make([]Session, 0, len(files))
+	for i := range results {
+		if ok[i] {
+			sessions = append(sessions, results[i])
+		}
 	}
 	return sessions, nil
 }

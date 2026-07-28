@@ -156,6 +156,7 @@ claude-mux usage      Show the current Claude usage/limits (used by the C-x u ch
 claude-mux new        Start a fresh Claude session in the current directory
 claude-mux kill       Kill the running sessions for the current directory
 claude-mux kill --all Kill every running session across all projects
+claude-mux reload     Repoint a running server's chords at this binary (live)
 claude-mux run        Internal launcher used by the tmux windows
 ```
 

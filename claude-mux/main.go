@@ -54,6 +54,8 @@ func run(args []string) error {
 			return cmdUsage(args[1:])
 		case "kill":
 			return cmdKill(args[1:])
+		case "reload":
+			return cmdReload(args[1:])
 		case "hook":
 			return cmdHook(args[1:])
 		case "-h", "--help", "help":
@@ -73,6 +75,7 @@ Usage:
   claude-mux new        Start a fresh Claude session in the current directory
   claude-mux kill       Kill the running sessions for the current directory
   claude-mux kill --all Kill every running session across all projects
+  claude-mux reload     Repoint a running server's chords at this binary (live)
 
 Inside a session:
   C-x l   list every Claude session for this project
@@ -168,6 +171,31 @@ func cmdKill(args []string) error {
 		fmt.Printf("killed running sessions for %s\n", dir)
 	} else {
 		fmt.Printf("no running sessions for %s\n", dir)
+	}
+	return nil
+}
+
+// cmdReload regenerates the isolated tmux config from this binary and re-sources
+// it into the running server, so its chords (C-x l/r/n/u) run the current
+// claude-mux rather than the store path baked in when the server first started.
+// It is meant to be run by home-manager activation after a Nix rebuild: the live
+// server's bindings hot-reload to the new binary while every running Claude
+// window keeps going untouched. It is a quiet no-op when no server is running.
+func cmdReload(args []string) error {
+	fs := flag.NewFlagSet("reload", flag.ContinueOnError)
+	sockFlag := fs.String("socket", "", "tmux socket name")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *sockFlag != "" {
+		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
+	}
+	reloaded, err := tmux.New().Reload()
+	if err != nil {
+		return err
+	}
+	if reloaded {
+		fmt.Println("reloaded claude-mux bindings")
 	}
 	return nil
 }
