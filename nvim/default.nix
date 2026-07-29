@@ -84,7 +84,7 @@ in
           oil-nvim
           harpoon2
 
-          gitsigns-nvim
+          mini-diff
           jj-nvim
           vim-fugitive
           vim-rhubarb

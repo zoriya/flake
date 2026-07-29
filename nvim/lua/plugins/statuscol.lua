@@ -17,7 +17,7 @@ return {
 					},
 					{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
 					{
-						sign = { namespace = { "gitsign" }, maxwidth = 1, colwidth = 1 },
+						sign = { namespace = { "MiniDiffViz" }, maxwidth = 1, colwidth = 1 },
 						click = "v:lua.ScSa"
 					},
 				}

@@ -24,43 +24,46 @@ vim.api.nvim_create_autocmd("FileType", {
 
 return {
 	{
-		"gitsigns.nvim",
+		"mini.diff",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {
-			signs = {
-				add = { text = "▕" },
-				change = { text = "▕" },
-				changedelete = { text = "▕" },
-				untracked = { text = "▕" },
+			view = {
+				style = "sign",
+				signs = { add = "▕", change = "▕", delete = "▕" },
 			},
-			signs_staged = {
-				add = { text = "▕" },
-				change = { text = "▕" },
-				changedelete = { text = "▕" },
-				untracked = { text = "▕" },
+			source = {
+				require("jj-diff").source,
+				require("mini.diff").gen_source.git(),
 			},
-			on_attach = function(buffer)
-				local gs = require("gitsigns")
-				local function map(mode, l, r, desc)
-					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-				end
-
-				map('n', ']h', function() gs.nav_hunk("next", { target = "all" }) end, "Next Hunk")
-				map('n', '[h', function() gs.nav_hunk("prev", { target = "all" }) end, "Prev Hunk")
-
-				map({ "n", "v" }, "<leader>ha", gs.stage_hunk, "Add Hunk")
-				map({ "n", "v" }, "<leader>hr", gs.reset_hunk, "Reset Hunk")
-				map("n", "<leader>hp", gs.preview_hunk, "Preview Hunk")
-
-				map("n", "<leader>ga", gs.stage_buffer, "Add buffer")
-				map("n", "<leader>gR", gs.reset_buffer, "Reset Buffer")
-
-				map({ "o", "x" }, "ih", gs.select_hunk, "Git Select Hunk")
-				map({ "o", "x" }, "ah", gs.select_hunk, "Git Select Hunk")
-			end,
+			mappings = {
+				apply = "",
+				reset = "gH",
+				textobject = "ih",
+				goto_first = "[H",
+				goto_prev = "[h",
+				goto_next = "]h",
+				goto_last = "]H",
+			},
 		},
 		after = function(plug)
-			require("gitsigns").setup(plug.opts)
+			local diff = require("mini.diff")
+			diff.setup(plug.opts)
+			require("jj-diff").setup()
+
+			local function map(mode, l, r, desc)
+				vim.keymap.set(mode, l, r, { desc = desc })
+			end
+
+			map("n", "<leader>hr", function()
+				local line = vim.fn.line(".")
+				diff.do_hunks(0, "reset", { line_start = line, line_end = line })
+			end, "Reset Hunk")
+			map("x", "<leader>hr", function()
+				diff.do_hunks(0, "reset", { line_start = vim.fn.line("v"), line_end = vim.fn.line(".") })
+			end, "Reset Hunk")
+
+			map("n", "<leader>hp", function() diff.toggle_overlay(0) end, "Preview Hunk (overlay)")
+			map("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, "Reset Buffer")
 		end,
 	},
 
