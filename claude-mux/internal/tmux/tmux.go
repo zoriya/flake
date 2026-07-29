@@ -13,7 +13,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"claude-mux/internal/claude"
@@ -258,14 +257,26 @@ func (s *Server) tagProject(slug, dir string) {
 	_, _ = s.run("set-environment", "-t", slug, "CLAUDE_CONFIG_DIR", paths.ClaudeConfigDir())
 }
 
-// Attach replaces the current process with a tmux client attached to slug.
+// Attach runs a tmux client attached to slug, blocking until it detaches.
+//
+// It deliberately runs tmux as a child (rather than exec-replacing this process)
+// so it can normalise the exit status. When the client detaches because its
+// session was closed or the server exited under it, tmux itself exits non-zero
+// — a normal end for claude-mux, but one that makes a parent tmux with
+// remain-on-exit ("failed"/"on") mark the pane "dead" instead of closing it.
+// Swallowing tmux's exit status keeps claude-mux exiting 0 on any clean close.
 func (s *Server) Attach(slug string) error {
-	tmuxPath, err := exec.LookPath("tmux")
-	if err != nil {
-		return err
+	cmd := exec.Command("tmux", s.args("attach-session", "-t", slug)...)
+	cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
+	if err := cmd.Run(); err != nil {
+		if _, ok := err.(*exec.ExitError); ok {
+			// tmux ran but exited non-zero (detach / session or server gone):
+			// that is a normal end for us, not a failure to surface.
+			return nil
+		}
+		return err // failed to start tmux at all
 	}
-	argv := s.args("attach-session", "-t", slug)
-	return syscall.Exec(tmuxPath, append([]string{tmuxPath}, argv...), os.Environ())
+	return nil
 }
 
 // RunningSessions returns a map of Claude session id -> tmux target

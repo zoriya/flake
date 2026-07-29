@@ -34,7 +34,8 @@ the keys above, so from inside it feels like you are talking to `claude` directl
 When a Claude session ends (you quit `claude`), claude-mux **detaches** and drops
 you back to your shell. Any other sessions keep running in the background and can
 be reattached (`claude-mux`) or reopened from the picker. To actually terminate
-sessions, use `claude-mux kill` or `x` in the picker.
+running sessions, use `claude-mux kill`. In the picker, `x` archives a session
+(closing it if it is still running) and files it under the archived section.
 
 ### The session picker (`C-x l`)
 
@@ -54,7 +55,10 @@ session it shows:
 
 Each session is shown on two lines (title, then status/meta) so it stays readable
 in narrow popups, and the list and help text scroll/wrap to fit small windows.
-Sessions needing attention float to the top (waiting → running → open → closed).
+Sessions are listed in the order they were created (oldest first) so a session
+keeps its place regardless of its status or recent activity. Archived sessions
+(see `x` below) are grouped at the bottom under an **Archived** divider, in the
+same creation order.
 
 The session you opened the picker from — the one running in the pane the popup is
 floating over — is marked "you are here": its title is underlined and its meta
@@ -72,14 +76,17 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 | Key            | Action                                          |
 | -------------- | ----------------------------------------------- |
 | `↑`/`↓`, `j`/`k` | Move the selection                            |
-| `enter`        | Open the selected session                       |
+| `enter`        | Open the selected session (restores it if archived) |
+| `p`            | Preview: open without restoring an archived session |
 | `n`            | Start a fresh session                           |
-| `x`            | Kill the selected running session               |
+| `x`            | Archive the selected session                    |
 | `ctrl+a`       | Toggle between this project and **all** projects |
 | `q` / `esc`    | Cancel                                          |
 
 Selecting a session that is already running just jumps to its window; selecting an
-idle one resumes it (`claude --resume`) in a new window. With `ctrl+a` (or
+idle one resumes it (`claude --resume`) in a new window. Opening an archived
+session with `enter` also restores it out of the archived section; `p` opens it
+the same way but leaves it archived, so you can peek without restoring. With `ctrl+a` (or
 `claude-mux list --all`) the picker shows sessions from every project, labelled by
 project; resuming one there opens (or switches to) that project's session.
 

@@ -12,6 +12,7 @@ import (
 
 	"claude-mux/internal/manager"
 	"claude-mux/internal/session"
+	"claude-mux/internal/state"
 	"claude-mux/internal/tmux"
 )
 
@@ -43,6 +44,12 @@ var (
 	selBar      = lipgloss.NewStyle().Foreground(lipgloss.Color("39"))
 	selRowStyle = lipgloss.NewStyle().Bold(true)
 	emptyStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("244")).Italic(true)
+	// archivedHeaderStyle labels the divider between live and archived sessions.
+	archivedHeaderStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("240")).Bold(true)
+	// archivedTint / archivedMetaStyle mute archived rows so they read as "put
+	// away" at a glance, distinct from the live sessions above the divider.
+	archivedTint      = lipgloss.Color("240")
+	archivedMetaStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("238"))
 	// currentTag marks the row whose session is open in the pane the picker was
 	// floated over ("you are here").
 	currentTag = lipgloss.NewStyle().Foreground(lipgloss.Color("42")).Bold(true)
@@ -200,11 +207,26 @@ func (m *model) footerHeight() int {
 	return lipgloss.Height(helpStyle.Width(width).Render(m.helpText())) + 1
 }
 
+// hasArchived reports whether any entry is archived, i.e. whether the archived
+// section header will be drawn somewhere in the list.
+func (m *model) hasArchived() bool {
+	for i := range m.entries {
+		if m.entries[i].Archived {
+			return true
+		}
+	}
+	return false
+}
+
 // pageSize is how many session entries fit, given the two-line layout and the
-// space taken by the header (1 line) and footer.
+// space taken by the header (1 line) and footer. When an archived section
+// exists, one more line is reserved for its divider header.
 func (m *model) pageSize() int {
 	_, height := m.dims()
 	body := height - 1 - m.footerHeight()
+	if m.hasArchived() {
+		body -= archivedDividerHeight
+	}
 	if body < linesPerEntry {
 		return 1
 	}
@@ -268,15 +290,46 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.result = Result{Action: ActionNew}
 			return m, tea.Quit
 		case "x":
-			// Kill the selected session's running window. Idle sessions have no
-			// live process, so there is nothing to kill.
+			// Archive the selected session: close any live window and drop it to
+			// the archived section. Archiving is one-way here — a session is
+			// restored by opening it with enter (or previewed with p).
 			if len(m.entries) > 0 {
-				if e := m.entries[m.cursor]; e.Target != "" {
+				e := m.entries[m.cursor]
+				if !e.Archived {
+					if e.Target != "" {
+						_ = m.srv.KillWindow(e.Target)
+					}
+					_ = state.Archive(e.ID)
+					// Keep the cursor where it is rather than following the
+					// session down to the archived section: point it at the next
+					// entry so applyLoad tracks that one (which shifts up into the
+					// archived session's old slot) after the reload.
+					if m.cursor+1 < len(m.entries) {
+						m.cursor++
+					}
+					cmd = m.startLoad()
+				} else if e.Target != "" {
+					// The session is already archived but was opened (e.g. via
+					// preview), so it has a live window: x closes that pane
+					// without changing its archived state.
 					_ = m.srv.KillWindow(e.Target)
 					cmd = m.startLoad()
 				}
 			}
 		case "enter":
+			// Opening an archived session restores it (un-archives it); a live one
+			// is opened as-is.
+			if len(m.entries) > 0 {
+				e := m.entries[m.cursor]
+				if e.Archived {
+					_ = state.Unarchive(e.ID)
+				}
+				m.result = Result{Action: ActionResume, Entry: e}
+				return m, tea.Quit
+			}
+		case "p":
+			// Preview: open the selected session without changing its archived
+			// state, so an archived session can be peeked at without restoring it.
 			if len(m.entries) > 0 {
 				m.result = Result{Action: ActionResume, Entry: m.entries[m.cursor]}
 				return m, tea.Quit
@@ -321,11 +374,37 @@ func (m *model) View() string {
 		end = len(m.entries)
 	}
 	for i := m.offset; i < end; i++ {
+		if m.isArchivedSectionStart(i) {
+			b.WriteString(m.renderArchivedHeader(width))
+			b.WriteString("\n")
+		}
 		b.WriteString(m.renderRow(i, m.entries[i], width))
 		b.WriteString("\n")
 	}
 	b.WriteString(m.renderFooter(width))
 	return b.String()
+}
+
+// isArchivedSectionStart reports whether entry i is the first archived entry, so
+// the "Archived" divider should be drawn just before it.
+func (m *model) isArchivedSectionStart(i int) bool {
+	return m.entries[i].Archived && (i == 0 || !m.entries[i-1].Archived)
+}
+
+// archivedDividerHeight is how many lines the archived-section divider occupies:
+// a blank line, the label rule, and another blank line so it stands well apart
+// from the live sessions above it.
+const archivedDividerHeight = 3
+
+// renderArchivedHeader draws the (multi-line) divider that opens the archived
+// section: padding above and below a full-width labelled rule.
+func (m *model) renderArchivedHeader(width int) string {
+	label := "── Archived "
+	if pad := width - len([]rune(label)); pad > 0 {
+		label += strings.Repeat("─", pad)
+	}
+	rule := archivedHeaderStyle.Render(truncate(label, width))
+	return "\n" + rule + "\n"
 }
 
 // renderHeader is the single (truncated) title line.
@@ -394,6 +473,11 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 	if isCurrent {
 		ts = ts.Underline(true)
 	}
+	// Archived rows are tinted a muted grey so the live/archived split reads at a
+	// glance, even while scrolled past the divider.
+	if e.Archived {
+		ts = ts.Foreground(archivedTint)
+	}
 	title = ts.Render(title)
 	line1 := bar + dot + " " + title
 
@@ -406,7 +490,7 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 	if m.all {
 		parts = append(parts, filepath.Base(e.ProjectDir))
 	}
-	parts = append(parts, fmt.Sprintf("%d msg", e.Messages), relTime(e.Updated))
+	parts = append(parts, fmt.Sprintf("%d msg", e.Messages), relTime(e.Created))
 
 	// A "this pane" tag flags the current session; reserve room for it so the
 	// meta text truncates around it rather than overflowing the row.
@@ -417,9 +501,13 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 			metaW = 4
 		}
 	}
-	meta := metaStyle.Render(truncate(strings.Join(parts, " · "), metaW))
+	ms := metaStyle
+	if e.Archived {
+		ms = archivedMetaStyle
+	}
+	meta := ms.Render(truncate(strings.Join(parts, " · "), metaW))
 	if isCurrent {
-		meta += metaStyle.Render(" · ") + currentTag.Render(tag)
+		meta += ms.Render(" · ") + currentTag.Render(tag)
 	}
 	line2 := indent + meta
 
@@ -431,7 +519,7 @@ func (m *model) helpText() string {
 	if m.all {
 		scope = "ctrl+a this project"
 	}
-	return "↑/↓ move · enter open · n new · x kill · " + scope + " · q cancel"
+	return "↑/↓ move · enter open · p preview · n new · x archive · " + scope + " · q cancel"
 }
 
 // pad right-pads s to at least n runes.

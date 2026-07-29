@@ -19,6 +19,9 @@ type Entry struct {
 	// ProjectDir is the directory this session belongs to (its own cwd), used to
 	// resume it in the right project even when listing across all projects.
 	ProjectDir string
+	// Archived is true when the user has archived this session; archived sessions
+	// are grouped at the bottom of the listing under their own header.
+	Archived bool
 }
 
 // Load lists sessions and marks which are currently running by consulting the
@@ -40,10 +43,11 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 	}
 
 	running := srv.RunningSessions() // id -> target ("slug:window")
+	archived := state.ArchivedSet()  // id -> archived
 
 	entries := make([]Entry, 0, len(sessions))
 	for _, s := range sessions {
-		e := Entry{Session: s, ProjectDir: projectDirOf(s, dir)}
+		e := Entry{Session: s, ProjectDir: projectDirOf(s, dir), Archived: archived[s.ID]}
 		if target, ok := running[s.ID]; ok {
 			// Open in a window; the substate (running/questions/idle) comes from
 			// what the session last reported through its hooks.
@@ -61,30 +65,16 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 		entries = append(entries, e)
 	}
 
-	// Order by attention: questions first, then running, idle, closed; then by
-	// most recent activity within each group.
+	// Order strictly by creation: live sessions first (newest created first), then
+	// archived sessions in the same creation order. Status and recent activity do
+	// not affect placement, so a session never jumps around as it runs or idles.
 	sort.SliceStable(entries, func(i, j int) bool {
-		pi, pj := statusRank(entries[i].Status), statusRank(entries[j].Status)
-		if pi != pj {
-			return pi > pj
+		if entries[i].Archived != entries[j].Archived {
+			return !entries[i].Archived // live sessions before archived ones
 		}
-		return entries[i].Updated.After(entries[j].Updated)
+		return entries[i].Created.After(entries[j].Created)
 	})
 	return entries, nil
-}
-
-// statusRank orders statuses so the ones needing attention float to the top.
-func statusRank(s session.Status) int {
-	switch s {
-	case session.StatusQuestions:
-		return 3
-	case session.StatusRunning:
-		return 2
-	case session.StatusIdle:
-		return 1
-	default: // closed
-		return 0
-	}
 }
 
 // projectDirOf returns the directory a session belongs to, preferring the cwd
