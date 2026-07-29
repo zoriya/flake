@@ -48,6 +48,12 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 			// Open in a window; the substate (running/questions/idle) comes from
 			// what the session last reported through its hooks.
 			e.Status = session.ParseStatus(state.Get(s.ID))
+			// No hook fires when a response is interrupted with Esc, so the hook
+			// status can be left stuck at "running". If the transcript's last
+			// entry is an interrupt marker, the session is actually idle.
+			if s.Interrupted && e.Status != session.StatusIdle {
+				e.Status = session.StatusIdle
+			}
 			e.Target = target
 		} else {
 			e.Status = session.StatusClosed

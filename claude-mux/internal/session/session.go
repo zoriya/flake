@@ -71,6 +71,10 @@ type Session struct {
 	Messages   int       // number of user/assistant messages
 	Status     Status    // running/idle, populated by the caller
 	RunningPID int       // pid of the process holding it open, when running
+	// Interrupted is true when the last message in the transcript is an
+	// interrupt marker (the user pressed Esc). No hook fires on interrupt, so
+	// the reported status can be stale "running"; callers use this to correct it.
+	Interrupted bool
 }
 
 // line is the subset of a transcript record we care about. Decoding only these
@@ -82,6 +86,9 @@ type line struct {
 	Summary    string    `json:"summary"`
 	CWD        string    `json:"cwd"`
 	Timestamp  time.Time `json:"timestamp"`
+	// InterruptedMessageID is set only on the synthetic user entry Claude writes
+	// when a response is interrupted with Esc; its presence identifies that entry.
+	InterruptedMessageID string `json:"interruptedMessageId"`
 }
 
 // List returns every Claude session recorded for projectDir, most recently
@@ -237,7 +244,14 @@ func parse(path string) (Session, error) {
 				summary = l.Summary
 			}
 		case "user", "assistant":
-			s.Messages++
+			if l.InterruptedMessageID != "" {
+				// The interrupt marker is not a real message; record that it was
+				// the last thing to happen so a stale "running" can be corrected.
+				s.Interrupted = true
+			} else {
+				s.Messages++
+				s.Interrupted = false
+			}
 		}
 		if l.CWD != "" && s.CWD == "" {
 			s.CWD = l.CWD

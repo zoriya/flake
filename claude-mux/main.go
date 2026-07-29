@@ -125,12 +125,19 @@ func cmdRun(args []string) error {
 	fs := flag.NewFlagSet("run", flag.ContinueOnError)
 	dirFlag := fs.String("dir", "", "project directory (defaults to cwd)")
 	resumeFlag := fs.String("resume", "", "resume this session id instead of starting fresh")
+	sessionFlag := fs.String("session-id", "", "start a fresh session with this exact id (defaults to a random one)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
 	dir := resolveDir(*dirFlag)
 
+	// Precedence: resume an existing id, else a caller-supplied fresh id (used by
+	// the warm pool, which pre-generates the id so it can hand the window over),
+	// else a fresh random one.
 	id := *resumeFlag
+	if id == "" {
+		id = *sessionFlag
+	}
 	if id == "" {
 		id = genUUID()
 	}
@@ -268,8 +275,12 @@ func isIdleNotification(msg string) bool {
 func cmdNew(args []string) error {
 	fs := flag.NewFlagSet("new", flag.ContinueOnError)
 	dirFlag := fs.String("dir", "", "project directory (defaults to cwd)")
+	sockFlag := fs.String("socket", "", "tmux socket name")
 	if err := fs.Parse(args); err != nil {
 		return err
+	}
+	if *sockFlag != "" {
+		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
 	}
 	dir := resolveDir(*dirFlag)
 	srv := tmux.New()

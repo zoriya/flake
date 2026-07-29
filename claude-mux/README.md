@@ -23,7 +23,7 @@ a session there are exactly two chords plus a detach, under the `C-x` prefix:
 | ------- | ----------------------------------------------------------------- |
 | `C-x l` | Float a picker of **every** Claude session for this project       |
 | `C-x r` | Float the remote-control (`claude rc`) toggle for this project     |
-| `C-x n` | Start a fresh Claude session in a new window (current keeps going) |
+| `C-x n` | Start a fresh Claude session in a new window (instant — see below) |
 | `C-x u` | Float the current Claude usage (limits) for this project          |
 | `C-x d` | Detach — everything keeps running in the background               |
 | `C-x C-x` | Send a literal `C-x` through to Claude                           |
@@ -120,6 +120,22 @@ The enabled list is persisted (under the state dir, `rc-projects`). Whenever the
 isolated tmux server first cold-starts, claude-mux automatically brings the rc
 server back up for **every** rc-enabled project, so your remote-control endpoints
 are always available without having to open each project by hand.
+
+### Instant new sessions (`C-x n`)
+
+`claude` takes a moment to cold-start, which made `C-x n` feel sluggish. To hide
+that, claude-mux keeps a **warm pool**: one pre-booted, idle Claude session per
+project, sitting in its own hidden background tmux session (never shown in the
+picker). `C-x n` just hands that pre-booted window over — instantly, no
+cold-start — and boots a replacement into the pool in the background so the next
+`C-x n` is ready too. The pool is filled on attach, so even the first `C-x n` is
+instant. If the pool is drained (a burst of new windows), `C-x n` falls back to a
+normal cold start and refills afterwards.
+
+A warm session writes no transcript until it is actually used, so idle warm
+sessions never pollute your history or the picker. If a warm Claude exits on its
+own it is left as a dead pane (so it can never detach your client) and reaped on
+the next fill.
 
 ## How it works
 

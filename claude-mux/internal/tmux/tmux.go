@@ -4,6 +4,7 @@
 package tmux
 
 import (
+	"crypto/rand"
 	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
@@ -26,6 +27,16 @@ const DefaultSocket = "claude-mux"
 // window is running. It is what lets the picker tell running sessions apart and
 // jump straight to their window.
 const sessionIDOption = "@claude_session_id"
+
+// warmSuffix names a project's warm-pool session: a background session holding
+// pre-booted, idle Claude windows so C-x n can hand one over instantly instead
+// of paying Claude's cold-start each time.
+const warmSuffix = "-warm"
+
+// warmPoolSize is how many pre-booted Claude sessions to keep ready per project.
+// One is enough to make the common single C-x n instant; a burst of new windows
+// simply falls back to a cold start once the pool is drained, then refills.
+const warmPoolSize = 1
 
 // Server represents the isolated tmux server on a given socket.
 type Server struct {
@@ -78,15 +89,37 @@ func Slug(dir string) string {
 	return b.String() + "-" + hex.EncodeToString(sum[:])[:6]
 }
 
+// shQuote single-quotes v for safe embedding in a tmux shell-command.
+func shQuote(v string) string { return "'" + strings.ReplaceAll(v, "'", `'\''`) + "'" }
+
 // launchCmd builds the shell-command tmux runs in a window: it goes through
 // `claude-mux run` so the window records its session id, then execs Claude.
 func (s *Server) launchCmd(dir, resumeID string) string {
-	q := func(v string) string { return "'" + strings.ReplaceAll(v, "'", `'\''`) + "'" }
-	cmd := fmt.Sprintf("exec %s run --dir %s", q(s.BinPath), q(dir))
+	cmd := fmt.Sprintf("exec %s run --dir %s", shQuote(s.BinPath), shQuote(dir))
 	if resumeID != "" {
-		cmd += " --resume " + q(resumeID)
+		cmd += " --resume " + shQuote(resumeID)
 	}
 	return cmd
+}
+
+// launchFresh builds the shell-command for a fresh session with a pre-chosen id.
+// The warm pool generates the id up front so it can find and hand over the window
+// (by its @claude_session_id tag) once the session is consumed.
+func (s *Server) launchFresh(dir, id string) string {
+	return fmt.Sprintf("exec %s run --dir %s --session-id %s", shQuote(s.BinPath), shQuote(dir), shQuote(id))
+}
+
+// newSessionID returns a random RFC 4122 v4 UUID for a fresh Claude session id.
+// It mirrors the generator in the run launcher so the warm pool can pre-assign
+// ids to pre-booted windows.
+func newSessionID() string {
+	var b [16]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+	}
+	b[6] = (b[6] & 0x0f) | 0x40 // version 4
+	b[8] = (b[8] & 0x3f) | 0x80 // variant 10
+	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
 }
 
 // configPath is where the generated, isolated tmux config lives.
@@ -147,19 +180,19 @@ bind -T prefix l display-popup -d "#{@claude_project_dir}" -w 90%% -h 85%% -E "'
 # C-x r : floating remote-control (claude rc) toggle for this project.
 bind -T prefix r display-popup -d "#{@claude_project_dir}" -w 60%% -h 40%% -E "'%s' rc --socket '%s'"
 # C-x n : start a fresh Claude session in a new window (current keeps running).
-# Like the l/r bindings, the project is resolved from the session environment
-# ($CLAUDE_MUX_PROJECT_DIR, which the new window inherits) rather than a #{...}
-# format inside the shell-command: tmux passes the shell-command verbatim and
-# does not expand formats there, so an embedded --dir '#{@claude_project_dir}'
-# would reach run as a literal path, fail to chdir, and drop the whole session.
-bind -T prefix n new-window -c "#{@claude_project_dir}" -n claude "exec '%s' run"
+# This goes through "claude-mux new" (via run-shell) rather than a bare
+# new-window so it can hand over a pre-booted "warm" session for an instant
+# start and refill the pool in the background. Unlike a new-window shell-command,
+# run-shell does expand #{...} formats and inherits the session environment, so
+# both the project dir and CLAUDE_CONFIG_DIR resolve correctly here.
+bind -T prefix n run-shell "'%s' new --dir '#{@claude_project_dir}' --socket '%s'"
 # C-x u : float the current Claude usage (limits). The command stays up until
 # the user presses q (claude-mux usage blocks on a keypress), so -E can close
 # the popup on exit without it flashing away the instant claude prints.
 bind -T prefix u display-popup -d "#{@claude_project_dir}" -w 80%% -h 75%% -E "'%s' usage"
 # C-x d : detach and leave everything running in the background.
 bind -T prefix d detach-client
-`, binPath, socket, binPath, socket, binPath, binPath)
+`, binPath, socket, binPath, socket, binPath, socket, binPath)
 
 	path := configPath()
 	if err := os.WriteFile(path, []byte(conf), 0o644); err != nil {
@@ -191,6 +224,8 @@ func (s *Server) EnsureSession(dir string) (string, error) {
 	s.tagProject(slug, dir)
 	// Re-source the config so bindings exist even if the server pre-existed.
 	_, _ = s.run("source-file", conf)
+	// Pre-boot a session in the background so the first C-x n is instant.
+	s.Prewarm(dir)
 	return slug, nil
 }
 
@@ -238,7 +273,7 @@ func (s *Server) Attach(slug string) error {
 // the picker knows what is live and where to jump.
 func (s *Server) RunningSessions() map[string]string {
 	out, err := s.run("list-windows", "-a", "-F",
-		"#{session_name}:#{window_index}\t#{"+sessionIDOption+"}")
+		"#{session_name}\t#{session_name}:#{window_index}\t#{"+sessionIDOption+"}")
 	if err != nil {
 		return nil
 	}
@@ -247,11 +282,17 @@ func (s *Server) RunningSessions() map[string]string {
 		if ln == "" {
 			continue
 		}
-		f := strings.SplitN(ln, "\t", 2)
-		if len(f) != 2 || f[1] == "" {
+		f := strings.SplitN(ln, "\t", 3)
+		if len(f) != 3 || f[2] == "" {
 			continue
 		}
-		result[f[1]] = f[0]
+		// Warm-pool windows are tagged too but are not real user sessions; keep
+		// them out of the live listing so a pre-booted session never surfaces in
+		// the picker before it is actually handed over.
+		if strings.HasSuffix(f[0], warmSuffix) {
+			continue
+		}
+		result[f[2]] = f[1]
 	}
 	return result
 }
@@ -336,14 +377,24 @@ func (s *Server) KillWindow(target string) error {
 }
 
 // KillProject kills the tmux session (and thus every running Claude window) for
-// dir. It is a no-op when no such session exists. Returns whether one was killed.
+// dir, along with its warm pool. It is a no-op when neither exists. Returns
+// whether anything was killed.
 func (s *Server) KillProject(dir string) (bool, error) {
+	killed := false
+
+	// Tear down the warm pool first, guarding the detach hook: its background
+	// windows would otherwise drop the client as they are unlinked.
+	if s.hasSession(s.warmSlug(dir)) {
+		s.withoutUnlinkHook(func() { _, _ = s.run("kill-session", "-t", s.warmSlug(dir)) })
+		killed = true
+	}
+
 	slug := Slug(dir)
 	if !s.hasSession(slug) {
-		return false, nil
+		return killed, nil
 	}
 	_, err := s.run("kill-session", "-t", slug)
-	return err == nil, err
+	return err == nil || killed, err
 }
 
 // KillAll tears down the entire isolated server (every project's sessions). It
@@ -359,9 +410,30 @@ func (s *Server) KillAll() error {
 	return nil
 }
 
-// NewWindowFresh opens a new window running a fresh Claude session in dir.
+// NewWindowFresh opens a new window running a fresh Claude session in dir. It
+// first tries to hand over a pre-booted warm session (instant, no cold start);
+// on any miss it falls back to booting a fresh one. Either way it tops the warm
+// pool back up in the background so the next C-x n is ready.
 func (s *Server) NewWindowFresh(dir string) error {
 	slug := Slug(dir)
+
+	if winID, sessID := s.takeWarm(dir); winID != "" && s.hasSession(slug) {
+		if err := s.consumeWarm(slug, winID, sessID); err == nil {
+			s.Prewarm(dir)
+			return nil
+		}
+		// Consuming failed (raced with another C-x n, warm died): fall through to
+		// a normal cold start below.
+	}
+
+	err := s.coldNewWindow(dir, slug)
+	s.Prewarm(dir)
+	return err
+}
+
+// coldNewWindow opens a new window that boots a fresh Claude session from
+// scratch — the fallback when no warm session is available.
+func (s *Server) coldNewWindow(dir, slug string) error {
 	if !s.hasSession(slug) {
 		if _, err := s.run("new-session", "-d", "-s", slug, "-c", dir, s.launchCmd(dir, "")); err != nil {
 			return err
@@ -372,6 +444,129 @@ func (s *Server) NewWindowFresh(dir string) error {
 	}
 	_, err := s.run("new-window", "-t", slug, "-c", dir, "-n", "claude", s.launchCmd(dir, ""))
 	return err
+}
+
+// warmSlug returns the tmux session name holding dir's warm pool.
+func (s *Server) warmSlug(dir string) string { return Slug(dir) + warmSuffix }
+
+// withoutUnlinkHook runs fn with the global window-unlinked -> detach-client hook
+// disabled, then restores it. That hook fires whenever *any* session loses a
+// window and detaches the attached client — so moving or killing a background
+// warm window would otherwise drop the user. (Same guard KillWindow uses.)
+func (s *Server) withoutUnlinkHook(fn func()) {
+	_, _ = s.run("set-hook", "-gu", "window-unlinked")
+	defer func() { _, _ = s.run("set-hook", "-g", "window-unlinked", "detach-client") }()
+	fn()
+}
+
+// warmWin is one window in a warm pool: its stable tmux window id, whether its
+// Claude has exited (a dead pane, kept around by remain-on-exit), and the
+// pre-assigned session id it carries.
+type warmWin struct {
+	winID  string
+	dead   bool
+	sessID string
+}
+
+// warmWindows lists the windows in dir's warm pool, or nil when none exist.
+func (s *Server) warmWindows(dir string) []warmWin {
+	out, err := s.run("list-windows", "-t", s.warmSlug(dir), "-F",
+		"#{window_id}\t#{pane_dead}\t#{"+sessionIDOption+"}")
+	if err != nil {
+		return nil
+	}
+	var wins []warmWin
+	for _, ln := range strings.Split(out, "\n") {
+		if ln == "" {
+			continue
+		}
+		f := strings.SplitN(ln, "\t", 3)
+		if len(f) != 3 {
+			continue
+		}
+		wins = append(wins, warmWin{winID: f[0], dead: f[1] == "1", sessID: f[2]})
+	}
+	return wins
+}
+
+// takeWarm returns the window id and session id of a live, ready warm session
+// for dir, or ("", "") when the pool is empty. It does not remove it; consumeWarm
+// performs the (hook-guarded) move.
+func (s *Server) takeWarm(dir string) (winID, sessID string) {
+	for _, w := range s.warmWindows(dir) {
+		if !w.dead && w.sessID != "" {
+			return w.winID, w.sessID
+		}
+	}
+	return "", ""
+}
+
+// consumeWarm moves a pre-booted warm window into the project session and brings
+// it to the foreground, turning it into an ordinary Claude window. winID is a
+// stable tmux window id, so it keeps referring to the same window after the move.
+func (s *Server) consumeWarm(slug, winID, sessID string) error {
+	var err error
+	s.withoutUnlinkHook(func() {
+		_, err = s.run("move-window", "-s", winID, "-t", slug)
+	})
+	if err != nil {
+		return err
+	}
+	// Now a normal window: drop remain-on-exit (so quitting Claude here detaches
+	// per the usual flow) and give it the standard name. Its @claude_session_id
+	// tag travelled with the move, so the picker already recognises it.
+	_, _ = s.run("set-option", "-w", "-t", winID, "remain-on-exit", "off")
+	_, _ = s.run("rename-window", "-t", winID, "claude")
+	_, _ = s.run("select-window", "-t", winID)
+	_, err = s.run("switch-client", "-t", slug)
+	return err
+}
+
+// Prewarm tops dir's warm pool back up to warmPoolSize pre-booted Claude
+// sessions, reaping any that have since exited. It is best-effort and fast: each
+// launch just spawns a detached window whose Claude boots in the background, so
+// callers do not block on cold-start. Safe to call on every attach and after
+// every C-x n.
+func (s *Server) Prewarm(dir string) {
+	wslug := s.warmSlug(dir)
+	wins := s.warmWindows(dir)
+
+	// Reap dead entries (a warm Claude that exited leaves a dead pane, courtesy
+	// of remain-on-exit, rather than detaching the client).
+	live := 0
+	for _, w := range wins {
+		if w.dead {
+			s.withoutUnlinkHook(func() { _, _ = s.run("kill-window", "-t", w.winID) })
+			continue
+		}
+		live++
+	}
+
+	for ; live < warmPoolSize; live++ {
+		id := newSessionID()
+		cmd := s.launchFresh(dir, id)
+		var winID string
+		var err error
+		if !s.hasSession(wslug) {
+			winID, err = s.run("new-session", "-d", "-s", wslug, "-c", dir,
+				"-e", "CLAUDE_CONFIG_DIR="+paths.ClaudeConfigDir(),
+				"-P", "-F", "#{window_id}", cmd)
+			if err != nil {
+				return
+			}
+			s.tagProject(wslug, dir)
+		} else {
+			winID, err = s.run("new-window", "-t", wslug, "-c", dir,
+				"-P", "-F", "#{window_id}", cmd)
+			if err != nil {
+				return
+			}
+		}
+		// Keep a warm Claude that exits on its own from unlinking its window and
+		// tripping the global detach-client hook; the dead pane is reaped above on
+		// the next Prewarm.
+		_, _ = s.run("set-option", "-w", "-t", winID, "remain-on-exit", "on")
+	}
 }
 
 // usageSocket is the throwaway tmux socket used to render `claude /usage`
