@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
@@ -53,6 +54,8 @@ var (
 	// currentTag marks the row whose session is open in the pane the picker was
 	// floated over ("you are here").
 	currentTag = lipgloss.NewStyle().Foreground(lipgloss.Color("42")).Bold(true)
+	// searchStyle renders the "/query" search prompt in the footer.
+	searchStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("214"))
 
 	// Per-status colours.
 	runningStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("42"))  // green
@@ -93,8 +96,10 @@ type model struct {
 	dir     string
 	srv     *tmux.Server
 	all     bool
-	current string // session id open in the pane the picker was floated over
-	entries []manager.Entry
+	current string          // session id open in the pane the picker was floated over
+	raw     []manager.Entry // every loaded session, before the title filter
+	entries []manager.Entry // raw narrowed to the active search query
+	search  textinput.Model // the "/" title filter; focused == actively searching
 	cursor  int
 	offset  int // index of the first visible row (scrolling)
 	width   int
@@ -108,7 +113,11 @@ type model struct {
 // RunPicker shows the interactive picker for dir and returns the chosen action.
 // When all is true it starts listing sessions across every project.
 func RunPicker(dir string, all bool, srv *tmux.Server) (Result, error) {
-	m := &model{dir: dir, all: all, srv: srv}
+	ti := textinput.New()
+	ti.Prompt = "/"
+	ti.PromptStyle = searchStyle
+	ti.Placeholder = "filter by title"
+	m := &model{dir: dir, all: all, srv: srv, search: ti}
 	if srv.InsideOurServer() {
 		m.current = srv.CurrentSessionID()
 	}
@@ -155,7 +164,8 @@ func (m *model) applyLoad(msg loadedMsg) {
 	if m.cursor >= 0 && m.cursor < len(m.entries) {
 		selectedID = m.entries[m.cursor].ID
 	}
-	m.entries = msg.entries
+	m.raw = msg.entries
+	m.applyFilter()
 	if selectedID != "" {
 		for i, e := range m.entries {
 			if e.ID == selectedID {
@@ -172,6 +182,27 @@ func (m *model) applyLoad(msg loadedMsg) {
 	}
 	m.clampScroll()
 }
+
+// applyFilter narrows m.raw into m.entries by the active search query, matching
+// case-insensitively against session titles. An empty query shows everything.
+func (m *model) applyFilter() {
+	q := strings.ToLower(strings.TrimSpace(m.search.Value()))
+	if q == "" {
+		m.entries = m.raw
+		return
+	}
+	filtered := make([]manager.Entry, 0, len(m.raw))
+	for _, e := range m.raw {
+		if strings.Contains(strings.ToLower(e.Title), q) {
+			filtered = append(filtered, e)
+		}
+	}
+	m.entries = filtered
+}
+
+// searchActive reports whether the search box is open (focused) or a title
+// filter is otherwise in play.
+func (m *model) searchActive() bool { return m.search.Focused() || m.search.Value() != "" }
 
 // reloadInterval is how often an open picker re-reads sessions so its statuses,
 // titles and message counts stay live without the user pressing "r".
@@ -204,7 +235,11 @@ func (m *model) dims() (width, height int) {
 // occupy at the current width.
 func (m *model) footerHeight() int {
 	width, _ := m.dims()
-	return lipgloss.Height(helpStyle.Width(width).Render(m.helpText())) + 1
+	h := lipgloss.Height(helpStyle.Width(width).Render(m.helpText())) + 1
+	if m.searchActive() {
+		h++ // the "/query" search line sits above the help
+	}
+	return h
 }
 
 // hasArchived reports whether any entry is archived, i.e. whether the archived
@@ -265,11 +300,17 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width, m.height = msg.Width, msg.Height
 		m.clampScroll()
 	case tea.KeyMsg:
+		if m.search.Focused() {
+			return m.updateSearch(msg)
+		}
 		var cmd tea.Cmd
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
 			m.result = Result{Action: ActionNone}
 			return m, tea.Quit
+		case "/":
+			// Open the search box; Focus returns the cursor-blink command.
+			return m, m.search.Focus()
 		case "up", "k":
 			if m.cursor > 0 {
 				m.cursor--
@@ -319,13 +360,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			// Opening an archived session restores it (un-archives it); a live one
 			// is opened as-is.
-			if len(m.entries) > 0 {
-				e := m.entries[m.cursor]
-				if e.Archived {
-					_ = state.Unarchive(e.ID)
-				}
-				m.result = Result{Action: ActionResume, Entry: e}
-				return m, tea.Quit
+			if newM, cmd, ok := m.openSelected(); ok {
+				return newM, cmd
 			}
 		case "p":
 			// Preview: open the selected session without changing its archived
@@ -338,7 +374,85 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.clampScroll()
 		return m, cmd
 	}
+	// Forward everything else (notably the cursor-blink ticks) to the search box
+	// while it is focused, so its cursor keeps blinking.
+	if m.search.Focused() {
+		var cmd tea.Cmd
+		m.search, cmd = m.search.Update(msg)
+		return m, cmd
+	}
 	return m, nil
+}
+
+// openSelected opens the highlighted session, restoring it first if archived.
+// It reports ok=false (nothing to do) when the list is empty.
+func (m *model) openSelected() (tea.Model, tea.Cmd, bool) {
+	if len(m.entries) == 0 {
+		return m, nil, false
+	}
+	e := m.entries[m.cursor]
+	if e.Archived {
+		_ = state.Unarchive(e.ID)
+	}
+	m.result = Result{Action: ActionResume, Entry: e}
+	return m, tea.Quit, true
+}
+
+// stopSearch closes the search box and drops the filter, returning to the full
+// list. Used by esc, ctrl+c, and clearing the input to empty.
+func (m *model) stopSearch() {
+	m.search.Blur()
+	m.search.SetValue("")
+	m.applyFilter()
+	m.cursor = 0
+	m.clampScroll()
+}
+
+// updateSearch handles keys while the search box is open. Navigation (enter,
+// up/down) and exit keys (esc, ctrl+c) are handled here; every other key is
+// forwarded to the textinput, which owns all the line-editing bindings
+// (ctrl+w/u/a/e, word motions, space, paste, …). Clearing the input to empty
+// also exits the search, per the same "empty means done" rule as esc.
+func (m *model) updateSearch(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	switch msg.String() {
+	case "ctrl+c", "esc":
+		m.stopSearch()
+		return m, nil
+	case "enter":
+		// Open the highlighted match; if nothing matches there is nothing to do.
+		if newM, cmd, ok := m.openSelected(); ok {
+			return newM, cmd
+		}
+		return m, nil
+	case "up":
+		if m.cursor > 0 {
+			m.cursor--
+		}
+		m.clampScroll()
+		return m, nil
+	case "down":
+		if m.cursor < len(m.entries)-1 {
+			m.cursor++
+		}
+		m.clampScroll()
+		return m, nil
+	}
+
+	before := m.search.Value()
+	var cmd tea.Cmd
+	m.search, cmd = m.search.Update(msg)
+	after := m.search.Value()
+
+	if before != "" && after == "" {
+		m.stopSearch() // fully cleared the query -> leave search mode
+		return m, nil
+	}
+	if before != after {
+		m.applyFilter()
+		m.cursor = 0
+		m.clampScroll()
+	}
+	return m, cmd
 }
 
 func (m *model) View() string {
@@ -357,6 +471,8 @@ func (m *model) View() string {
 		switch {
 		case !m.loaded:
 			msg = "Loading sessions…"
+		case m.searchActive() && len(m.raw) > 0:
+			msg = fmt.Sprintf("No titles match %q.", m.search.Value())
 		case m.all:
 			msg = "No sessions found."
 		default:
@@ -421,10 +537,30 @@ func (m *model) renderHeader(width int) string {
 	return titleStyle.Render("Claude sessions") + dimStyle.Render(" · ") + dirStyle.Render(truncate(scope, avail))
 }
 
-// renderFooter renders the wrapped help text plus a position/summary line.
+// renderFooter renders the optional search line, the wrapped help text, and a
+// position/summary line.
 func (m *model) renderFooter(width int) string {
-	help := helpStyle.Width(width).Render(m.helpText())
-	return help + "\n" + dimStyle.Render(m.positionText())
+	var b strings.Builder
+	if line := m.searchLine(width); line != "" {
+		b.WriteString(line)
+		b.WriteString("\n")
+	}
+	b.WriteString(helpStyle.Width(width).Render(m.helpText()))
+	b.WriteString("\n")
+	b.WriteString(dimStyle.Render(m.positionText()))
+	return b.String()
+}
+
+// searchLine renders the textinput's "/query" prompt (with its live cursor). It
+// returns "" when no search is in play.
+func (m *model) searchLine(width int) string {
+	if !m.searchActive() {
+		return ""
+	}
+	if w := width - 1; w > 0 {
+		m.search.Width = w
+	}
+	return m.search.View()
 }
 
 // positionText summarises how much of the list is shown.
@@ -515,11 +651,14 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 }
 
 func (m *model) helpText() string {
+	if m.search.Focused() {
+		return "type to filter titles · ↑/↓ move · enter open · esc/ctrl+c cancel"
+	}
 	scope := "ctrl+a all"
 	if m.all {
 		scope = "ctrl+a this project"
 	}
-	return "↑/↓ move · enter open · p preview · n new · x archive · " + scope + " · q cancel"
+	return "↑/↓ move · enter open · / search · p preview · n new · x archive · " + scope + " · q cancel"
 }
 
 // pad right-pads s to at least n runes.

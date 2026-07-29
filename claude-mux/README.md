@@ -77,6 +77,7 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 | -------------- | ----------------------------------------------- |
 | `↑`/`↓`, `j`/`k` | Move the selection                            |
 | `enter`        | Open the selected session (restores it if archived) |
+| `/`            | Search: filter the list by title as you type    |
 | `p`            | Preview: open without restoring an archived session |
 | `n`            | Start a fresh session                           |
 | `x`            | Archive the selected session                    |
@@ -86,7 +87,11 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 Selecting a session that is already running just jumps to its window; selecting an
 idle one resumes it (`claude --resume`) in a new window. Opening an archived
 session with `enter` also restores it out of the archived section; `p` opens it
-the same way but leaves it archived, so you can peek without restoring. With `ctrl+a` (or
+the same way but leaves it archived, so you can peek without restoring. Press `/`
+to filter the list to sessions whose title matches what you type — the box has the
+usual line-editing keys (`ctrl+w`/`ctrl+u`, word motions, `ctrl+a`/`ctrl+e`, …),
+`↑`/`↓` still move the selection, and `enter` opens the highlighted match.
+`esc`, `ctrl+c`, or clearing the box back to empty leaves the search. With `ctrl+a` (or
 `claude-mux list --all`) the picker shows sessions from every project, labelled by
 project; resuming one there opens (or switches to) that project's session.
 

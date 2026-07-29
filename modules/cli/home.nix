@@ -111,6 +111,8 @@
 
   # path is persisted at first launch, reset it to hot-reload.
   home.activation.claudeMuxReload = ''
+    export TMUX_TMPDIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+    export PATH="${pkgs.tmux}/bin:$PATH"
     ${lib.getExe pkgs.claude-mux} reload || true
   '';
 

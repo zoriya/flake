@@ -35,7 +35,18 @@ in {
     ] (name:
       super.vimPlugins.${name}.overrideAttrs (old: {
         meta = old.meta // {license = super.lib.licenses.mit;};
-      }));
+      }))
+    // {
+      jj-nvim = super.vimPlugins.jj-nvim.overrideAttrs (old: {
+        version = "feat/browse";
+        src = super.fetchFromGitHub {
+          owner = "zoriya";
+          repo = "jj.nvim";
+          rev = "742cf28ce4c894782e7784e8f0a15c46121d7f50";
+          hash = "sha256-HzTfZCbKYsM+FHd9tXkgWKfrj6LKwrqPUEGN3ik0nNI=";
+        };
+      });
+    };
 
   discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];

@@ -84,7 +84,7 @@ Inside a session:
   C-x u   show the current Claude usage (limits) in a floating pane
   C-x d   detach (everything keeps running)
 
-In the picker: enter open · n new · x kill selected · ctrl+a all · q cancel
+In the picker: enter open · / search titles · n new · x kill selected · ctrl+a all · q cancel
 In the rc popup: t toggle · s switch to it · q close
 
 Environment:
