@@ -184,6 +184,25 @@ vim.treesitter.language.register("markdown", "mdx")
 
 vim.cmd.colorscheme("catppuccin")
 
+-- Terminals report their background color asynchronously via OSC 11, often
+-- after our UI plugins have already drawn. When the answer arrives, neovim
+-- silently flips 'background' and re-sources the colorscheme (mocha <-> latte),
+-- which clears every highlight group -- but it does *not* fire ColorScheme or
+-- OptionSet, so plugins that rebuild their highlights on those events (lualine,
+-- virt-column) get stranded with cleared/stale colors. Fire the missing
+-- ColorScheme ourselves so they refresh against the freshly-loaded flavor.
+vim.api.nvim_create_autocmd("TermResponse", {
+	group = vim.api.nvim_create_augroup("bg-detect-colorscheme-refresh", { clear = true }),
+	callback = function(ev)
+		local seq = type(ev.data) == "table" and ev.data.sequence or ev.data
+		if type(seq) == "string" and seq:find("\27]11;", 1, true) then
+			vim.schedule(function()
+				vim.api.nvim_exec_autocmds("ColorScheme", { modeline = false })
+			end)
+		end
+	end,
+})
+
 if vim.g.have_nerd_font then
 	vim.diagnostic.config({
 		signs = {

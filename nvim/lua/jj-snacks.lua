@@ -123,8 +123,7 @@ Snacks.picker.jj_log = function(file)
 				)
 				return
 			end
-			-- local cmd = { 'jj', 'log', '-r=' .. ctx.item.change_id, "--git" }
-			local cmd = { "git", "show", ctx.item.commit }
+			local cmd = { "jj", "show", "--git", "--no-pager", "-r", ctx.item.change_id }
 			Snacks.picker.preview.cmd(cmd, ctx, { ft = "git" })
 		end,
 		confirm = function(picker, item)
@@ -158,11 +157,11 @@ Snacks.picker.jj_log = function(file)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				vim.cmd('Gsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. file))
+				vim.cmd({ cmd = "Jsplit", args = { item.change_id .. ":" .. file } })
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(item.commit .. ':' .. file))
+				vim.cmd({ cmd = "Jvsplit", args = { item.change_id .. ":" .. file } })
 			end,
 		},
 	})
@@ -300,13 +299,11 @@ Snacks.picker.jj_show = function(spec)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				local commit = vim.trim(vim.fn.system({ "jj", "show", show_ref, "--template", "commit_id", "--no-patch" }))
-				vim.cmd('Gsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
+				vim.cmd({ cmd = "Jsplit", args = { show_ref .. ":" .. item.file } })
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				local commit = vim.trim(vim.fn.system({ "jj", "show", show_ref, "--template", "commit_id", "--no-patch" }))
-				vim.cmd('Gvsplit ' .. vim.fn.fnameescape(commit .. ':' .. item.file))
+				vim.cmd({ cmd = "Jvsplit", args = { show_ref .. ":" .. item.file } })
 			end,
 		},
 	})
