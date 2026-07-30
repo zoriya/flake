@@ -389,6 +389,17 @@ func (s *Server) WindowSessionID(paneTarget string) string {
 	return strings.TrimSpace(out)
 }
 
+// PanePID returns the pid of the command tmux started in paneTarget, or "" when
+// it cannot be resolved. Windows are launched with an `exec`, so for a Claude
+// window this is the pid of Claude itself.
+func (s *Server) PanePID(paneTarget string) string {
+	out, err := s.run("display-message", "-p", "-t", paneTarget, "#{pane_pid}")
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(out)
+}
+
 // hasSession reports whether a session named slug exists.
 func (s *Server) hasSession(slug string) bool {
 	_, err := s.run("has-session", "-t", slug)

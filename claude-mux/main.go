@@ -266,9 +266,17 @@ func cmdHook(args []string) error {
 	// reads as closed). Re-tagging on every hook self-heals that: the window now
 	// carries the live id, and the id it used to host is no longer live here, so
 	// its stale state is cleared rather than left to accumulate.
+	//
+	// Only the Claude that *owns* the pane may retag it. A Claude started from
+	// inside another one (a `claude -p` run from a Bash tool, say) inherits its
+	// TMUX_PANE, and would otherwise steal the tag from the session actually
+	// running in that window — dropping it to "closed" in the picker until its
+	// next hook fires. Claude exports CLAUDE_PID to its children, so the hook can
+	// tell the two apart: for a window claude-mux launched the pane command execs
+	// Claude, so the pane's pid is the owning Claude's pid.
 	if pane := os.Getenv("TMUX_PANE"); pane != "" {
 		srv := tmux.New()
-		if srv.InsideOurServer() {
+		if srv.InsideOurServer() && os.Getenv("CLAUDE_PID") == srv.PanePID(pane) {
 			if old := srv.WindowSessionID(pane); old != "" && old != payload.SessionID {
 				_ = state.Clear(old)
 			}

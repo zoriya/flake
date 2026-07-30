@@ -36,7 +36,7 @@ return {
 				require("mini.diff").gen_source.git(),
 			},
 			mappings = {
-				apply = "",
+				apply = "gh",
 				reset = "gH",
 				textobject = "ih",
 				goto_first = "[H",
@@ -52,6 +52,9 @@ return {
 
 			vim.keymap.set("n", "<leader>hr", "gHih", { remap = true, desc = "Reset Hunk" })
 			vim.keymap.set("x", "<leader>hr", "gH", { remap = true, desc = "Reset Hunk" })
+
+			vim.keymap.set("n", "<leader>hs", "ghih", { remap = true, desc = "Squash Hunk" })
+			vim.keymap.set("x", "<leader>hs", "gh", { remap = true, desc = "Squash Hunk" })
 
 			vim.keymap.set("n", "<leader>hp", function() diff.toggle_overlay(0) end, { desc = "Preview Hunk (overlay)" })
 			vim.keymap.set("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, { desc = "Reset Buffer" })

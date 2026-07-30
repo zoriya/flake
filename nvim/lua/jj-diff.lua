@@ -12,14 +12,21 @@ local function resolve(buf_id)
 	if change_id then
 		-- The path in the uri is repo-relative; jj resolves it from anywhere in
 		-- the repo, so run from the current working directory.
-		return { rev = change_id .. "-", file = rel, cwd = vim.fn.getcwd() }
+		return { rev = change_id .. "-", from = change_id, file = rel, rel = rel, cwd = vim.fn.getcwd() }
 	end
 
 	local path = vim.uv.fs_realpath(name)
 	if path == nil then
 		return nil
 	end
-	return { rev = "@-", file = path, cwd = vim.fs.dirname(path) }
+	local root = vim.fs.root(path, ".jj")
+	return {
+		rev = "@-",
+		from = "@",
+		file = path,
+		rel = root and path:sub(#root + 2),
+		cwd = vim.fs.dirname(path),
+	}
 end
 
 local function set_ref_text(buf_id)
@@ -162,10 +169,71 @@ local function detach(buf_id)
 	end
 end
 
+-- Squash the given hunks into the revision we diff against. jj has no index to
+-- stage into, so instead we rebuild what the parent should look like (the
+-- reference text with only those hunks applied) and hand it to `jj squash -i`
+-- through a diff editor that just copies our file over jj's right side.
+local function apply_hunks(buf_id, hunks)
+	local target = resolve(buf_id)
+	if target == nil or target.rel == nil then
+		return
+	end
+
+	local ref = vim.split(MiniDiff.get_buf_data(buf_id).ref_text, "\n")
+	-- mini.diff always terminates the reference text with a newline
+	if ref[#ref] == "" then
+		table.remove(ref)
+	end
+	local buf = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+
+	-- Bottom-up so earlier hunks keep their reference line numbers.
+	local sorted = vim.deepcopy(hunks)
+	table.sort(sorted, function(a, b) return a.ref_start > b.ref_start end)
+	for _, hunk in ipairs(sorted) do
+		-- "add" hunks have no reference line, `ref_start` is the one above them
+		local from = hunk.ref_start + (hunk.ref_count == 0 and 1 or 0)
+		local to = from + hunk.ref_count - 1
+		local out = vim.list_slice(ref, 1, from - 1)
+		vim.list_extend(out, buf, hunk.buf_start, hunk.buf_start + hunk.buf_count - 1)
+		vim.list_extend(out, ref, to + 1, #ref)
+		ref = out
+	end
+
+	local tmp = vim.fn.tempname()
+	vim.fn.writefile(ref, tmp)
+	vim.system({
+		"jj",
+		"squash",
+		"--from",
+		target.from,
+		"--into",
+		target.rev,
+		"--use-destination-message",
+		"--tool",
+		"minidiff",
+		"--config",
+		'merge-tools.minidiff.program="cp"',
+		"--config",
+		string.format(
+			"merge-tools.minidiff.edit-args=[%s, %s]",
+			vim.json.encode(tmp),
+			vim.json.encode("$right/" .. target.rel)
+		),
+		"--",
+		target.rel,
+	}, { cwd = target.cwd, text = true }, vim.schedule_wrap(function(obj)
+		vim.fn.delete(tmp)
+		if obj.code ~= 0 then
+			vim.notify(obj.stderr, vim.log.levels.ERROR)
+		end
+	end))
+end
+
 M.source = {
 	name = "jj",
 	attach = attach,
 	detach = detach,
+	apply_hunks = apply_hunks,
 }
 
 -- support jj:// buffers
