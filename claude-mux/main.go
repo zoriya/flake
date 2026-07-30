@@ -115,7 +115,23 @@ func cmdAttach() error {
 			_ = srv.StartRC(p)
 		}
 	}
+	// Pin this client's home project (the dir it was launched from) keyed by its
+	// tty, so C-x n always creates a session here even after the client is later
+	// switched onto another project's session by resuming a cross-project session
+	// from the picker. The client's tty is the terminal claude-mux is attached to,
+	// i.e. our own stdin — the same tty tmux reports as #{client_tty}.
+	srv.SetClientHome(ttyName(), dir)
 	return srv.Attach(slug)
+}
+
+// ttyName returns the path of the terminal on this process's stdin (e.g.
+// "/dev/pts/3"), which is the tty the tmux client we attach will run on and thus
+// matches tmux's #{client_tty}. Returns "" when stdin is not a terminal.
+func ttyName() string {
+	if name, err := os.Readlink("/proc/self/fd/0"); err == nil {
+		return name
+	}
+	return ""
 }
 
 // cmdRun is the launcher every Claude window goes through. It settles on a
@@ -276,6 +292,7 @@ func cmdNew(args []string) error {
 	fs := flag.NewFlagSet("new", flag.ContinueOnError)
 	dirFlag := fs.String("dir", "", "project directory (defaults to cwd)")
 	sockFlag := fs.String("socket", "", "tmux socket name")
+	clientFlag := fs.String("client", "", "tty of the invoking client, to resolve its home project")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -284,6 +301,13 @@ func cmdNew(args []string) error {
 	}
 	dir := resolveDir(*dirFlag)
 	srv := tmux.New()
+	// Prefer the invoking client's pinned home project over --dir: --dir carries
+	// #{@claude_project_dir}, which follows the client's current session and so
+	// points at the wrong project once it has been switched onto a cross-project
+	// session. The home is the dir the client was launched from (see SetClientHome).
+	if home := srv.ClientHome(*clientFlag); home != "" {
+		dir = home
+	}
 	if srv.InsideOurServer() {
 		return srv.NewWindowFresh(dir)
 	}

@@ -184,7 +184,12 @@ bind -T prefix r display-popup -d "#{@claude_project_dir}" -w 60%% -h 40%% -E "'
 # start and refill the pool in the background. Unlike a new-window shell-command,
 # run-shell does expand #{...} formats and inherits the session environment, so
 # both the project dir and CLAUDE_CONFIG_DIR resolve correctly here.
-bind -T prefix n run-shell "'%s' new --dir '#{@claude_project_dir}' --socket '%s'"
+# --client passes the invoking client's tty so "new" can resolve the directory
+# the client was *launched* from (its home project, pinned at attach) rather than
+# #{@claude_project_dir}, which follows switch-client onto another project's
+# session when a cross-project session is resumed from the picker. --dir is the
+# fallback for clients with no recorded home.
+bind -T prefix n run-shell "'%s' new --client '#{client_tty}' --dir '#{@claude_project_dir}' --socket '%s'"
 # C-x u : float the current Claude usage (limits). The command stays up until
 # the user presses q (claude-mux usage blocks on a keypress), so -E can close
 # the popup on exit without it flashing away the instant claude prints.
@@ -255,6 +260,51 @@ func (s *Server) tagProject(slug, dir string) {
 	_, _ = s.run("set-option", "-t", slug, "@claude_project_dir", dir)
 	_, _ = s.run("set-environment", "-t", slug, "CLAUDE_MUX_PROJECT_DIR", dir)
 	_, _ = s.run("set-environment", "-t", slug, "CLAUDE_CONFIG_DIR", paths.ClaudeConfigDir())
+}
+
+// clientHomeOption is the global tmux option name recording the home (launch)
+// project dir for the client attached on tty. The tty is folded into an
+// option-name-safe suffix (only alphanumerics survive; everything else, e.g. the
+// slashes in "/dev/pts/3", becomes an underscore).
+func clientHomeOption(tty string) string {
+	var b strings.Builder
+	b.WriteString("@claude_home_")
+	for _, r := range tty {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+		} else {
+			b.WriteByte('_')
+		}
+	}
+	return b.String()
+}
+
+// SetClientHome pins dir as the home project for the client on tty. C-x n reads
+// this back (via ClientHome) so a fresh session always lands in the directory
+// the client was launched from, even after switch-client has moved the client
+// onto another project's session (which is what resuming a cross-project session
+// from the picker does, and what otherwise made C-x n follow the wrong project).
+// It is stored as a global option — not a session one — precisely so switching
+// sessions never changes it; it is only ever (re)written here, on attach.
+func (s *Server) SetClientHome(tty, dir string) {
+	if tty == "" || dir == "" {
+		return
+	}
+	_, _ = s.run("set-option", "-g", clientHomeOption(tty), dir)
+}
+
+// ClientHome returns the home project dir pinned for the client on tty, or ""
+// when none was recorded (or tty is empty). -q keeps an unset option quiet
+// rather than erroring.
+func (s *Server) ClientHome(tty string) string {
+	if tty == "" {
+		return ""
+	}
+	out, err := s.run("show-options", "-gqv", clientHomeOption(tty))
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(out)
 }
 
 // Attach runs a tmux client attached to slug, blocking until it detaches.
