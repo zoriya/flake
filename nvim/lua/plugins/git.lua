@@ -50,20 +50,11 @@ return {
 			diff.setup(plug.opts)
 			require("jj-diff").setup()
 
-			local function map(mode, l, r, desc)
-				vim.keymap.set(mode, l, r, { desc = desc })
-			end
+			vim.keymap.set("n", "<leader>hr", "gHih", { remap = true, desc = "Reset Hunk" })
+			vim.keymap.set("x", "<leader>hr", "gH", { remap = true, desc = "Reset Hunk" })
 
-			map("n", "<leader>hr", function()
-				local line = vim.fn.line(".")
-				diff.do_hunks(0, "reset", { line_start = line, line_end = line })
-			end, "Reset Hunk")
-			map("x", "<leader>hr", function()
-				diff.do_hunks(0, "reset", { line_start = vim.fn.line("v"), line_end = vim.fn.line(".") })
-			end, "Reset Hunk")
-
-			map("n", "<leader>hp", function() diff.toggle_overlay(0) end, "Preview Hunk (overlay)")
-			map("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, "Reset Buffer")
+			vim.keymap.set("n", "<leader>hp", function() diff.toggle_overlay(0) end, { desc = "Preview Hunk (overlay)" })
+			vim.keymap.set("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, { desc = "Reset Buffer" })
 		end,
 	},
 
