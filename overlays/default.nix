@@ -57,7 +57,7 @@ in {
     pname = "claude-mux";
     version = "0.1.0";
     src = ../claude-mux;
-    vendorHash = "sha256-uwBJAqN4sIepiiJf9lCDumLqfKJEowQO2tOiSWD3Fig=";
+    vendorHash = "sha256-TUbaUoqDZoQTkcOMtoE/FlAiqkWN+x49JeGkDguh2UU=";
     nativeBuildInputs = [super.makeWrapper];
     postInstall = ''
       wrapProgram $out/bin/claude-mux \

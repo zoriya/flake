@@ -152,6 +152,7 @@
     in rec {
       default = nvim;
       nvim = pkgs.nvim;
+      claude-mux = pkgs.claude-mux;
     });
 
     devShells = eachSystem (system: let

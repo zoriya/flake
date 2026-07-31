@@ -153,6 +153,7 @@ func (m *model) startLoad() tea.Cmd {
 // applyLoad folds a completed load into the model, keeping the cursor on the
 // same session even when attention sorting reorders the list.
 func (m *model) applyLoad(msg loadedMsg) {
+	firstLoad := !m.loaded
 	m.loading = false
 	m.loaded = true
 	m.err = msg.err
@@ -160,8 +161,14 @@ func (m *model) applyLoad(msg loadedMsg) {
 		return
 	}
 
+	// After the first load, keep the cursor on whatever session it was already
+	// pointing at (attention sorting can reorder the list). On the very first
+	// load there is nothing to track yet, so start the cursor on the current
+	// session — the one open in the pane the picker was floated over.
 	var selectedID string
-	if m.cursor >= 0 && m.cursor < len(m.entries) {
+	if firstLoad {
+		selectedID = m.current
+	} else if m.cursor >= 0 && m.cursor < len(m.entries) {
 		selectedID = m.entries[m.cursor].ID
 	}
 	m.raw = msg.entries
