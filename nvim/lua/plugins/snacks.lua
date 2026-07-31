@@ -51,6 +51,11 @@ return {
 			},
 			indent = {
 				enabled = true,
+				filter = function(buf)
+					return vim.g.snacks_indent ~= false
+						and vim.b[buf].snacks_indent ~= false
+						and (vim.bo[buf].buftype == "" or vim.api.nvim_buf_get_name(buf):match("^jj://") ~= nil)
+				end,
 				indent = {
 					char = "▏",
 				},

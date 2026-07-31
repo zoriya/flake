@@ -444,6 +444,7 @@ Snacks.picker.jj_show = function(spec)
 				keys = {
 					["<a-s>"] = { "jj_split", mode = { "i" } },
 					["<c-s-s>"] = { "jj_squash", mode = { "i" } },
+					["<c-s-a>"] = { "jj_absorb", mode = { "i" } },
 					["<c-s>"] = { "jj_gsplit", mode = { "i" } },
 					["<c-v>"] = { "jj_gvsplit", mode = { "i" } },
 				},
@@ -466,6 +467,22 @@ Snacks.picker.jj_show = function(spec)
 					return
 				end
 				local cmd = { "jj", "squash", "-r", show_ref }
+				for _, item in ipairs(items) do
+					table.insert(cmd, string.format("file:'%s'", item.file))
+					if item.rename then
+						table.insert(cmd, string.format("file:'%s'", item.rename))
+					end
+				end
+				Snacks.picker.util.cmd(cmd, function()
+					picker:refresh()
+				end, { cwd = items[1].cwd })
+			end,
+			jj_absorb = function(picker)
+				local items = picker:selected({ fallback = true })
+				if #items == 0 then
+					return
+				end
+				local cmd = { "jj", "absorb", "--from", show_ref }
 				for _, item in ipairs(items) do
 					table.insert(cmd, string.format("file:'%s'", item.file))
 					if item.rename then

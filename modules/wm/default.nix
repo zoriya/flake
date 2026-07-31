@@ -36,6 +36,16 @@
     };
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk];
+    config.common.default = ["gnome" "gtk"];
+  };
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
+
   services.printing.enable = true;
   security.polkit.enable = true;
   security.rtkit.enable = true;
@@ -54,7 +64,9 @@
     polkit_gnome
   ];
 
-  security.pam.services.hyprlock = {};
+  security.pam.services.hyprlock = {
+    enableGnomeKeyring = true;
+  };
 
   # Allow gsettings to work
   environment.sessionVariables.XDG_DATA_DIRS = [

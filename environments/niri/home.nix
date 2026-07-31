@@ -29,15 +29,23 @@
     brightnessctl
     playerctl
     hyprpicker
+    wtype
 
     gnome-control-center
     gnome-weather
     wdisplays
-    wtype
-    niri
   ];
 
-  xdg.configFile."niri/config.kdl".source = ./niri.kdl;
+  wayland.windowManager.niri = {
+    enable = true;
+    systemd.enable = true;
+    extraConfig = builtins.readFile ./niri.kdl;
+  };
+
+  xdg.configFile."systemd/user/niri.service.d/unset-shlvl.conf".text = ''
+    [Service]
+    UnsetEnvironment=SHLVL
+  '';
 
   services.kanshi = {
     enable = true;

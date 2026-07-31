@@ -8,7 +8,9 @@
     ../../modules/gui
   ];
 
-  programs.niri.enable = true;
+  services.graphical-desktop.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+
   services.greetd = {
     enable = true;
     settings = {
@@ -17,7 +19,7 @@
         user = "greeter";
       };
       initial_session = {
-        command = ./niri-session.sh;
+        command = "${pkgs.niri}/bin/niri-session";
         user = user;
       };
     };
