@@ -47,13 +47,87 @@ local function group_name(buf_id)
 	return "MiniDiffSourceJj" .. buf_id
 end
 
+-- One filesystem watcher per repo root, tracking the buffers attached to it.
+-- jj rewrites `.jj/repo/op_heads/heads/` on every operation (edit, squash, …),
+-- so watching it lets us refresh signs when jj state changes out from under us.
+local watchers = {}
+
+local function refresh_watcher(root)
+	local watcher = watchers[root]
+	if watcher == nil then
+		return
+	end
+	for buf_id in pairs(watcher.buffers) do
+		if vim.api.nvim_buf_is_valid(buf_id) then
+			set_ref_text(buf_id)
+		else
+			watcher.buffers[buf_id] = nil
+		end
+	end
+end
+
+local function start_watcher(root)
+	local watcher = { buffers = {} }
+	local heads = root .. "/.jj/repo/op_heads/heads"
+	local handle = vim.uv.new_fs_event()
+	if handle ~= nil then
+		local ok = handle:start(heads, {}, function(err)
+			if err then
+				return
+			end
+			-- Debounce: an operation removes the old head and adds the new one,
+			-- firing several events; coalesce them into a single refresh.
+			if watcher.timer == nil then
+				watcher.timer = vim.uv.new_timer()
+				watcher.timer:start(
+					50,
+					0,
+					vim.schedule_wrap(function()
+						if watcher.timer ~= nil then
+							watcher.timer:close()
+							watcher.timer = nil
+						end
+						refresh_watcher(root)
+					end)
+				)
+			end
+		end)
+		if ok then
+			watcher.handle = handle
+		else
+			handle:close()
+		end
+	end
+	watchers[root] = watcher
+	return watcher
+end
+
+local function stop_watcher(root)
+	local watcher = watchers[root]
+	if watcher == nil then
+		return
+	end
+	if watcher.timer ~= nil then
+		watcher.timer:close()
+		watcher.timer = nil
+	end
+	if watcher.handle ~= nil then
+		watcher.handle:stop()
+		watcher.handle:close()
+	end
+	watchers[root] = nil
+end
+
+local buf_roots = {}
+
 local function attach(buf_id)
 	local target = resolve(buf_id)
 	if target == nil then
 		return false
 	end
 
-	if vim.fs.root(target.cwd, ".jj") == nil then
+	local root = vim.fs.root(target.cwd, ".jj")
+	if root == nil then
 		return false
 	end
 
@@ -67,11 +141,25 @@ local function attach(buf_id)
 		end,
 	})
 
+	local watcher = watchers[root] or start_watcher(root)
+	watcher.buffers[buf_id] = true
+	buf_roots[buf_id] = root
+
 	set_ref_text(buf_id)
 end
 
 local function detach(buf_id)
 	pcall(vim.api.nvim_del_augroup_by_name, group_name(buf_id))
+
+	local root = buf_roots[buf_id]
+	buf_roots[buf_id] = nil
+	local watcher = root and watchers[root]
+	if watcher ~= nil then
+		watcher.buffers[buf_id] = nil
+		if next(watcher.buffers) == nil then
+			stop_watcher(root)
+		end
+	end
 end
 
 M.source = {

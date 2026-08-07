@@ -123,6 +123,7 @@
     - Do not edit run git commands to write/checkout/fetch/whatever. Use `jj` if you need but you should not touch the git/jj state in most cases.
     - when fetching github content/pr/issues/wha, use the `gh` cli.
     - NEVER ever create issues/pr/write on github.
+    - write dumb code, keep functions/variables inlines. don't refactor
   '';
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {

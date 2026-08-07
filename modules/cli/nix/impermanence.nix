@@ -97,6 +97,7 @@
         ".cache/go-build"
         # android studio
         ".cache/Google"
+        ".config/android"
       ];
       files = [
         ".config/zsh/custom.zsh"
