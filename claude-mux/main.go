@@ -440,7 +440,12 @@ func cmdList(args []string) error {
 			pdir = dir
 		}
 		if srv.InsideOurServer() {
-			if e.Target != "" { // already open in a window: just jump to it
+			// A remote session (one the mobile app or claude.ai/code spawned) runs
+			// inside the project's `claude rc` process, so its target is that rc
+			// window — which shows the remote-control server, not the conversation.
+			// Jumping there is never what "open this session" means, so resume it in
+			// a window of its own instead, the same as a closed session.
+			if e.Target != "" && !e.Remote { // already open in a window: just jump to it
 				return srv.Focus(e.Target)
 			}
 			return srv.ResumeInProject(pdir, e.ID)

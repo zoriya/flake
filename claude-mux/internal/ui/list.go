@@ -359,10 +359,12 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						m.cursor++
 					}
 					cmd = m.startLoad()
-				} else if e.Target != "" {
+				} else if e.Target != "" && !e.Remote {
 					// The session is already archived but was opened (e.g. via
 					// preview), so it has a live window: x closes that pane
-					// without changing its archived state.
+					// without changing its archived state. Remote sessions are
+					// excluded for the same reason as above — their "window" is
+					// the shared rc one.
 					_ = m.srv.KillWindow(e.Target)
 					cmd = m.startLoad()
 				}

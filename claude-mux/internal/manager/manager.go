@@ -73,7 +73,9 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 		// the project's `claude rc` process, so they never get a window of their own
 		// and used to read as closed even while actively working. Their hooks do
 		// report status, so a live status plus a running rc server for the project
-		// is what marks them open; opening one jumps to the rc window hosting it.
+		// is what marks them open. Target is the rc window purely so the picker can
+		// see where they are hosted — opening one resumes it in a window of its own
+		// (see cmdList), because the rc window shows the server, not the session.
 		case reported && live.RC[e.ProjectDir] != "":
 			e.Status = session.ParseStatus(st)
 			e.Target, e.Remote = live.RC[e.ProjectDir], true
