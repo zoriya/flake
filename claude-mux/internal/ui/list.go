@@ -344,7 +344,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if len(m.entries) > 0 {
 				e := m.entries[m.cursor]
 				if !e.Archived {
-					if e.Target != "" {
+					// A remote session shares the project's rc window with the
+					// server itself, so killing it would take the whole
+					// remote-control endpoint down with it: only file it away.
+					if e.Target != "" && !e.Remote {
 						_ = m.srv.KillWindow(e.Target)
 					}
 					_ = state.Archive(e.ID)
@@ -630,6 +633,12 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 		indent = selBar.Render("▌ ") + "  "
 	}
 	parts := []string{statusWord(e.Status)}
+	// Remote sessions live in the project's rc window rather than one of their
+	// own, so flag them: opening one lands on the remote-control server, not on a
+	// pane showing the conversation.
+	if e.Remote {
+		parts = append(parts, "remote")
+	}
 	if m.all {
 		parts = append(parts, filepath.Base(e.ProjectDir))
 	}

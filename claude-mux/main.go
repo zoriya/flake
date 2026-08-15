@@ -103,17 +103,17 @@ func cmdAttach() error {
 	if srv.InsideOurServer() {
 		return fmt.Errorf("already inside a claude-mux session (use C-x n for a new session, C-x d to detach)")
 	}
-	// A cold start (the server was not already running) is when we bring every
-	// rc-enabled project's remote-control server back up in the background.
-	coldStart := !srv.IsRunning()
 	slug, err := srv.EnsureSession(dir)
 	if err != nil {
 		return err
 	}
-	if coldStart {
-		for _, p := range rc.List() {
-			_ = srv.StartRC(p)
-		}
+	// Bring every rc-enabled project's remote-control server back up. This runs on
+	// every attach, not just a cold start: an rc server that died mid-session used
+	// to stay down for the life of the tmux server while the popup still promised
+	// it would auto-start, so sessions created from the phone had nothing local to
+	// spawn into. StartRC is a no-op when the session is already up.
+	for _, p := range rc.List() {
+		_ = srv.StartRC(p)
 	}
 	// Pin this client's home project (the dir it was launched from) keyed by its
 	// tty, so C-x n always creates a session here even after the client is later
@@ -213,11 +213,17 @@ func cmdReload(args []string) error {
 	if *sockFlag != "" {
 		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
 	}
-	reloaded, err := tmux.New().Reload()
+	srv := tmux.New()
+	reloaded, err := srv.Reload()
 	if err != nil {
 		return err
 	}
 	if reloaded {
+		// Activation is the other natural point to heal a remote-control server
+		// that died since the tmux server came up (see cmdAttach).
+		for _, p := range rc.List() {
+			_ = srv.StartRC(p)
+		}
 		fmt.Println("reloaded claude-mux bindings")
 	}
 	return nil
@@ -274,9 +280,13 @@ func cmdHook(args []string) error {
 	// next hook fires. Claude exports CLAUDE_PID to its children, so the hook can
 	// tell the two apart: for a window claude-mux launched the pane command execs
 	// Claude, so the pane's pid is the owning Claude's pid.
+	// A remote-control window is exempt: it hosts `claude rc` and every session
+	// the mobile app spawns through it, so the sessions there would take turns
+	// stealing the tag and clearing each other's status, leaving all but the
+	// latest reading "closed". The picker finds them by their status instead.
 	if pane := os.Getenv("TMUX_PANE"); pane != "" {
 		srv := tmux.New()
-		if srv.InsideOurServer() && os.Getenv("CLAUDE_PID") == srv.PanePID(pane) {
+		if srv.InsideOurServer() && os.Getenv("CLAUDE_PID") == srv.PanePID(pane) && !srv.IsRCPane(pane) {
 			if old := srv.WindowSessionID(pane); old != "" && old != payload.SessionID {
 				_ = state.Clear(old)
 			}

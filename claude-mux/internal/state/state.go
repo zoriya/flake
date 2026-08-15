@@ -47,6 +47,26 @@ func Get(id string) string {
 	return strings.TrimSpace(string(b))
 }
 
+// LiveSet returns the recorded status word of every session that currently has
+// one, keyed by session id. A session only has a status file between its
+// SessionStart and SessionEnd hooks, so membership is itself the signal that a
+// session is alive — which is the only thing the picker has to go on for the
+// sessions `claude rc` spawns, since they run inside the rc process and so have
+// no tmux window of their own.
+func LiveSet() map[string]string {
+	entries, err := os.ReadDir(dir())
+	if err != nil {
+		return nil
+	}
+	set := make(map[string]string, len(entries))
+	for _, e := range entries {
+		if !e.IsDir() {
+			set[e.Name()] = Get(e.Name())
+		}
+	}
+	return set
+}
+
 // archiveDir is where the archived-session markers live: one empty file per
 // archived session id. Membership is what matters, not the contents.
 func archiveDir() string { return filepath.Join(paths.StateDir(), "archived") }

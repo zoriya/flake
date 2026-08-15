@@ -329,22 +329,45 @@ func (s *Server) Attach(slug string) error {
 	return nil
 }
 
-// RunningSessions returns a map of Claude session id -> tmux target
-// ("session:window") for every window currently hosting a session. This is how
-// the picker knows what is live and where to jump.
-func (s *Server) RunningSessions() map[string]string {
+// Window is where a live Claude session is hosted in the isolated server.
+type Window struct {
+	// Target is the tmux "session:window" to jump to.
+	Target string
+	// Dir is the project directory of the hosting tmux session.
+	Dir string
+	// RC is true when the host is a project's remote-control session, i.e. the
+	// window belongs to `claude rc` rather than to a Claude of its own.
+	RC bool
+}
+
+// Live is everything the isolated server knows about currently hosted Claude
+// sessions.
+type Live struct {
+	// Windows maps a Claude session id to the window hosting it. This is how the
+	// picker knows what is live and where to jump.
+	Windows map[string]Window
+	// RC maps a project directory to the target of its remote-control window.
+	// Sessions `claude rc` spawns (from the mobile app or claude.ai/code) run
+	// inside that one process and so never get a window of their own; this is
+	// where the picker sends you when you open one.
+	RC map[string]string
+}
+
+// Live lists the windows currently hosting Claude sessions, along with the
+// remote-control window of every project running one.
+func (s *Server) Live() Live {
+	live := Live{Windows: map[string]Window{}, RC: map[string]string{}}
 	out, err := s.run("list-windows", "-a", "-F",
-		"#{session_name}\t#{session_name}:#{window_index}\t#{"+sessionIDOption+"}")
+		"#{session_name}\t#{session_name}:#{window_index}\t#{"+sessionIDOption+"}\t#{@claude_project_dir}")
 	if err != nil {
-		return nil
+		return live
 	}
-	result := make(map[string]string)
 	for _, ln := range strings.Split(out, "\n") {
 		if ln == "" {
 			continue
 		}
-		f := strings.SplitN(ln, "\t", 3)
-		if len(f) != 3 || f[2] == "" {
+		f := strings.SplitN(ln, "\t", 4)
+		if len(f) != 4 {
 			continue
 		}
 		// Warm-pool windows are tagged too but are not real user sessions; keep
@@ -353,9 +376,16 @@ func (s *Server) RunningSessions() map[string]string {
 		if strings.HasSuffix(f[0], warmSuffix) {
 			continue
 		}
-		result[f[2]] = f[1]
+		isRC := strings.HasSuffix(f[0], rcSuffix)
+		if isRC && f[3] != "" {
+			live.RC[f[3]] = f[1]
+		}
+		if f[2] == "" {
+			continue
+		}
+		live.Windows[f[2]] = Window{Target: f[1], Dir: f[3], RC: isRC}
 	}
-	return result
+	return live
 }
 
 // CurrentSessionID returns the Claude session id tagged on the window the
@@ -387,6 +417,17 @@ func (s *Server) WindowSessionID(paneTarget string) string {
 		return ""
 	}
 	return strings.TrimSpace(out)
+}
+
+// IsRCPane reports whether paneTarget lives in a project's remote-control
+// session. Such a window hosts `claude rc` plus every session it spawns, so it
+// belongs to no single Claude and must not be retagged by them.
+func (s *Server) IsRCPane(paneTarget string) bool {
+	out, err := s.run("display-message", "-p", "-t", paneTarget, "#{session_name}")
+	if err != nil {
+		return false
+	}
+	return strings.HasSuffix(strings.TrimSpace(out), rcSuffix)
 }
 
 // PanePID returns the pid of the command tmux started in paneTarget, or "" when
@@ -734,7 +775,15 @@ func (s *Server) StartRC(dir string) error {
 	if err != nil {
 		return err
 	}
-	if _, err := s.run("-f", conf, "new-session", "-d", "-s", slug, "-c", dir, "exec claude rc --spawn=same-dir"); err != nil {
+	// Respawn rather than exec: `claude rc` exits on its own often enough (a
+	// dropped connection it cannot recover, an update, a crash) and taking the
+	// window with it ends the whole tmux session, so the endpoint stays down until
+	// the next cold start. Sessions created from the phone then have nothing local
+	// to spawn into and never show up. The loop puts it straight back; the sleep
+	// keeps a persistently failing rc from spinning, and StopRC kills the session
+	// so the loop dies with it.
+	if _, err := s.run("-f", conf, "new-session", "-d", "-s", slug, "-c", dir,
+		"while true; do claude rc --spawn=same-dir; sleep 2; done"); err != nil {
 		return err
 	}
 	s.tagProject(slug, dir)

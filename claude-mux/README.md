@@ -117,9 +117,16 @@ app. `C-x r` floats a small popup to manage it **per project**:
 | `q` / `esc` | Close the popup                                   |
 
 Toggling it on starts `claude rc` in its own dedicated, background tmux session
-(so it never spawns a stray Claude window and never clutters the `C-x l` picker)
-and records the project in an **rc-enabled list**. Toggling it off kills that
-session and removes the project from the list.
+(so it never spawns a stray Claude window) and records the project in an
+**rc-enabled list**. Toggling it off kills that session and removes the project
+from the list.
+
+Sessions you create from the phone or the browser are spawned *inside* that one
+`claude rc` process, so they never get a tmux window of their own. The picker
+finds them by their reported status instead of by a window tag, and tags their
+row `· remote`; opening one switches to the rc window that hosts it. `x` on a
+remote session only archives it — it does not kill the window, which would take
+the whole remote-control endpoint down with it.
 
 `claude rc` is launched non-interactively so it never stalls the background
 session on a prompt: it runs with `--spawn=same-dir` (skipping the spawn-mode

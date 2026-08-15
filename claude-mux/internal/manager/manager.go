@@ -22,6 +22,10 @@ type Entry struct {
 	// Archived is true when the user has archived this session; archived sessions
 	// are grouped at the bottom of the listing under their own header.
 	Archived bool
+	// Remote is true when the session is hosted by the project's remote-control
+	// server, i.e. it was created from the mobile app or claude.ai/code rather
+	// than in a window of its own.
+	Remote bool
 }
 
 // Load lists sessions and marks which are currently running by consulting the
@@ -42,24 +46,38 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 		return nil, err
 	}
 
-	running := srv.RunningSessions() // id -> target ("slug:window")
-	archived := state.ArchivedSet()  // id -> archived
+	live := srv.Live()              // what the isolated server is hosting
+	status := state.LiveSet()       // id -> status word, for every live session
+	archived := state.ArchivedSet() // id -> archived
 
 	entries := make([]Entry, 0, len(sessions))
 	for _, s := range sessions {
 		e := Entry{Session: s, ProjectDir: projectDirOf(s, dir), Archived: archived[s.ID]}
-		if target, ok := running[s.ID]; ok {
-			// Open in a window; the substate (running/questions/idle) comes from
-			// what the session last reported through its hooks.
-			e.Status = session.ParseStatus(state.Get(s.ID))
+		w, hosted := live.Windows[s.ID]
+		st, reported := status[s.ID]
+		switch {
+		// Open in a window; the substate (running/questions/idle) comes from what
+		// the session last reported through its hooks. A remote-control window is
+		// only trusted while its session is still reporting: nothing untags it when
+		// the session ends, so a stale tag would otherwise read as open forever.
+		case hosted && (!w.RC || reported):
+			e.Status = session.ParseStatus(st)
 			// No hook fires when a response is interrupted with Esc, so the hook
 			// status can be left stuck at "running". If the transcript's last
 			// entry is an interrupt marker, the session is actually idle.
 			if s.Interrupted && e.Status != session.StatusIdle {
 				e.Status = session.StatusIdle
 			}
-			e.Target = target
-		} else {
+			e.Target, e.Remote = w.Target, w.RC
+		// Sessions created from the mobile app or claude.ai/code are spawned inside
+		// the project's `claude rc` process, so they never get a window of their own
+		// and used to read as closed even while actively working. Their hooks do
+		// report status, so a live status plus a running rc server for the project
+		// is what marks them open; opening one jumps to the rc window hosting it.
+		case reported && live.RC[e.ProjectDir] != "":
+			e.Status = session.ParseStatus(st)
+			e.Target, e.Remote = live.RC[e.ProjectDir], true
+		default:
 			e.Status = session.StatusClosed
 		}
 		entries = append(entries, e)

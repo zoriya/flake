@@ -38,7 +38,7 @@
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["size=8G" "mode=755"];
+    options = ["size=16G" "mode=755"];
   };
 
   fileSystems."/tmp" = {
