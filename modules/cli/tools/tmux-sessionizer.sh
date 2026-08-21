@@ -36,6 +36,13 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
+
+# projects converted with `jj workspace-init` keep every jj workspace in a subfolder,
+# open the default one instead of the (bare) repo.
+if [[ -f "$selected/.wsp-root" ]]; then
+	selected="$selected/default"
+fi
+
 tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then

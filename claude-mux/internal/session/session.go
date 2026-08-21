@@ -4,10 +4,12 @@ package session
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"sort"
 	"strings"
@@ -15,6 +17,7 @@ import (
 	"time"
 
 	"claude-mux/internal/paths"
+	"claude-mux/internal/workspace"
 )
 
 // Status describes the live state of a Claude session.
@@ -75,7 +78,22 @@ type Session struct {
 	// interrupt marker (the user pressed Esc). No hook fires on interrupt, so
 	// the reported status can be stale "running"; callers use this to correct it.
 	Interrupted bool
+	// Workspace is the jj workspace this session made for itself, when it made
+	// one — agents are told to (see the CLAUDE.md `jj workspace-init` writes),
+	// and `jj workspace add` announces where it landed in its output, which the
+	// transcript records verbatim. Reading it back from there is what links a
+	// session to its checkout: nothing else in claude-mux creates the workspace,
+	// so nothing else knows about it.
+	Workspace string
 }
+
+// workspaceCreated matches jj's `Created workspace in "<path>"` line as it
+// appears inside a transcript's JSON — quotes backslash-escaped. toolResult
+// marks the entries that carry a command's own output.
+var (
+	workspaceCreated = regexp.MustCompile(`Created workspace in \\"([^"\\]+)\\"`)
+	toolResult       = []byte(`"tool_result"`)
+)
 
 // line is the subset of a transcript record we care about. Decoding only these
 // fields keeps parsing cheap even for large transcripts.
@@ -100,6 +118,12 @@ func List(projectDir string) ([]Session, error) {
 		return nil, err
 	}
 	c.save()
+	// The directory a transcript is filed under is where the session works now;
+	// the cwd recorded inside it is where the session *started*, which is stale
+	// once a session is moved between jj workspaces.
+	for i := range sessions {
+		sessions[i].CWD = projectDir
+	}
 	sortByRecent(sessions)
 	return sessions, nil
 }
@@ -125,11 +149,43 @@ func ListAll() ([]Session, error) {
 		if err != nil {
 			continue
 		}
+		// Unlike List, there is no directory to attribute these to — the encoded
+		// name cannot be decoded back into a path — so the transcript's own cwd
+		// stands in. Correct it when it disagrees with the encoded name, which is
+		// what a session moved into a jj workspace looks like: the workspace it
+		// now lives in is one of its peers.
+		for i := range sessions {
+			if paths.EncodeProjectPath(sessions[i].CWD) == p.Name() {
+				continue
+			}
+			for _, peer := range workspace.Peers(sessions[i].CWD) {
+				if paths.EncodeProjectPath(peer) == p.Name() {
+					sessions[i].CWD = peer
+					break
+				}
+			}
+		}
 		all = append(all, sessions...)
 	}
 	c.save()
 	sortByRecent(all)
 	return all, nil
+}
+
+// Move relocates a session's transcript from one project directory to another,
+// which is what makes `claude --resume` find it after the session's working
+// directory changes (Claude looks the transcript up under the encoded cwd). It
+// is a no-op when the transcript is not where it is expected.
+func Move(id, fromDir, toDir string) error {
+	src := filepath.Join(paths.SessionDir(fromDir), id+".jsonl")
+	if _, err := os.Stat(src); err != nil {
+		return nil
+	}
+	dst := paths.SessionDir(toDir)
+	if err := os.MkdirAll(dst, 0o755); err != nil {
+		return err
+	}
+	return os.Rename(src, filepath.Join(dst, id+".jsonl"))
 }
 
 // listDir parses every *.jsonl transcript directly inside dir. Unchanged
@@ -226,6 +282,17 @@ func parse(path string) (Session, error) {
 		if len(raw) == 0 {
 			continue
 		}
+		// Scan the raw line rather than the decoded one: the marker lives in a
+		// tool result, whose content field is a string in some entries and a
+		// block list in others. Only tool results count — an assistant that
+		// merely writes the sentence out would otherwise point this at a path
+		// nobody created. The last match wins: an agent that made several
+		// workspaces is working in the one it made most recently.
+		if bytes.Contains(raw, toolResult) {
+			if m := workspaceCreated.FindSubmatch(raw); m != nil {
+				s.Workspace = string(m[1])
+			}
+		}
 		var l line
 		if err := json.Unmarshal(raw, &l); err != nil {
 			continue
@@ -267,6 +334,17 @@ func parse(path string) (Session, error) {
 	}
 	if err := sc.Err(); err != nil && err != io.EOF {
 		return Session{}, err
+	}
+
+	// jj prints the destination as it was given, so a relative path resolves
+	// against the directory the session runs in — and is worth nothing without
+	// it, since it would otherwise resolve against whatever process reads it.
+	if s.Workspace != "" && !filepath.IsAbs(s.Workspace) {
+		if s.CWD == "" {
+			s.Workspace = ""
+		} else {
+			s.Workspace = filepath.Join(s.CWD, s.Workspace)
+		}
 	}
 
 	s.Title = firstNonEmpty(aiTitle, summary, firstLine(lastPrompt), "(untitled)")

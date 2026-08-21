@@ -1,4 +1,6 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  jj-workspace-init = pkgs.writeShellScriptBin "jj-workspace-init" (builtins.readFile ./jj-workspace-init.sh);
+in {
   programs.jujutsu = {
     enable = true;
     settings = {
@@ -27,6 +29,7 @@
         init = ["git" "init" "--colocate"];
         clone = ["git" "clone" "--colocate"];
         tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
+        workspace-init = ["util" "exec" "--" "${jj-workspace-init}/bin/jj-workspace-init"];
       };
       revset-aliases = {
         "closest_bookmark(to)" = "heads(::to & bookmarks())";
@@ -61,6 +64,9 @@
           	input.KeyMap.DeleteWordBackward.SetKeys("alt+backspace", "ctrl+w", "ctrl+backspace")'
         '';
     });
+    # the workspace actions live there: they share a helper, which the toml's
+    # per-action lua strings cannot do.
+    configLua = ./jjui.lua;
     settings = {
       actions = [
         {

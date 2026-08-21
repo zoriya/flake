@@ -203,6 +203,22 @@ vim.api.nvim_create_autocmd("TermResponse", {
 	end,
 })
 
+-- follow osc7 requests (inner program wants to cd, like jjui)
+vim.api.nvim_create_autocmd("TermRequest", {
+	group = vim.api.nvim_create_augroup("osc7-follow-cwd", { clear = true }),
+	callback = function(ev)
+		local seq = type(ev.data) == "table" and ev.data.sequence or ev.data
+		if type(seq) ~= "string" then
+			return
+		end
+		local dir = seq:match("^\27]7;file://[^/]*(/[^\27\7]*)")
+		if not dir or vim.fn.isdirectory(dir) == 0 then
+			return
+		end
+		vim.cmd("cd " .. vim.fn.fnameescape(dir))
+	end,
+})
+
 if vim.g.have_nerd_font then
 	vim.diagnostic.config({
 		signs = {

@@ -80,7 +80,7 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 | `/`            | Search: filter the list by title as you type    |
 | `p`            | Preview: open without restoring an archived session |
 | `n`            | Start a fresh session                           |
-| `x`            | Archive the selected session                    |
+| `x`            | Archive the selected session (deletes its jj workspace) |
 | `ctrl+a`       | Toggle between this project and **all** projects |
 | `q` / `esc`    | Cancel                                          |
 
@@ -157,6 +157,53 @@ A warm session writes no transcript until it is actually used, so idle warm
 sessions never pollute your history or the picker. If a warm Claude exits on its
 own it is left as a dead pane (so it can never detach your client) and reaped on
 the next fill.
+
+### One jj workspace per agent
+
+In a project converted with `jj workspace-init` — the repo root keeps an empty
+working copy plus a `.wsp-root` marker, and every real working copy is a
+subfolder of it, `default` being the one you work in — **each agent works in a jj
+workspace of its own, and names it itself**. `jj workspace-init` leaves a
+`CLAUDE.md` in the project root telling every agent to `jj workspace add -r @
+../<name>` and `cd` there before touching anything, so the directory is named
+after the task (`fix-login`) rather than after a session id. The root's
+`.gitignore` is `*`, so that CLAUDE.md never shows up as a change in the repo,
+and Claude picks it up from there for every workspace below it.
+
+The root's own workspace is named `root`. It exists so `jj` works at the root at
+all (there is no bare repo in jj — an empty working copy is the stand-in) and is
+never somewhere to work, so the nvim and jjui workspace pickers skip it.
+
+Sessions launch in **`default`**, the human's working copy, so a path in the
+first prompt — an `@`-mention especially — resolves without a prefix. The agent
+then creates its workspace beside it and `cd`s in, which sticks for every shell
+command after it. Claude refuses to edit outside the directory it was started in,
+so claude-mux passes `--add-dir <project root>` for workspace projects; that one
+flag is what lets the agent write in the workspace it just made.
+
+The project is identified by its **root**, not by `default`: `claude-mux` run
+from any workspace resolves to the same project, so its windows stay in one tmux
+session and its sessions in one picker. Ordinary projects are untouched — no
+CLAUDE.md, no flag, sessions run in the project directory as before.
+
+All of a project's workspaces share **one** tmux session and one window list, so
+`C-x l` lists every agent of the project regardless of which workspace it works
+in — each row tagged with its workspace name — and `C-x n` always starts in the
+project you launched from.
+
+claude-mux learns which workspace a session made **from the transcript**: `jj
+workspace add` announces `Created workspace in "…"`, Claude records the tool
+output verbatim, and the session parser reads it back. Nothing has to be
+registered, no hook fires, the agent needs no extra permission, and it works
+retroactively for sessions that already ran. The picker tags each row with that
+workspace name.
+
+Archiving a session with `x` then **deletes its workspace**. The working copy is
+snapshotted first, so everything the agent did is recorded in a jj change that
+stays in the repo (`jj log` still shows it) — the checkout goes, the work does
+not. Files jj does not track (gitignored build output, `.env`, …) are not in any
+change and do go with the directory. The transcript is left alone, so the
+conversation stays in the list and can be reopened.
 
 ## How it works
 

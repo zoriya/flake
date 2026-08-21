@@ -173,11 +173,12 @@
   xdg.configFile."claude/CLAUDE.md".text = ''
     # Global instructions
 
-    - NEVER EVER commit ; don't talk about commiting we do not care. Do not run `git commit` (or `jj commit`) and never push changes under any circumstances unless the user explicitly asks you to commit in that message.
-    - Do not edit run git commands to write/checkout/fetch/whatever. Use `jj` if you need but you should not touch the git/jj state in most cases.
+    - Never use git, we use jj instead.
+    - Never edit jj (or even worse git) state, don't jj commit/edit/describe/split in a workspace you don't own, unless specifically asked to
+    - Never ever push or talk about it
     - when fetching github content/pr/issues/wha, use the `gh` cli.
     - NEVER ever create issues/pr/write on github.
-    - write dumb code, keep functions/variables inlines. don't refactor
+    - keep functions/variables inlined, no clean-code here.
   '';
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {

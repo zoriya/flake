@@ -8,6 +8,7 @@ import (
 	"claude-mux/internal/session"
 	"claude-mux/internal/state"
 	"claude-mux/internal/tmux"
+	"claude-mux/internal/workspace"
 )
 
 // Entry is a session augmented with its live tmux location, when running.
@@ -39,11 +40,31 @@ func Load(dir string, all bool, srv *tmux.Server) ([]Entry, error) {
 	)
 	if all {
 		sessions, err = session.ListAll()
+		if err != nil {
+			return nil, err
+		}
 	} else {
-		sessions, err = session.List(dir)
-	}
-	if err != nil {
-		return nil, err
+		// A project converted with `jj workspace-init` keeps its code in workspace
+		// subfolders, and each agent works in one of its own — so its sessions are
+		// filed under the workspace, not the project. They all belong to the same
+		// project, so list every workspace's sessions together. For an ordinary
+		// directory Peers is just [dir].
+		var firstErr error
+		for _, d := range workspace.Peers(dir) {
+			s, listErr := session.List(d)
+			if listErr != nil {
+				// One unreadable workspace shouldn't blank the whole list, but a
+				// listing that found nothing at all should say why.
+				if firstErr == nil {
+					firstErr = listErr
+				}
+				continue
+			}
+			sessions = append(sessions, s...)
+		}
+		if len(sessions) == 0 && firstErr != nil {
+			return nil, firstErr
+		}
 	}
 
 	live := srv.Live()              // what the isolated server is hosting

@@ -504,3 +504,122 @@ Snacks.picker.jj_show = function(spec)
 		},
 	})
 end
+
+Snacks.picker.jj_workspaces = function()
+	Snacks.picker.pick({
+		title = "jj workspaces",
+		supports_live = false,
+		finder = function(opts, ctx)
+			local cwd = jj_cwd(nil, opts, ctx)
+			if not cwd then
+				return {}
+			end
+			local template = [[
+			separate("\0",
+				name,
+				root,
+				target.change_id().shortest(),
+				target.change_id().shortest(8),
+				target.commit_id().shortest(),
+				target.commit_id().shortest(8),
+				target.empty(),
+				if(target.description(),
+					target.description().first_line(),
+					description_placeholder
+				)
+			) ++ "\n"
+		  ]]
+			return require('snacks.picker.source.proc').proc(
+				ctx:opts({
+					cmd = "jj",
+					args = { "workspace", "list", "--color=never", "--template=" .. template },
+					cwd = cwd,
+					---@param item snacks.picker.finder.Item
+					transform = function(item)
+						local data = vim.split(item.text, '\0')
+						if data[1] == "root" then
+							return false
+						end
+						item.cwd = cwd
+						item.text = data[1]
+						item.name = data[1]
+						item.dir = data[2]
+						item.current = data[2] == cwd
+						item.change_id_prefix = data[3]
+						item.change_id = data[4]
+						item.commit_prefix = data[5]
+						item.commit = data[6]
+						item.empty = data[7] == "true"
+						item.msg = data[8]
+					end,
+				}),
+				ctx
+			)
+		end,
+		format = function(item, picker)
+			local ret = {} ---@type snacks.picker.Highlight[]
+			table.insert(ret, { item.current and "@" or "○", "SnacksPickerGitCommit" })
+			table.insert(ret, { ' ' })
+			table.insert(ret, { item.name, "SnacksPickerGitBranch" })
+			table.insert(ret, { ' ' })
+			table.insert(ret, { item.change_id_prefix, 'SnacksPickerGitCommit' })
+			table.insert(ret, { item.change_id:sub(#item.change_id_prefix + 1), 'SnacksPickerDimmed' })
+			table.insert(ret, { ' ' })
+			table.insert(ret, { picker.opts.icons.git.commit, "SnacksPickerGitStatusModified" })
+			table.insert(ret, { item.commit_prefix, 'SnacksPickerGitStatusModified' })
+			table.insert(ret, { item.commit:sub(#item.commit_prefix + 1), 'SnacksPickerDimmed' })
+			table.insert(ret, { ' ' })
+			if item.empty then
+				table.insert(ret, { '(empty) ', 'SnacksPickerDimmed' })
+			end
+			if item.msg == '(no description set)' then
+				table.insert(ret, { item.msg, 'SnacksPickerDimmed' })
+			else
+				Snacks.picker.highlight.extend(ret, Snacks.picker.format.commit_message(item, picker))
+			end
+			return ret
+		end,
+		preview = function(ctx)
+			Snacks.picker.preview.cmd(
+				{ "jj", "show", "--git", "--no-pager", "-r", ctx.item.change_id },
+				ctx,
+				{ ft = "git" }
+			)
+		end,
+		sort = { fields = { 'score:desc', 'idx' } },
+		confirm = function(picker, item)
+			picker:close()
+			if vim.fn.isdirectory(item.dir) == 0 then
+				Snacks.notify.error("workspace " .. item.name .. " is not at " .. item.dir)
+				return
+			end
+			vim.cmd("cd " .. vim.fn.fnameescape(item.dir))
+			Snacks.notify("cd " .. item.dir)
+		end,
+		win = {
+			input = {
+				keys = {
+					["<c-x>"] = { "jj_workspace_forget", mode = { "i", "n" } },
+				},
+			},
+		},
+		actions = {
+			jj_workspace_forget = function(picker, item)
+				if item.current then
+					Snacks.notify.error("cannot delete the current workspace")
+					return
+				end
+				local prompt = string.format("Delete workspace %s (%s)?", item.name, item.dir)
+				if vim.fn.confirm(prompt, "&Yes\n&No", 2) ~= 1 then
+					return
+				end
+				Snacks.picker.util.cmd({ "jj", "-R", item.dir, "status" }, function()
+					Snacks.picker.util.cmd({ "jj", "workspace", "forget", item.name }, function()
+						vim.fn.delete(item.dir, "rf")
+						picker:refresh()
+					end, { cwd = item.cwd })
+				end, { cwd = item.cwd })
+			end,
+		},
+	})
+end

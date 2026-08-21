@@ -98,6 +98,7 @@
         # android studio
         ".cache/Google"
         ".config/android"
+        ".config/.android"
       ];
       files = [
         ".config/zsh/custom.zsh"

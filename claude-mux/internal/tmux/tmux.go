@@ -17,6 +17,8 @@ import (
 
 	"claude-mux/internal/claude"
 	"claude-mux/internal/paths"
+	"claude-mux/internal/session"
+	"claude-mux/internal/workspace"
 )
 
 // DefaultSocket is the tmux -L socket name used unless overridden.
@@ -221,7 +223,8 @@ func (s *Server) EnsureSession(dir string) (string, error) {
 	// runs with captured, non-tty stdio.) -f applies our config when this call
 	// is what first starts the server.
 	if !s.hasSession(slug) {
-		if _, err := s.run("-f", conf, "new-session", "-d", "-s", slug, "-c", dir, s.launchCmd(dir, "")); err != nil {
+		work := workspace.Work(dir)
+		if _, err := s.run("-f", conf, "new-session", "-d", "-s", slug, "-c", work, s.launchCmd(work, "")); err != nil {
 			return "", err
 		}
 	}
@@ -462,20 +465,43 @@ func (s *Server) Focus(target string) error {
 
 // ResumeInProject opens (or creates the project session for) a window that
 // resumes the given Claude session id in dir, then switches the client to it.
+// A session living in a jj workspace is hosted by its project's tmux session
+// (see workspace.Host), so every workspace of a project shares one window list.
 func (s *Server) ResumeInProject(dir, sessionID string) error {
-	slug := Slug(dir)
+	host := workspace.Host(dir)
+	work := workspace.Work(host)
+	slug := Slug(host)
+	// A session whose directory is gone (it ran in a workspace that has since been
+	// abandoned) has nothing to run in: resume it where sessions start and carry
+	// its transcript along, which is where `claude --resume` looks for it.
+	if _, err := os.Stat(dir); err != nil {
+		if err := session.Move(sessionID, dir, work); err != nil {
+			return err
+		}
+		dir = work
+	}
 	if s.hasSession(slug) {
-		if _, err := s.run("new-window", "-t", slug, "-c", dir, "-n", "claude", s.launchCmd(dir, sessionID)); err != nil {
+		if _, err := s.run("new-window", "-t", slug, "-c", dir, "-n", windowName(dir, work), s.launchCmd(dir, sessionID)); err != nil {
 			return err
 		}
 	} else {
 		if _, err := s.run("new-session", "-d", "-s", slug, "-c", dir, s.launchCmd(dir, sessionID)); err != nil {
 			return err
 		}
-		s.tagProject(slug, dir)
+		s.tagProject(slug, host)
 	}
 	_, err := s.run("switch-client", "-t", slug)
 	return err
+}
+
+// windowName labels a Claude window: plain "claude" for one running where
+// sessions normally start, and the workspace name for one running inside a jj
+// workspace instead.
+func windowName(dir, work string) string {
+	if dir == work {
+		return "claude"
+	}
+	return filepath.Base(dir)
 }
 
 // KillWindow terminates the Claude window at target ("session:window"). The
@@ -530,8 +556,8 @@ func (s *Server) KillAll() error {
 func (s *Server) NewWindowFresh(dir string) error {
 	slug := Slug(dir)
 
-	if winID, sessID := s.takeWarm(dir); winID != "" && s.hasSession(slug) {
-		if err := s.consumeWarm(slug, winID, sessID); err == nil {
+	if w := s.takeWarm(dir); w.winID != "" && s.hasSession(slug) {
+		if err := s.consumeWarm(slug, w); err == nil {
 			s.Prewarm(dir)
 			return nil
 		}
@@ -547,15 +573,16 @@ func (s *Server) NewWindowFresh(dir string) error {
 // coldNewWindow opens a new window that boots a fresh Claude session from
 // scratch — the fallback when no warm session is available.
 func (s *Server) coldNewWindow(dir, slug string) error {
+	work := workspace.Work(dir)
 	if !s.hasSession(slug) {
-		if _, err := s.run("new-session", "-d", "-s", slug, "-c", dir, s.launchCmd(dir, "")); err != nil {
+		if _, err := s.run("new-session", "-d", "-s", slug, "-c", work, s.launchCmd(work, "")); err != nil {
 			return err
 		}
 		s.tagProject(slug, dir)
 		_, err := s.run("switch-client", "-t", slug)
 		return err
 	}
-	_, err := s.run("new-window", "-t", slug, "-c", dir, "-n", "claude", s.launchCmd(dir, ""))
+	_, err := s.run("new-window", "-t", slug, "-c", work, "-n", "claude", s.launchCmd(work, ""))
 	return err
 }
 
@@ -602,25 +629,25 @@ func (s *Server) warmWindows(dir string) []warmWin {
 	return wins
 }
 
-// takeWarm returns the window id and session id of a live, ready warm session
-// for dir, or ("", "") when the pool is empty. It does not remove it; consumeWarm
-// performs the (hook-guarded) move.
-func (s *Server) takeWarm(dir string) (winID, sessID string) {
+// takeWarm returns a live, ready warm session for dir, or a zero warmWin when
+// the pool is empty. It does not remove it; consumeWarm performs the
+// (hook-guarded) move.
+func (s *Server) takeWarm(dir string) warmWin {
 	for _, w := range s.warmWindows(dir) {
 		if !w.dead && w.sessID != "" {
-			return w.winID, w.sessID
+			return w
 		}
 	}
-	return "", ""
+	return warmWin{}
 }
 
 // consumeWarm moves a pre-booted warm window into the project session and brings
 // it to the foreground, turning it into an ordinary Claude window. winID is a
 // stable tmux window id, so it keeps referring to the same window after the move.
-func (s *Server) consumeWarm(slug, winID, sessID string) error {
+func (s *Server) consumeWarm(slug string, w warmWin) error {
 	var err error
 	s.withoutUnlinkHook(func() {
-		_, err = s.run("move-window", "-s", winID, "-t", slug)
+		_, err = s.run("move-window", "-s", w.winID, "-t", slug)
 	})
 	if err != nil {
 		return err
@@ -628,9 +655,9 @@ func (s *Server) consumeWarm(slug, winID, sessID string) error {
 	// Now a normal window: drop remain-on-exit (so quitting Claude here detaches
 	// per the usual flow) and give it the standard name. Its @claude_session_id
 	// tag travelled with the move, so the picker already recognises it.
-	_, _ = s.run("set-option", "-w", "-t", winID, "remain-on-exit", "off")
-	_, _ = s.run("rename-window", "-t", winID, "claude")
-	_, _ = s.run("select-window", "-t", winID)
+	_, _ = s.run("set-option", "-w", "-t", w.winID, "remain-on-exit", "off")
+	_, _ = s.run("rename-window", "-t", w.winID, "claude")
+	_, _ = s.run("select-window", "-t", w.winID)
 	_, err = s.run("switch-client", "-t", slug)
 	return err
 }
@@ -655,13 +682,14 @@ func (s *Server) Prewarm(dir string) {
 		live++
 	}
 
+	work := workspace.Work(dir)
 	for ; live < warmPoolSize; live++ {
 		id := newSessionID()
-		cmd := s.launchFresh(dir, id)
+		cmd := s.launchFresh(work, id)
 		var winID string
 		var err error
 		if !s.hasSession(wslug) {
-			winID, err = s.run("new-session", "-d", "-s", wslug, "-c", dir,
+			winID, err = s.run("new-session", "-d", "-s", wslug, "-c", work,
 				"-e", "CLAUDE_CONFIG_DIR="+paths.ClaudeConfigDir(),
 				"-P", "-F", "#{window_id}", cmd)
 			if err != nil {
@@ -669,7 +697,7 @@ func (s *Server) Prewarm(dir string) {
 			}
 			s.tagProject(wslug, dir)
 		} else {
-			winID, err = s.run("new-window", "-t", wslug, "-c", dir,
+			winID, err = s.run("new-window", "-t", wslug, "-c", work,
 				"-P", "-F", "#{window_id}", cmd)
 			if err != nil {
 				return

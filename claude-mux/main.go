@@ -30,6 +30,7 @@ import (
 	"claude-mux/internal/state"
 	"claude-mux/internal/tmux"
 	"claude-mux/internal/ui"
+	"claude-mux/internal/workspace"
 )
 
 func main() {
@@ -99,6 +100,11 @@ func cmdAttach() error {
 	if err != nil {
 		return err
 	}
+	// A workspace project is one project however many workspaces it has, so a
+	// command run from any of them resolves to the same root — that is what keeps
+	// its windows in one tmux session and its sessions in one picker. Claude
+	// itself starts in `default` (see workspace.Work).
+	dir = workspace.Host(dir)
 	srv := tmux.New()
 	if srv.InsideOurServer() {
 		return fmt.Errorf("already inside a claude-mux session (use C-x n for a new session, C-x d to detach)")
@@ -162,10 +168,18 @@ func cmdRun(args []string) error {
 		_ = srv.TagWindow(pane, id)
 	}
 
-	if *resumeFlag != "" {
-		return execIn(dir, "claude", "--resume", id)
+	// Claude starts in the human's working copy so the paths they mention resolve,
+	// then the agent creates its own workspace beside it and cds there — but
+	// Claude refuses to edit outside the directory it was started in, so the whole
+	// project has to be allowed up front.
+	var extra []string
+	if root := workspace.Root(dir); root != "" {
+		extra = append(extra, "--add-dir", root)
 	}
-	return execIn(dir, "claude", "--session-id", id)
+	if *resumeFlag != "" {
+		return execIn(dir, "claude", append(extra, "--resume", id)...)
+	}
+	return execIn(dir, "claude", append(extra, "--session-id", id)...)
 }
 
 // cmdKill terminates running sessions: those for the current project, or every
@@ -185,7 +199,7 @@ func cmdKill(args []string) error {
 		fmt.Println("killed all claude-mux sessions")
 		return nil
 	}
-	dir := resolveDir(*dirFlag)
+	dir := resolveProject(*dirFlag)
 	killed, err := srv.KillProject(dir)
 	if err != nil {
 		return err
@@ -317,7 +331,7 @@ func cmdNew(args []string) error {
 	if *sockFlag != "" {
 		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
 	}
-	dir := resolveDir(*dirFlag)
+	dir := resolveProject(*dirFlag)
 	srv := tmux.New()
 	// Prefer the invoking client's pinned home project over --dir: --dir carries
 	// #{@claude_project_dir}, which follows the client's current session and so
@@ -415,7 +429,7 @@ func cmdList(args []string) error {
 	if *sockFlag != "" {
 		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
 	}
-	dir := resolveDir(*dirFlag)
+	dir := resolveProject(*dirFlag)
 	srv := tmux.New()
 
 	if *dump {
@@ -467,7 +481,7 @@ func cmdRC(args []string) error {
 	if *sockFlag != "" {
 		os.Setenv("CLAUDE_MUX_SOCKET", *sockFlag)
 	}
-	dir := resolveDir(*dirFlag)
+	dir := resolveProject(*dirFlag)
 	srv := tmux.New()
 
 	res, err := ui.RunRCPopup(dir, srv)
@@ -498,9 +512,13 @@ func dumpList(dir string, all bool, srv *tmux.Server) error {
 	return nil
 }
 
-// resolveDir returns an absolute project directory. It prefers the given value,
-// then $CLAUDE_MUX_PROJECT_DIR (set on the tmux session, so the popup resolves
-// the right project), then the current working directory.
+// resolveDir returns an absolute directory. It prefers the given value, then
+// $CLAUDE_MUX_PROJECT_DIR (set on the tmux session, so the popup resolves the
+// right project), then the current working directory. It resolves a path and
+// nothing more — callers that mean "the project" wrap it in workspace.Host,
+// which a workspace project answers with its root; callers that mean "where
+// Claude runs" must not, or a session would start in the root rather than in
+// the working copy it was pointed at.
 func resolveDir(dir string) string {
 	if dir == "" {
 		dir = os.Getenv("CLAUDE_MUX_PROJECT_DIR")
@@ -515,6 +533,12 @@ func resolveDir(dir string) string {
 		return abs
 	}
 	return dir
+}
+
+// resolveProject is resolveDir for the callers that mean the project as a whole
+// — its tmux session, its session list, its rc server.
+func resolveProject(dir string) string {
+	return workspace.Host(resolveDir(dir))
 }
 
 // execClaude replaces the process with a fresh `claude` running in dir.

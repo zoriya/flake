@@ -303,6 +303,7 @@ return {
 			vim.keymap.set("n", "<leader>jh", Snacks.picker.jj_log_file, { desc = "jj file log" })
 			vim.keymap.set("n", "<leader>js", Snacks.picker.jj_show, { desc = "jj status" })
 			vim.keymap.set("n", "<leader>jS", Snacks.picker.jj_stage, { desc = "jj stage (@ / @-)" })
+			vim.keymap.set("n", "<leader>jw", Snacks.picker.jj_workspaces, { desc = "jj workspaces" })
 			vim.keymap.set("n", "<leader>jr", function()
 				Snacks.picker.jj_show({ from = "trunk()", to = "@" })
 			end, { desc = "review branch" })

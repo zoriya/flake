@@ -15,6 +15,7 @@ import (
 	"claude-mux/internal/session"
 	"claude-mux/internal/state"
 	"claude-mux/internal/tmux"
+	"claude-mux/internal/workspace"
 )
 
 // Action is what the user chose to do when the picker closed.
@@ -344,13 +345,35 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if len(m.entries) > 0 {
 				e := m.entries[m.cursor]
 				if !e.Archived {
+					_ = state.Archive(e.ID)
+					// Archiving is also where the agent's jj workspace is cleaned
+					// up. Everything it did is snapshotted into a change first, so
+					// the work stays in the repo even though the checkout goes
+					// (see workspace.Remove) — nothing is thrown away here. The
+					// transcript is untouched, so the session keeps its place in
+					// this list and can be reopened; only its checkout goes.
+					//
+					// This has to happen before the window is killed: closing the
+					// last window of a project destroys its tmux session, and this
+					// popup along with it, so anything left for afterwards would
+					// never run.
+					if e.Workspace != "" {
+						_ = workspace.Remove(e.Workspace)
+					} else if work := workspace.Work(e.ProjectDir); e.ProjectDir != "" && e.ProjectDir != work {
+						// A session that runs *in* a workspace (reopened there, or
+						// from before agents made their own) instead of beside it.
+						// Compared against where sessions start, never against the
+						// project: `default` is the human's and is not ours to
+						// delete.
+						_ = session.Move(e.ID, e.ProjectDir, work)
+						_ = workspace.Remove(e.ProjectDir)
+					}
 					// A remote session shares the project's rc window with the
 					// server itself, so killing it would take the whole
 					// remote-control endpoint down with it: only file it away.
 					if e.Target != "" && !e.Remote {
 						_ = m.srv.KillWindow(e.Target)
 					}
-					_ = state.Archive(e.ID)
 					// Keep the cursor where it is rather than following the
 					// session down to the archived section: point it at the next
 					// entry so applyLoad tracks that one (which shifts up into the
@@ -642,6 +665,17 @@ func (m *model) renderRow(i int, e manager.Entry, width int) string {
 		parts = append(parts, "remote")
 	}
 	if m.all {
+		// Name the project, not the directory the session runs in: every workspace
+		// project's sessions live in a folder called `default`, so basenames alone
+		// would label them all the same.
+		parts = append(parts, filepath.Base(workspace.Host(e.ProjectDir)))
+	} else if e.Workspace != "" {
+		// The jj workspace the agent made for itself — named after the task.
+		parts = append(parts, filepath.Base(e.Workspace))
+	} else if e.ProjectDir != "" && e.ProjectDir != workspace.Work(m.dir) {
+		// A session running inside a workspace rather than beside it. Compared
+		// against the directory sessions are *started* in, not the project: every
+		// session of a workspace project would otherwise be tagged `default`.
 		parts = append(parts, filepath.Base(e.ProjectDir))
 	}
 	parts = append(parts, fmt.Sprintf("%d msg", e.Messages), relTime(e.Created))
