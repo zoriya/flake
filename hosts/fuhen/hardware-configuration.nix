@@ -35,21 +35,41 @@
     };
   };
 
+  boot.initrd.luks.devices.crypt = {
+    device = "/dev/disk/by-partlabel/crypt";
+    allowDiscards = true;
+    bypassWorkqueues = true;
+  };
+
   fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = ["size=16G" "mode=755"];
+    device = "/dev/disk/by-label/nix";
+    fsType = "btrfs";
+    options = ["subvol=@root" "compress=zstd" "noatime"];
   };
 
   fileSystems."/tmp" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = ["size=32G" "mode=755"];
+    device = "/dev/disk/by-label/nix";
+    fsType = "btrfs";
+    options = ["subvol=@tmp" "nodatacow" "noatime"];
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-label/fuhen";
-    fsType = "ext4";
+    device = "/dev/disk/by-label/nix";
+    fsType = "btrfs";
+    options = ["subvol=@nix" "compress=zstd" "noatime"];
+  };
+
+  fileSystems."/persist" = {
+    device = "/dev/disk/by-label/nix";
+    fsType = "btrfs";
+    options = ["subvol=@persist" "compress=zstd" "noatime"];
+    neededForBoot = true;
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-label/nix";
+    fsType = "btrfs";
+    options = ["subvol=@swap" "noatime"];
   };
 
   fileSystems."/boot" = {
@@ -59,7 +79,7 @@
 
   swapDevices = [
     {
-      device = "/nix/swapfile";
+      device = "/swap/swapfile";
       size = 64 * 1024;
     }
   ];

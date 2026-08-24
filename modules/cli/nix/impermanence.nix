@@ -1,13 +1,55 @@
 {
   impermanence,
   user,
+  config,
+  lib,
+  utils,
   ...
-}: {
+}: let
+  root = config.fileSystems."/";
+  wipe = root.fsType == "btrfs" && lib.elem "subvol=@root" root.options;
+in {
   imports = [
     impermanence.nixosModules.impermanence
   ];
 
-  environment.persistence."/nix/persist" = {
+  # `/` is a disposable btrfs subvolume. the previous root is renamed `old_roots/<mtime>`
+  boot.initrd.systemd = lib.mkIf wipe {
+    enable = true;
+    services.wipe-root = {
+      wantedBy = ["initrd.target"];
+      after = ["initrd-root-device.target" "${utils.escapeSystemdPath root.device}.device"];
+      before = ["sysroot.mount"];
+      unitConfig.DefaultDependencies = "no";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        mkdir -p /wipe
+        mount -o subvol=/ ${root.device} /wipe
+
+        mkdir -p /wipe/old_roots
+        if [ -e /wipe/@root ]; then
+          mv /wipe/@root /wipe/old_roots/"$(stat -c %Y /wipe/@root)"
+        fi
+        for old in $(ls -1 /wipe/old_roots | sort -n | head -n -3); do
+          btrfs subvolume delete -R "/wipe/old_roots/$old"
+        done
+
+        btrfs subvolume create /wipe/@root
+
+        if [ -e /wipe/@tmp ]; then
+          btrfs subvolume delete -R /wipe/@tmp
+        fi
+        btrfs subvolume create /wipe/@tmp
+        chmod 1777 /wipe/@tmp
+
+        umount /wipe
+      '';
+    };
+  };
+
+  services.btrfs.autoScrub.enable = lib.mkIf wipe true;
+
+  environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
       "/var/log"
@@ -107,8 +149,8 @@
   };
 
   fileSystems."/home/zoriya/wallpapers" = {
-    device = "/home/zoriya/projects/flake/wallpapers/";
+    device = "/home/zoriya/projects/flake/default/wallpapers/";
     fsType = "none";
-    options = ["bind"];
+    options = ["bind" "nofail"];
   };
 }

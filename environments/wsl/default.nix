@@ -9,5 +9,5 @@
   };
 
   # Disable it for wls
-  environment.persistence."/nix/persist".enable = false;
+  environment.persistence."/persist".enable = false;
 }

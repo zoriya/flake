@@ -9,7 +9,7 @@
 - Widgets: astal + rofi (app picker + clipboard history picker)
 - Lockscreen: hyprlock (+ hypridle for loginctl/auto suspend when locked)
 - Lots of cli tools
-- Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot), `/` is a tmpfs.
+- Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot).
 
 ## Nvim
 
@@ -24,11 +24,18 @@
 
 Format disk with:
  - 200M efi part -> `mkfs.fat -F 32 -n boot /dev/sda1`
- - other as linux part (/nix) -> `mkfs.ext4 -n nix /dev/sda2`
+ - other as linux part, GPT name `crypt`.
+
+```sh
+cryptsetup luksFormat --type luks2 /dev/sda2
+cryptsetup open /dev/sda2 crypt
+mkfs.btrfs -L nix /dev/mapper/crypt
+```
 
 ```sh
 nix-shell -p git go-task
 git clone https://github.com/zoriya/flake
 cd flake
+sudo task btrfs
 sudo task install:host
 ```
