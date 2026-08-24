@@ -26,11 +26,25 @@ jj new -r 'root()'
 jj -R default edit "$current"
 
 for f in *; do
-	case "$f" in .jj | .git | .gitignore | default) continue ;; esac
-	mv "$f" default/
+	case "$f" in .jj | .git | .gitignore | .envrc | default) continue ;; esac
+	if [[ -d "$f" && -d "default/$f" ]]; then
+		cp -a "$f/." "default/$f/"
+		rm -rf "$f"
+	else
+		mv "$f" default/
+	fi
 done
-
 printf '*\n' > .gitignore
+
+
+if [[ -e .envrc ]]; then
+	if [[ -e default/flake.nix ]]; then
+		printf 'use flake path:./default\n' > .envrc
+	elif [[ -e default/shell.nix ]]; then
+		printf 'use nix ./default/shell.nix\n' > .envrc
+	fi
+fi
+
 touch .wsp-root
 cat > CLAUDE.md <<'EOF'
 # Workspaces

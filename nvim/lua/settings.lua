@@ -206,6 +206,7 @@ vim.api.nvim_create_autocmd("TermResponse", {
 -- follow osc7 requests (inner program wants to cd, like jjui)
 vim.api.nvim_create_autocmd("TermRequest", {
 	group = vim.api.nvim_create_augroup("osc7-follow-cwd", { clear = true }),
+	nested = true,
 	callback = function(ev)
 		local seq = type(ev.data) == "table" and ev.data.sequence or ev.data
 		if type(seq) ~= "string" then
@@ -216,6 +217,76 @@ vim.api.nvim_create_autocmd("TermRequest", {
 			return
 		end
 		vim.cmd("cd " .. vim.fn.fnameescape(dir))
+	end,
+})
+
+-- buffer follow jj workspace changes
+vim.api.nvim_create_autocmd("DirChanged", {
+	group = vim.api.nvim_create_augroup("jj-follow-workspace", { clear = true }),
+	callback = function()
+		local cwd = vim.v.event.cwd
+		-- swapping buffers underneath the `:cd` that got us here upsets both, so
+		-- let it finish first
+		vim.schedule(function()
+			-- two workspaces share a repo when `.jj/repo` resolves to the same
+			-- place: it is a directory in the workspace owning it, and everywhere
+			-- else a file holding the path to that directory, relative to `.jj/`.
+			-- Anything less strict would drag buffers between repos that merely
+			-- agree on a path.
+			local function repo_of(root)
+				local repo = root .. "/.jj/repo"
+				local stat = vim.uv.fs_stat(repo)
+				if not stat then
+					return nil
+				end
+				if stat.type == "directory" then
+					return vim.uv.fs_realpath(repo)
+				end
+				local f = io.open(repo)
+				if not f then
+					return nil
+				end
+				local link = vim.trim(f:read("*a"))
+				f:close()
+				return vim.uv.fs_realpath(link:sub(1, 1) == "/" and link or root .. "/.jj/" .. link)
+			end
+
+			local root = cwd and vim.fs.root(cwd, ".jj")
+			local repo = root and repo_of(root)
+			if not repo then
+				return
+			end
+
+			for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+				local name = vim.api.nvim_buf_get_name(buf)
+				-- unsaved work stays put, we have nowhere to carry it over to
+				if vim.bo[buf].buflisted and vim.bo[buf].buftype == "" and not vim.bo[buf].modified and name ~= "" then
+					local path = vim.uv.fs_realpath(name)
+					local from = path and vim.fs.root(path, ".jj")
+					if from and from ~= root and repo_of(from) == repo then
+						local target = root .. "/" .. path:sub(#from + 2)
+						if vim.uv.fs_stat(target) then
+							local new = vim.fn.bufadd(target)
+							vim.fn.bufload(new)
+							vim.bo[new].buflisted = true
+							for _, win in ipairs(vim.fn.win_findbuf(buf)) do
+								-- floats are previews and the like, not ours to steer
+								if vim.api.nvim_win_get_config(win).relative == "" then
+									local cursor = vim.api.nvim_win_get_cursor(win)
+									vim.api.nvim_win_set_buf(win, new)
+									pcall(vim.api.nvim_win_set_cursor, win, cursor)
+								end
+							end
+							-- drop what we replaced, so the copy from the workspace we
+							-- left cannot sneak back in through the buffer list
+							if #vim.fn.win_findbuf(buf) == 0 then
+								pcall(vim.api.nvim_buf_delete, buf, {})
+							end
+						end
+					end
+				end
+			end
+		end)
 	end,
 })
 
