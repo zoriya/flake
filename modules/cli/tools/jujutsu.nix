@@ -35,6 +35,10 @@ in {
         "closest_bookmark(to)" = "heads(::to & bookmarks())";
         "closest_pushable(to)" = ''heads(::to & mutable() & ~description(exact:" ") & (~empty() | merges()))'';
       };
+      revsets = {
+        # the builtin default, minus the empty commit the root workspace parks on
+        log = "(present(@) | ancestors(immutable_heads().., 2) | trunk()) ~ (present(root@) & empty() & ~@)";
+      };
       ui = {
         conflict-marker-style = "git";
       };
