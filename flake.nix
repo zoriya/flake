@@ -6,6 +6,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.1.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
@@ -57,6 +61,7 @@
       env = "niri";
       custom = [
         nixos-hardware.nixosModules.tuxedo-infinitybook-pro14-gen7
+        ./modules/cli/nix/secureboot.nix
         {
           services.sshd.enable = true;
         }
