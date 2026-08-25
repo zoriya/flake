@@ -178,6 +178,7 @@
     - Never ever push or talk about it
     - when fetching github content/pr/issues/wha, use the `gh` cli.
     - NEVER ever create issues/pr/write on github.
+    - When talking about issues, pr or anything give me LINKS not just #123.
     - keep functions/variables inlined, no clean-code here.
   '';
 
