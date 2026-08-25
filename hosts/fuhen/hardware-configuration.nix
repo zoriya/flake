@@ -39,6 +39,7 @@
     device = "/dev/disk/by-partlabel/crypt";
     allowDiscards = true;
     bypassWorkqueues = true;
+    crypttabExtraOpts = ["tpm2-device=auto"];
   };
 
   fileSystems."/" = {

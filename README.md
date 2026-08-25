@@ -39,3 +39,14 @@ cd flake
 sudo task btrfs
 sudo task install:host
 ```
+
+## Secure boot
+
+Keys are created on the first boot and staged on the esp. To let the firmware
+pick them up, set `Secure Boot Mode` to `Custom` and `Factory Key Provision` to
+`Disabled` in the bios, then `Reset To Setup Mode`: systemd-boot enrolls them on
+the next boot and reboots on its own. Then to auto-unlock luks:
+
+```sh
+sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/disk/by-partlabel/crypt
+```
