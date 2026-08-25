@@ -76,18 +76,23 @@ The live states (running / waiting / open) are reported by Claude Code hooks
 | Key            | Action                                          |
 | -------------- | ----------------------------------------------- |
 | `↑`/`↓`, `j`/`k` | Move the selection                            |
-| `enter`        | Open the selected session (restores it if archived) |
+| `enter`        | Open the selected session (restores it if archived, and takes the editor to its workspace) |
 | `/`            | Search: filter the list by title as you type    |
-| `p`            | Preview: open without restoring an archived session |
+| `p`            | Preview: open without restoring an archived session, or moving the editor |
 | `n`            | Start a fresh session                           |
 | `x`            | Archive the selected session (deletes its jj workspace) |
 | `ctrl+a`       | Toggle between this project and **all** projects |
 | `q` / `esc`    | Cancel                                          |
 
 Selecting a session that is already running just jumps to its window; selecting an
-idle one resumes it (`claude --resume`) in a new window. Opening an archived
-session with `enter` also restores it out of the archived section; `p` opens it
-the same way but leaves it archived, so you can peek without restoring. Press `/`
+idle one resumes it (`claude --resume`) in a new window. Opening a session with
+`enter` also **moves the editor claude-mux is running in** into that session's
+workspace, so the files under your cursor are the ones its agent is working on:
+the picker emits OSC 7 (the sequence a shell sends after `cd`) and nvim follows
+it out of the terminal buffer. Opening an archived session with `enter` restores
+it out of the archived section; `p` opens it the same way but leaves it archived
+*and* leaves the editor where it is, so you can peek at a conversation without
+moving anything. Press `/`
 to filter the list to sessions whose title matches what you type — the box has the
 usual line-editing keys (`ctrl+w`/`ctrl+u`, word motions, `ctrl+a`/`ctrl+e`, …),
 `↑`/`↓` still move the selection, and `enter` opens the highlighted match.
@@ -212,9 +217,11 @@ change and do go with the directory. The transcript is left alone, so the
 conversation stays in the list and can be reopened — a session that was running
 *in* the workspace being deleted (reopened there rather than beside it) moves
 back to `default` first, so it is never left pointing at a directory that is
-about to go. The nvim and jjui workspace pickers do the same on their side:
-forgetting the workspace you are currently in is allowed, they just move you
-back to `default` before the checkout goes.
+about to go. The editor is moved out too, by the same OSC 7 `enter` uses: to the
+workspace of the session the cursor lands on, or back to `default` when there is
+nothing left to land on. The nvim and jjui workspace pickers do the same on their
+side: forgetting the workspace you are currently in is allowed, they just move
+you back to `default` before the checkout goes.
 
 ## How it works
 

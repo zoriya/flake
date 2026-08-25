@@ -3,6 +3,7 @@
 package manager
 
 import (
+	"os"
 	"sort"
 
 	"claude-mux/internal/session"
@@ -27,6 +28,20 @@ type Entry struct {
 	// server, i.e. it was created from the mobile app or claude.ai/code rather
 	// than in a window of its own.
 	Remote bool
+}
+
+// Dir is the tree this session's files are in: the jj workspace its agent made
+// for itself, when it made one and the checkout is still there, and otherwise
+// the directory the session itself runs in (`default`, for a workspace project).
+// It is what the picker points the editor at (see tmux.NotifyCwd), so a deleted
+// workspace falls back rather than sending anyone into a directory that is gone.
+func (e Entry) Dir() string {
+	if e.Workspace != "" {
+		if fi, err := os.Stat(e.Workspace); err == nil && fi.IsDir() {
+			return e.Workspace
+		}
+	}
+	return e.ProjectDir
 }
 
 // Load lists sessions and marks which are currently running by consulting the

@@ -34,6 +34,11 @@ const (
 type Result struct {
 	Action Action
 	Entry  manager.Entry
+	// Preview is set when the session was opened with `p` rather than enter: a
+	// peek, which leaves an archived session archived and — the other half of the
+	// same idea — leaves the editor where it is instead of moving it into the
+	// session's workspace (see tmux.NotifyCwd).
+	Preview bool
 }
 
 var (
@@ -353,10 +358,11 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					// transcript is untouched, so the session keeps its place in
 					// this list and can be reopened; only its checkout goes.
 					//
-					// This has to happen before the window is killed: closing the
-					// last window of a project destroys its tmux session, and this
-					// popup along with it, so anything left for afterwards would
-					// never run.
+					// This has to happen before the window is killed, and so does
+					// everything up to the OSC 7 below: closing the last window of
+					// a project destroys its tmux session, and this popup along
+					// with it, so anything left for afterwards would never run.
+					//
 					// A session that runs *in* a workspace (reopened there, or
 					// from before agents made their own) instead of beside it
 					// goes back to where sessions start first — including when
@@ -365,18 +371,13 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					// a directory that is about to stop existing. Compared
 					// against where sessions start, never against the project:
 					// `default` is the human's and is not ours to delete.
+					gone := false
 					if work := workspace.Work(e.ProjectDir); e.ProjectDir != "" && e.ProjectDir != work {
 						_ = session.Move(e.ID, e.ProjectDir, work)
-						_ = workspace.Remove(e.ProjectDir)
+						gone = workspace.Remove(e.ProjectDir) == nil
 					}
 					if e.Workspace != "" {
-						_ = workspace.Remove(e.Workspace)
-					}
-					// A remote session shares the project's rc window with the
-					// server itself, so killing it would take the whole
-					// remote-control endpoint down with it: only file it away.
-					if e.Target != "" && !e.Remote {
-						_ = m.srv.KillWindow(e.Target)
+						gone = workspace.Remove(e.Workspace) == nil || gone
 					}
 					// Keep the cursor where it is rather than following the
 					// session down to the archived section: point it at the next
@@ -384,6 +385,27 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					// archived session's old slot) after the reload.
 					if m.cursor+1 < len(m.entries) {
 						m.cursor++
+					}
+					// An editor sitting in the checkout we just deleted has to be
+					// moved out of it, and it is the terminal we are drawn in that
+					// knows how (see tmux.NotifyCwd). Send it wherever the cursor
+					// landed — the next session's own workspace — and when there is
+					// nothing left to land on, back to `default`, which is always
+					// there.
+					if gone {
+						next := workspace.Work(m.dir)
+						if m.cursor < len(m.entries) {
+							if d := m.entries[m.cursor].Dir(); d != "" {
+								next = d
+							}
+						}
+						tmux.NotifyCwd(next)
+					}
+					// A remote session shares the project's rc window with the
+					// server itself, so killing it would take the whole
+					// remote-control endpoint down with it: only file it away.
+					if e.Target != "" && !e.Remote {
+						_ = m.srv.KillWindow(e.Target)
 					}
 					cmd = m.startLoad()
 				} else if e.Target != "" && !e.Remote {
@@ -406,7 +428,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// Preview: open the selected session without changing its archived
 			// state, so an archived session can be peeked at without restoring it.
 			if len(m.entries) > 0 {
-				m.result = Result{Action: ActionResume, Entry: m.entries[m.cursor]}
+				m.result = Result{Action: ActionResume, Entry: m.entries[m.cursor], Preview: true}
 				return m, tea.Quit
 			}
 		}

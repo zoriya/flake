@@ -155,6 +155,12 @@ set -g default-terminal "tmux-256color"
 set -g extended-keys on
 set -as terminal-features '*:extkeys'
 
+# Let a pane hand a raw escape sequence through to the outer terminal. The picker
+# needs it for the OSC 7 it sends when you open a session or delete a workspace
+# (see NotifyCwd): tmux swallows a bare OSC 7 to track its own pane cwd, so
+# without this the editor hosting us would never hear about the move.
+set -g allow-passthrough on
+
 # Frame the floating picker with a rounded border so it stands out, but keep its
 # interior on the terminal's default colours so it follows the system theme.
 set -g popup-border-lines rounded
@@ -854,4 +860,30 @@ func (s *Server) InsideOurServer() bool {
 	// $TMUX is "socket_path,pid,session"; the socket path ends in the name.
 	sockPath := strings.Split(t, ",")[0]
 	return filepath.Base(sockPath) == s.Socket
+}
+
+// NotifyCwd tells the terminal claude-mux is displayed in to change directory to
+// dir, with OSC 7 — the sequence a shell emits after every cd. Nothing here has a
+// cwd worth changing; what listens is whatever is hosting us. nvim acts on OSC 7
+// coming out of a terminal buffer (nvim/lua/settings.lua), so opening a session
+// moves the editor into the workspace that session works in, and deleting a
+// workspace moves it out of the directory that just stopped existing — the same
+// hand-off jjui does when you switch or abandon a workspace there.
+//
+// Inside tmux the sequence has to travel in a passthrough DCS with its escapes
+// doubled: tmux reads a bare OSC 7 as its own pane's cwd and never forwards it,
+// so the client's terminal would never see it. Our server enables passthrough
+// (writeConfig); another tmux may not, and then this is silently dropped, which
+// is the same no-op as running under a terminal that ignores OSC 7 anyway.
+func NotifyCwd(dir string) {
+	if dir == "" {
+		return
+	}
+	// No percent-encoding: the sequence is read back by a matcher that takes
+	// everything up to the terminator, and a path is the only thing in it.
+	seq := "\x1b]7;file://" + dir + "\x1b\\"
+	if os.Getenv("TMUX") != "" {
+		seq = "\x1bPtmux;" + strings.ReplaceAll(seq, "\x1b", "\x1b\x1b") + "\x1b\\"
+	}
+	fmt.Print(seq)
 }

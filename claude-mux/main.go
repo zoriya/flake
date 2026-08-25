@@ -453,6 +453,17 @@ func cmdList(args []string) error {
 		if pdir == "" {
 			pdir = dir
 		}
+		// Take the editor hosting us along: opening an agent's session also puts
+		// nvim in the tree that agent works in, so the files under the cursor are
+		// the ones being talked about. `p` is the peek that does not — it opens the
+		// conversation and leaves everything else where it was.
+		if !res.Preview {
+			wd := e.Dir()
+			if wd == "" {
+				wd = workspace.Work(pdir)
+			}
+			tmux.NotifyCwd(wd)
+		}
 		if srv.InsideOurServer() {
 			// A remote session (one the mobile app or claude.ai/code spawned) runs
 			// inside the project's `claude rc` process, so its target is that rc
