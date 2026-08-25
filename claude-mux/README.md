@@ -164,11 +164,17 @@ In a project converted with `jj workspace-init` — the repo root keeps an empty
 working copy plus a `.wsp-root` marker, and every real working copy is a
 subfolder of it, `default` being the one you work in — **each agent works in a jj
 workspace of its own, and names it itself**. `jj workspace-init` leaves a
-`CLAUDE.md` in the project root telling every agent to `jj workspace add -r @
-../<name>` and `cd` there before touching anything, so the directory is named
-after the task (`fix-login`) rather than after a session id. The root's
-`.gitignore` is `*`, so that CLAUDE.md never shows up as a change in the repo,
-and Claude picks it up from there for every workspace below it.
+`CLAUDE.md` in the project root telling every agent to `jj workspace add -r
+'latest(::@ ~ empty())' ../<name>` and `cd` there before touching anything, so
+the directory is named after the task (`fix-login`) rather than after a session
+id — and so it branches off the newest commit that actually changes something
+rather than the empty working copy `default` usually sits on. That CLAUDE.md is a
+symlink to the guide home-manager installs (`~/.config/jj/workspace-CLAUDE.md`),
+never a copy, so rewording it updates every converted project at once; roots made
+before a change to the layout catch up by running `jj workspace-init` again,
+which only relinks. The root's `.gitignore` is `*`, so the CLAUDE.md never shows
+up as a change in the repo, and Claude picks it up from there for every workspace
+below it.
 
 The root's own workspace is named `root`. It exists so `jj` works at the root at
 all (there is no bare repo in jj — an empty working copy is the stand-in) and is

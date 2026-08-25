@@ -1,6 +1,15 @@
-{pkgs, ...}: let
-  jj-workspace-init = pkgs.writeShellScriptBin "jj-workspace-init" (builtins.readFile ./jj-workspace-init.sh);
+{
+  pkgs,
+  config,
+  ...
+}: let
+  jj-workspace-init = pkgs.writeShellScriptBin "jj-workspace-init" ''
+    claude_md="${config.xdg.configHome}/jj/workspace-CLAUDE.md"
+    ${builtins.readFile ./jj-workspace-init.sh}
+  '';
 in {
+  xdg.configFile."jj/workspace-CLAUDE.md".source = ./workspace-claude.md;
+
   programs.jujutsu = {
     enable = true;
     settings = {
