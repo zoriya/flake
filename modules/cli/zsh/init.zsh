@@ -40,11 +40,15 @@ push() {
 }
 
 nixify() {
-	if [ ! -e ./.envrc ]; then
-		echo "use nix" > .envrc
+	local root=$PWD work=$PWD
+	if [[ -e .wsp-root ]]; then
+		work=$PWD/default
+	elif [[ -e ${PWD:h}/.wsp-root ]]; then
+		root=${PWD:h}
 	fi
-	if [[ ! -e shell.nix ]]; then
-		cat > shell.nix <<'EOF'
+
+	if [[ ! -e $work/shell.nix ]]; then
+		cat > $work/shell.nix <<'EOF'
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
   packages = with pkgs; [
@@ -53,16 +57,36 @@ pkgs.mkShell {
 }
 EOF
 	fi
-	direnv allow
+	if [[ ! -e $root/.envrc ]]; then
+		if [[ $work == $root ]]; then
+			echo "use nix" > $root/.envrc
+		else
+			echo "use nix ./${work:t}/shell.nix" > $root/.envrc
+		fi
+	fi
+	direnv allow $root
 }
 
 flakify() {
-	if [ ! -e flake.nix ]; then
-		nix flake new -t github:nix-community/nix-direnv .
-	elif [ ! -e .envrc ]; then
-		echo "use flake" > .envrc
+	local root=$PWD work=$PWD
+	if [[ -e .wsp-root ]]; then
+		work=$PWD/default
+	elif [[ -e ${PWD:h}/.wsp-root ]]; then
+		root=${PWD:h}
 	fi
-	direnv allow
+
+	if [[ ! -e $work/flake.nix ]]; then
+		nix flake new -t github:nix-community/nix-direnv $work
+		[[ $work == $root ]] || rm -f $work/.envrc
+	fi
+	if [[ ! -e $root/.envrc ]]; then
+		if [[ $work == $root ]]; then
+			echo "use flake" > $root/.envrc
+		else
+			echo "use flake path:./${work:t}" > $root/.envrc
+		fi
+	fi
+	direnv allow $root
 }
 
 dotenv() {
