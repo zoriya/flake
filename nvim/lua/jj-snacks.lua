@@ -605,20 +605,34 @@ Snacks.picker.jj_workspaces = function()
 		},
 		actions = {
 			jj_workspace_forget = function(picker, item)
-				if item.current then
-					Snacks.notify.error("cannot delete the current workspace")
+				if item.name == "default" then
+					Snacks.notify.error("cannot delete the default workspace")
 					return
 				end
 				local prompt = string.format("Delete workspace %s (%s)?", item.name, item.dir)
 				if vim.fn.confirm(prompt, "&Yes\n&No", 2) ~= 1 then
 					return
 				end
+				local from = item.cwd
+				if item.current then
+					local out = vim.system(
+						{ "jj", "workspace", "root", "--name", "default" },
+						{ cwd = item.cwd, text = true }
+					):wait()
+					from = vim.trim(out.stdout or "")
+					if out.code ~= 0 or from == "" or from == item.dir then
+						Snacks.notify.error("no default workspace to fall back to")
+						return
+					end
+					vim.cmd("cd " .. vim.fn.fnameescape(from))
+					Snacks.notify("cd " .. from)
+				end
 				Snacks.picker.util.cmd({ "jj", "-R", item.dir, "status" }, function()
 					Snacks.picker.util.cmd({ "jj", "workspace", "forget", item.name }, function()
 						vim.fn.delete(item.dir, "rf")
 						picker:refresh()
-					end, { cwd = item.cwd })
-				end, { cwd = item.cwd })
+					end, { cwd = from })
+				end, { cwd = from })
 			end,
 		},
 	})

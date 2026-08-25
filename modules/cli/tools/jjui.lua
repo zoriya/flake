@@ -66,12 +66,21 @@ function setup(config)
 
 		local here = (jj("workspace", "root") or ""):gsub("%s+$", "")
 		if dir == here then
-			flash({ text = "cannot abandon the workspace you are in", error = true })
-			return
+			local def = (jj("workspace", "root", "--name", "default") or ""):gsub("%s+$", "")
+			if def == "" then
+				flash({ text = "no default workspace to fall back to", error = true })
+				return
+			end
+			local ok, err = change_workspace(def)
+			if not ok then
+				flash({ text = err, error = true })
+				return
+			end
+			jj("util", "exec", "--", "sh", "-c",
+				[[printf '\033]7;file://%s\033\\' "$1" 2>/dev/null >/dev/tty || true]], "sh", def)
 		end
 
-		-- snapshot the workspace first
-		local _, snap_err = jj("-R", dir, "status")
+		local _, snap_err = jj("-R", dir, "util", "snapshot")
 		if snap_err then
 			flash({ text = snap_err, error = true })
 			return
@@ -84,7 +93,7 @@ function setup(config)
 		end
 		jj("util", "exec", "--", "rm", "-rf", dir)
 
-		flash("abandoned workspace " .. target)
+		flash("abandoned workspace " .. target .. (dir == here and ", now in default" or ""))
 		revisions.refresh({})
 	end, { desc = "Abandon workspace", scope = "revisions", seq = { "w", "a" } })
 end

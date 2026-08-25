@@ -357,16 +357,20 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					// last window of a project destroys its tmux session, and this
 					// popup along with it, so anything left for afterwards would
 					// never run.
-					if e.Workspace != "" {
-						_ = workspace.Remove(e.Workspace)
-					} else if work := workspace.Work(e.ProjectDir); e.ProjectDir != "" && e.ProjectDir != work {
-						// A session that runs *in* a workspace (reopened there, or
-						// from before agents made their own) instead of beside it.
-						// Compared against where sessions start, never against the
-						// project: `default` is the human's and is not ours to
-						// delete.
+					// A session that runs *in* a workspace (reopened there, or
+					// from before agents made their own) instead of beside it
+					// goes back to where sessions start first — including when
+					// that workspace is the one it made and is removed just
+					// below, so archiving never leaves a session registered in
+					// a directory that is about to stop existing. Compared
+					// against where sessions start, never against the project:
+					// `default` is the human's and is not ours to delete.
+					if work := workspace.Work(e.ProjectDir); e.ProjectDir != "" && e.ProjectDir != work {
 						_ = session.Move(e.ID, e.ProjectDir, work)
 						_ = workspace.Remove(e.ProjectDir)
+					}
+					if e.Workspace != "" {
+						_ = workspace.Remove(e.Workspace)
 					}
 					// A remote session shares the project's rc window with the
 					// server itself, so killing it would take the whole

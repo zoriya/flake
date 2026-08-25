@@ -209,7 +209,12 @@ snapshotted first, so everything the agent did is recorded in a jj change that
 stays in the repo (`jj log` still shows it) — the checkout goes, the work does
 not. Files jj does not track (gitignored build output, `.env`, …) are not in any
 change and do go with the directory. The transcript is left alone, so the
-conversation stays in the list and can be reopened.
+conversation stays in the list and can be reopened — a session that was running
+*in* the workspace being deleted (reopened there rather than beside it) moves
+back to `default` first, so it is never left pointing at a directory that is
+about to go. The nvim and jjui workspace pickers do the same on their side:
+forgetting the workspace you are currently in is allowed, they just move you
+back to `default` before the checkout goes.
 
 ## How it works
 
