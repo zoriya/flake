@@ -75,8 +75,9 @@
 
   services.locate = {
     enable = true;
-    package = pkgs.mlocate;
+    package = pkgs.mlocate.overrideAttrs {makeFlags = ["dbfile=/var/cache/locate/locatedb"];};
     interval = "hourly";
+    output = "/var/cache/locate/locatedb";
   };
 
   virtualisation.docker.enable = true;

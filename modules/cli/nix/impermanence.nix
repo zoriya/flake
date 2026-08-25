@@ -67,6 +67,7 @@ in {
       "/var/lib/flood"
       "/var/lib/acme"
       "/etc/NetworkManager/system-connections"
+      "/var/cache/locate"
     ];
     files = [
       "/etc/machine-id"
@@ -75,7 +76,6 @@ in {
       "/etc/ssh/ssh_host_rsa_key"
       "/etc/ssh/ssh_host_rsa_key.pub"
       "/var/snapraid.content"
-      "/var/cache/locatedb"
     ];
     users.${user} = {
       directories = [
