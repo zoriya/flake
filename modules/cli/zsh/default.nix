@@ -60,7 +60,7 @@
       jl = "jj log";
       jla = "jj log -r 'all()'";
       jdf = "jj diff";
-      jcl = "jj git clone --colocate";
+      jcl = "jj clone";
       jrb = "jj rebase";
       jrbt = "jj rebase -o 'trunk()'";
       ja = "jj abandon";
