@@ -29,6 +29,7 @@
         # request clipboard from parent terminal instead of using tmux's internal buffer
         set -s get-clipboard request
         set -g extended-keys on
+        set -as terminal-features "*:hyperlinks"
 
         # from tmux-sensible
         set -g display-time 4000

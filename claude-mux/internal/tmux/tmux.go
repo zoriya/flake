@@ -155,6 +155,12 @@ set -g default-terminal "tmux-256color"
 set -g extended-keys on
 set -as terminal-features '*:extkeys'
 
+# Same story for OSC 8 hyperlinks: tmux keeps the label but throws the URL away
+# unless the terminal hosting us is flagged as hyperlink-capable. Claude Code
+# emits real hyperlinks (it detects tmux >= 3.4 and turns them on), so without
+# this every link it prints arrives downstream as plain bold text.
+set -as terminal-features '*:hyperlinks'
+
 # Let a pane hand a raw escape sequence through to the outer terminal. The picker
 # needs it for the OSC 7 it sends when you open a session or delete a workspace
 # (see NotifyCwd): tmux swallows a bare OSC 7 to track its own pane cwd, so
