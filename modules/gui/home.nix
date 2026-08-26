@@ -180,4 +180,51 @@ in {
     categories = ["Network" "FileTransfer" "Game"];
     mimeType = ["x-scheme-handler/steam" "x-scheme-handler/steamlink"];
   };
+
+  # Machines we ssh into get this socket forwarded to 127.0.0.1:17321 on their
+  # end, so their open-url (see modules/cli/tools/tmux.nix) can hand us a link
+  # and it opens here, in front of the terminal we typed in, however many
+  # tmux/ssh layers deep the pane is.
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    settings."*".RemoteForward = {
+      bind = {
+        address = "127.0.0.1";
+        port = 17321;
+      };
+      # %i is our uid, the socket lives in our XDG_RUNTIME_DIR.
+      host.address = "/run/user/%i/open-url.sock";
+    };
+  };
+  systemd.user.sockets.open-url = {
+    Unit.Description = "Socket ssh'd machines send urls to open here";
+    Socket = {
+      ListenStream = "%t/open-url.sock";
+      Accept = true;
+      SocketMode = "0600";
+    };
+    Install.WantedBy = ["sockets.target"];
+  };
+  systemd.user.services."open-url@" = {
+    Unit = {
+      Description = "Open an url sent by an ssh'd machine";
+      After = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "oneshot";
+      StandardInput = "socket";
+      ExecStart = lib.getExe (pkgs.writeShellScriptBin "open-url-handler" ''
+        read -r url
+        case "$url" in
+          http://*|https://*) ;;
+          *)
+            echo "refusing to open '$url'" >&2
+            exit 1
+            ;;
+        esac
+        exec ${lib.getExe' pkgs.xdg-utils "xdg-open"} "$url"
+      '');
+    };
+  };
 }
