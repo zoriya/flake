@@ -48,6 +48,11 @@ in {
       });
     };
 
+  # gh only knows how to find a repo through git, which non-colocated jj repos hide.
+  gh = wrapProgram super.gh ["gh"] ''
+    --suffix PATH : ${super.lib.makeBinPath [super.jujutsu super.git super.coreutils]} \
+    --run "source ${./gh-jj.sh}"'';
+
   discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];
   pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
