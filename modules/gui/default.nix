@@ -4,7 +4,7 @@
   ...
 }: {
   environment.systemPackages = with pkgs;
-    lib.optionals pkgs.stdenv.isx86_64 [
+    lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
       wineWow64Packages.stable
       wineWow64Packages.waylandFull
       winetricks

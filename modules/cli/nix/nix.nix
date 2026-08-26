@@ -22,7 +22,7 @@
         options = "--delete-older-than 14d";
       }
       // (
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         then {
           dates = "weekly";
         }

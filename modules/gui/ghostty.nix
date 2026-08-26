@@ -2,7 +2,7 @@
   programs.ghostty = {
     enable = true;
     package =
-      if pkgs.stdenv.isLinux
+      if pkgs.stdenv.hostPlatform.isLinux
       then pkgs.ghostty
       else pkgs.ghostty-bin;
     enableZshIntegration = true;

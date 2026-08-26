@@ -122,7 +122,7 @@
                       name=$(echo "$input" | ${lib.getExe pkgs.jq} -r 'if .session_name then .session_name else (.cwd | split("/") | last) end')
                     '';
                   in
-                    if pkgs.stdenv.isDarwin
+                    if pkgs.stdenv.hostPlatform.isDarwin
                     then ''
                       ${parse}
                       osascript -e "display notification \"Response complete\" with title \"Claude Code · $name\""

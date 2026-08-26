@@ -101,7 +101,7 @@
       dc = "docker compose";
       dcd = "docker compose -f $(setopt extendedglob; echo (../)#docker-compose.dev.yml)";
       op =
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         then "xdg-open"
         else "open";
       py = "python3 2> /dev/null || , python3";
@@ -116,7 +116,7 @@
       nixos-option = "nixos-option --flake ~/projects/flake";
       # i will never remember those flags
       ss =
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         then "ss -tlpun"
         else "netstat -anvp tcp | awk 'NR<3 || /LISTEN/'";
 
@@ -273,7 +273,7 @@
   };
 
   programs.distrobox = {
-    enable = pkgs.stdenv.isLinux; # this is not supported on macos
+    enable = pkgs.stdenv.hostPlatform.isLinux; # this is not supported on macos
   };
   xdg.configFile."distrobox/distrobox.conf".text = ''
     container_name_default="archlinux"
@@ -379,7 +379,7 @@
       osc
       # bitwarden-cli
     ]
-    ++ lib.optionals pkgs.stdenv.isLinux [
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
       usbutils
       pciutils
       psmisc

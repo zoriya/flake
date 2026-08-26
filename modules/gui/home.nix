@@ -34,7 +34,7 @@ in {
       playerctl
       nautilus
     ]
-    ++ lib.optionals pkgs.stdenv.isx86_64 [google-chrome];
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [google-chrome];
 
   home.sessionVariables = rec {
     TERMINAL = "kitty";

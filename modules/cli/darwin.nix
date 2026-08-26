@@ -49,7 +49,7 @@
   launchd.user.agents.ssh-tunnel = let
     ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
       while true; do
-        dns-sd -m -Q fuhen.local
+        dns-sd -m -Q fuhen.local > /dev/null 2> /dev/null
         echo "Host found, starting tunnel" | tee /dev/stderr
         ssh -NR "2222:localhost:22" zoriya@fuhen.local
         echo "Connetion closed" | tee /dev/stderr
