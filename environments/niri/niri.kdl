@@ -178,14 +178,17 @@ binds {
 	Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
-workspace "music" {
-	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
-}
 workspace "chat" {
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
 }
 workspace "work" {
 	open-on-output "Dell Inc. DELL S2722QC 2HHZH24"
+}
+
+output "Dell Inc. DELL S2722QC 2HHZH24" {
+	layout {
+		empty-workspace-above-first
+	}
 }
 
 window-rule {
