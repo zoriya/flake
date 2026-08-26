@@ -1,0 +1,23 @@
+id = "zoriya/notif-inline"
+name = "Inline notifications"
+version = "1.1.0"
+plugin_api = 14
+author = "zoriya"
+license = "MIT"
+description = "Bell and live notification in one bar widget, no popup toast"
+
+[[widget]]
+id = "bar"
+entry = "bar.luau"
+
+# left has to round-trip through the script: what it does depends on whether a
+# notification is on screen right now. right goes to the service, which owns the
+# DND state the bell glyph is drawn from.
+[widget.actions]
+left = "plugin zoriya/notif-inline:bar focused click"
+right = "plugin zoriya/notif-inline:dnd all dnd"
+middle = "notification-clear-active"
+
+[[service]]
+id = "dnd"
+entry = "dnd.luau"

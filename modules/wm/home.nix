@@ -38,6 +38,7 @@ in {
     screenshot-freeze
     record
     libnotify
+    socat
   ];
 
   services.darkman = let
@@ -76,16 +77,29 @@ in {
     };
   };
 
+  xdg.dataFile."noctalia/plugins/notif-inline".source = ./noctalia/notif-inline;
+
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
     settings = {
+      plugins.enabled = ["zoriya/notif-inline"];
+
+      # no toasts, the notif-inline plugin renders them in the bar instead
+      notification.filter.inline = {
+        match_content = ".*";
+        show_toast = false;
+        save_history = true;
+        allow_permanent = false;
+      };
+
       shell = {
         avatar_path = "~/.face";
         clipboard_auto_paste = "off";
         clipboard_history_max_entries = 10000;
         launch_apps_as_systemd_services = true;
         polkit_agent = true;
+        setup_wizard_enabled = false;
         panel.transparency_mode = "glass";
         panel.open_near_click_control_center = true;
         session.show_shortcuts = false;
@@ -106,7 +120,7 @@ in {
         capsule_opacity = 0.5;
 
         start = ["taskbar"];
-        center = ["notifications"];
+        center = ["zoriya/notif-inline:bar"];
         end = ["media" "spacer" "tray" "privacy" "battery" "volume" "bluetooth" "network" "spacer" "clock"];
       };
 
@@ -114,7 +128,7 @@ in {
         taskbar = {
           group_by_workspace = true;
           show_workspace_label = false;
-          inactive_opacity = 0.9;
+          inactive_opacity = 0.8;
         };
         notifications.hide_when_no_unread = true;
         media = {
@@ -126,7 +140,10 @@ in {
         privacy.hide_inactive = true;
         spacer.length = 20;
         network.show_label = false;
-        clock.format = "{:%H:%M}\n{:%Y-%m-%d}";
+        clock = {
+          format = "{:%H:%M}\n{:%Y-%m-%d}";
+          font_weight = 700;
+        };
       };
 
       battery.warning_threshold = 20;
