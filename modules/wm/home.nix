@@ -160,11 +160,6 @@ in {
 
       desktop_widgets.enabled = false;
 
-      hooks.started = "noctalia msg session lock";
-      idle.behavior.lock = {
-        timeout = 660;
-        action = "lock";
-      };
       idle.behavior.suspend = {
         timeout = 0;
         locked_timeout = 600;

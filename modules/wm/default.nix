@@ -44,6 +44,7 @@
   environment.pathsToLink = [
     "/share/applications"
     "/share/xdg-desktop-portal"
+    "/share/wayland-sessions"
   ];
 
   services.printing.enable = true;
