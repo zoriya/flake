@@ -91,7 +91,16 @@ in
           unclash-nvim
 
           nvim-surround
-          mini-operators
+          # `cr` crashes on nvim nightly: https://github.com/nvim-mini/mini.nvim/issues/2534
+          # fixed upstream, but not in a release yet (latest tag is v0.18.0)
+          (mini-operators.overrideAttrs {
+            src = pkgs.fetchFromGitHub {
+              owner = "nvim-mini";
+              repo = "mini.operators";
+              rev = "9e0aa164b097c6cb45e59b9371c9347ac06eb822";
+              hash = "sha256-3abEmagIuwj9SrTeIJYzzri8zUFmRDqjaAKoPNhqRgA=";
+            };
+          })
           mini-splitjoin
           vim-wordmotion
           increment-activator
