@@ -310,9 +310,11 @@ return {
 
 			vim.keymap.set("n", "<leader>ju", function()
 				local from = vim.api.nvim_buf_get_name(0)
-				local cwd
-				if from ~= "" then
-					cwd = vim.fs.root(vim.fs.normalize(from), ".jj")
+				local cwd = vim.fs.root(vim.fs.normalize(from ~= "" and from or vim.uv.cwd() or "."), ".jj")
+				-- the root workspace of a `jj workspace-init` project is a stand-in for
+				-- a bare repo, so landing on it means the workspace we came from is gone
+				if cwd and vim.uv.fs_stat(cwd .. "/.wsp-root") then
+					cwd = cwd .. "/default"
 				end
 				Snacks.terminal.toggle("jjui", { cwd = cwd })
 			end, { desc = "jj ui" })

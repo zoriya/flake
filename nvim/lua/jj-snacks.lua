@@ -1,8 +1,13 @@
+local function jj_root(path)
+	local root = vim.fs.root(vim.fs.normalize(path), '.jj')
+	if root and vim.uv.fs_stat(root .. '/.wsp-root') then
+		return root .. '/default'
+	end
+	return root
+end
+
 local function jj_cwd(from, opts, ctx)
-	local cwd
-	cwd = (opts and opts.cwd) or from or vim.uv.cwd() or '.'
-	cwd = vim.fs.normalize(cwd)
-	cwd = vim.fs.root(cwd, '.jj')
+	local cwd = jj_root((opts and opts.cwd) or from or vim.uv.cwd() or '.')
 	if not cwd then
 		Snacks.notify.error 'Cannot find `.jj` folder. To initialize a repository use `jj git init .`'
 		ctx.picker.closed = true
@@ -194,7 +199,7 @@ Snacks.picker.jj_stage = function()
 	end
 
 	local title = "jj stage @ / @-"
-	local root = vim.fs.root(vim.fs.normalize(from or vim.uv.cwd() or "."), ".jj")
+	local root = jj_root(from or vim.uv.cwd() or ".")
 	if root then
 		local function desc(rev)
 			local out = vim.system({
