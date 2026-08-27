@@ -34,6 +34,39 @@ local function workspace_under_cursor(include_default)
 end
 
 function setup(config)
+	config.action("new_workspace", function()
+		local rev = context.change_id()
+		if not rev then
+			flash({ text = "no revision selected", error = true })
+			return
+		end
+
+		local name = input({ title = "new workspace", prompt = "name" })
+		if not name then
+			return
+		end
+		name = name:gsub("%s", "")
+		if name == "" then
+			flash({ text = "a workspace needs a name", error = true })
+			return
+		end
+
+		local root = jj("workspace", "root", "--name", "root")
+		if root == "" then
+			flash({ text = "Run `jj workspace-init before", error = true })
+			return
+		end
+		local dir = root .. "/" .. name
+		local _, err = jj("workspace", "add", "-r", rev, dir)
+		if err then
+			flash({ text = err, error = true })
+			return
+		end
+
+		flash("created workspace " .. name)
+		revisions.refresh({})
+	end, { desc = "New workspace", scope = "revisions", seq = { "w", "n" } })
+
 	config.action("edit_workspace", function()
 		local target, dir = workspace_under_cursor(true)
 		if not target then

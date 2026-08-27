@@ -179,8 +179,7 @@ binds {
 }
 
 workspace "music" {
-	// TODO: make this output to secondary monitor by default
-	open-on-output ""
+	open-on-output "Stargate Technology HS156PC Unknown"
 }
 
 workspace "chat" {
