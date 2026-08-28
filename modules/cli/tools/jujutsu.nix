@@ -48,7 +48,8 @@ in {
       };
       revsets = {
         # the builtin default, minus the empty commit the root workspace parks on
-        log = "(present(@) | ancestors(immutable_heads().., 2) | trunk()) ~ (present(root@) & empty() & ~@)";
+        # and minus renovate's bookmarks (they are tracked, so otherwise mutable heads)
+        log = ''(present(@) | ancestors(immutable_heads().., 2) | trunk()) ~ (present(root@) & empty() & ~@) ~ (trunk()..bookmarks(glob:"renovate/*") ~ ::@)'';
       };
       ui = {
         conflict-marker-style = "git";
@@ -90,7 +91,36 @@ in {
           lua =
             #lua
             ''
-              jj("bookmark", "move", "--from", "closest_bookmark(@)", "--to", context.change_id())
+              local rev = context.change_id()
+              jj("bookmark", "move", "--from", "closest_bookmark(" .. rev .. ")", "--to", rev)
+              revisions.refresh({})
+            '';
+        }
+        {
+          name = "new_on_trunk";
+          desc = "New commit on top of trunk()";
+          lua =
+            #lua
+            ''
+              local _, err = jj("new", "trunk()")
+              if err then
+                flash({text = err, error = true})
+                return
+              end
+              revisions.refresh({})
+            '';
+        }
+        {
+          name = "new_before";
+          desc = "New commit before the current one";
+          lua =
+            #lua
+            ''
+              local _, err = jj("new", "--no-edit", "--insert-before", "@")
+              if err then
+                flash({text = err, error = true})
+                return
+              end
               revisions.refresh({})
             '';
         }
@@ -101,6 +131,18 @@ in {
           action = "tug";
           scope = "revisions";
           desc = "Tug";
+        }
+        {
+          seq = ["shift+n" "t"];
+          action = "new_on_trunk";
+          scope = "revisions";
+          desc = "New on trunk";
+        }
+        {
+          seq = ["shift+n" "b"];
+          action = "new_before";
+          scope = "revisions";
+          desc = "New before current";
         }
         # bindings bellows are just for ctrl+c as cancel
         {
