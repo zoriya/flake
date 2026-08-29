@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   imports = [
@@ -43,6 +44,13 @@
     };
   };
   services.automatic-timezoned.enable = true;
+  environment.etc = lib.optionalAttrs config.services.geoclue2.enable {
+    "geoclue/geoclue.conf".text = lib.mkAfter ''
+      [ip]
+      enable=true
+      method=ichnaea
+    '';
+  };
 
   programs.dconf.enable = true;
   services.dbus.enable = true;
