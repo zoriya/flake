@@ -1,23 +1,12 @@
-{lib, ...}: {
-  options.git = {
-    useRsa = lib.mkEnableOption "Use rsa instead of ed25519";
-  };
-  config.programs.git = {
+{
+  programs.git = {
     enable = true;
     ignores = [".envrc"];
     signing = {
-      format = "openpgp";
+      format = "ssh";
       signByDefault = true;
-      key =
-        if true #config.git.useRsa
-        then "~/.ssh/id_rsa.pub"
-        else "~/.ssh/id_ed25519.pub";
+      key = "~/.ssh/id_rsa.pub";
     };
-    # maintenance = {
-    #   enable = false;
-    #   # TODO: figure out a way to specify all repositories in ~/projects & ~/work at run time
-    #   repositories = [];
-    # };
     settings = {
       user = {
         name = "Zoe Roux";
@@ -40,10 +29,7 @@
             !git reset --hard HEAD && git clean -df .
           '';
       };
-      gpg = {
-        format = "ssh";
-        ssh.allowedSignersFile = "~/.ssh/allowed_signers";
-      };
+      gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
       fetch = {
         prune = true;
         pruneTags = true;

@@ -77,15 +77,6 @@
       ];
     };
 
-    nixosConfigurations.saikai = mkSystem "saikai" {
-      env = "server";
-    };
-
-    nixosConfigurations.lucca = mkSystem "lucca" {
-      env = "wsl";
-      wsl = true;
-    };
-
     nixosConfigurations.kujima = mkSystem "kujima" {
       env = "none";
       system = "aarch64-linux";

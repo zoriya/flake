@@ -25,15 +25,6 @@ vim.lsp.enable({
 	"mdx_analyzer",
 })
 
--- vim.api.nvim_create_autocmd("LspAttach", {
--- 	group = vim.api.nvim_create_augroup("lsp-setup", {}),
--- 	callback = function(ev)
--- 		local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
--- 		if client:supports_method('textDocument/completion') then
--- 			vim.lsp.completion.enable(true, client.id, ev.buf)
--- 		end
--- 	end,
--- })
 vim.lsp.on_type_formatting.enable()
 vim.lsp.document_color.enable(true, nil, { style = "virtual" })
 

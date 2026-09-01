@@ -105,7 +105,6 @@ in
           vim-wordmotion
           increment-activator
           leap-nvim
-          flit-nvim
 
           (snacks-nvim.overrideAttrs {
             postPatch = "rm -rf queries";

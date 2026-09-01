@@ -39,8 +39,6 @@
     /* vim:ft=css
   '';
   home.packages = with pkgs; [rofi];
-  xdg.configFile."rofi" = {
-    source = ./.;
-    recursive = true;
-  };
+  xdg.configFile."rofi/colors.rasi".source = ./colors.rasi;
+  xdg.configFile."rofi/config.rasi".source = ./config.rasi;
 }

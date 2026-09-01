@@ -11,7 +11,7 @@ return {
 				["<Up>"] = { "select_prev", "fallback" },
 				["<Down>"] = { "select_next", "fallback" },
 				["<Tab>"] = {},
-				["S-Tab"] = {},
+				["<S-Tab>"] = {},
 			},
 			completion = {
 				trigger = {
@@ -49,9 +49,6 @@ return {
 
 					return { "lsp", "snippets" }
 				end,
-				per_filetype = {
-					codecompanion = { "codecompanion" },
-				}
 			},
 		},
 		after = function(plug)

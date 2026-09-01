@@ -19,62 +19,10 @@
     # settings.json is installed as a writable file in the activation below instead
     # Claude needs to update it at runtime (e.g. model effort via the slash command).
 
-    skills.new-session = ''
-      ---
-      name: new-session
-      description: Spawn a separate Claude Code session to work on a described task, handing it a self-contained prompt built from the current conversation. Use when the user asks to "create/spawn/start a new session", "open a new claude for X", "hand this off to another session", or "do that in a separate session".
-      ---
-
-      # New session
-
-      Spawn a fresh Claude Code session that works on what the user described,
-      in parallel with this one. It runs detached in the background and is
-      resumable like any other session, so the user picks it up when it is done.
-
-      ## Steps
-
-      1. Work out the task and the project directory — the new session runs in
-         whatever directory you launch it from, so `cd` there. Default to the
-         current working directory. Only ask the user something if the task
-         itself is ambiguous, not to confirm details you can read from the
-         conversation or the repo.
-
-      2. Write the prompt to a file (the scratchpad dir if this session has one,
-         otherwise `mktemp`). The new session shares **nothing** with this one
-         and nobody is watching it work, so the prompt must stand on its own and
-         must not ask questions back. Include, in plain prose:
-         - the goal, stated as a concrete task;
-         - the background from this conversation the new session would otherwise
-           have to rediscover (what was tried, what failed, decisions already
-           made and why);
-         - the files that matter, as absolute or repo-relative paths — point at
-           files rather than pasting large chunks of them;
-         - constraints and non-goals: what must not change, what is out of scope;
-         - how to know it worked (a command to run, a behaviour to check).
-
-         Do not restate the user's global CLAUDE.md rules — the new session
-         reads them itself. Write it as instructions to the new session, not as
-         a summary of this conversation.
-
-      3. Launch it detached, with an id of your own so you can report it:
-
-         ```sh
-         id=$(uuidgen)
-         setsid claude -p --session-id "$id" "$(cat /path/to/prompt.md)" >"/tmp/claude-$id.log" 2>&1 &
-         echo "$id"
-         ```
-
-         `setsid` keeps it alive after the command returns, and it must be
-         backgrounded — do not wait for it.
-
-      4. Tell the user, briefly, what the new session was told to do, and give
-         them the session id (they resume it with `claude --resume <id>`, and it
-         is in their session picker). Do not do the task yourself afterwards
-         unless the user asks.
-    '';
+    skills.new-session = builtins.readFile ./claude/new-session.md;
   };
 
-  home.activation.claudeWritableSettings = ''
+  home.activation.claudeWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     install -Dm644 ${(pkgs.formats.json {}).generate "claude-code-settings.json" {
       "$schema" = "https://json.schemastore.org/claude-code-settings.json";
       theme = "auto";
@@ -143,45 +91,62 @@
       ];
 
       hooks.UserPromptSubmit = [
-        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status running";}];}
+        {
+          hooks = [
+            {
+              type = "command";
+              command = "${lib.getExe pkgs.claude-mux} hook --status running";
+            }
+          ];
+        }
       ];
       hooks.Notification = [
-        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status questions";}];}
+        {
+          hooks = [
+            {
+              type = "command";
+              command = "${lib.getExe pkgs.claude-mux} hook --status questions";
+            }
+          ];
+        }
       ];
       hooks.SessionStart = [
-        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status idle";}];}
+        {
+          hooks = [
+            {
+              type = "command";
+              command = "${lib.getExe pkgs.claude-mux} hook --status idle";
+            }
+          ];
+        }
       ];
       hooks.SessionEnd = [
-        {hooks = [{type = "command"; command = "${lib.getExe pkgs.claude-mux} hook --status closed";}];}
+        {
+          hooks = [
+            {
+              type = "command";
+              command = "${lib.getExe pkgs.claude-mux} hook --status closed";
+            }
+          ];
+        }
       ];
     }} "${config.xdg.configHome}/claude/settings.json"
   '';
 
-  home.activation.claudeRemoteControl = ''
+  home.activation.claudeRemoteControl = lib.hm.dag.entryAfter ["writeBoundary"] ''
     f="${config.xdg.configHome}/claude/.claude.json"
     [ -e "$f" ] || echo '{}' >"$f"
     ${lib.getExe pkgs.jq} '.remoteControlAtStartup = true' "$f" >"$f.tmp" && mv "$f.tmp" "$f"
   '';
 
   # path is persisted at first launch, reset it to hot-reload.
-  home.activation.claudeMuxReload = ''
+  home.activation.claudeMuxReload = lib.hm.dag.entryAfter ["writeBoundary"] ''
     export TMUX_TMPDIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
     export PATH="${pkgs.tmux}/bin:$PATH"
     ${lib.getExe pkgs.claude-mux} reload || true
   '';
 
-  xdg.configFile."claude/CLAUDE.md".text = ''
-    # Global instructions
-
-    - Never use git, we use jj instead.
-    - Never edit jj (or even worse git) state, don't jj commit/edit/describe/split in a workspace you don't own, unless specifically asked to
-    - Never ever push or talk about it
-    - when fetching github content/pr/issues/wha, use the `gh` cli.
-    - NEVER ever create issues/pr/write on github.
-    - When talking about issues, pr or anything give me LINKS not just #123.
-    - keep functions/variables inlined, no clean-code here.
-    - If you need a tool, you can use a `nix shell` or comma (`, my-cli`). don't execute diretly from /nix/store
-  '';
+  xdg.configFile."claude/CLAUDE.md".source = ./claude/global.md;
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
     "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
@@ -246,22 +211,18 @@
       android_sdk.accept_license = true;
     }'';
 
-  # For virt-manager to detect hypervisor
   dconf.settings = {
+    # For virt-manager to detect hypervisor
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
+    # Use geoclue2 for weather location
+    "org/gnome/shell/weather".automatic-location = true;
   };
 
-  # Use geoclue2 for weather location
-  dconf.settings = {
-    "org/gnome/shell/weather" = {
-      automatic-location = true;
-    };
-  };
-
-  systemd.user.services.download-clears = let
+  # home-manager warns on non-linux `systemd.user`, and darwin imports this file too.
+  systemd.user.services.download-clears = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
     script = pkgs.writeShellScriptBin "download-clears" ''
       find ~/downloads -mtime +30 -delete
     '';
@@ -276,9 +237,9 @@
     Install = {
       WantedBy = ["default.target"];
     };
-  };
+  });
 
-  systemd.user.timers.download-clears = {
+  systemd.user.timers.download-clears = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     Unit = {
       Description = "Clear old downloads";
     };

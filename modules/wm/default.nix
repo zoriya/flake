@@ -65,10 +65,6 @@
     polkit_gnome
   ];
 
-  security.pam.services.hyprlock = {
-    enableGnomeKeyring = true;
-  };
-
   # Allow gsettings to work
   environment.sessionVariables.XDG_DATA_DIRS = [
     "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"

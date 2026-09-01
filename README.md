@@ -6,8 +6,7 @@
 ## Tools
 
 - WM: niri
-- Widgets: astal + rofi (app picker + clipboard history picker)
-- Lockscreen: hyprlock (+ hypridle for loginctl/auto suspend when locked)
+- Widgets: noctalia (bar, launcher, clipboard history, lockscreen, idle) + rofi as the app picker
 - Lots of cli tools
 - Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot).
 
@@ -33,8 +32,8 @@ mkfs.btrfs -L nix /dev/mapper/crypt
 ```
 
 ```sh
-nix-shell -p git go-task
-git clone https://github.com/zoriya/flake
+nix-shell -p jujutsu go-task
+jj git clone https://github.com/zoriya/flake
 cd flake
 sudo task btrfs
 sudo task install:host

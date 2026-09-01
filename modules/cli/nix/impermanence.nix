@@ -148,8 +148,8 @@ in {
     };
   };
 
-  fileSystems."/home/zoriya/wallpapers" = {
-    device = "/home/zoriya/projects/flake/default/wallpapers/";
+  fileSystems."/home/${user}/wallpapers" = {
+    device = "/home/${user}/projects/flake/default/wallpapers/";
     fsType = "none";
     options = ["bind" "nofail"];
   };

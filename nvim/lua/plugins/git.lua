@@ -84,7 +84,7 @@ return {
 		event = "DeferredUIEnter",
 		opts = {},
 		after = function(plug)
-			require("jj").setup(plug.opt)
+			require("jj").setup(plug.opts)
 
 			local cmd = require("jj.cmd")
 			vim.keymap.set("n", "<leader>jd", cmd.describe, { desc = "JJ describe" })

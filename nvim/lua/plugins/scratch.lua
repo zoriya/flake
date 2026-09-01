@@ -7,8 +7,8 @@ local function scratch()
 			return
 		end
 
-		if vim.loop.fs_stat("/tmp/scratch") == nil then
-			vim.loop.fs_mkdir("/tmp/scratch", 448) -- 0o700
+		if vim.uv.fs_stat("/tmp/scratch") == nil then
+			vim.uv.fs_mkdir("/tmp/scratch", 448) -- 0o700
 		end
 
 		local buf = vim.api.nvim_create_buf(false, false)

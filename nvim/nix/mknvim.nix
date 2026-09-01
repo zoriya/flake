@@ -92,7 +92,7 @@ in {
   nvim = pkgs.wrapNeovimUnstable nvim {
     wrapRc = false;
     wrapperArgs = builtins.concatStringsSep " " [
-      (lib.optionals (extraPackages != []) ''--prefix PATH : "${lib.makeBinPath extraPackages}"'')
+      (lib.optionalString (extraPackages != []) ''--prefix PATH : "${lib.makeBinPath extraPackages}"'')
       ''--add-flags "-u ${builder.writeByteCompiledLua "init.lua" initLua}"''
     ];
 

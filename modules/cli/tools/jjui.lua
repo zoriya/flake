@@ -51,9 +51,9 @@ function setup(config)
 			return
 		end
 
-		local root = jj("workspace", "root", "--name", "root")
+		local root = (jj("workspace", "root", "--name", "root") or ""):gsub("%s+$", "")
 		if root == "" then
-			flash({ text = "Run `jj workspace-init before", error = true })
+			flash({ text = "Run `jj workspace-init` before", error = true })
 			return
 		end
 		local dir = root .. "/" .. name

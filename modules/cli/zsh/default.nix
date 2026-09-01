@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  user,
   ...
 }: {
   programs.zsh = {
@@ -113,7 +114,7 @@
       # add labels, replace type by fstype, use a single mountpoint
       lsblk = "lsblk -o name,label,size,rm,ro,fstype,uuid,mountpoint";
       dr = "direnv reload";
-      nixos-option = "nixos-option --flake ~/projects/flake";
+      nixos-option = "nixos-option --flake ~/projects/flake/default";
       # i will never remember those flags
       ss =
         if pkgs.stdenv.hostPlatform.isLinux
@@ -200,7 +201,7 @@
             fi
 
             # execute arbitrary commands on startup since `zsh -sc` is not a real option :c
-            if [[ -n CMD ]]; then
+            if [[ -n $CMD ]]; then
                 # unset the cmd before executing it (for long processes)
                 cmd=$CMD
                 unset CMD
@@ -272,15 +273,6 @@
     };
   };
 
-  programs.distrobox = {
-    enable = pkgs.stdenv.hostPlatform.isLinux; # this is not supported on macos
-  };
-  xdg.configFile."distrobox/distrobox.conf".text = ''
-    container_name_default="archlinux"
-    container_image_default="quay.io/toolbx/arch-toolbox:latest"
-    container_additional_volumes="/nix/store:/nix/store:ro /etc/profiles/per-user/zoriya:/etc/profiles/per-user/zoriya:ro"
-  '';
-
   programs.bat = {
     enable = true;
     themes = {
@@ -348,7 +340,6 @@
   home.packages = with pkgs;
     [
       eza
-      viu
       htop-vim
       tldr
       fd
