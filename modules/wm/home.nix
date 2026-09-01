@@ -29,7 +29,6 @@
   };
 in {
   imports = [
-    ./rofi
     ./fcitx5.nix
     noctalia.homeModules.default
   ];

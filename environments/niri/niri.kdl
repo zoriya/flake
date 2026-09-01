@@ -72,7 +72,7 @@ binds {
 
 	Mod+R { spawn "zen"; }
 	Mod+E { spawn "kitty"; }
-	Mod+P { spawn "rofi" "-show" "drun" "-show-icons" "-run-command" "{cmd}"; }
+	Mod+P repeat=false { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
 	Mod+S { spawn "screenshot"; }
 	Mod+Control+S { spawn "screenshot-freeze"; }
 	Mod+Shift+S { spawn "record"; }

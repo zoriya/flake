@@ -6,7 +6,7 @@
 ## Tools
 
 - WM: niri
-- Widgets: noctalia (bar, launcher, clipboard history, lockscreen, idle) + rofi as the app picker
+- Widgets: noctalia (bar, launcher, clipboard history, lockscreen, idle)
 - Lots of cli tools
 - Impermanence (everything except `~/stuff` & `~/projects` is wiped on reboot).
 
