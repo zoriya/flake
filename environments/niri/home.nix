@@ -3,65 +3,83 @@
     name = "niri-workspaces";
     runtimeInputs = [pkgs.niri pkgs.jq];
     text = ''
-      # kanshi execs us while the outputs are still moving, so wait for them to settle
-      prev=""
-      for _ in $(seq 25); do
-        cur=$(niri msg -j outputs | jq -r '[.[] | select(.logical) | .name] | sort | join(" ")')
-        if [ -n "$cur" ] && [ "$cur" = "$prev" ]; then break; fi
-        prev="$cur"
-        sleep 0.2
+      # niri drops every action while the session is locked, silently and still exit 0, so
+      # a run during a locked undock reports success and leaves the layout wrong until the
+      # next dock change -- which is what closing the lid before unplugging did. kanshi
+      # only ever execs us once, so check the moves actually landed and come back until
+      # they do, for a couple of hours, which also covers being woken mid-shuffle
+      for _ in $(seq 1440); do
+        # the output list settles before the workspaces do, so wait on the workspace list
+        prev=""
+        for _ in $(seq 25); do
+          cur=$(niri msg -j workspaces | jq -c '[.[] | select(.output) | {name, output, idx}] | sort_by(.output, .idx)')
+          if [ "$cur" != "[]" ] && [ "$cur" = "$prev" ]; then break; fi
+          prev="$cur"
+          sleep 0.2
+        done
+
+        outs=$(niri msg -j outputs | jq -c '[.[] | select(.logical)]')
+        # the dell while the dock is plugged in, the laptop panel otherwise
+        main=$(jq -rn --argjson o "$outs" '($o | map(select(.model == "DELL S2722QC")) + map(select(.name == "eDP-1")) + $o)[0].name // ""')
+        second=$(jq -rn --argjson o "$outs" --arg m "$main" '[$o[] | select(.name != $m)][0].name // ""')
+        [ -n "$main" ] || exit 0
+        was=$(niri msg -j workspaces | jq '[.[] | select(.is_focused)][0].id // 0')
+
+        if [ -n "$second" ]; then
+          # niri deletes any empty workspace that is neither named nor the last one, so
+          # naming the trailing empty one is the only way to keep slot 1 of the main screen
+          # free. index references resolve against the focused monitor, hence focus-monitor
+          if [ "$(niri msg -j workspaces | jq '[.[] | select(.name == "scratch")] | length')" -eq 0 ]; then
+            niri msg action focus-monitor "$main"
+            niri msg action set-workspace-name scratch \
+              --workspace "$(niri msg -j workspaces | jq --arg m "$main" '[.[] | select(.output == $m)] | length')"
+          fi
+          targets="$second:1:music $main:1:scratch $main:2:chat $main:3:work"
+        else
+          # a single screen, so what the second one would carry takes slot 1 and the
+          # placeholder goes away -- unless something is parked on it, then it drifts down
+          scratch=$(niri msg -j workspaces | jq '[.[] | select(.name == "scratch")][0].id // 0')
+          if [ "$(niri msg -j windows | jq --argjson s "$scratch" '[.[] | select(.workspace_id == $s)] | length')" -eq 0 ]; then
+            niri msg action unset-workspace-name scratch
+          fi
+          targets="$main:1:music $main:2:chat $main:3:work"
+        fi
+
+        # placing them in increasing index order converges in one pass: once slot i is
+        # right, moving anything from further down only shifts what sits after it
+        pending=""
+        for t in $targets; do
+          out=''${t%%:*}
+          idx=''${t#*:}
+          ws=''${idx#*:}
+          idx=''${idx%%:*}
+          at=$(niri msg -j workspaces | jq -r --arg n "$ws" '.[] | select(.name == $n) | "\(.output) \(.idx)"')
+          # the ones already in place are left alone, which is what keeps a rebuild, where
+          # we get execed with nothing to do, from animating the whole layout around
+          if [ "$at" = "$out $idx" ]; then continue; fi
+          if [ -n "$at" ]; then
+            niri msg action move-workspace-to-monitor "$out" --reference "$ws"
+            niri msg action move-workspace-to-index "$idx" --reference "$ws"
+          fi
+          if [ "$(niri msg -j workspaces | jq -r --arg n "$ws" '.[] | select(.name == $n) | "\(.output) \(.idx)"')" != "$out $idx" ]; then
+            pending=yes
+          fi
+        done
+
+        # hand the focus back if the shuffling dragged it along. only if it moved, mind:
+        # workspace-auto-back-and-forth turns a focus request for the workspace you are
+        # already on into a jump to the previous one
+        now=$(niri msg -j workspaces | jq '[.[] | select(.is_focused)][0].id // 0')
+        back=$(niri msg -j workspaces | jq -r --argjson w "$was" '.[] | select(.id == $w) | "\(.output) \(.idx)"')
+        if [ "$now" -ne "$was" ] && [ -n "$back" ]; then
+          niri msg action focus-monitor "''${back% *}"
+          niri msg action focus-workspace "''${back#* }"
+        fi
+
+        [ -n "$pending" ] || exit 0
+        sleep 5
       done
-
-      outs=$(niri msg -j outputs | jq -c '[.[] | select(.logical)]')
-      # the dell while the dock is plugged in, the laptop panel otherwise
-      main=$(jq -rn --argjson o "$outs" '($o | map(select(.model == "DELL S2722QC")) + map(select(.name == "eDP-1")) + $o)[0].name // ""')
-      second=$(jq -rn --argjson o "$outs" --arg m "$main" '[$o[] | select(.name != $m)][0].name // ""')
-      [ -n "$main" ] || exit 0
-      was=$(niri msg -j workspaces | jq '[.[] | select(.is_focused)][0].id // 0')
-
-      if [ -n "$second" ]; then
-        # niri deletes any empty workspace that is neither named nor the last one, so naming
-        # the trailing empty one is the only way to keep slot 1 of the main screen free.
-        # index references resolve against the focused monitor, hence the focus-monitor
-        if [ "$(niri msg -j workspaces | jq '[.[] | select(.name == "scratch")] | length')" -eq 0 ]; then
-          niri msg action focus-monitor "$main"
-          niri msg action set-workspace-name scratch \
-            --workspace "$(niri msg -j workspaces | jq --arg m "$main" '[.[] | select(.output == $m)] | length')"
-        fi
-        targets="$second:1:music $main:1:scratch $main:2:chat $main:3:work"
-      else
-        # a single screen, so what the second one would carry takes slot 1 and the
-        # placeholder goes away -- unless something is parked on it, then it just drifts down
-        scratch=$(niri msg -j workspaces | jq '[.[] | select(.name == "scratch")][0].id // 0')
-        if [ "$(niri msg -j windows | jq --argjson s "$scratch" '[.[] | select(.workspace_id == $s)] | length')" -eq 0 ]; then
-          niri msg action unset-workspace-name scratch
-        fi
-        targets="$main:1:music $main:2:chat $main:3:work"
-      fi
-
-      for t in $targets; do
-        out=''${t%%:*}
-        idx=''${t#*:}
-        ws=''${idx#*:}
-        idx=''${idx%%:*}
-        # leaving the ones already in place alone is what keeps a rebuild, which execs us
-        # with nothing to do, from animating the whole layout around
-        if [ "$(niri msg -j workspaces | jq -r --arg n "$ws" '.[] | select(.name == $n) | "\(.output) \(.idx)"')" = "$out $idx" ]; then
-          continue
-        fi
-        niri msg action move-workspace-to-monitor "$out" --reference "$ws"
-        niri msg action move-workspace-to-index "$idx" --reference "$ws"
-      done
-
-      # and hand the focus back if the shuffling dragged it along. only if it moved, mind:
-      # workspace-auto-back-and-forth turns a focus request for the workspace you are already
-      # on into a jump to the previous one
-      now=$(niri msg -j workspaces | jq '[.[] | select(.is_focused)][0].id // 0')
-      back=$(niri msg -j workspaces | jq -r --argjson w "$was" '.[] | select(.id == $w) | "\(.output) \(.idx)"')
-      if [ "$now" -ne "$was" ] && [ -n "$back" ]; then
-        niri msg action focus-monitor "''${back% *}"
-        niri msg action focus-workspace "''${back#* }"
-      fi
+      echo "gave up waiting for the workspace moves to land" >&2
     '';
   };
 in {
