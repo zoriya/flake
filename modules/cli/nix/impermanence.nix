@@ -91,6 +91,10 @@ in {
           directory = ".ssh";
           mode = "0700";
         }
+        {
+          directory = ".local/share/keyrings";
+          mode = "0700";
+        }
         ".local/share/direnv"
         ".cache/direnv"
         ".local/share/flatpak"
