@@ -28,14 +28,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia-greeter = {
-      url = "github:noctalia-dev/noctalia-greeter";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # no nixpkgs.follows: the noctalia.cachix.org cache is built against their
+    # own nixpkgs, following ours changes every store path and forces a rebuild.
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
   };
 
   outputs = {
