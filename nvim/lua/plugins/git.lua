@@ -58,6 +58,19 @@ return {
 
 			vim.keymap.set("n", "<leader>hp", function() diff.toggle_overlay(0) end, { desc = "Preview Hunk (overlay)" })
 			vim.keymap.set("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, { desc = "Reset Buffer" })
+
+			vim.keymap.set("n", "<leader>hw", function()
+				local opts = diff.config.options
+				opts.ignore_whitespace = not opts.ignore_whitespace
+				-- each buffer snapshots the config when it attaches, so re-attach them all
+				for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+					if diff.get_buf_data(buf) ~= nil then
+						diff.disable(buf)
+						diff.enable(buf)
+					end
+				end
+				vim.notify("diff: whitespace " .. (opts.ignore_whitespace and "ignored" or "counted"))
+			end, { desc = "Toggle Whitespace in Diffs" })
 		end,
 	},
 

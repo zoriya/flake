@@ -1,0 +1,64 @@
+--- a/lua/mini/diff.lua
++++ b/lua/mini/diff.lua
+@@ -407,6 +407,11 @@
+ --- hunk navigation (with |MiniDiff.goto_hunk()| or `goto_*` mappings). Like if
+ --- cursor is after the last hunk, going "next" will put cursor on the first hunk.
+ --- Default: `false`.
++---
++--- `options.ignore_whitespace` is a boolean defining whether to ignore all
++--- whitespace when computing hunks, like `git diff -w` does. Note that hunks
++--- are still applied and reset verbatim, whitespace included.
++--- Default: `false`.
+ MiniDiff.config = {
+   -- Options for how hunks are visualized
+   view = {
+@@ -463,6 +468,9 @@
+ 
+     -- Whether to wrap around edges during hunk navigation
+     wrap_goto = false,
++
++    -- Whether to ignore all whitespace when computing hunks
++    ignore_whitespace = false,
+   },
+ }
+ --minidoc_afterlines_end
+@@ -1020,6 +1028,7 @@
+   H.check_type('options.indent_heuristic', config.options.indent_heuristic, 'boolean')
+   H.check_type('options.linematch', config.options.linematch, 'number')
+   H.check_type('options.wrap_goto', config.options.wrap_goto, 'boolean')
++  H.check_type('options.ignore_whitespace', config.options.ignore_whitespace, 'boolean')
+ 
+   return config
+ end
+@@ -1315,6 +1324,7 @@
+   H.vimdiff_opts.algorithm = options.algorithm
+   H.vimdiff_opts.indent_heuristic = options.indent_heuristic
+   H.vimdiff_opts.linematch = options.linematch
++  H.vimdiff_opts.ignore_whitespace = options.ignore_whitespace
+ 
+   local buf_text, buf_lines = H.get_buftext(buf_id)
+   local diff = vim.diff(buf_cache.ref_text, buf_text, H.vimdiff_opts)
+--- a/doc/mini-diff.txt
++++ b/doc/mini-diff.txt
+@@ -303,6 +303,9 @@
+ 
+       -- Whether to wrap around edges during hunk navigation
+       wrap_goto = false,
++
++      -- Whether to ignore all whitespace when computing hunks
++      ignore_whitespace = false,
+     },
+   }
+ <
+@@ -433,6 +436,11 @@
+ cursor is after the last hunk, going "next" will put cursor on the first hunk.
+ Default: `false`.
+ 
++`options.ignore_whitespace` is a boolean defining whether to ignore all
++whitespace when computing hunks, like `git diff -w` does. Note that hunks
++are still applied and reset verbatim, whitespace included.
++Default: `false`.
++
+ ------------------------------------------------------------------------------
+                                                              *MiniDiff.enable()*
+                           `MiniDiff.enable`({buf_id})
