@@ -30,6 +30,8 @@
       autoMemoryEnabled = false;
       env.CLAUDE_CODE_DISABLE_AUTO_MEMORY = "1";
       permissions.defaultMode = "auto";
+      attribution.commit = "";
+      attribution.sessionUrl = false;
       statusLine = {
         type = "command";
         command = let
