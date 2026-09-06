@@ -84,7 +84,9 @@ in
           oil-nvim
           harpoon2
 
-          mini-diff
+          (mini-diff.overrideAttrs {
+            patches = [./mini-diff-ignore-whitespace.patch];
+          })
           jj-nvim
           vim-fugitive
           vim-rhubarb
