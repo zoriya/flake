@@ -13,6 +13,7 @@ cd "$root"
 
 if [[ -e .wsp-root ]]; then
 	ln -sfn "$claude_md" CLAUDE.md
+	printf '/*\n!/*/\n' > .gitignore
 	echo "$root is already a workspace root" >&2
 	echo "$root/default"
 	exit 0
@@ -37,7 +38,10 @@ for f in *; do
 		mv "$f" default/
 	fi
 done
-printf '*\n' > .gitignore
+# the root only ever holds workspaces, so hide its own files from jj — but stop at
+# that first level: ignoring the workspace folders themselves would make every tool
+# that walks gitignores upwards call their whole contents ignored too.
+printf '/*\n!/*/\n' > .gitignore
 
 
 if [[ -e .envrc ]]; then
