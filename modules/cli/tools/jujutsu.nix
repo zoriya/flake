@@ -124,6 +124,53 @@ in {
               revisions.refresh({})
             '';
         }
+        {
+          name = "open_pr";
+          desc = "Open the pull request in the browser";
+          lua =
+            #lua
+            ''
+              local rev = context.change_id()
+              if not rev then
+                flash({text = "no revision selected", error = true})
+                return
+              end
+              jjui.git.cancel()
+
+              local names = jj("log", "-r", "closest_bookmark(" .. rev .. ")", "--no-graph", "--color=never", "-T",
+                [[local_bookmarks.map(|b| b.name()).join("\n") ++ "\n" ++ remote_bookmarks.map(|b| b.name()).join("\n")]])
+              local seen, bookmarks = {}, {}
+              for _, name in ipairs(split_lines(names or "")) do
+                if not seen[name] then
+                  seen[name] = true
+                  bookmarks[#bookmarks + 1] = name
+                end
+              end
+              if #bookmarks == 0 then
+                flash({text = "no bookmark on or below this revision", error = true})
+                return
+              end
+              local bookmark = #bookmarks == 1 and bookmarks[1] or choose({options = bookmarks, title = "bookmark"})
+              if not bookmark then
+                return
+              end
+
+              local remote = ("\n" .. (jj("git", "remote", "list") or "")):match("\norigin%s+(%S+)")
+              if not remote then
+                flash({text = "no origin remote to look the pull request up on", error = true})
+                return
+              end
+
+              local _, err = jj("util", "exec", "--", "sh", "-c",
+                [[gh pr view "$2" --repo "$1" --web 2>/dev/null || gh pr create --head "$2" --repo "$1" --web]],
+                "sh", remote, bookmark)
+              if err then
+                flash({text = err, error = true})
+                return
+              end
+              flash("opened the pull request of " .. bookmark)
+            '';
+        }
       ];
       bindings = [
         {
@@ -143,6 +190,12 @@ in {
           action = "new_before";
           scope = "revisions";
           desc = "New before current";
+        }
+        {
+          key = "h";
+          action = "open_pr";
+          scope = "git";
+          desc = "Open pull request";
         }
         # bindings bellows are just for ctrl+c as cancel
         {
