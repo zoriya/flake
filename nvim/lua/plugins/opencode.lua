@@ -12,6 +12,12 @@ local snacks_terminal_opts = {
 
 ---@type snacks.terminal.Opts
 local claude_terminal_opts = {
+	cwd = vim.fs.root(vim.fn.getcwd(), ".wsp-root")
+		or vim.fs.root(vim.fn.getcwd(), { ".jj", ".git" })
+		or vim.fn.getcwd(),
+	-- Pinned so a stray count (`3<leader>l`) asks for the same terminal rather
+	-- than a second claude-mux.
+	count = 1,
 	win = {
 		position = 'right',
 		enter = true,

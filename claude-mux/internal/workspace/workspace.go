@@ -21,21 +21,29 @@ import (
 // marker is the file identifying a workspace-root project.
 const marker = ".wsp-root"
 
-// Root returns the workspace-root project directory dir belongs to — dir itself
-// when it holds the .wsp-root marker, its parent when the parent does — or ""
-// when dir has nothing to do with such a project.
+// Root returns the workspace-root project directory dir belongs to — the
+// nearest directory at or above it holding the .wsp-root marker — or "" when
+// dir has nothing to do with such a project.
+//
+// It walks the whole way up because a directory can sit anywhere inside a
+// workspace, not just at its top: an editor opened on a subfolder, a shell cd'd
+// into one, an agent working there. Looking only at dir and its parent made
+// every one of those look like a project of its own — its own tmux session, its
+// own empty session list — instead of part of the project it is in.
 func Root(dir string) string {
 	if dir == "" {
 		return ""
 	}
-	if _, err := os.Stat(filepath.Join(dir, marker)); err == nil {
-		return dir
+	for d := filepath.Clean(dir); ; {
+		if _, err := os.Stat(filepath.Join(d, marker)); err == nil {
+			return d
+		}
+		parent := filepath.Dir(d)
+		if parent == d { // hit the filesystem root
+			return ""
+		}
+		d = parent
 	}
-	parent := filepath.Dir(dir)
-	if _, err := os.Stat(filepath.Join(parent, marker)); err != nil {
-		return ""
-	}
-	return parent
 }
 
 // Peers lists the directories a project's sessions can live in: every workspace
@@ -111,12 +119,15 @@ func Work(dir string) string {
 // Files jj does not track — anything gitignored, build output, .env — are not
 // in any change and do go with the directory.
 func Remove(wsDir string) error {
+	wsDir = filepath.Clean(wsDir)
 	root := Root(wsDir)
-	// Only ever an agent's own workspace: never the project root (which would
-	// leave the repo without the working copy jj needs there) and never
-	// `default`, which is the human's. Both are one bad caller away otherwise,
-	// and this is a delete.
-	if root == "" || wsDir == root || wsDir == filepath.Join(root, "default") {
+	// Only ever an agent's own workspace: a direct child of the root, so a
+	// subfolder someone happened to be sitting in (a session's recorded cwd is
+	// wherever it ran) can never stand in for the workspace containing it; never
+	// the project root, which would leave the repo without the working copy jj
+	// needs there; and never `default`, which is the human's. All three are one
+	// bad caller away otherwise, and this is a delete.
+	if root == "" || filepath.Dir(wsDir) != root || filepath.Base(wsDir) == "default" {
 		return fmt.Errorf("%s is not an agent's workspace", wsDir)
 	}
 	snap := exec.Command("jj", "status")
