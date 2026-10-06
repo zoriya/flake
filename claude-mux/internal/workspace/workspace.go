@@ -3,7 +3,7 @@
 // `.wsp-root` marker and every real working copy is a subfolder of it
 // (`default` being the human's, and where sessions start).
 //
-// Agents make their own: the CLAUDE.md `jj workspace-init` leaves in the project
+// Agents make their own: the AGENTS.md `jj workspace-init` leaves in the project
 // root tells each one to `jj workspace add` a workspace named after its task and
 // work there, so they edit files nobody else is editing while sharing one repo.
 // claude-mux only has to find them (Peers), keep them under one tmux session

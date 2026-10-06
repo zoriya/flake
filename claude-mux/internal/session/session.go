@@ -79,7 +79,7 @@ type Session struct {
 	// the reported status can be stale "running"; callers use this to correct it.
 	Interrupted bool
 	// Workspace is the jj workspace this session made for itself, when it made
-	// one — agents are told to (see the CLAUDE.md `jj workspace-init` writes),
+	// one — agents are told to (see the AGENTS.md `jj workspace-init` writes),
 	// and `jj workspace add` announces where it landed in its output, which the
 	// transcript records verbatim. Reading it back from there is what links a
 	// session to its checkout: nothing else in claude-mux creates the workspace,
