@@ -25,7 +25,7 @@ in
     withRuby = false;
     withPython3 = false;
 
-    package = neovim-nightly.packages.${pkgs.system}.default;
+    package = neovim-nightly.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
     config = ./.;
 

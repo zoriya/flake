@@ -123,6 +123,7 @@ in {
         ".local/state/nvim"
         # claude-code
         ".config/claude"
+        ".config/meridian"
         # claude-mux (persisted rc-enabled project list + session status)
         ".local/state/claude-mux"
         # opencode
