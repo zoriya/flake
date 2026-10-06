@@ -20,14 +20,12 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly = {
-      url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pi.url = "github:earendil-works/pi/stable";
     # no nixpkgs.follows: the noctalia.cachix.org cache is built against their
     # own nixpkgs, following ours changes every store path and forces a rebuild.
     noctalia.url = "github:noctalia-dev/noctalia-shell";

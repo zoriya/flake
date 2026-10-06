@@ -125,6 +125,7 @@ in {
         ".config/claude"
         # claude-mux (persisted rc-enabled project list + session status)
         ".local/state/claude-mux"
+        ".config/pi"
         # opencode
         ".config/opencode"
         ".cache/opencode"

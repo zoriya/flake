@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  pi,
   ...
 }: {
   imports = [
@@ -178,6 +179,47 @@
       }
     ];
   };
+
+  programs.pi-coding-agent = {
+    enable = true;
+    package = pi.packages.${pkgs.stdenv.hostPlatform.system}.pi;
+    configDir = "${config.xdg.configHome}/pi/agent";
+    # settings.json and claude-bridge.json are installed as writable files in the
+    # activations below: pi rewrites settings.json at runtime (ctrl+s in the model
+    # and thinking pickers, package installs) and the bridge records its
+    # one-time startup notice in its own config.
+
+    # same file claude-code gets as ~/.config/claude/CLAUDE.md
+    context = ./claude/global.md;
+
+    keybindings = {
+      "tui.input.submit" = "ctrl+s";
+      "tui.input.newLine" = ["enter" "shift+enter" "ctrl+j"];
+      "app.interrupt" = ["escape" "ctrl+d"];
+      "app.exit" = [];
+      "tui.editor.deleteCharForward" = "delete";
+      "tui.editor.undo" = ["ctrl+z" "ctrl+y"];
+    };
+  };
+
+  home.activation.piWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    install -Dm644 ${(pkgs.formats.json {}).generate "pi-settings.json" {
+      packages = ["npm:pi-claude-bridge"];
+      defaultProvider = "claude-bridge";
+      defaultModel = "claude-opus-5";
+      defaultThinkingLevel = "high";
+      theme = "system";
+      enableAnalytics = false;
+      enableInstallTelemetry = false;
+    }} "${config.xdg.configHome}/pi/agent/settings.json"
+
+    install -Dm644 ${(pkgs.formats.json {}).generate "pi-claude-bridge.json" {
+      provider = {
+        plan = "max";
+        pathToClaudeCodeExecutable = lib.getExe config.programs.claude-code.finalPackage;
+      };
+    }} "${config.xdg.configHome}/pi/agent/claude-bridge.json"
+  '';
 
   programs.opencode = {
     enable = true;
