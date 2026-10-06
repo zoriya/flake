@@ -358,6 +358,22 @@
         "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
       }
     },
+    "nixpkgs_7": {
+      "locked": {
+        "lastModified": 1790510107,
+        "narHash": "sha256-EVMNYv7hYDDD9TGVT/hIyTYgpiXA8y3m5xIEIxuGNU0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3181085bfd08663b6b9e60bc7a8395c2aaa741bd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "noctalia": {
       "inputs": {
         "nixpkgs": "nixpkgs_5"
@@ -391,6 +407,25 @@
       "original": {
         "owner": "noctalia-dev",
         "repo": "noctalia-greeter",
+        "type": "github"
+      }
+    },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1791319272,
+        "narHash": "sha256-UF4zSAuoUk4g7BxU11MMbqWikHvGjyDYVM8mZnJS9FE=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "59e59534434ed84be63ad2af966f2b8717ed3470",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "ref": "v2",
+        "repo": "opencode",
         "type": "github"
       }
     },
@@ -430,6 +465,7 @@
         "nixpkgs": "nixpkgs_4",
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
+        "opencode": "opencode",
         "zen-browser": "zen-browser"
       }
     },
