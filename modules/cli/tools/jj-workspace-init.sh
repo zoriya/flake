@@ -12,7 +12,8 @@ root="$JJ_WORKSPACE_ROOT"
 cd "$root"
 
 if [[ -e .wsp-root ]]; then
-	ln -sfn "$claude_md" CLAUDE.md
+	ln -sfn "$agents_md" AGENTS.md
+	rm -f CLAUDE.md && printf '@AGENTS.md\n' > CLAUDE.md
 	printf '/*\n!/*/\n' > .gitignore
 	echo "$root is already a workspace root" >&2
 	echo "$root/default"
@@ -53,5 +54,6 @@ if [[ -e .envrc ]]; then
 fi
 
 touch .wsp-root
-ln -sfn "$claude_md" CLAUDE.md
+ln -sfn "$agents_md" AGENTS.md
+rm -f CLAUDE.md && printf '@AGENTS.md\n' > CLAUDE.md
 echo "$root/default"
