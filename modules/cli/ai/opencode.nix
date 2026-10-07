@@ -43,6 +43,7 @@
     "$schema" = "https://opencode.ai/v2/cli.json";
     theme.name = "catppuccin";
     diffs.view = "unified";
+    tabs.mode = "off";
     keybinds = {
       "variant.cycle" = "ctrl+n";
       "prompt.clear" = "ctrl+u";
