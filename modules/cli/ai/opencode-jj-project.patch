@@ -1,0 +1,134 @@
+diff -ru a/packages/core/src/project.ts b/packages/core/src/project.ts
+--- a/packages/core/src/project.ts	2026-10-07 14:12:44.335776062 +0200
++++ b/packages/core/src/project.ts	2026-10-07 14:13:08.037896922 +0200
+@@ -49,7 +49,7 @@
+ export const root = Effect.fn("Project.root")(function* (
+   fs: FSUtil.Interface,
+   input: AbsolutePath,
+-  markers: readonly string[] = [".git", ".hg"],
++  markers: readonly string[] = [".git", ".hg", ".jj"],
+ ) {
+   return yield* fs.up({ targets: [...markers], start: input, mode: "first" }).pipe(
+     Effect.map((matches) => (matches[0] ? AbsolutePath.make(path.dirname(matches[0])) : undefined)),
+@@ -173,7 +173,7 @@
+               if (candidate.id === item.projectID) return false
+               if (!FSUtil.contains(directory, candidate.directory)) return false
+               const found = yield* fs
+-                .up({ targets: [".git", ".hg"], start: candidate.directory, stop: directory, mode: "first" })
++                .up({ targets: [".git", ".hg", ".jj"], start: candidate.directory, stop: directory, mode: "first" })
+                 .pipe(Effect.orElseSucceed(() => []))
+               if (!found[0]) return false
+               return (yield* fs.resolve(path.dirname(found[0]))) === directory
+@@ -334,9 +334,47 @@
+       }
+     })
+ 
++    // Every jj workspace shares one repo: `.jj/repo` is either that directory or a file
++    // holding its path relative to `.jj`. Identity comes from the backing git store so a
++    // jj checkout and a git clone of the same remote land in the same project.
++    const jjDiscover = Effect.fnUntraced(function* (dotJj: AbsolutePath) {
++      const worktree = AbsolutePath.make(path.dirname(dotJj))
++      const link = path.join(dotJj, "repo")
++      const target = (yield* fs.isDir(link))
++        ? link
++        : yield* fs.readFileString(link).pipe(
++            Effect.map((value) => path.resolve(dotJj, value.trim())),
++            Effect.orElseSucceed(() => undefined),
++          )
++      if (!target) return undefined
++      const store = AbsolutePath.make(yield* fs.resolve(target))
++      const gitTarget = yield* fs.readFileString(path.join(store, "store", "git_target")).pipe(
++        Effect.map((value) => value.trim()),
++        Effect.orElseSucceed(() => undefined),
++      )
++      const gitDirectory = gitTarget ? AbsolutePath.make(path.resolve(store, "store", gitTarget)) : undefined
++      const repo = gitDirectory
++        ? new Git.Repository({ worktree: gitDirectory, gitDirectory, commonDirectory: gitDirectory })
++        : undefined
++      const previous = yield* cached(store)
++      const id =
++        (repo ? yield* remote(repo) : undefined) ??
++        previous ??
++        (repo ? yield* rootCommit(repo) : undefined) ??
++        ID.make(Hash.fast(`jj:${store}`))
++      return {
++        previous,
++        id,
++        directory: worktree,
++        // The repo lives at `<main>/.jj/repo`, so its main workspace is two levels up.
++        canonical: AbsolutePath.make(path.dirname(path.dirname(store))),
++        vcs: { type: "jj" as const, store },
++      }
++    })
++
+     const resolve = Effect.fn("Project.resolve")(function* (input: AbsolutePath) {
+       const directory = AbsolutePath.make(yield* fs.resolve(input))
+-      const native = yield* fs.up({ targets: [".git", ".hg"], start: directory, mode: "first" }).pipe(
++      const native = yield* fs.up({ targets: [".git", ".hg", ".jj"], start: directory, mode: "first" }).pipe(
+         Effect.map((matches) => matches[0]),
+         Effect.orElseSucceed(() => undefined),
+       )
+@@ -371,6 +409,9 @@
+         })
+       }
+ 
++      const jj = native && path.basename(native) === ".jj" ? yield* jjDiscover(AbsolutePath.make(native)) : undefined
++      if (jj) return yield* persist(jj)
++
+       return yield* persist({
+         id: ID.make(Hash.fast(`directory:${directory}`)),
+         directory,
+diff -ru a/packages/tui/src/component/dialog-session-list.tsx b/packages/tui/src/component/dialog-session-list.tsx
+--- a/packages/tui/src/component/dialog-session-list.tsx	2026-10-07 14:12:44.337776073 +0200
++++ b/packages/tui/src/component/dialog-session-list.tsx	2026-10-07 14:13:22.223969815 +0200
+@@ -64,10 +64,7 @@
+             ? {}
+             : current.project.id === Project.ID.global
+               ? { directory: current.directory }
+-              : {
+-                  project: current.project.id,
+-                  subpath: path.relative(current.project.directory, current.directory).replaceAll("\\", "/"),
+-                }),
++              : { project: current.project.id }),
+           ...(query ? { search: query } : {}),
+           limit: 50,
+           order: "desc",
+@@ -91,7 +88,8 @@
+       .filter(
+         (session) =>
+           allProjects() ||
+-          (session.projectID === current?.project.id && session.location.directory === current.directory),
++          (session.projectID === current?.project.id &&
++            (current.project.id !== Project.ID.global || session.location.directory === current.directory)),
+       )
+     if (!query) return sessions
+     return sessions.filter(
+@@ -155,9 +153,7 @@
+       const root = session.subpath ? path.resolve(directory, ...session.subpath.split("/").map(() => "..")) : directory
+       const relative = path.relative(project?.canonical ?? root, root)
+       const footer =
+-        relative.startsWith("..") || path.isAbsolute(relative)
+-          ? Locale.truncate(path.basename(relative), 25)
+-          : undefined
++        relative && session.projectID !== Project.ID.global ? Locale.truncate(path.basename(relative), 25) : undefined
+       const slot = sessionTabs.enabled() ? undefined : slotByID.get(session.id)
+       const deleting = toDelete() === session.id
+       const attention = sessionTabs.status(session.id).attention
+@@ -216,7 +212,7 @@
+       bindings={[
+         {
+           bind: "ctrl+a",
+-          title: allProjects() ? "Show current directory sessions" : "Show all project sessions",
++          title: allProjects() ? "Show current project sessions" : "Show all project sessions",
+           group: "Dialog",
+           run: () => {
+             void updatePrefs((draft) => {
+@@ -287,7 +283,7 @@
+       ]}
+       footerHints={[
+         ...quickSwitchFooterHints(),
+-        { title: allProjects() ? "current directory" : "all projects", label: "ctrl+a", side: "right" },
++        { title: allProjects() ? "current project" : "all projects", label: "ctrl+a", side: "right" },
+       ]}
+     />
+   )

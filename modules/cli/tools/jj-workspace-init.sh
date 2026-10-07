@@ -13,7 +13,6 @@ cd "$root"
 
 if [[ -e .wsp-root ]]; then
 	ln -sfn "$agents_md" AGENTS.md
-	rm -f CLAUDE.md && printf '@AGENTS.md\n' > CLAUDE.md
 	printf '/*\n!/*/\n' > .gitignore
 	echo "$root is already a workspace root" >&2
 	echo "$root/default"
@@ -55,5 +54,4 @@ fi
 
 touch .wsp-root
 ln -sfn "$agents_md" AGENTS.md
-rm -f CLAUDE.md && printf '@AGENTS.md\n' > CLAUDE.md
 echo "$root/default"
