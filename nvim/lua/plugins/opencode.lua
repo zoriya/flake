@@ -1,22 +1,10 @@
-local opencode_cmd = 'opencode --port'
 ---@type snacks.terminal.Opts
-local snacks_terminal_opts = {
-	win = {
-		position = 'right',
-		enter = true,
-		on_win = function(win)
-			require('opencode.terminal').setup(win.win)
-		end,
-	},
-}
-
----@type snacks.terminal.Opts
-local claude_terminal_opts = {
+local termops = {
 	cwd = vim.fs.root(vim.fn.getcwd(), ".wsp-root")
 		or vim.fs.root(vim.fn.getcwd(), { ".jj", ".git" })
 		or vim.fn.getcwd(),
 	-- Pinned so a stray count (`3<leader>l`) asks for the same terminal rather
-	-- than a second claude-mux.
+	-- than a second one.
 	count = 1,
 	win = {
 		position = 'right',
@@ -40,13 +28,7 @@ end
 vim.g.opencode_opts = {
 	server = {
 		start = function()
-			require('snacks.terminal').open(opencode_cmd, snacks_terminal_opts)
-		end,
-		stop = function()
-			require('snacks.terminal').get(opencode_cmd, snacks_terminal_opts):close()
-		end,
-		toggle = function()
-			require('snacks.terminal').toggle(opencode_cmd, snacks_terminal_opts)
+			require('snacks.terminal').open("opencode", termops)
 		end,
 	},
 }
@@ -59,9 +41,9 @@ return {
 				"<leader>l",
 				function()
 					if get_mode() == "claude" then
-						require("snacks.terminal").toggle("claude-mux", claude_terminal_opts)
+						require("snacks.terminal").toggle("claude-mux", termops)
 					else
-						require("opencode").toggle()
+						require("snacks.terminal").toggle("opencode", termops)
 					end
 				end,
 				desc = "Toggle AI terminal",

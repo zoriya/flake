@@ -19,5 +19,3 @@ local function scratch()
 end
 
 vim.keymap.set("n", "<leader>s", scratch, { desc = "Scratch" })
-
-return {}

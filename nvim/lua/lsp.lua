@@ -27,5 +27,3 @@ vim.lsp.enable({
 
 vim.lsp.on_type_formatting.enable()
 vim.lsp.document_color.enable(true, nil, { style = "virtual" })
-
-return {}

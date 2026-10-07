@@ -9,6 +9,7 @@
 
   services.meridian = {
     enable = true;
+    environment.CLAUDE_CONFIG_DIR = config.programs.claude-code.configDir;
     settings = {
       defaultAgent = "opencode";
       pluginConfig = [

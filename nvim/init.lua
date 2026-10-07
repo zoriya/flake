@@ -6,4 +6,6 @@ vim.g.lz_n = {
 }
 
 require("./settings")
+require("lsp")
+require("scratch")
 require("lz.n").load("plugins")
