@@ -50,8 +50,7 @@
     keybinds = {
       "variant.cycle" = "ctrl+n";
       "prompt.clear" = "ctrl+u";
-      "session.interrupt" = "ctrl+d";
-      "app.exit" = "<leader>q";
+      "session.interrupt" = "ctrl+c,ctrl+d";
       "input.submit" = "ctrl+s";
       "input.newline" = "return";
       "input.undo" = "ctrl+y,ctrl+z";
