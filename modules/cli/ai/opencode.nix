@@ -25,20 +25,18 @@
       patches = (old.patches or []) ++ [./opencode-jj-project.patch];
     });
     context = ./global.md;
-  };
-
-  xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    update = "disable";
-    model = "anthropic/claude-opus-5";
-    agents.title.model = "anthropic/claude-haiku-4-5";
-    plugins = [
-      "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
-      "@mohak34/opencode-notifier"
-    ];
-    providers.anthropic.settings = {
-      apiKey = "x";
-      baseURL = "http://${config.services.meridian.settings.host}:${toString config.services.meridian.settings.port}/v1";
+    settings = {
+      update = "disable";
+      model = "anthropic/claude-opus-5-5";
+      agents.title.model = "anthropic/claude-haiku-5-5";
+      plugins = [
+        "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
+        "@mohak34/opencode-notifier"
+      ];
+      providers.anthropic.settings = {
+        apiKey = "x";
+        baseURL = "http://${config.services.meridian.settings.host}:${toString config.services.meridian.settings.port}/v1";
+      };
     };
   };
 
