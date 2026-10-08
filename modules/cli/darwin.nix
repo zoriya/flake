@@ -36,23 +36,33 @@
     info.enable = true;
   };
 
-  launchd.user.agents.ssh-tunnel = let
-    ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
-      while true; do
-        dns-sd -m -Q fuhen.local > /dev/null 2> /dev/null
-        echo "Host found, starting tunnel" | tee /dev/stderr
-        ssh -NR "2222:localhost:22" zoriya@fuhen.local
-        echo "Connetion closed" | tee /dev/stderr
-        sleep 5
-      done
-    '';
-  in {
-    command = lib.getExe ssh-tunnel;
+  launchd.user.agents.caffeinate = {
+    command = "/usr/bin/caffeinate -diu";
     serviceConfig = {
       KeepAlive = true;
       RunAtLoad = true;
-      StandardOutPath = "/tmp/ssh-tunnel.log";
-      StandardErrorPath = "/tmp/ssh-tunnel.err";
+      StandardOutPath = "/tmp/caffeinate.log";
+      StandardErrorPath = "/tmp/caffeinate.err";
     };
   };
+
+  # launchd.user.agents.ssh-tunnel = let
+  #   ssh-tunnel = pkgs.writeShellScriptBin "ssh-tunnel" ''
+  #     while true; do
+  #       dns-sd -m -Q fuhen.local > /dev/null 2> /dev/null
+  #       echo "Host found, starting tunnel" | tee /dev/stderr
+  #       ssh -NR "2222:localhost:22" zoriya@fuhen.local
+  #       echo "Connetion closed" | tee /dev/stderr
+  #       sleep 5
+  #     done
+  #   '';
+  # in {
+  #   command = lib.getExe ssh-tunnel;
+  #   serviceConfig = {
+  #     KeepAlive = true;
+  #     RunAtLoad = true;
+  #     StandardOutPath = "/tmp/ssh-tunnel.log";
+  #     StandardErrorPath = "/tmp/ssh-tunnel.err";
+  #   };
+  # };
 }

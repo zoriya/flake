@@ -1,6 +1,6 @@
 {
-  pkgs,
   lib,
+  pkgs,
   config,
   opencode,
   meridian,
@@ -25,6 +25,25 @@
       pluginConfig = [
         {path = meridian.legacyPackages.${pkgs.stdenv.hostPlatform.system}.meridianPlugins.opencode-scrub.path;}
       ];
+    };
+  };
+
+  # meridian's hm module only ships a systemd unit, run it via launchd on darwin with the same env.
+  launchd.agents.meridian = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    enable = true;
+    config = {
+      ProgramArguments = [(lib.getExe config.services.meridian.package)];
+      EnvironmentVariables = builtins.listToAttrs (map (x: let
+        name = builtins.elemAt (builtins.match "([^=]*)=.*" x) 0;
+      in {
+        inherit name;
+        value = lib.removePrefix "${name}=" x;
+      })
+      config.systemd.user.services.meridian.Service.Environment);
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/meridian.log";
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/meridian.log";
     };
   };
 

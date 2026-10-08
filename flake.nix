@@ -123,7 +123,16 @@
             DOTNET_HOST_ROOT = DOTNET_ROOT;
             DOTNET_MULTILEVEL_LOOKUP = 0;
             SKIP_DEVTOOLS_UPDATE_CHECK = "true";
+            DEVTOOLS_HELM_NO_PIN = "true";
             LUCCA_KUBE_CONTEXT = "lucca";
+          };
+          programs.opencode.settings.mcp.servers.lucca-gateway = {
+            type = "remote";
+            url = "https://mcp.infra.private.o11y.lucca.tech/mcp";
+          };
+          programs.claude-code.mcpServers.lucca-gateway = {
+            type = "http";
+            url = "https://mcp.infra.private.o11y.lucca.tech/mcp";
           };
         })
       ];
