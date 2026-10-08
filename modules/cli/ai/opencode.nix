@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   config,
   opencode,
   meridian,
@@ -40,22 +41,26 @@
     };
   };
 
-  xdg.configFile."opencode/cli.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/v2/cli.json";
-    theme.name = "catppuccin";
-    diffs.view = "unified";
-    tabs.mode = "off";
-    keybinds = {
-      "variant.cycle" = "ctrl+n";
-      "prompt.clear" = "ctrl+u";
-      "session.interrupt" = "ctrl+c,ctrl+d";
-      "input.submit" = "ctrl+s";
-      "input.newline" = "return";
-      "input.undo" = "ctrl+y,ctrl+z";
-      "input.redo" = "ctrl+shift+y,ctrl+shift+z";
-      "terminal.suspend" = "none";
-    };
-  };
+  # cli.json is installed as a writable file in the activation below instead
+  # opencode needs to update it at runtime (e.g. theme mode, thinking toggle).
+  home.activation.opencodeWritableCli = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    install -Dm644 ${(pkgs.formats.json {}).generate "opencode-cli.json" {
+      "$schema" = "https://opencode.ai/v2/cli.json";
+      theme.name = "catppuccin";
+      diffs.view = "unified";
+      tabs.mode = "off";
+      keybinds = {
+        "variant.cycle" = "ctrl+n";
+        "prompt.clear" = "ctrl+u";
+        "session.interrupt" = "ctrl+c,ctrl+d";
+        "input.submit" = "ctrl+s";
+        "input.newline" = "return";
+        "input.undo" = "ctrl+y,ctrl+z";
+        "input.redo" = "ctrl+shift+y,ctrl+shift+z";
+        "terminal.suspend" = "none";
+      };
+    }} "${config.xdg.configHome}/opencode/cli.json"
+  '';
 
   xdg.configFile."opencode/opencode-notifier.json".text = builtins.toJSON {
     sound = false;
