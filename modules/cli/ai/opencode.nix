@@ -33,6 +33,13 @@
       plugins = [
         "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
         "@mohak34/opencode-notifier"
+        [
+          "opencode-goal-plugin@0.11.0"
+          {
+            # Default is <cwd>/.opencode/goals, which litters every repo.
+            stateFilePath = "${config.xdg.stateHome}/opencode/goals/state.json";
+          }
+        ]
       ];
       providers.anthropic.settings = {
         apiKey = "x";
