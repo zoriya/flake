@@ -30,6 +30,7 @@
       update = "disable";
       model = "anthropic/claude-opus-5-5";
       agents.title.model = "anthropic/claude-haiku-5-5";
+      websearch = false;
       plugins = [
         "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
         "@mohak34/opencode-notifier"
