@@ -57,6 +57,7 @@
       je = "jj edit";
       jb = "jj bookmark";
       jp = "jj git push";
+      jpc = "jj git push -c @";
       jf = "jj git fetch";
       jl = "jj log";
       jla = "jj log -r 'all()'";

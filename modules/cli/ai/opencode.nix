@@ -43,6 +43,13 @@
         apiKey = "x";
         baseURL = "http://${config.services.meridian.settings.host}:${toString config.services.meridian.settings.port}/v1";
       };
+      providers.anthropic.models.claude-opus-5-5.settings = {
+        thinking = {
+          type = "adaptive";
+          display = "summarized";
+        };
+        effort = "high";
+      };
     };
   };
 
