@@ -21,10 +21,7 @@
 
   programs.opencode = {
     enable = true;
-    package = opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode.overrideAttrs (old: {
-      # Detect jj workspaces as one project and list sessions per project instead of per directory.
-      patches = (old.patches or []) ++ [./opencode-jj-project.patch];
-    });
+    package = opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
     context = ./global.md;
     settings = {
       update = "disable";

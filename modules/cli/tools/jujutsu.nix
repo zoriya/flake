@@ -34,11 +34,10 @@ in {
           auto-track-bookmarks = "exact:master | exact:main";
         };
       };
-      git.colocate = false;
+      git.colocate = true;
       aliases = {
-        # colocate disabled until workspace are supported.
-        init = ["git" "init"]; # "--colocate"];
-        clone = ["git" "clone"]; # "--colocate"];
+        init = ["git" "init" "--colocate"];
+        clone = ["git" "clone" "--colocate"];
         tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
         workspace-init = ["util" "exec" "--" "${jj-workspace-init}/bin/jj-workspace-init"];
       };
