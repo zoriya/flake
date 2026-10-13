@@ -72,6 +72,20 @@ return {
 				end
 			end
 
+			-- claudecode only ignores its own terminal, so focusing the snacks terminal running
+			-- claude/opencode would make it the active file. Keep the last real buffer instead.
+			local selection = require("claudecode.selection")
+			for _, name in ipairs({ "update_selection", "flush_visual_selection" }) do
+				local original = selection[name]
+				selection[name] = function(...)
+					if vim.b.snacks_terminal then
+						selection._cancel_demotion_timer()
+						return
+					end
+					return original(...)
+				end
+			end
+
 			require("claudecode").setup({ terminal = { provider = "none" } })
 		end,
 		keys = {
