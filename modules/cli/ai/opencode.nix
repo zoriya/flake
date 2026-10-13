@@ -21,7 +21,16 @@
 
   programs.opencode = {
     enable = true;
-    package = opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
+    # Let nvim (claudecode.nvim) hand its ide server's auth token through the env, next to
+    # OPENCODE_EDITOR_SSE_PORT, instead of opencode reading ~/.claude/ide lockfiles.
+    package = opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode.overrideAttrs (old: {
+      postPatch =
+        old.postPatch
+        + ''
+          substituteInPlace packages/tui/src/context/editor.ts \
+            --replace-fail 'source: `env:''${port}`,' 'source: `env:''${port}`, authToken: process.env.OPENCODE_EDITOR_AUTH_TOKEN,'
+        '';
+    });
     context = ./global.md;
     settings = {
       update = "disable";

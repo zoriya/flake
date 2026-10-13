@@ -129,7 +129,7 @@ in
           nvim-navic
           virt-column-nvim
 
-          opencode-nvim
+          claudecode-nvim
         ];
         opt = [];
       };

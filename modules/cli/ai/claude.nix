@@ -128,11 +128,19 @@
     }} "${config.xdg.configHome}/claude/settings.json"
   '';
 
-  home.activation.claudeRemoteControl = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    f="${config.xdg.configHome}/claude/.claude.json"
-    [ -e "$f" ] || echo '{}' >"$f"
-    ${lib.getExe pkgs.jq} '.remoteControlAtStartup = true' "$f" >"$f.tmp" && mv "$f.tmp" "$f"
-  '';
+  # .claude.json also holds claude's runtime state, so only set our keys.
+  home.activation.claudeGlobalConfig = let
+    file = "${config.xdg.configHome}/claude/.claude.json";
+  in
+    lib.hm.dag.entryAfter ["writeBoundary"] ''
+      [ -e ${file} ] || echo '{}' > ${file}
+      ${lib.getExe pkgs.jq} '
+        # claude runs in claude-mux, not in nvim, so it has to find claudecode.nvim by itself.
+        .autoConnectIde = true
+        | .diffTool = "terminal"
+      ' ${file} > ${file}.tmp
+      mv ${file}.tmp ${file}
+    '';
 
   # path is persisted at first launch, reset it to hot-reload.
   home.activation.claudeMuxReload = lib.hm.dag.entryAfter ["writeBoundary"] ''
