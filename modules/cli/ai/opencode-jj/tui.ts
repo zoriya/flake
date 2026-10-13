@@ -1,4 +1,4 @@
-// opencode tui plugin: when the session on screen lives in a jj workspace that was deleted by
+// opencode tui side: when the session on screen lives in a jj workspace that was deleted by
 // hand, move it back to `default/` (where the agent's instructions make it create a new one)
 // instead of asking which directory to use.
 import { existsSync } from "node:fs"

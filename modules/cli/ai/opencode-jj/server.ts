@@ -1,5 +1,6 @@
-// opencode worktree strategy for jj workspace roots (see jj-workspace-init): worktree_create
-// adds a jj workspace beside `default/`, worktree_remove snapshots it before forgetting it.
+// opencode server side for jj workspace roots (see jj-workspace-init): a worktree strategy where
+// worktree_create adds a jj workspace beside `default/` and worktree_remove snapshots it before
+// forgetting it.
 import { execFile } from "node:child_process"
 import { existsSync } from "node:fs"
 import { rm } from "node:fs/promises"

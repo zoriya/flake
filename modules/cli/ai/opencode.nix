@@ -35,12 +35,17 @@
     settings = {
       update = "disable";
       model = "anthropic/claude-opus-5-5";
-      agents.title.model = "anthropic/claude-haiku-5-5";
+      agents.title.model = "anthropic/claude-haiku-4-5";
       websearch = false;
       plugins = [
         "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
         "@mohak34/opencode-notifier"
-        "${pkgs.replaceVars ./jj-worktree.ts {jj = lib.getExe config.programs.jujutsu.package;}}"
+        # opencode only loads directories (server.ts for the server, tui.ts for the tui).
+        "${pkgs.runCommand "opencode-jj" {} ''
+          cp -r ${./opencode-jj} $out
+          chmod -R u+w $out
+          substituteInPlace $out/server.ts --replace-fail @jj@ ${lib.getExe config.programs.jujutsu.package}
+        ''}"
         [
           "opencode-goal-plugin@0.11.0"
           {
@@ -71,7 +76,6 @@
       theme.name = "catppuccin";
       diffs.view = "unified";
       tabs.mode = "off";
-      plugins = ["${./jj-workspace-missing.ts}"];
       keybinds = {
         "variant.cycle" = "ctrl+n";
         "prompt.clear" = "ctrl+u";
