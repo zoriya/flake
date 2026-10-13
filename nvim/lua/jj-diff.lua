@@ -2,6 +2,11 @@
 
 local M = {}
 
+-- jj parses paths as filesets, so names like `(app)/x.tsx` must be quoted.
+local function fileset(kind, path)
+	return kind .. ':"' .. path:gsub('[\\"]', "\\%0") .. '"'
+end
+
 local function resolve(buf_id)
 	local name = vim.api.nvim_buf_get_name(buf_id)
 	if name == "" then
@@ -12,7 +17,13 @@ local function resolve(buf_id)
 	if change_id then
 		-- The path in the uri is repo-relative; jj resolves it from anywhere in
 		-- the repo, so run from the current working directory.
-		return { rev = change_id .. "-", from = change_id, file = rel, rel = rel, cwd = vim.fn.getcwd() }
+		return {
+			rev = change_id .. "-",
+			from = change_id,
+			file = fileset("root-file", rel),
+			rel = rel,
+			cwd = vim.fn.getcwd(),
+		}
 	end
 
 	local path = vim.uv.fs_realpath(name)
@@ -23,7 +34,7 @@ local function resolve(buf_id)
 	return {
 		rev = "@-",
 		from = "@",
-		file = path,
+		file = fileset("file", path),
 		rel = root and path:sub(#root + 2),
 		cwd = vim.fs.dirname(path),
 	}
@@ -220,7 +231,7 @@ local function apply_hunks(buf_id, hunks)
 			vim.json.encode("$right/" .. target.rel)
 		),
 		"--",
-		target.rel,
+		fileset("root-file", target.rel),
 	}, { cwd = target.cwd, text = true }, vim.schedule_wrap(function(obj)
 		vim.fn.delete(tmp)
 		if obj.code ~= 0 then
