@@ -40,6 +40,7 @@
       plugins = [
         "${config.services.meridian.package}/lib/meridian/dist/meridian-v2"
         "@mohak34/opencode-notifier"
+        "${pkgs.replaceVars ./jj-worktree.ts {jj = lib.getExe config.programs.jujutsu.package;}}"
         [
           "opencode-goal-plugin@0.11.0"
           {
@@ -70,6 +71,7 @@
       theme.name = "catppuccin";
       diffs.view = "unified";
       tabs.mode = "off";
+      plugins = ["${./jj-workspace-missing.ts}"];
       keybinds = {
         "variant.cycle" = "ctrl+n";
         "prompt.clear" = "ctrl+u";
