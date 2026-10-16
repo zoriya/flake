@@ -25,9 +25,7 @@ in
     withRuby = false;
     withPython3 = false;
 
-    package = neovim-nightly.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [./terminal-theme-dsr.patch];
-    });
+    package = neovim-nightly.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
     config = ./.;
 

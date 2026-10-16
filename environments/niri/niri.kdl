@@ -242,6 +242,11 @@ window-rule {
 	open-focused false
 }
 
+window-rule {
+	match app-id="orca-slicer"
+	open-maximized true
+}
+
 // from wiki, move steam notifications to a corner
 window-rule {
 	match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#

@@ -53,6 +53,10 @@ in {
     --suffix PATH : ${super.lib.makeBinPath [super.jujutsu super.git super.coreutils]} \
     --run "source ${./gh-jj.sh}"'';
 
+  # Orca renders plate thumbnails without making its gl context current. WebKit's dmabuf
+  # renderer leaves its own context current, so orca draws into it and segfaults in mesa.
+  orca-slicer = wrapProgram super.orca-slicer ["orca-slicer"] "--set WEBKIT_DISABLE_DMABUF_RENDERER 1";
+
   discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];
   pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
