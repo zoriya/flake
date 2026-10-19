@@ -85,6 +85,7 @@
         "input.undo" = "ctrl+y,ctrl+z";
         "input.redo" = "ctrl+shift+y,ctrl+shift+z";
         "terminal.suspend" = "none";
+        "prompt.autocomplete.select" = "return,ctrl+h";
       };
     }} "${config.xdg.configHome}/opencode/cli.json"
   '';
