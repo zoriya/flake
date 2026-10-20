@@ -10,7 +10,16 @@
 
   services.meridian = {
     enable = true;
-    environment.CLAUDE_CONFIG_DIR = config.programs.claude-code.configDir;
+    environment = {
+      CLAUDE_CONFIG_DIR = config.programs.claude-code.configDir;
+      MERIDIAN_PROFILES = builtins.toJSON [
+        {
+          id = "default";
+          type = "claude-max";
+          claudeConfigDir = config.programs.claude-code.configDir;
+        }
+      ];
+    };
     settings = {
       defaultAgent = "opencode";
       pluginConfig = [
