@@ -15,7 +15,6 @@ in {
 
   # `/` is a disposable btrfs subvolume. the previous root is renamed `old_roots/<mtime>`
   boot.initrd.systemd = lib.mkIf wipe {
-    enable = true;
     services.wipe-root = {
       wantedBy = ["initrd.target"];
       after = ["initrd-root-device.target" "${utils.escapeSystemdPath root.device}.device"];

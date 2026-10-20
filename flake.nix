@@ -27,7 +27,7 @@
     };
     opencode.url = "github:anomalyco/opencode/v2";
     meridian.url = "github:rynfar/meridian";
-    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.url = "github:zoriya/noctalia-shell";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
   };
 
