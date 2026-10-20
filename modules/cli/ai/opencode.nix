@@ -30,6 +30,12 @@
           substituteInPlace packages/tui/src/context/editor.ts \
             --replace-fail 'source: `env:''${port}`,' 'source: `env:''${port}`, authToken: process.env.OPENCODE_EDITOR_AUTH_TOKEN,'
         '';
+      # opentui doesn't emits OSC 8 for tmux/nvim
+      postFixup =
+        (old.postFixup or "")
+        + ''
+          wrapProgram $out/bin/opencode --set-default FORCE_HYPERLINK 1
+        '';
     });
     context = ./global.md;
     settings = {
