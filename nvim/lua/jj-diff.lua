@@ -86,7 +86,18 @@ end
 
 local function start_watcher(root)
 	local watcher = { buffers = {} }
-	local heads = root .. "/.jj/repo/op_heads/heads"
+	-- In secondary workspaces `.jj/repo` is a file holding the path to the
+	-- shared repo dir (relative to `.jj/`).
+	local repo = root .. "/.jj/repo"
+	if vim.fn.isdirectory(repo) == 0 then
+		local f = io.open(repo)
+		if f ~= nil then
+			local target = vim.trim(f:read("*a"))
+			f:close()
+			repo = vim.uv.fs_realpath(target:sub(1, 1) == "/" and target or root .. "/.jj/" .. target) or repo
+		end
+	end
+	local heads = repo .. "/op_heads/heads"
 	local handle = vim.uv.new_fs_event()
 	if handle ~= nil then
 		local ok = handle:start(heads, {}, function(err)
