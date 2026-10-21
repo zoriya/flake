@@ -363,7 +363,16 @@
       gfold
       lsof
       kubectl
-      kubecolor
+      # while waiting for https://github.com/muesli/termenv/pull/123 (auto preset can't detect bg in tmux)
+      (kubecolor.overrideAttrs (old: {
+        postConfigure =
+          (old.postConfigure or "")
+          + ''
+            chmod -R u+w vendor
+            substituteInPlace vendor/github.com/muesli/termenv/termenv_unix.go \
+              --replace-fail 'strings.HasPrefix(term, "screen") || strings.HasPrefix(term, "tmux")' 'strings.HasPrefix(term, "screen")'
+          '';
+      }))
       kubectx
       usql
       rsync
