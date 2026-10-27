@@ -29,18 +29,20 @@
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
-    allowInterfaces = [
-      "wlo1"
-      "eth0"
-      "enp0s1"
-      "wlan0"
-      "eno1"
-      "end0"
-    ];
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
+    settings = {
+      server.allow-interfaces = [
+        "wlo1"
+        "eth0"
+        "enp0s1"
+        "wlan0"
+        "eno1"
+        "end0"
+      ];
+      publish = {
+        disable-publishing = false;
+        publish-addresses = true;
+        publish-workstation = true;
+      };
     };
   };
   services.automatic-timezoned.enable = true;
