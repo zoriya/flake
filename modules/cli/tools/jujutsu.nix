@@ -53,6 +53,7 @@ in {
       ui = {
         conflict-marker-style = "git";
       };
+      snapshot.auto-update-stale = true;
       templates = {
         draft_commit_description = ''
           concat(

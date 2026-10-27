@@ -5,7 +5,8 @@ local function workspace_under_cursor(include_default)
 		return
 	end
 
-	local marks = jj("log", "-r", rev, "--no-graph", "--color=never", "-T", "working_copies") or ""
+	-- --ignore-working-copy: a stale current workspace would fail the query
+	local marks = jj("log", "--ignore-working-copy", "-r", rev, "--no-graph", "--color=never", "-T", "working_copies") or ""
 	local names = {}
 	for name in marks:gmatch("([^%s]+)@") do
 		if name ~= "root" and (include_default or name ~= "default") then
@@ -31,6 +32,56 @@ local function workspace_under_cursor(include_default)
 		return
 	end
 	return target, dir
+end
+
+-- abandon snapshots the workspace before dropping it, forget loses whatever
+-- was not snapshotted yet so it asks first
+local function remove_workspace(snapshot)
+	local target, dir = workspace_under_cursor(false)
+	if not target then
+		return
+	end
+
+	if not snapshot then
+		local answer = choose({ options = { "no", "yes" }, title = "forget " .. target .. " without snapshotting it?" })
+		if answer ~= "yes" then
+			return
+		end
+	end
+
+	local here = (jj("workspace", "root") or ""):gsub("%s+$", "")
+	if dir == here then
+		local def = (jj("workspace", "root", "--name", "default") or ""):gsub("%s+$", "")
+		if def == "" then
+			flash({ text = "no default workspace to fall back to", error = true })
+			return
+		end
+		local ok, err = change_workspace(def)
+		if not ok then
+			flash({ text = err, error = true })
+			return
+		end
+		jj("util", "exec", "--", "sh", "-c",
+			[[printf '\033]7;file://%s\033\\' "$1" 2>/dev/null >/dev/tty || true]], "sh", def)
+	end
+
+	if snapshot then
+		local _, snap_err = jj("-R", dir, "util", "snapshot")
+		if snap_err then
+			flash({ text = snap_err, error = true })
+			return
+		end
+	end
+
+	local _, forget_err = jj("workspace", "forget", target)
+	if forget_err then
+		flash({ text = forget_err, error = true })
+		return
+	end
+	jj("util", "exec", "--", "rm", "-rf", dir)
+
+	flash((snapshot and "abandoned" or "forgot") .. " workspace " .. target .. (dir == here and ", now in default" or ""))
+	revisions.refresh({})
 end
 
 function setup(config)
@@ -91,42 +142,34 @@ function setup(config)
 		revisions.refresh({})
 	end, { desc = "Work in workspace", scope = "revisions", seq = { "w", "e" } })
 
-	config.action("abandon_workspace", function()
-		local target, dir = workspace_under_cursor(false)
-		if not target then
-			return
-		end
-
-		local here = (jj("workspace", "root") or ""):gsub("%s+$", "")
-		if dir == here then
-			local def = (jj("workspace", "root", "--name", "default") or ""):gsub("%s+$", "")
-			if def == "" then
-				flash({ text = "no default workspace to fall back to", error = true })
+	config.action("update_workspace", function()
+		local target, dir
+		-- a stale current workspace fails jjui's log, leaving no revision to pick from
+		if context.change_id() then
+			target, dir = workspace_under_cursor(true)
+			if not target then
 				return
 			end
-			local ok, err = change_workspace(def)
-			if not ok then
-				flash({ text = err, error = true })
-				return
-			end
-			jj("util", "exec", "--", "sh", "-c",
-				[[printf '\033]7;file://%s\033\\' "$1" 2>/dev/null >/dev/tty || true]], "sh", def)
+		else
+			target = "current"
+			dir = (jj("workspace", "root") or ""):gsub("%s+$", "")
 		end
 
-		local _, snap_err = jj("-R", dir, "util", "snapshot")
-		if snap_err then
-			flash({ text = snap_err, error = true })
+		local _, err = jj("-R", dir, "workspace", "update-stale")
+		if err then
+			flash({ text = err, error = true })
 			return
 		end
 
-		local _, forget_err = jj("workspace", "forget", target)
-		if forget_err then
-			flash({ text = forget_err, error = true })
-			return
-		end
-		jj("util", "exec", "--", "rm", "-rf", dir)
-
-		flash("abandoned workspace " .. target .. (dir == here and ", now in default" or ""))
+		flash("updated " .. target .. " workspace")
 		revisions.refresh({})
+	end, { desc = "Update stale workspace", scope = "revisions", seq = { "w", "u" } })
+
+	config.action("abandon_workspace", function()
+		remove_workspace(true)
 	end, { desc = "Abandon workspace", scope = "revisions", seq = { "w", "a" } })
+
+	config.action("forget_workspace", function()
+		remove_workspace(false)
+	end, { desc = "Forget workspace", scope = "revisions", seq = { "w", "f" } })
 end
