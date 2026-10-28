@@ -20,7 +20,9 @@
     force = true;
     text = ''
       [Hotkey/TriggerKeys]
-      0=Super+a
+      0=Super+A
+
+      [Hotkey/AltTriggerKeys]
 
       [Behavior]
       ShowInputMethodInformation=False
