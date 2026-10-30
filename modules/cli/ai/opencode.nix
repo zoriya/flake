@@ -33,13 +33,18 @@
     enable = true;
     config = {
       ProgramArguments = [(lib.getExe config.services.meridian.package)];
-      EnvironmentVariables = builtins.listToAttrs (map (x: let
-        name = builtins.elemAt (builtins.match "([^=]*)=.*" x) 0;
-      in {
-        inherit name;
-        value = lib.removePrefix "${name}=" x;
-      })
-      config.systemd.user.services.meridian.Service.Environment);
+      EnvironmentVariables =
+        builtins.listToAttrs (map (quoted: let
+          # entries are systemd-quoted: "NAME=value" with \" and \\ escapes
+          x = builtins.replaceStrings ["\\\"" "\\\\"] ["\"" "\\"] (lib.removeSuffix "\"" (lib.removePrefix "\"" quoted));
+          name = builtins.elemAt (builtins.match "([^=]*)=.*" x) 0;
+        in {
+          inherit name;
+          value = lib.removePrefix "${name}=" x;
+        })
+        config.systemd.user.services.meridian.Service.Environment)
+        # launchd doesn't set USER, and claude looks up its keychain credentials by it (else loggedIn: false).
+        // {USER = config.home.username;};
       KeepAlive = true;
       RunAtLoad = true;
       StandardOutPath = "${config.home.homeDirectory}/Library/Logs/meridian.log";

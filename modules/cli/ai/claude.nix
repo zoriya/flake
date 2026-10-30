@@ -21,7 +21,12 @@
       theme = "auto";
       awaySummaryEnabled = false;
       autoMemoryEnabled = false;
-      env.CLAUDE_CODE_DISABLE_AUTO_MEMORY = "1";
+      env =
+        {CLAUDE_CODE_DISABLE_AUTO_MEMORY = "1";}
+        # Remove once https://github.com/NixOS/nixpkgs/pull/579756 lands in our nixpkgs.
+        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+          NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+        };
       permissions.defaultMode = "auto";
       attribution.commit = "";
       attribution.sessionUrl = false;
