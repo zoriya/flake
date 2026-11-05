@@ -284,6 +284,35 @@ vim.api.nvim_create_autocmd("DirChanged", {
 					end
 				end
 			end
+
+			-- a root that vanished is a workspace that got forgotten
+			local function stale(dir)
+				if vim.startswith(dir .. "/", root .. "/") then
+					return false
+				end
+				if not vim.uv.fs_stat(dir) then
+					return true
+				end
+				local from = vim.fs.root(dir, ".jj")
+				return from ~= nil and repo_of(from) == repo
+			end
+
+			-- servers of the workspace we left would otherwise keep running (and
+			-- analysing) forever, one per workspace ever visited
+			for _, client in ipairs(vim.lsp.get_clients()) do
+				if client.root_dir and stale(client.root_dir) and not vim.iter(client.attached_buffers):any(function(buf) return vim.bo[buf].buflisted end) then
+					client:stop()
+				end
+			end
+
+			-- hidden buffers left behind by their diagnostics, stopping the server
+			-- does not clear those
+			for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+				local name = vim.api.nvim_buf_get_name(buf)
+				if not vim.bo[buf].buflisted and not vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" and name:sub(1, 1) == "/" and stale(vim.fs.dirname(name)) then
+					pcall(vim.api.nvim_buf_delete, buf, {})
+				end
+			end
 		end)
 	end,
 })

@@ -24,17 +24,13 @@ return {
 						sources = {
 							function()
 								local diag_severity = vim.diagnostic.severity
-
-								local function workspace_diag(severity)
-									local count = vim.diagnostic.get(nil, { severity = severity })
-									return vim.tbl_count(count)
-								end
+								local count = vim.diagnostic.count(nil)
 
 								return {
-									error = workspace_diag(diag_severity.ERROR),
-									warn = workspace_diag(diag_severity.WARN),
-									info = workspace_diag(diag_severity.INFO),
-									hint = workspace_diag(diag_severity.HINT)
+									error = count[diag_severity.ERROR] or 0,
+									warn = count[diag_severity.WARN] or 0,
+									info = count[diag_severity.INFO] or 0,
+									hint = count[diag_severity.HINT] or 0
 								}
 							end,
 						},
