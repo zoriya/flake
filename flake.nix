@@ -89,7 +89,11 @@
       ];
       customHome = [
         ./modules/gui/ghostty.nix
-        ({pkgs, ...}: let
+        ({
+          pkgs,
+          lib,
+          ...
+        }: let
           dotnet = with pkgs.dotnetCorePackages;
             combinePackages [
               sdk_10_0
@@ -99,6 +103,12 @@
               aspnetcore_9_0
               aspnetcore_8_0
             ];
+          agentContext = ''
+            # Datadog
+
+            - Call the Datadog API with `lucca dd api`, it takes the same args as `curl` and is auto-authenticated.
+            - Read Datadog logs with `pup`, with the site set to `datadoghq.eu` (`DD_SITE=datadoghq.eu pup ...`).
+          '';
         in {
           home.packages = with pkgs; [
             nodejs
@@ -115,6 +125,7 @@
             kubeseal
             sqlcmd
             go
+            datadog-pup
           ];
           home.sessionVariables = rec {
             DOTNET_ROOT = "${dotnet}/share/dotnet";
@@ -134,6 +145,8 @@
             type = "http";
             url = "https://mcp.infra.private.o11y.lucca.tech/mcp";
           };
+          programs.opencode.context = lib.mkAfter agentContext;
+          xdg.configFile."claude/CLAUDE.md".text = lib.mkAfter agentContext;
         })
       ];
     };

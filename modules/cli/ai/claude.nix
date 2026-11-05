@@ -154,7 +154,7 @@
     ${lib.getExe pkgs.claude-mux} reload || true
   '';
 
-  xdg.configFile."claude/CLAUDE.md".source = ./global.md;
+  xdg.configFile."claude/CLAUDE.md".text = builtins.readFile ./global.md;
 
   xdg.configFile."claude/keybindings.json".text = builtins.toJSON {
     "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";

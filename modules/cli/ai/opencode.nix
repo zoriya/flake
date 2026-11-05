@@ -70,7 +70,7 @@
           wrapProgram $out/bin/opencode --set-default FORCE_HYPERLINK 1
         '';
     });
-    context = ./global.md;
+    context = builtins.readFile ./global.md;
     settings = {
       update = "disable";
       model = "anthropic/claude-opus-5-5";
