@@ -139,6 +139,10 @@
             DEVTOOLS_HELM_NO_PIN = "true";
             LUCCA_KUBE_CONTEXT = "lucca";
           };
+          home.sessionPath = [
+            "$HOME/.dotnet/tools"
+            "$HOME/.local/bin"
+          ];
           programs.opencode.settings.mcp.servers.lucca-gateway = {
             type = "remote";
             url = "https://mcp.infra.private.o11y.lucca.tech/mcp";

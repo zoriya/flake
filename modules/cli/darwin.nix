@@ -36,6 +36,23 @@
     info.enable = true;
   };
 
+  # /usr/bin/{git,make,clang,python3,...} are xcrun shims that prompt to install the CLT when no developer dir is set.
+  # Point xcode-select to a fake developer dir whose xcrun just fails instead.
+  system.activationScripts.postActivation.text = let
+    devDir = pkgs.runCommand "fake-developer-dir" {} ''
+      mkdir -p $out/usr/bin
+      # the /usr/bin shims exec $DEVELOPER_DIR/usr/bin/xcrun <tool> <args...>
+      cat > $out/usr/bin/xcrun <<'EOF'
+      #!/bin/sh
+      echo "xcrun: $1: command line tools are not installed" >&2
+      exit 72
+      EOF
+      chmod +x $out/usr/bin/xcrun
+    '';
+  in ''
+    /usr/bin/xcode-select --switch ${devDir}
+  '';
+
   launchd.user.agents.caffeinate = {
     command = "/usr/bin/caffeinate -diu";
     serviceConfig = {

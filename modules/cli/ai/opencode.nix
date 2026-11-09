@@ -126,7 +126,8 @@
       keybinds = {
         "variant.cycle" = "ctrl+n";
         "prompt.clear" = "ctrl+u";
-        "session.interrupt" = "ctrl+c,ctrl+d";
+        "session.interrupt" = "ctrl+c";
+        "app.exit" = "ctrl+d,<leader>q";
         "input.submit" = "ctrl+s";
         "input.newline" = "return";
         "input.undo" = "ctrl+y,ctrl+z";
