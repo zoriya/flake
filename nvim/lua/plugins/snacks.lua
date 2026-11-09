@@ -272,6 +272,15 @@ return {
 			require(".jj-snacks")
 			Snacks.picker.git_show = git_show
 
+			-- Let the picker open files over oil/fugitive/jj:// buffers but not over terminals (opencode/claude).
+			vim.api.nvim_create_autocmd("BufWinEnter", {
+				callback = function(ev)
+					if vim.bo[ev.buf].buftype ~= "terminal" then
+						vim.b[ev.buf].snacks_main = true
+					end
+				end,
+			})
+
 			vim.keymap.set("n", "<leader>zz", function() Snacks.zen() end, { desc = "Toggle zen mode" })
 
 			vim.keymap.set("n", "<leader>f", function()

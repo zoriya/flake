@@ -1,0 +1,26 @@
+--- a/packages/tui/src/clipboard.ts	2026-11-09 10:23:20
++++ b/packages/tui/src/clipboard.ts	2026-11-09 10:23:25
+@@ -14,7 +14,22 @@
+   return createClipboardAdapter(
+     createClipboard({
+       host: createHostClipboard(),
+-      terminal: createRendererClipboardAdapter(renderer),
++      // OpenTUI wraps OSC 52 in a tmux DCS passthrough, which tmux drops unless allow-passthrough is on.
++      // A plain OSC 52 goes through tmux's own set-clipboard instead, and so across nested tmux/ssh too.
++      terminal: createRendererClipboardAdapter({
++        get capabilities() {
++          return renderer.capabilities
++        },
++        copyToClipboardOSC52(text, target) {
++          const r = renderer as RendererClipboardBoundary & {
++            capabilities: { multiplexer?: string } | null
++            writeOut?: (chunk: string) => boolean
++          }
++          if (r.capabilities?.multiplexer !== "tmux" || !r.writeOut) return renderer.copyToClipboardOSC52(text, target)
++          return r.writeOut(`\x1b]52;${target === 1 ? "p" : "c"};${Buffer.from(text).toString("base64")}\x1b\\`)
++        },
++        clearClipboardOSC52: (target) => renderer.clearClipboardOSC52(target),
++      }),
+     }),
+   )
+ }

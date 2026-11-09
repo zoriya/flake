@@ -106,8 +106,10 @@
           agentContext = ''
             # Datadog
 
-            - Call the Datadog API with `lucca dd api`, it takes the same args as `curl` and is auto-authenticated.
             - Read Datadog logs with `pup`, with the site set to `datadoghq.eu` (`DD_SITE=datadoghq.eu pup ...`).
+
+            # DevopsDashboard (dd)
+            - Call dd's API (dd.lucca.tech) with `lucca dd api`, it takes the same args as `curl` and is auto-authenticated.
           '';
         in {
           home.packages = with pkgs; [

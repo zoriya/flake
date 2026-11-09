@@ -57,6 +57,8 @@
     # Let nvim (claudecode.nvim) hand its ide server's auth token through the env, next to
     # OPENCODE_EDITOR_SSE_PORT, instead of opencode reading ~/.claude/ide lockfiles.
     package = opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode.overrideAttrs (old: {
+      # Copy inside tmux: https://github.com/anomalyco/opencode/issues/50208
+      patches = (old.patches or []) ++ [./opencode-tmux-osc52.patch];
       postPatch =
         old.postPatch
         + ''
