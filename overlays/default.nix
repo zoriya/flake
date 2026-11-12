@@ -51,6 +51,50 @@ in {
   pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
   vscode = enableWayland super.vscode ["code"];
 
+  # https://github.com/NixOS/nixpkgs/pull/585097
+  browse = let
+    version = "0.0.16";
+    targets = {
+      x86_64-linux = {
+        target = "linux-x64";
+        hash = "sha512-l/adQHsk8y49F/a2Wm6yUYZKrD578zojSLyd/iXQ1pLee0eZFWiW27KI6NbBB7CTWuDKRZEyb+zstZs0Z4pqzg==";
+      };
+      aarch64-linux = {
+        target = "linux-arm64";
+        hash = "sha512-kqt9LGOEwYbL6We4yyIevCGaLJNulClV6RxOvYaMjANUIyyBIlTtDOPQECiuTfyo/MQ8eMWIbCioOyssksigYw==";
+      };
+      aarch64-darwin = {
+        target = "darwin-arm64";
+        hash = "sha512-H6HihYDLzZqk/SlrNOwNh5Aht4huceIxP4e+fWq7l9n2zkJ52kUW/EnCVQjBwJg2fvTJShxouDAPCST0+O/KWA==";
+      };
+    };
+    t = targets.${super.stdenv.hostPlatform.system};
+  in
+    super.stdenvNoCC.mkDerivation {
+      pname = "browse";
+      inherit version;
+      src = super.fetchurl {
+        url = "https://registry.npmjs.org/@opencode/browse-${t.target}/-/browse-${t.target}-${version}.tgz";
+        inherit (t) hash;
+      };
+      nativeBuildInputs = [super.makeWrapper] ++ super.lib.optionals super.stdenv.hostPlatform.isLinux [super.autoPatchelfHook];
+      buildInputs = super.lib.optionals super.stdenv.hostPlatform.isLinux [(super.lib.getLib super.stdenv.cc.cc)];
+      # bun keeps the bundled js inside the executable.
+      dontStrip = true;
+      installPhase = ''
+        install -Dm755 bin/browse $out/bin/browse
+        # It would rerun its install script to replace itself.
+        wrapProgram $out/bin/browse --set OPENCODE_BROWSER_AUTO_UPDATE off
+      '';
+      meta = {
+        description = "Let your AI agents use your real browser";
+        homepage = "https://github.com/anomalyco/browse";
+        license = super.lib.licenses.mit;
+        platforms = builtins.attrNames targets;
+        mainProgram = "browse";
+      };
+    };
+
   claude-mux = super.buildGoModule {
     pname = "claude-mux";
     version = "0.1.0";

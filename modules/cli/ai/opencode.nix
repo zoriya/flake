@@ -52,6 +52,8 @@
     };
   };
 
+  home.packages = [pkgs.browse];
+
   programs.opencode = {
     enable = true;
     # Let nvim (claudecode.nvim) hand its ide server's auth token through the env, next to
@@ -95,6 +97,10 @@
           }
         ]
       ];
+      mcp.servers.browse = {
+        type = "local";
+        command = [(lib.getExe pkgs.browse) "mcp"];
+      };
       providers.anthropic.settings = {
         apiKey = "x";
         baseURL = "http://${config.services.meridian.settings.host}:${toString config.services.meridian.settings.port}/v1";

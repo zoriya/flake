@@ -130,6 +130,10 @@ in {
         ".cache/opencode"
         ".local/share/opencode"
         ".local/state/opencode"
+        # relay token, paired browsers, settings, sessions
+        ".config/browse"
+        ".local/share/browse"
+        ".local/state/browse"
         # Gnome accounts
         ".config/goa-1.0"
         ".cache/gnome-control-center-goa-helper"
