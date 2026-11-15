@@ -300,7 +300,7 @@ vim.api.nvim_create_autocmd("DirChanged", {
 			-- servers of the workspace we left would otherwise keep running (and
 			-- analysing) forever, one per workspace ever visited
 			for _, client in ipairs(vim.lsp.get_clients()) do
-				if client.root_dir and stale(client.root_dir) and not vim.iter(client.attached_buffers):any(function(buf) return vim.bo[buf].buflisted end) then
+				if client.root_dir and stale(client.root_dir) and not vim.iter(pairs(client.attached_buffers)):any(function(buf) return vim.bo[buf].buflisted end) then
 					client:stop()
 				end
 			end
