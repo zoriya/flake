@@ -25,7 +25,6 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    opencode.url = "github:anomalyco/opencode/v2";
     meridian.url = "github:rynfar/meridian";
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
