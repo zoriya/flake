@@ -12,6 +12,8 @@
     enable = true;
     environment = {
       CLAUDE_CONFIG_DIR = config.programs.claude-code.configDir;
+      # https://github.com/anthropics/claude-code/issues/97074
+      CLAUDE_CODE_ENTRYPOINT = "opencode";
       MERIDIAN_PROFILES = builtins.toJSON [
         {
           id = "default";
@@ -71,7 +73,8 @@
       postFixup =
         (old.postFixup or "")
         + ''
-          wrapProgram $out/bin/opencode --set-default FORCE_HYPERLINK 1
+          wrapProgram $out/bin/opencode --set-default FORCE_HYPERLINK 1 \
+            --set-default CLAUDE_CODE_ENTRYPOINT opencode
         '';
     });
     context = builtins.readFile ./global.md;
