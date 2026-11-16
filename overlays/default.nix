@@ -37,9 +37,25 @@ in {
         meta = old.meta // {license = super.lib.licenses.mit;};
       }));
 
+  # The machine we sshed from remote-forwards its open-url socket to this port
+  # (see modules/gui/home.nix), so links land in the browser we are sitting in
+  # front of instead of on the box we are sshed into. Nothing listens on it when
+  # we are not sshed anywhere, and we then open locally.
+  open-url = super.writeShellScriptBin "open-url" ''
+    if (printf '%s\n' "$1" >/dev/tcp/127.0.0.1/17321) 2>/dev/null; then
+      exit 0
+    fi
+    exec ${
+      if super.stdenv.hostPlatform.isDarwin
+      then "/usr/bin/open"
+      else super.lib.getExe' super.xdg-utils "xdg-open"
+    } "$1"
+  '';
+
   # gh only knows how to find a repo through git, which non-colocated jj repos hide.
   gh = wrapProgram super.gh ["gh"] ''
     --suffix PATH : ${super.lib.makeBinPath [super.jujutsu super.git super.coreutils]} \
+    --set-default GH_BROWSER ${super.lib.getExe self.open-url} \
     --run "source ${./gh-jj.sh}"'';
 
   # Orca renders plate thumbnails without making its gl context current. WebKit's dmabuf

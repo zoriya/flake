@@ -2,22 +2,7 @@
   pkgs,
   lib,
   ...
-}: let
-  # The machine we sshed from remote-forwards its open-url socket to this port
-  # (see modules/gui/home.nix), so links land in the browser we are sitting in
-  # front of instead of on the box we are sshed into. Nothing listens on it when
-  # we are not sshed anywhere, and we then open locally.
-  open-url = pkgs.writeShellScriptBin "open-url" ''
-    if (printf '%s\n' "$1" >/dev/tcp/127.0.0.1/17321) 2>/dev/null; then
-      exit 0
-    fi
-    exec ${
-      if pkgs.stdenv.hostPlatform.isDarwin
-      then "/usr/bin/open"
-      else lib.getExe' pkgs.xdg-utils "xdg-open"
-    } "$1"
-  '';
-in {
+}: {
   home.packages = [
     (pkgs.writeShellScriptBin "tmux-sessionizer" (builtins.readFile ./tmux-sessionizer.sh))
   ];
@@ -44,7 +29,7 @@ in {
         extraConfig =
           #tmux
           ''
-            set -g @fzf-url-open "${lib.getExe open-url}"
+            set -g @fzf-url-open "${lib.getExe pkgs.open-url}"
           '';
       }
     ];

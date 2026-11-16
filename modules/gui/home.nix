@@ -182,7 +182,7 @@ in {
   };
 
   # Machines we ssh into get this socket forwarded to 127.0.0.1:17321 on their
-  # end, so their open-url (see modules/cli/tools/tmux.nix) can hand us a link
+  # end, so their open-url (see overlays/default.nix) can hand us a link
   # and it opens here, in front of the terminal we typed in, however many
   # tmux/ssh layers deep the pane is.
   programs.ssh = {
