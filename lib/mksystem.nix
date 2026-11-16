@@ -6,7 +6,6 @@
   env,
   user ? "zoriya",
   system ? "x86_64-linux",
-  wsl ? false,
   darwin ? false,
   avf ? false,
   custom ? [],
@@ -128,24 +127,6 @@ in
           networking.nameservers = ["1.1.1.1" "9.9.9.9"];
           networking.resolvconf.extraConfig = "name_servers=\"1.1.1.1 9.9.9.9\"";
         }
-      ]
-      ++ nixpkgs.lib.optionals wsl [
-        inputs.nixos-wsl.nixosModules.wsl
-        ({pkgs, ...}: {
-          wsl.enable = true;
-          wsl.defaultUser = user;
-          environment.systemPackages = with pkgs; [
-            wslu
-            wsl-open
-          ];
-
-          services.flatpak.enable = true;
-          xdg.portal = {
-            enable = true;
-            wlr.enable = true;
-            config.common.default = "*";
-          };
-        })
       ]
       ++ nixpkgs.lib.optionals avf [
         inputs.nixos-avf.nixosModules.avf

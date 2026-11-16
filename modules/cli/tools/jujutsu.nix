@@ -68,18 +68,6 @@ in {
 
   programs.jjui = {
     enable = true;
-    # while waiting for https://github.com/charmbracelet/bubbles/pull/1020
-    package = pkgs.jjui.overrideAttrs (old: {
-      postPatch =
-        (old.postPatch or "")
-        + ''
-          substituteInPlace internal/ui/operations/describe/describe.go \
-            --replace-fail 'input := textarea.New()' 'input := textarea.New()
-          	input.KeyMap.WordForward.SetKeys("alt+right", "alt+f", "ctrl+right")
-          	input.KeyMap.WordBackward.SetKeys("alt+left", "alt+b", "ctrl+left")
-          	input.KeyMap.DeleteWordBackward.SetKeys("alt+backspace", "ctrl+w", "ctrl+backspace")'
-        '';
-    });
     # the workspace actions live there: they share a helper, which the toml's
     # per-action lua strings cannot do.
     configLua = ./jjui.lua;

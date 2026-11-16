@@ -46,10 +46,8 @@ in {
   # renderer leaves its own context current, so orca draws into it and segfaults in mesa.
   orca-slicer = wrapProgram super.orca-slicer ["orca-slicer"] "--set WEBKIT_DISABLE_DMABUF_RENDERER 1";
 
-  discord = enableWayland super.discord ["discord" "Discord"];
   vesktop = enableWayland super.vesktop ["vesktop"];
   pear-desktop = enableWayland super.pear-desktop ["pear-desktop"];
-  vscode = enableWayland super.vscode ["code"];
 
   # https://github.com/NixOS/nixpkgs/pull/585097
   browse = let
