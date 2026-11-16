@@ -45,7 +45,10 @@
         })
         config.systemd.user.services.meridian.Service.Environment)
         # launchd doesn't set USER, and claude looks up its keychain credentials by it (else loggedIn: false).
-        // {USER = config.home.username;};
+        // {
+          USER = config.home.username;
+          NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+        };
       KeepAlive = true;
       RunAtLoad = true;
       StandardOutPath = "${config.home.homeDirectory}/Library/Logs/meridian.log";

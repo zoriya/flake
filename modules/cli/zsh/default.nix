@@ -360,7 +360,7 @@
       http-server
       nvim
       rename # this is perl-rename
-      gfold
+      # gfold
       lsof
       kubectl
       # while waiting for https://github.com/muesli/termenv/pull/123 (auto preset can't detect bg in tmux)

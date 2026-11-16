@@ -25,7 +25,11 @@ in
     withRuby = false;
     withPython3 = false;
 
-    package = neovim-nightly.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    # opentui (opencode) emits SGR 0 inside OSC 8 links, which drops the link in nvim's terminal
+    # (and so from tmux's fzf-url picker).
+    package = neovim-nightly.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [./vterm-sgr-reset-keep-hyperlink.patch];
+    });
 
     config = ./.;
 
