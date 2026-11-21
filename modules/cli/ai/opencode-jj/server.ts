@@ -1,6 +1,8 @@
-// opencode server side for jj workspace roots (see jj-workspace-init): a worktree strategy where
-// worktree_create adds a jj workspace beside `default/` and worktree_remove snapshots it before
-// forgetting it.
+// opencode server side for jj:
+// - in every jj repo, tell the agent where `@` is each time the user sends a message, so moving it by
+//   hand between turns is noticed (an instruction entry: only re-announced when it changed).
+// - in jj workspace roots (see jj-workspace-init), a worktree strategy where worktree_create adds a jj
+//   workspace beside `default/` and worktree_remove snapshots it before forgetting it.
 import { execFile } from "node:child_process"
 import { existsSync } from "node:fs"
 import { rm } from "node:fs/promises"
@@ -30,6 +32,39 @@ async function workspaces(cwd: string, signal: AbortSignal) {
 export default {
 	id: "zoriya.jj-worktree",
 	async setup(ctx: any) {
+		await ctx.session.hook("prompt", async (event: { sessionID: string }) => {
+			// a throwing prompt hook would refuse the user's message, never let jj break that.
+			try {
+				const session = await ctx.session.get({ sessionID: event.sessionID })
+				// --ignore-working-copy: no snapshot, so we never race the agent's own jj commands.
+				const { stdout } = await exec(
+					"@jj@",
+					[
+						"log",
+						"--ignore-working-copy",
+						"--no-graph",
+						"-r",
+						"@ | @-",
+						"-T",
+						'if(current_working_copy, "@  ", "@- ") ++ change_id.shortest(8) ++ " " ++ if(description, description.first_line(), "(no description)") ++ if(local_bookmarks, " [" ++ local_bookmarks.join(" ") ++ "]") ++ if(conflict, " (conflict)") ++ "\\n"',
+					],
+					{ cwd: session.location.directory, timeout: 5000 },
+				).catch(() => ({ stdout: undefined }))
+				if (stdout === undefined) {
+					// not (or no longer, after a move) in a jj repo.
+					await ctx.session.instructions.entry.remove({ sessionID: event.sessionID, key: "jj" })
+					return
+				}
+				await ctx.session.instructions.entry.put({
+					sessionID: event.sessionID,
+					key: "jj",
+					value: `jj working copy when the user sent their latest message (your own jj commands since may have moved it):\n${stdout.trimEnd()}`,
+				})
+			} catch (error) {
+				console.error("zoriya.jj: failed to update the jj context", error)
+			}
+		})
+
 		if (!wspRoot(ctx.location.directory)) return
 		await ctx.worktree.transform((editor: any) => {
 			editor.add({
