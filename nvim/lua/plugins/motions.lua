@@ -13,6 +13,8 @@ local function ft(key_specific_args)
 				labels = '',
 				-- Match the modes where you don't need labels (`:h mode()`).
 				safe_labels = vim.fn.mode(1):match('o') and '' or nil,
+				-- Default groups `([{`, `)]}` & quotes, f/t should be exact.
+				equivalence_classes = { ' \t\r\n' },
 			},
 		})
 	)
