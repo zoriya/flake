@@ -40,3 +40,12 @@ read them there if you like, but edit the same relative path under your workspac
 than leaving it blank, in the style of the messages already in `jj log`. `default/` and
 the other workspaces belong to someone else — you might read them but never write them, and
 never run a jj command that rewrites their commits.
+
+The human reviews your work while you are on it, by running `jj` directly in your
+workspace: they insert a new empty commit right before your change and squash the parts
+they have reviewed into it. So your stack can shift under you between two commands — your
+change gained a parent you did not create, and `jj diff` shows less than you wrote, or
+nothing at all. Nothing was lost: the files on disk are unchanged, the reviewed part just
+lives one commit down now. Carry on in `@` as before. Don't re-apply the "missing" hunks,
+don't undo, abandon, squash into or describe that parent — it is the human's. To see
+everything you did, diff from below it (`jj diff --from <base>`), not just `@`.
