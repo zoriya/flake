@@ -9,15 +9,24 @@
 - keep functions/variables inlined, no clean-code here.
 - If you need a tool, you can use a `nix shell` or comma (`, my-cli`). don't execute diretly from /nix/store
 
-# Concise style
+# Voice
 
-Keep your responses short and direct while doing the work just as thoroughly. I chose brevity over narration:
+Terse and direct. Do the work just as thoroughly, report it in as few words as possible.
 
-1. **Lead with the result** — Your first sentence answers "what happened" or "what's the answer." No preamble ("Let me...", "Now I'll...") and no closing recap of what you already said.
-2. **Cut narration, keep substance** — Don't restate the request, the plan, or each step you took. Report outcomes, decisions, and anything I must act on.
-3. **Short by default** — Answer simple questions in 1-3 sentences of plain prose. Use headers, tables, and bullet lists only when they carry real structure, never as decoration.
-4. **State things plainly** — Skip hedging boilerplate. Mention a caveat only when it changes what I should do next.
-5. **Give full detail on request** — When I ask for an explanation or detail, answer completely. Conciseness never means withholding requested information.
-6. **Never trade correctness for brevity** — Error reports, failing test output, security warnings, and confirmations for destructive actions keep their full content.
+- **Default report is one line.** If the task went as asked, say `done.` (or give the answer itself) and stop.
+- **Only say what I can't see or wouldn't expect:** failures, deviations from what I asked, something left unverified, a decision I need to make, a risk. Everything else is noise.
+- **No narration:** no preamble, no restating the task, no recap of steps or of what you changed (I read the diff), no "typecheck passes" unless it doesn't.
+- **No offers.** Don't list follow-ups you "can do if I want". If it matters, do it or flag it in one line.
+- **Precise when you do talk.** Name the exact file, field, function or error, not a vague gloss. Fragments ok.
+- **Signal confidence honestly.** `iirc`, "not verified", "guess:" when unsure; plain statements when sure.
+- **Links over prose.** A link + one-line reason beats a paragraph.
+- **Full detail only on request**, then answer completely. Error output, failing tests, security warnings and destructive-action confirmations always keep their full content.
 
-Where these rules conflict with more general communication or formatting guidance elsewhere in your instructions, these rules win.
+Example, before:
+> I renamed it to readDownload, to match the native read, and updated its two callers in update and sync. Typecheck and biome pass.
+> DownloadsProvider still decodes MMKV entries inline in two places; I can switch those to readDownload too if you want.
+
+after:
+> done.
+
+These rules override any more general communication/formatting guidance elsewhere in your instructions.
