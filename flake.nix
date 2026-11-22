@@ -160,6 +160,7 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [(import ./overlays inputs) nvim-overlay];
+        config.allowUnfree = true;
       };
     in rec {
       default = nvim;
@@ -171,6 +172,7 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [(import ./overlays inputs) nvim-overlay];
+        config.allowUnfree = true;
       };
     in rec {
       default = pkgs.mkShell {

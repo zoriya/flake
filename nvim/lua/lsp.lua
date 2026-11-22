@@ -23,6 +23,7 @@ vim.lsp.enable({
 	"roslyn_ls",
 	"astro",
 	"mdx_analyzer",
+	"kotlin_lsp",
 })
 
 vim.lsp.on_type_formatting.enable()

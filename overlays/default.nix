@@ -109,6 +109,61 @@ in {
       };
     };
 
+  # https://github.com/NixOS/nixpkgs/pull/587729
+  kotlin-lsp = let
+    version = "271.2085.0";
+    targets = {
+      x86_64-linux = {
+        file = "kotlin-server-${version}.tar.gz";
+        hash = "sha256-45jnmQJ/QXSeoz+qV0cDB9E9QPkQlhhYx+MK29d4rgg=";
+      };
+      aarch64-linux = {
+        file = "kotlin-server-${version}-aarch64.tar.gz";
+        hash = "sha256-h3ruYSoX2rSBREZigqZBTsWKtCihC5fH4T7dm2s9yW4=";
+      };
+      x86_64-darwin = {
+        file = "kotlin-server-${version}.sit";
+        hash = "sha256-aEV6sYJTMePqyFGRt8MnN8vYmThn9anFDf4BLFUJ6Pc=";
+      };
+      aarch64-darwin = {
+        file = "kotlin-server-${version}-aarch64.sit";
+        hash = "sha256-LSI4j1i+b036eo8YweIxhxFk3KzBbkB1WQKdcjKBa0o=";
+      };
+    };
+    t = targets.${super.stdenv.hostPlatform.system};
+  in
+    super.stdenv.mkDerivation {
+      pname = "kotlin-lsp";
+      inherit version;
+      src = super.fetchurl {
+        url = "https://download.jetbrains.com/language-server/kotlin-server/${version}/${t.file}";
+        inherit (t) hash;
+      };
+      # the mac archives are zips with a .sit extension
+      unpackCmd = super.lib.optionalString super.stdenv.hostPlatform.isDarwin "unzip -q $curSrc";
+      nativeBuildInputs =
+        [super.makeWrapper]
+        ++ super.lib.optionals super.stdenv.hostPlatform.isLinux [super.autoPatchelfHook]
+        ++ super.lib.optionals super.stdenv.hostPlatform.isDarwin [super.unzip];
+      buildInputs = super.lib.optionals super.stdenv.hostPlatform.isLinux [(super.lib.getLib super.stdenv.cc.cc) super.zlib];
+      # The bundled jbr runs headless, its awt/sound libs are never loaded.
+      autoPatchelfIgnoreMissingDeps = true;
+      dontStrip = true;
+      dontFixup = super.stdenv.hostPlatform.isDarwin;
+      installPhase = ''
+        mkdir -p $out/lib $out/bin
+        cp -r . $out/lib/kotlin-lsp
+        makeWrapper $out/lib/kotlin-lsp/bin/intellij-server $out/bin/kotlin-lsp
+      '';
+      meta = {
+        description = "Kotlin language server by JetBrains";
+        homepage = "https://github.com/Kotlin/kotlin-lsp";
+        license = super.lib.licenses.unfree;
+        platforms = builtins.attrNames targets;
+        mainProgram = "kotlin-lsp";
+      };
+    };
+
   claude-mux = super.buildGoModule {
     pname = "claude-mux";
     version = "0.1.0";

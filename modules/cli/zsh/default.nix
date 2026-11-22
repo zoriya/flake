@@ -259,6 +259,7 @@
     EDITOR = "nvim";
     VISUAL = EDITOR;
     PAGER = "less -FRX";
+    GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
   };
 
   programs.atuin = {
@@ -333,6 +334,8 @@
     nix-direnv.enable = true;
     config = {warn_timeout = "500h";};
   };
+
+  xdg.dataFile."gradle/init.d/kotlin-lsp.gradle".source = ../../../nvim/kotlin-lsp.init.gradle;
 
   xdg.configFile."gfold.toml".text = ''
     display_mode = "Classic"

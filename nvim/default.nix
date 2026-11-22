@@ -164,6 +164,7 @@ in
       astro-ls-wrapped
       typescript
       kdePackages.qtdeclarative # qmlls
+      kotlin-lsp
 
       # gopls also needs go /shame
       gopls

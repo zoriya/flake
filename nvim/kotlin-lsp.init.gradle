@@ -1,0 +1,52 @@
+// Workarounds for kotlin-lsp's gradle import of android projects, inert in normal builds.
+if (System.getProperty("com.jetbrains.ls.imports.gradle") != "true") return
+
+allprojects { p ->
+	["com.android.application", "com.android.library"].each { id ->
+		p.pluginManager.withPlugin(id) {
+			// Resolving androidTest's generated sources (BuildConfig...) throws during the import,
+			// which drops the whole module (or the whole build) from the workspace model.
+			// https://github.com/Kotlin/kotlin-lsp/issues/253
+			def components = p.extensions.getByName("androidComponents")
+			components.beforeVariants(components.selector().all()) { variant ->
+				variant.enableAndroidTest = false
+			}
+		}
+	}
+
+	// The importer only reads the R jar of applications, libraries never resolve `R`.
+	// Put it on the classpath ourselves and generate it during the import.
+	// https://github.com/Kotlin/kotlin-lsp/issues/280
+	p.pluginManager.withPlugin("com.android.library") {
+		def components = p.extensions.getByName("androidComponents")
+		def rTasks = []
+		components.onVariants(components.selector().all()) { variant ->
+			def task = "generate${variant.name.capitalize()}RFile"
+			rTasks << task
+			def rJar = p.files({ p.tasks.findByName(task)?.getRClassOutputJar()?.get()?.asFile ?: [] })
+			// The R classes of aar dependencies only live in the jars agp compiles libraries against,
+			// the importer reads the plain classes.jar.
+			def resolving = false
+			def depsR = p.files({
+				if (resolving) return []
+				resolving = true
+				try {
+					return p.configurations.getByName("${variant.name}CompileClasspath").incoming.artifactView {
+						attributes { it.attribute(Attribute.of("artifactType", String), "android-classes-jar") }
+					}.files.filter { it.name.endsWith("-api.jar") }.files
+				} finally {
+					resolving = false
+				}
+			})
+			["${variant.name}CompileOnly", "test${variant.name.capitalize()}CompileOnly"].each { conf ->
+				if (p.configurations.findByName(conf) != null) {
+					p.dependencies.add(conf, rJar)
+					p.dependencies.add(conf, depsR)
+				}
+			}
+		}
+		p.tasks.matching { it.name == "prepareKotlinIdeaImport" }.configureEach {
+			it.dependsOn({ rTasks.findAll { p.tasks.findByName(it) != null } })
+		}
+	}
+}
