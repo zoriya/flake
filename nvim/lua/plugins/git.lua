@@ -55,6 +55,7 @@ return {
 
 			vim.keymap.set("n", "<leader>hs", "ghih", { remap = true, desc = "Squash Hunk" })
 			vim.keymap.set("x", "<leader>hs", "gh", { remap = true, desc = "Squash Hunk" })
+			vim.keymap.set("n", "<leader>hS", function() diff.do_hunks(0, "apply") end, { desc = "Squash Buffer" })
 
 			vim.keymap.set("n", "<leader>hp", function() diff.toggle_overlay(0) end, { desc = "Preview Hunk (overlay)" })
 			vim.keymap.set("n", "<leader>gR", function() diff.do_hunks(0, "reset") end, { desc = "Reset Buffer" })
