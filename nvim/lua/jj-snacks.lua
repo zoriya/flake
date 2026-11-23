@@ -59,9 +59,16 @@ Snacks.picker.jj_log = function(file)
 				),
 				self.author().name(),
 				current_working_copy,
-				immutable
+				immutable,
+				DELETED
 			) ++ "\n"
 		  ]]
+			template = template:gsub("DELETED", function()
+				if not file then
+					return "false"
+				end
+				return string.format([[self.diff("file:'%s'").files().any(|e| e.status() == "removed")]], file)
+			end)
 			local args = {
 				'log',
 				'-r',
@@ -96,6 +103,7 @@ Snacks.picker.jj_log = function(file)
 						item.author = data[8]
 						item.working_copy = data[9] == "true"
 						item.immutable = data[10] == "true"
+						item.deleted = data[11] == "true"
 					end,
 				}),
 				ctx
@@ -175,11 +183,11 @@ Snacks.picker.jj_log = function(file)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jsplit", args = { item.change_id .. ":" .. file } })
+				vim.cmd({ cmd = "Jsplit", args = { item.change_id .. (item.deleted and "-" or "") .. ":" .. file } })
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jvsplit", args = { item.change_id .. ":" .. file } })
+				vim.cmd({ cmd = "Jvsplit", args = { item.change_id .. (item.deleted and "-" or "") .. ":" .. file } })
 			end,
 		},
 	})
@@ -337,11 +345,11 @@ Snacks.picker.jj_stage = function()
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jsplit", args = { "@:" .. item.file } })
+				vim.cmd({ cmd = "Jsplit", args = { (item.at_status == "D" and "@-" or item.parent_status == "D" and "@--" or "@") .. ":" .. item.file } })
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jvsplit", args = { "@:" .. item.file } })
+				vim.cmd({ cmd = "Jvsplit", args = { (item.at_status == "D" and "@-" or item.parent_status == "D" and "@--" or "@") .. ":" .. item.file } })
 			end,
 		},
 	})
@@ -500,11 +508,11 @@ Snacks.picker.jj_show = function(spec)
 			end,
 			jj_gsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jsplit", args = { show_ref .. ":" .. item.file } })
+				vim.cmd({ cmd = "Jsplit", args = { (item.status ~= "D" and show_ref or range and (spec.from or "@") or show_ref .. "-") .. ":" .. item.file } })
 			end,
 			jj_gvsplit = function(picker, item)
 				picker:close()
-				vim.cmd({ cmd = "Jvsplit", args = { show_ref .. ":" .. item.file } })
+				vim.cmd({ cmd = "Jvsplit", args = { (item.status ~= "D" and show_ref or range and (spec.from or "@") or show_ref .. "-") .. ":" .. item.file } })
 			end,
 		},
 	})
