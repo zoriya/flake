@@ -1,7 +1,8 @@
 # Global instructions
 
 - Never use git, we use jj instead.
-- Never edit jj (or even worse git) state, don't jj commit/edit/describe/split in a workspace you don't own, unless specifically asked to
+- Never edit jj (or even worse git) state, don't jj commit/edit/new/split/squash in a workspace you don't own, unless specifically asked to
+- The one exception: `jj describe` the change you are working on as you go (only if its description is empty or yours), in the style of `jj log`.
 - Never ever push or talk about it
 - when fetching github content/pr/issues/wha, use the `gh` cli.
 - NEVER ever create issues/pr/write on github.

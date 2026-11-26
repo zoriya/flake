@@ -1,5 +1,8 @@
 # Workspaces
 
+This only applies to this project. Elsewhere, work where you started and never create a
+workspace or worktree.
+
 You start in `default/`, the human's working copy — that is where the files they point you
 at live, but it is not where you work. Every agent gets a jj workspace of its own beside
 it, a sibling folder of `default/`.
